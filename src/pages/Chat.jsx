@@ -16,18 +16,59 @@ export default function Chat() {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // Welcome message
+    const params = new URLSearchParams(window.location.search);
+    const crisis = params.get("crisis");
+    const prefill = params.get("prompt");
+
     setMessages([
       {
         role: "assistant",
         content: "Hi — I'm here with you right now. 🌿\n\nTell me what's happening with your child. I'll give you trauma-informed guidance you can use immediately.\n\n*If there is immediate danger, please call 911. For mental health crisis, call or text 988.*",
       },
     ]);
+
+    if (crisis || prefill) {
+      const prompt = prefill
+        ? decodeURIComponent(prefill)
+        : "I need help right now. My child is having a crisis moment and I don't know what to do.";
+      // slight delay so welcome message renders first
+      setTimeout(() => autoSend(prompt), 300);
+    }
   }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  async function autoSend(txt) {
+    setInput("");
+    setLoading(true);
+    const userMsg = { role: "user", content: txt };
+    const welcomeMsg = {
+      role: "assistant",
+      content: "Hi — I'm here with you right now. 🌿\n\nTell me what's happening with your child. I'll give you trauma-informed guidance you can use immediately.\n\n*If there is immediate danger, please call 911. For mental health crisis, call or text 988.*",
+    };
+    const nextMessages = [welcomeMsg, userMsg];
+    setMessages(nextMessages);
+
+    const convoHistory = nextMessages
+      .filter(m => m.role !== "system")
+      .map(m => `${m.role === "user" ? "Parent" : "HALO Support"}: ${m.content}`)
+      .join("\n\n");
+
+    const reply = await base44.integrations.Core.InvokeLLM({
+      prompt: `${SYSTEM_PROMPT}\n\nConversation:\n${convoHistory}`,
+      model: "claude_sonnet_4_6",
+    });
+
+    const replyText = typeof reply === "string" ? reply : reply?.text || "I'm having trouble connecting. Please try again.";
+    setMessages([...nextMessages, { role: "assistant", content: replyText }]);
+    setLoading(false);
+
+    const label = txt.length > 60 ? txt.slice(0, 57) + "…" : txt;
+    const session = await base44.entities.CrisisSession.create({ prompt: txt, response: replyText, label });
+    setSessionId(session?.id || null);
+  }
 
   async function handleSend() {
     const txt = input.trim();

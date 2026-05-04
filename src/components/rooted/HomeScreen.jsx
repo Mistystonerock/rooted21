@@ -104,7 +104,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
               Get Help →
             </button>
             <Link
-              to="/chat"
+              to={txt.trim() ? `/chat?prompt=${encodeURIComponent(txt.trim())}` : "/chat?crisis=1"}
               className="flex items-center gap-1.5 px-4 py-3.5 rounded-xl font-extrabold text-[14px] transition-all hover:opacity-90"
               style={{ background: C.midGreen, color: C.white, textDecoration: "none", flexShrink: 0 }}
             >
@@ -121,7 +121,21 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
           OR SELECT A BEHAVIOR
         </p>
 
-        <BehaviorGrid onSelect={onHelp} />
+        {/* Help Me Right Now — crisis shortcut */}
+        <Link
+          to="/chat?crisis=1"
+          className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl font-extrabold text-[15px] transition-all hover:opacity-90 active:scale-[0.98] mb-5"
+          style={{
+            background: C.brown,
+            color: C.white,
+            textDecoration: "none",
+            boxShadow: "0 4px 16px rgba(139,94,52,.25)",
+          }}
+        >
+          🆘 Help Me Right Now
+        </Link>
+
+        <BehaviorGrid onSelect={(q) => window.location.href = `/chat?prompt=${encodeURIComponent(q)}`} />
 
         {/* Platform links */}
         <div className="grid grid-cols-3 gap-2 mt-5">
