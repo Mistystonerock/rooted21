@@ -3,6 +3,7 @@ import { C } from "@/lib/rooted-constants";
 import { CheckCircle2, ChevronLeft, Download, BookOpen, Zap, BookMarked } from "lucide-react";
 import LessonActivities from "./LessonActivities";
 import ReflectionForm from "./ReflectionForm";
+import LessonQuiz from "./LessonQuiz";
 
 const TABS = [
   { id: "lesson", label: "Lesson", icon: BookOpen },
@@ -193,17 +194,11 @@ export default function LessonDetail({ lesson, isCompleted, onMarkComplete, onBa
               </button>
             </div>
 
-            {/* Q&A Section */}
+            {/* Quiz Section */}
             {lesson.questions && lesson.questions.length > 0 && (
-              <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Key Questions & Answers</p>
-                {lesson.questions.map((qa, i) => (
-                  <div key={i} className="space-y-1 pb-3" style={{ borderBottom: i < lesson.questions.length - 1 ? `1px solid ${C.cream}` : "none" }}>
-                    <p className="text-xs font-bold" style={{ color: C.brown }}>Q: {qa.question}</p>
-                    <p className="text-xs leading-relaxed" style={{ color: C.darkText }}>A: {qa.answer}</p>
-                  </div>
-                ))}
-              </div>
+              <>
+                <LessonQuiz questions={lesson.questions} />
+              </>
             )}
 
             {/* Reading Material */}
