@@ -115,14 +115,16 @@ export default function FamilyCalendar({ events, familyEmail, currentUser, sende
             style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}
           />
           <div className="grid grid-cols-2 gap-2">
-            <select
-              value={form.event_type}
-              onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))}
-              className="rounded-xl px-3 py-2.5 text-sm font-sans"
-              style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}
-            >
-              {EVENT_TYPES.map(t => <option key={t.value} value={t.value}>{t.emoji} {t.label}</option>)}
-            </select>
+            <div className="relative rounded-xl" style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}>
+              <select
+                value={form.event_type}
+                onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))}
+                className="w-full px-3 py-2.5 text-sm font-sans appearance-none rounded-xl"
+                style={{ border: "none", background: "transparent" }}
+              >
+                {EVENT_TYPES.map(t => <option key={t.value} value={t.value}>{t.emoji} {t.label}</option>)}
+              </select>
+            </div>
             <input
               type="date"
               value={form.date}

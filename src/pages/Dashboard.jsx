@@ -34,7 +34,10 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3" style={{ background: C.darkGreen }}>
+      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{
+        background: C.darkGreen,
+        paddingTop: "max(1rem, calc(1rem + env(safe-area-inset-top)))"
+      }}>
         <TreeLogo size={36} />
         <div>
           <div className="font-serif font-bold text-lg" style={{ color: C.cream }}>

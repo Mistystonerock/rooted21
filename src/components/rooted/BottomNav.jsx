@@ -20,6 +20,7 @@ export default function BottomNav() {
         background: C.white,
         borderTop: `1px solid ${C.cream}`,
         boxShadow: "0 -2px 12px rgba(47,75,58,.08)",
+        paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))"
       }}
     >
       {NAV.map(({ path, label, icon: Icon }) => {

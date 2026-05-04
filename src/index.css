@@ -99,11 +99,17 @@
 }
 
 @layer base {
+  html, body {
+    overscroll-behavior: none;
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button, a {
+    @apply select-none;
   }
 }
 

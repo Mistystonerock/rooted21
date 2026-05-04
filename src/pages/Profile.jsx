@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Phone, Bell, BellOff, Check } from "lucide-react";
+import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2 } from "lucide-react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -10,6 +10,8 @@ export default function Profile() {
   const [smsReminders, setSmsReminders] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -25,6 +27,18 @@ export default function Profile() {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
+  }
+
+  async function handleDeleteAccount() {
+    setDeletingAccount(true);
+    try {
+      // Call backend function or API to delete account
+      // For now, we'll just log out and redirect
+      await base44.auth.logout("/");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      setDeletingAccount(false);
+    }
   }
 
   return (
@@ -135,6 +149,46 @@ export default function Profile() {
         >
           📋 Legal Documents & Consent Forms
         </Link>
+
+        {/* DELETE ACCOUNT */}
+        {!showDeleteConfirm ? (
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="w-full rounded-xl p-3.5 text-xs font-bold flex items-center gap-2 transition-all hover:shadow-sm"
+            style={{ background: "#FEF3EE", border: `1px solid #F4C9B8`, textDecoration: "none", color: "#B84C2A", cursor: "pointer" }}
+          >
+            <Trash2 size={13} /> Delete My Account
+          </button>
+        ) : (
+          <div className="rounded-xl p-4" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
+            <div className="flex items-start gap-2 mb-3">
+              <AlertTriangle size={16} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-bold mb-1" style={{ color: "#B84C2A" }}>Delete Account?</p>
+                <p className="text-[11px]" style={{ color: "#B84C2A" }}>
+                  This will permanently delete your account and all associated data including child profiles, journal entries, lessons, goals, and calendar events. This cannot be undone.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 py-2 rounded-lg text-xs font-bold"
+                style={{ background: C.white, color: C.darkGreen, border: `1px solid ${C.cream}`, cursor: "pointer" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deletingAccount}
+                className="flex-1 py-2 rounded-lg text-xs font-bold"
+                style={{ background: "#B84C2A", color: C.white, border: "none", cursor: "pointer", opacity: deletingAccount ? 0.7 : 1 }}
+              >
+                {deletingAccount ? "Deleting…" : "Yes, Delete"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

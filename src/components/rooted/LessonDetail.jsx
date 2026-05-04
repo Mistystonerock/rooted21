@@ -49,7 +49,10 @@ export default function LessonDetail({ lesson, isCompleted, onMarkComplete, onBa
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       {/* Header */}
-      <div className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
+      <div className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10" style={{
+        background: C.darkGreen,
+        paddingTop: "max(0.75rem, calc(0.75rem + env(safe-area-inset-top)))"
+      }}>
         <button onClick={onBack} className="rounded-lg p-1.5" style={{ background: "#ffffff18", border: "none" }}>
           <ChevronLeft size={18} color={C.cream} />
         </button>

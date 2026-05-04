@@ -65,19 +65,21 @@ export default function AgencyContactForm() {
           style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
         />
 
-        <select
-          name="staff_size"
-          value={formData.staff_size}
-          onChange={handleChange}
-          className="w-full rounded-lg px-3 py-2.5 text-xs font-sans"
-          style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
-        >
-          <option value="">Staff Size (optional)</option>
-          <option value="1-3">1-3 staff</option>
-          <option value="4-10">4-10 staff</option>
-          <option value="11-25">11-25 staff</option>
-          <option value="26+">26+ staff</option>
-        </select>
+        <div className="relative rounded-lg" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}>
+          <select
+            name="staff_size"
+            value={formData.staff_size}
+            onChange={handleChange}
+            className="w-full px-3 py-2.5 text-xs font-sans appearance-none rounded-lg"
+            style={{ border: "none", background: "transparent" }}
+          >
+            <option value="">Staff Size (optional)</option>
+            <option value="1-3">1-3 staff</option>
+            <option value="4-10">4-10 staff</option>
+            <option value="11-25">11-25 staff</option>
+            <option value="26+">26+ staff</option>
+          </select>
+        </div>
 
         <input
           type="email"
