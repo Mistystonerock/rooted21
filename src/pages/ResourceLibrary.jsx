@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Search, ExternalLink, BookOpen, FileText, Video, Headphones, X } from "lucide-react";
 import LocalResources from "@/components/resources/LocalResources";
+import FillableWorksheets from "@/components/resources/FillableWorksheets";
 
 const CATEGORIES = [
   { id: "all", label: "All", emoji: "📚" },
@@ -472,6 +473,9 @@ export default function ResourceLibrary() {
             </div>
           </div>
         )}
+
+        {/* Fillable Worksheets */}
+        <FillableWorksheets />
 
         {/* Local Resources ZIP search */}
         <LocalResources />
