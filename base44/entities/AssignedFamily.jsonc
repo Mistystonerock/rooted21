@@ -1,0 +1,53 @@
+{
+  "name": "AssignedFamily",
+  "type": "object",
+  "properties": {
+    "family_email": {
+      "type": "string",
+      "description": "Email of the parent/family user"
+    },
+    "family_name": {
+      "type": "string",
+      "description": "Display name for the family"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child's first name"
+    },
+    "professional_email": {
+      "type": "string",
+      "description": "Email of the assigned professional"
+    },
+    "professional_role": {
+      "type": "string",
+      "enum": [
+        "Counselor",
+        "Caseworker",
+        "CPS Worker",
+        "Court Staff",
+        "Mentor",
+        "Behavioral Health Worker",
+        "School Staff",
+        "Therapist",
+        "Juvenile Probation",
+        "Other"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "on_hold"
+      ],
+      "default": "active"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "family_email",
+    "professional_email"
+  ]
+}
