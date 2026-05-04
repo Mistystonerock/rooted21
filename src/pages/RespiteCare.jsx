@@ -33,7 +33,7 @@ const PROVIDERS = [
     bio: "Licensed foster parent and TBRI® practitioner with 12 years of experience supporting children from hard places. I provide a calm, structured, loving environment with predictable routines.",
     certifications: ["CPR/First Aid", "TBRI® Certified", "DHS Approved"],
     phone: "918-555-0142",
-    email: "sandra.respite@haloproject.org",
+    email: "sandra.respite@rooted21.org",
     hourlyRate: "$18–22/hr",
     overnight: true,
     vetted: true,
@@ -51,7 +51,7 @@ const PROVIDERS = [
     bio: "We are a two-parent household with therapeutic foster care experience. Our home is calm and pet-friendly. We specialize in teenagers who need structure and safety during caregiver recovery periods.",
     certifications: ["CPR/First Aid", "DHS Approved", "Therapeutic Foster Certified"],
     phone: "918-555-0287",
-    email: "taylors.respite@haloproject.org",
+    email: "taylors.respite@rooted21.org",
     hourlyRate: "$20–25/hr",
     overnight: true,
     vetted: true,
@@ -69,7 +69,7 @@ const PROVIDERS = [
     bio: "Bilingual (Spanish/English) care specialist with a background in early childhood development and medical foster care. I come to your home to reduce transitions for sensitive children.",
     certifications: ["CPR/First Aid", "Early Childhood Cert.", "DHS Approved"],
     phone: "918-555-0391",
-    email: "rosa.respite@haloproject.org",
+    email: "rosa.respite@rooted21.org",
     hourlyRate: "$16–20/hr",
     overnight: false,
     vetted: true,
@@ -84,12 +84,31 @@ const PROVIDERS = [
     reviews: 12,
     availability: ["Saturdays", "Evenings"],
     expertise: ["Trauma-Informed", "Foster Care", "Developmental Disabilities", "Ages 5–12"],
-    bio: "Retired school counselor and HALO program volunteer. I provide structured, calm respite for children with developmental differences and trauma histories. Short sessions (2–6 hours) preferred.",
-    certifications: ["CPR/First Aid", "School Counselor (Ret.)", "HALO Trained"],
+    bio: "Retired school counselor and program volunteer. I provide structured, calm respite for children with developmental differences and trauma histories. Short sessions (2–6 hours) preferred.",
+    certifications: ["CPR/First Aid", "School Counselor (Ret.)", "TBRI® Trained"],
     phone: "918-555-0445",
-    email: "james.respite@haloproject.org",
+    email: "james.respite@rooted21.org",
     hourlyRate: "Sliding scale / Volunteer",
     overnight: false,
+    vetted: true,
+  },
+  {
+    id: 6,
+    name: "Ohio RISE",
+    title: "Statewide Respite & Crisis Stabilization Program",
+    location: "Ohio (Statewide)",
+    photo: "OR",
+    rating: 4.9,
+    reviews: 0,
+    availability: ["Weekdays", "Weekends", "Overnight"],
+    expertise: ["Trauma-Informed", "Behavioral Needs", "Teen", "Ages 5–12", "Developmental Disabilities", "Foster Care"],
+    bio: "Ohio RISE (Resilience through Integrated Systems and Excellence) provides intensive, community-based services including crisis stabilization and respite for children with complex behavioral health needs. Services are available to Medicaid-eligible youth statewide and are coordinated through each county's Care Management Entity (CME).",
+    certifications: ["Ohio Medicaid Covered", "State-Certified", "Crisis Stabilization", "Care Coordination"],
+    phone: "1-833-OH-RISE1",
+    email: "ohiorise@medicaid.ohio.gov",
+    website: "https://managedcare.medicaid.ohio.gov/ohio-rise",
+    hourlyRate: "Medicaid / No Cost",
+    overnight: true,
     vetted: true,
   },
   {
@@ -105,7 +124,7 @@ const PROVIDERS = [
     bio: "10 years providing therapeutic respite for families in the foster and adoption community. TBRI® trained and experienced with attachment-disordered children. Can work in your home or mine.",
     certifications: ["TBRI® Certified", "CPR/First Aid", "DHS Approved", "Mental Health First Aid"],
     phone: "918-555-0521",
-    email: "angela.respite@haloproject.org",
+    email: "angela.respite@rooted21.org",
     hourlyRate: "$22–28/hr",
     overnight: true,
     vetted: true,
@@ -140,7 +159,7 @@ function ProviderCard({ provider, onView }) {
             {provider.vetted && (
               <span className="flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full"
                 style={{ background: `${C.midGreen}18`, color: C.midGreen }}>
-                <CheckCircle2 size={8} /> HALO Vetted
+                <CheckCircle2 size={8} /> Vetted
               </span>
             )}
           </div>
@@ -242,7 +261,7 @@ function ProviderProfile({ provider, onBack }) {
               {provider.vetted && (
                 <span className="flex items-center gap-0.5 text-[9px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: `${C.midGreen}40`, color: C.lightGreen }}>
-                  <CheckCircle2 size={8} /> HALO Vetted
+                  <CheckCircle2 size={8} /> Vetted
                 </span>
               )}
             </div>
@@ -354,7 +373,7 @@ export default function RespiteCare() {
         <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
         <div>
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Respite Care Directory</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>HALO-Vetted Providers · Short-Term Relief</p>
+          <p className="text-[10px]" style={{ color: C.lightGreen }}>Vetted Providers · Short-Term Relief</p>
         </div>
         <div className="ml-auto flex items-center gap-1 rounded-full px-2.5 py-1"
           style={{ background: `${C.gold}30` }}>
@@ -372,7 +391,7 @@ export default function RespiteCare() {
           <div>
             <p className="text-xs font-bold mb-0.5" style={{ color: C.brown }}>You deserve rest.</p>
             <p className="text-xs leading-relaxed" style={{ color: "#3a3028" }}>
-              All providers are background-checked, HALO-trained, and experienced with children from hard places.
+              All providers are background-checked and experienced with children from hard places.
               Short-term care so you can restore and return stronger.
             </p>
           </div>
@@ -449,14 +468,14 @@ export default function RespiteCare() {
             <div className="rounded-2xl p-4 text-center" style={{ background: C.darkGreen }}>
               <p className="font-serif font-bold text-sm mb-1" style={{ color: C.cream }}>Need someone not listed?</p>
               <p className="text-xs mb-3" style={{ color: C.lightGreen }}>
-                Contact the HALO Project to request a vetted provider in your area or to apply to become one.
+                Contact us to request a vetted provider in your area or to apply to become one.
               </p>
               <a
-                href="mailto:haloproject@respite.org?subject=Respite Care Request"
+                href="mailto:rooted21@respite.org?subject=Respite Care Request"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold"
                 style={{ background: C.gold, color: C.darkGreen, textDecoration: "none" }}
               >
-                <MessageCircle size={13} /> Contact HALO Project
+                <MessageCircle size={13} /> Contact Rooted 21
               </a>
             </div>
           </>
