@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -101,6 +101,11 @@ export default function Dashboard() {
             <Library size={22} color={C.brown} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Resource Library</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Guides, books & articles</p>
+          </Link>
+          <Link to="/safety-plan" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Shield size={22} color={C.brown} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Safety Plan</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Crisis prep & resources</p>
           </Link>
           <Link to="/schedule" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <CalendarDays size={22} color={C.midGreen} />

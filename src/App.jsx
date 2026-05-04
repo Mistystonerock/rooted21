@@ -21,6 +21,7 @@ import ResourceLibrary from './pages/ResourceLibrary';
 import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
 import ScheduleCreator from './pages/ScheduleCreator';
+import SafetyPlan from './pages/SafetyPlan';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -65,6 +66,7 @@ const AuthenticatedApp = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/schedule" element={<ScheduleCreator />} />
+      <Route path="/safety-plan" element={<SafetyPlan />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
