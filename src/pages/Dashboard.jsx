@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
 import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
@@ -9,6 +10,7 @@ import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
 
 export default function Dashboard() {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [child, setChild] = useState(null);
   const [goals, setGoals] = useState([]);
@@ -16,13 +18,45 @@ export default function Dashboard() {
   const [recentCheckins, setRecentCheckins] = useState([]);
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const touchStartY = useRef(0);
+
+  async function handleRefresh() {
+    setIsRefreshing(true);
+    await Promise.all([
+      base44.auth.me().then(setUser),
+      base44.entities.ChildProfile.list("-created_date", 1).then(r => setChild(r[0] || null)),
+      base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals),
+      base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
+      base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
+    ]);
+    queryClient.invalidateQueries();
+    setIsRefreshing(false);
+  }
+
+  function handleTouchStart(e) {
+    touchStartY.current = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    const touchY = e.touches[0].clientY;
+    const scrollTop = window.scrollY;
+    if (scrollTop === 0 && touchY > touchStartY.current + 80 && !isRefreshing) {
+      handleRefresh();
+    }
+  }
 
   useEffect(() => {
-    base44.auth.me().then(setUser);
-    base44.entities.ChildProfile.list("-created_date", 1).then(r => setChild(r[0] || null));
-    base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals);
-    base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress);
-    base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [isRefreshing]);
+
+  useEffect(() => {
+    handleRefresh();
   }, []);
 
   const completedLessons = lessonProgress.length;

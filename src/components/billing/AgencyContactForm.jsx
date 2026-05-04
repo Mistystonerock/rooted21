@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { C } from '@/lib/rooted-constants';
-import { Mail, CheckCircle2 } from 'lucide-react';
+import { Mail, CheckCircle2, ChevronDown } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 export default function AgencyContactForm() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function AgencyContactForm() {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showStaffDrawer, setShowStaffDrawer] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,14 +42,14 @@ export default function AgencyContactForm() {
       <h3 className="font-serif font-bold text-base mb-2" style={{ color: C.darkGreen }}>
         🏢 Enterprise Pricing
       </h3>
-      <p className="text-xs mb-4" style={{ color: C.mutedText }}>
+      <p className="text-sm mb-4" style={{ color: C.mutedText }}>
         Rooted 21 is customizable for agencies, schools, and organizations. Get a personalized quote.
       </p>
 
       {submitted && (
         <div className="rounded-xl p-3 mb-4 flex items-center gap-2" style={{ background: `${C.midGreen}15` }}>
           <CheckCircle2 size={16} color={C.midGreen} />
-          <p className="text-xs font-bold" style={{ color: C.midGreen }}>
+          <p className="text-sm font-bold" style={{ color: C.midGreen }}>
             Thanks! Misty will reach out within 2 business days.
           </p>
         </div>
@@ -61,25 +63,51 @@ export default function AgencyContactForm() {
           value={formData.agency_name}
           onChange={handleChange}
           required
-          className="w-full rounded-lg px-3 py-2.5 text-xs font-sans"
+          className="w-full rounded-lg px-3 py-2.5 text-sm font-sans"
           style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
         />
 
-        <div className="relative rounded-lg" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}>
-          <select
-            name="staff_size"
-            value={formData.staff_size}
-            onChange={handleChange}
-            className="w-full px-3 py-2.5 text-xs font-sans appearance-none rounded-lg"
-            style={{ border: "none", background: "transparent" }}
+        <>
+          <button
+            type="button"
+            onClick={() => setShowStaffDrawer(true)}
+            className="w-full rounded-lg px-3 py-2.5 text-sm font-sans flex items-center justify-between"
+            style={{ border: `1px solid ${C.cream}`, background: C.offWhite, cursor: "pointer" }}
           >
-            <option value="">Staff Size (optional)</option>
-            <option value="1-3">1-3 staff</option>
-            <option value="4-10">4-10 staff</option>
-            <option value="11-25">11-25 staff</option>
-            <option value="26+">26+ staff</option>
-          </select>
-        </div>
+            {formData.staff_size || "Staff Size (optional)"}
+            <ChevronDown size={14} color={C.mutedText} />
+          </button>
+          
+          <Drawer open={showStaffDrawer} onOpenChange={setShowStaffDrawer}>
+            <DrawerContent style={{ background: C.white }}>
+              <DrawerHeader>
+                <DrawerTitle style={{ color: C.darkGreen }}>Select Staff Size</DrawerTitle>
+              </DrawerHeader>
+              <div className="px-4 pb-6 space-y-2">
+                {["Staff Size (optional)", "1-3 staff", "4-10 staff", "11-25 staff", "26+ staff"].map(option => (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, staff_size: option === "Staff Size (optional)" ? "" : option }));
+                      setShowStaffDrawer(false);
+                    }}
+                    className="w-full rounded-lg px-4 py-3 text-left text-sm font-medium transition-all"
+                    style={{
+                      background: (formData.staff_size === option || (!formData.staff_size && option === "Staff Size (optional)")) ? `${C.midGreen}15` : C.offWhite,
+                      border: (formData.staff_size === option || (!formData.staff_size && option === "Staff Size (optional)")) ? `2px solid ${C.midGreen}` : `1px solid ${C.cream}`,
+                      color: C.darkGreen,
+                      cursor: "pointer"
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </>
+        
 
         <input
           type="email"
@@ -88,7 +116,7 @@ export default function AgencyContactForm() {
           value={formData.contact_email}
           onChange={handleChange}
           required
-          className="w-full rounded-lg px-3 py-2.5 text-xs font-sans"
+          className="w-full rounded-lg px-3 py-2.5 text-sm font-sans"
           style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
         />
 
@@ -98,14 +126,14 @@ export default function AgencyContactForm() {
           value={formData.message}
           onChange={handleChange}
           rows="3"
-          className="w-full rounded-lg px-3 py-2.5 text-xs font-sans resize-none"
+          className="w-full rounded-lg px-3 py-2.5 text-sm font-sans resize-none"
           style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
         />
 
         <button
           type="submit"
           disabled={loading || !formData.agency_name.trim() || !formData.contact_email.trim()}
-          className="w-full py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-2 transition-opacity"
+          className="w-full py-2.5 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-opacity"
           style={{
             background: C.darkGreen,
             color: C.cream,

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft } from "lucide-react";
 import RegulationChart from "@/components/progress/RegulationChart";
@@ -11,14 +12,47 @@ function fmt(d) {
 }
 
 export default function Progress() {
+  const queryClient = useQueryClient();
   const [checkins, setCheckins] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const touchStartY = useRef(0);
+
+  async function handleRefresh() {
+    setIsRefreshing(true);
+    await Promise.all([
+      base44.entities.CheckIn.list("created_date", 200).then(setCheckins),
+      base44.entities.LessonProgress.filter({ completed: true }).then(setLessons),
+      base44.entities.Goal.list().then(setGoals),
+    ]);
+    queryClient.invalidateQueries();
+    setIsRefreshing(false);
+  }
+
+  function handleTouchStart(e) {
+    touchStartY.current = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    const touchY = e.touches[0].clientY;
+    const scrollTop = window.scrollY;
+    if (scrollTop === 0 && touchY > touchStartY.current + 80 && !isRefreshing) {
+      handleRefresh();
+    }
+  }
 
   useEffect(() => {
-    base44.entities.CheckIn.list("created_date", 200).then(setCheckins);
-    base44.entities.LessonProgress.filter({ completed: true }).then(setLessons);
-    base44.entities.Goal.list().then(setGoals);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [isRefreshing]);
+
+  useEffect(() => {
+    handleRefresh();
   }, []);
 
   const completedGoals = goals.filter(g => g.progress === "completed").length;
@@ -42,8 +76,8 @@ export default function Progress() {
             <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
               <p className="text-lg mb-0.5">{s.emoji}</p>
               <p className="text-xl font-extrabold leading-none" style={{ color: C.darkGreen }}>{s.value}</p>
-              <p className="text-[9px] mt-0.5" style={{ color: C.mutedText }}>{s.sub}</p>
-              <p className="text-[9px] font-bold" style={{ color: C.midGreen }}>{s.label}</p>
+              <p className="text-xs mt-0.5" style={{ color: C.mutedText }}>{s.sub}</p>
+              <p className="text-xs font-bold" style={{ color: C.midGreen }}>{s.label}</p>
             </div>
           ))}
         </div>

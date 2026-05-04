@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { C } from '@/lib/rooted-constants';
-import { X, Check, Loader2, AlertCircle } from 'lucide-react';
+import { X, Check, Loader2, AlertCircle, ChevronDown } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 const ROLES = ["Counselor", "Caseworker", "CPS Worker", "Court Staff", "Mentor", "Behavioral Health Worker", "School Staff", "Therapist", "Juvenile Probation", "Other"];
 
@@ -11,6 +12,7 @@ export default function RedeemInvitationModal({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [showRoleDrawer, setShowRoleDrawer] = useState(false);
 
   const handleRedeem = async (e) => {
     e.preventDefault();
@@ -40,13 +42,13 @@ export default function RedeemInvitationModal({ onClose, onSuccess }) {
         <div className="w-full rounded-t-2xl p-5" style={{ background: C.white }}>
           <div className="text-center space-y-3">
             <Check size={40} color={C.midGreen} className="mx-auto" />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>
+            <p className="font-bold text-base" style={{ color: C.darkGreen }}>
               ✓ Successfully Linked!
             </p>
-            <p className="text-xs" style={{ color: C.mutedText }}>
+            <p className="text-sm" style={{ color: C.mutedText }}>
               You're now connected to {success.assignment.family_name}'s account
             </p>
-            <p className="text-xs font-bold mt-2" style={{ color: C.midGreen }}>
+            <p className="text-sm font-bold mt-2" style={{ color: C.midGreen }}>
               Data is now being shared with you
             </p>
           </div>
@@ -73,19 +75,19 @@ export default function RedeemInvitationModal({ onClose, onSuccess }) {
         </div>
 
         <form onSubmit={handleRedeem} className="space-y-3">
-          <p className="text-xs" style={{ color: C.mutedText }}>
+          <p className="text-sm" style={{ color: C.mutedText }}>
             Enter the 6-digit code provided by the parent/family you work with.
           </p>
 
           {error && (
             <div className="rounded-lg p-3 flex gap-2" style={{ background: '#FEF3EE', border: '1px solid #F4C9B8' }}>
               <AlertCircle size={14} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
-              <p className="text-xs" style={{ color: '#B84C2A' }}>{error}</p>
+              <p className="text-sm" style={{ color: '#B84C2A' }}>{error}</p>
             </div>
           )}
 
           <div>
-            <label className="text-[10px] font-bold block mb-1.5" style={{ color: C.mutedText }}>
+            <label className="text-xs font-bold block mb-1.5" style={{ color: C.mutedText }}>
               INVITATION CODE
             </label>
             <input
@@ -100,17 +102,46 @@ export default function RedeemInvitationModal({ onClose, onSuccess }) {
           </div>
 
           <div>
-            <label className="text-[10px] font-bold block mb-1.5" style={{ color: C.mutedText }}>
+            <label className="text-xs font-bold block mb-1.5" style={{ color: C.mutedText }}>
               YOUR ROLE
             </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-lg px-3 py-2.5 text-xs"
-              style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
+            <button
+              type="button"
+              onClick={() => setShowRoleDrawer(true)}
+              className="w-full rounded-lg px-3 py-2.5 text-sm font-sans flex items-center justify-between"
+              style={{ border: `1px solid ${C.cream}`, background: C.offWhite, cursor: "pointer" }}
             >
-              {ROLES.map(r => <option key={r}>{r}</option>)}
-            </select>
+              {role}
+              <ChevronDown size={14} color={C.mutedText} />
+            </button>
+            
+            <Drawer open={showRoleDrawer} onOpenChange={setShowRoleDrawer}>
+              <DrawerContent style={{ background: C.white }}>
+                <DrawerHeader>
+                  <DrawerTitle style={{ color: C.darkGreen }}>Select Your Role</DrawerTitle>
+                </DrawerHeader>
+                <div className="px-4 pb-6 space-y-2">
+                  {ROLES.map(r => (
+                    <button
+                      key={r}
+                      onClick={() => {
+                        setRole(r);
+                        setShowRoleDrawer(false);
+                      }}
+                      className="w-full rounded-lg px-4 py-3 text-left text-sm font-medium transition-all"
+                      style={{
+                        background: role === r ? `${C.midGreen}15` : C.offWhite,
+                        border: role === r ? `2px solid ${C.midGreen}` : `1px solid ${C.cream}`,
+                        color: C.darkGreen,
+                        cursor: "pointer"
+                      }}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
 
           <button

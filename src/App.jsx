@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -58,7 +58,11 @@ const AuthenticatedApp = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={
+        <motion.div key="home" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
+          <Home />
+        </motion.div>
+      } />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/lessons" element={<Lessons />} />
       <Route path="/goals" element={<Goals />} />
@@ -81,7 +85,11 @@ const AuthenticatedApp = () => {
       <Route path="/legal" element={<Legal />} />
       <Route path="/billing" element={<Billing />} />
       <Route path="/owner-dashboard" element={<OwnerDashboard />} />
-      <Route path="*" element={<PageNotFound />} />
+      <Route path="*" element={
+        <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
+          <PageNotFound />
+        </motion.div>
+      } />
     </Routes>
     </AnimatePresence>
   );
