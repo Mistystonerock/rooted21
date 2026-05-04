@@ -28,10 +28,10 @@ const GUIDES = {
       `,
     },
     {
-      title: "Lessons (HALO Program)",
+      title: "Lessons",
       icon: "📚",
       content: `
-        The HALO program teaches trauma-informed parenting across 3 pillars:
+        The 21-lesson program teaches trauma-informed parenting across 3 pillars:
         • Connection & Attachment (Lessons 1-7)
         • Behavior & De-escalation (Lessons 8-14)
         • Regulation & Healing (Lessons 15-21)

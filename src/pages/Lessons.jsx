@@ -9,7 +9,7 @@ import CompletionCertificate from "@/components/rooted/CompletionCertificate";
 
 function downloadAllLessons() {
   const lines = [
-    `HALO PROJECT — ROOTED 21`,
+    `ROOTED 21 — 21-Lesson Program`,
     `Complete 10-Week TBRI® Curriculum`,
     `21 Lessons for Trauma-Informed Parenting`,
     `${"═".repeat(55)}`,
@@ -31,8 +31,8 @@ function downloadAllLessons() {
   });
 
   lines.push(`${"═".repeat(55)}`);
-  lines.push(`HALO Project · Rooted 21 Parenting Network`);
-  lines.push(`Crisis support: call or text 988`);
+    lines.push(`Rooted 21 Parenting Network`);
+    lines.push(`Crisis support: call or text 988`);
 
   const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -85,7 +85,7 @@ export default function Lessons() {
           <ChevronLeft size={20} color={C.cream} />
         </Link>
         <div>
-          <p className="font-serif font-bold" style={{ color: C.cream }}>HALO 10-Week Curriculum</p>
+          <p className="font-serif font-bold" style={{ color: C.cream }}>21-Lesson Program</p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>{completedCount} of 21 lessons complete</p>
         </div>
         <div className="flex items-center gap-2 ml-auto">
@@ -152,8 +152,8 @@ export default function Lessons() {
         {completedCount === 21 && (
           <div className="rounded-2xl p-5 text-center mt-3" style={{ background: C.darkGreen }}>
             <p className="text-3xl mb-2">🌳</p>
-            <p className="font-serif font-bold text-base" style={{ color: C.cream }}>HALO Program Complete!</p>
-            <p className="text-xs mt-1 mb-4" style={{ color: C.lightGreen }}>You completed the full 10-week TBRI® curriculum.</p>
+            <p className="font-serif font-bold text-base" style={{ color: C.cream }}>Program Complete!</p>
+            <p className="text-xs mt-1 mb-4" style={{ color: C.lightGreen }}>You completed the full 21-lesson curriculum.</p>
             <button
               onClick={() => setShowCertificate(true)}
               className="flex items-center gap-2 mx-auto px-5 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
