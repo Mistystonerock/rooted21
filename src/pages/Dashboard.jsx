@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, User, AlertTriangle, Zap } from "lucide-react";
+import { BookOpen, Target, TrendingUp, User, AlertTriangle, Zap, KeyRound } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
+import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -12,6 +13,7 @@ export default function Dashboard() {
   const [goals, setGoals] = useState([]);
   const [lessonProgress, setLessonProgress] = useState([]);
   const [recentCheckins, setRecentCheckins] = useState([]);
+  const [showCodeEntry, setShowCodeEntry] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser);
@@ -137,6 +139,26 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Access code entry */}
+        {showCodeEntry ? (
+          <AccessCodeEntry
+            onLinked={() => setShowCodeEntry(false)}
+            onDismiss={() => setShowCodeEntry(false)}
+          />
+        ) : (
+          <button
+            onClick={() => setShowCodeEntry(true)}
+            className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
+            style={{ background: C.white, border: `1.5px dashed ${C.midGreen}` }}
+          >
+            <KeyRound size={20} color={C.midGreen} />
+            <div>
+              <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Enter Professional Access Code</p>
+              <p className="text-[11px]" style={{ color: C.mutedText }}>Link your account to your assigned professional</p>
+            </div>
+          </button>
         )}
 
         <div className="pb-16" />

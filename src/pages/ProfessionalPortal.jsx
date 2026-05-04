@@ -85,6 +85,7 @@ export default function ProfessionalPortal() {
         lessons={data.lessons || []}
         goals={data.goals || []}
         notes={data.notes || []}
+        user={user}
         onBack={() => setSelectedFamily(null)}
         onNoteSaved={() => {
           // refresh notes for this family

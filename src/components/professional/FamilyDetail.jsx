@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Save } from "lucide-react";
+import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Key } from "lucide-react";
+import GenerateCodeModal from "./GenerateCodeModal";
 import { LESSONS } from "@/lib/lessons-data";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -12,9 +13,10 @@ function fmt(d) {
   return `${dt.getMonth() + 1}/${dt.getDate()}`;
 }
 
-export default function FamilyDetail({ family, checkins, lessons, goals, notes: initialNotes, onBack, onNoteSaved }) {
+export default function FamilyDetail({ family, checkins, lessons, goals, notes: initialNotes, onBack, onNoteSaved, user }) {
   const [tab, setTab] = useState("overview");
   const [showNoteForm, setShowNoteForm] = useState(false);
+  const [showCodeModal, setShowCodeModal] = useState(false);
   const [noteForm, setNoteForm] = useState({ note: "", recommendation: "" });
   const [notes, setNotes] = useState(initialNotes || []);
   const [saving, setSaving] = useState(false);
@@ -58,6 +60,9 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
+      {showCodeModal && (
+        <GenerateCodeModal family={family} user={user} onClose={() => setShowCodeModal(false)} />
+      )}
       {/* Header */}
       <div className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10 flex-shrink-0" style={{ background: C.darkGreen }}>
         <button onClick={onBack} className="rounded-lg p-1.5" style={{ background: "#ffffff18", border: "none" }}>
@@ -71,6 +76,13 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
             <p className="text-[10px]" style={{ color: C.lightGreen }}>🧒 {family.child_name}</p>
           )}
         </div>
+        <button
+          onClick={() => setShowCodeModal(true)}
+          className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-[11px] font-bold mr-1"
+          style={{ background: "#ffffff18", border: "none", color: C.lightGreen }}
+        >
+          <Key size={12} /> Code
+        </button>
         <button
           onClick={() => setShowNoteForm(true)}
           className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-[11px] font-bold"
