@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Search, ExternalLink, BookOpen, FileText, Video, Headphones, X } from "lucide-react";
+import LocalResources from "@/components/resources/LocalResources";
 
 const CATEGORIES = [
   { id: "all", label: "All", emoji: "📚" },
@@ -471,6 +472,9 @@ export default function ResourceLibrary() {
             </div>
           </div>
         )}
+
+        {/* Local Resources ZIP search */}
+        <LocalResources />
 
         {/* Footer note */}
         <div className="rounded-xl p-3.5" style={{ background: C.cream }}>
