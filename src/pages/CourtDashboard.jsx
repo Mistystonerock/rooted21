@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Users, MessageSquare, Calendar, Shield } from "lucide-react";
+import { ChevronLeft, Users, MessageSquare, Calendar, Shield, Download } from "lucide-react";
 
 export default function CourtDashboard() {
   const [user, setUser] = useState(null);
@@ -75,6 +75,19 @@ export default function CourtDashboard() {
             <p className="text-xs" style={{ color: C.mutedText }}>Pending</p>
           </div>
         </div>
+
+        {/* Quick actions */}
+        <Link
+          to="/court-generate-report"
+          className="flex items-center gap-3 rounded-2xl p-4 transition-all hover:shadow-md"
+          style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}`, textDecoration: "none" }}
+        >
+          <Download size={18} color={C.gold} />
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm" style={{ color: C.cream }}>Generate Partnership Report</p>
+            <p className="text-[11px]" style={{ color: C.lightGreen }}>Messages, behaviors & routines</p>
+          </div>
+        </Link>
 
         {/* Cases list */}
         <div>
