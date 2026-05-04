@@ -14,15 +14,27 @@ export const LESSONS = [
     tip: "This week, choose one behavior that frustrates you and ask: 'What might this child be trying to communicate?'",
     worksheet: "Write down what you know about your child's history. What hard places have they come from? What do you still not know?",
     questions: [
-      {
-        question: "What are some examples of 'hard places' that shape a child's early experiences?",
-        answer: "Hard places include prenatal stress, alcohol or drug exposure, neglect or abuse in early childhood, multiple foster placements, loss of birth parents, chronic instability, and medical trauma."
-      },
-      {
-        question: "Why is behavior that looks like defiance or rage actually a survival response?",
-        answer: "Children who experienced trauma learned that the world is not safe, and their nervous system developed survival behaviors to protect them. What looks like defiance is the child's brain responding to perceived danger based on their past experiences."
-      }
-    ],
+       {
+         question: "What are some examples of 'hard places' that shape a child's early experiences?",
+         answer: "Hard places include prenatal stress, alcohol or drug exposure, neglect or abuse in early childhood, multiple foster placements, loss of birth parents, chronic instability, and medical trauma."
+       },
+       {
+         question: "Why is behavior that looks like defiance or rage actually a survival response?",
+         answer: "Children who experienced trauma learned that the world is not safe, and their nervous system developed survival behaviors to protect them. What looks like defiance is the child's brain responding to perceived danger based on their past experiences."
+       },
+       {
+         question: "What does it mean that children from hard places have 'lost trust in adults'?",
+         answer: "Because of their early experiences with unreliable, harmful, or absent caregivers, children from hard places have learned not to trust that adults will keep them safe, meet their needs, or stay in their lives. Rebuilding that trust is the foundation of healing."
+       },
+       {
+         question: "How should you interpret a child's behavior when it appears manipulative?",
+         answer: "What appears to be manipulation is actually a learned survival strategy. The child is trying to meet a need in the only way they learned worked in their past. This requires compassion and teaching, not punishment."
+       },
+       {
+         question: "What is the core principle of trauma-informed parenting mentioned in this lesson?",
+         answer: "The core principle is that every child deserves to be seen, safe, soothed, and secure. Understanding that behavior is communication—not defiance—is the foundation of trauma-informed response."
+       }
+     ],
     readingMaterial: [
       "The Boy Who Was Raised as a Dog by Bruce Perry & Maia Szalavitz",
       "What Happened to You? by Bruce Perry & Oprah Winfrey",
@@ -39,19 +51,27 @@ export const LESSONS = [
     tip: "Practice identifying which 'R' your child needs in the moment: Regulate, Relate, or Reason.",
     worksheet: "Think of a recent escalation. Which stage was your child in — regulate, relate, or reason? What did you try? What might have worked better?",
     questions: [
-      {
-        question: "How does trauma affect the development of different brain regions?",
-        answer: "Trauma causes the lower brain (responsible for survival and reactivity) to become overactive, while the higher brain (responsible for thinking and reasoning) becomes underdeveloped. This explains why traumatized children react before thinking."
-      },
-      {
-        question: "What are the four stages of the stress response cycle?",
-        answer: "The four stages are: 1) Trigger (something that reminds the brain of danger), 2) Activation (fight, flight, or freeze), 3) Reaction (the behavior you see), and 4) Recovery (the window where healing happens)."
-      },
-      {
-        question: "What does the 3 R's principle in TBRI® stand for?",
-        answer: "Regulate, Relate, and Reason. You cannot reason with a dysregulated brain, so you first help the child regulate, then relate (connect), and finally reason with them."
-      }
-    ],
+       {
+         question: "How does trauma affect the development of different brain regions?",
+         answer: "Trauma causes the lower brain (responsible for survival and reactivity) to become overactive, while the higher brain (responsible for thinking and reasoning) becomes underdeveloped. This explains why traumatized children react before thinking."
+       },
+       {
+         question: "What are the four stages of the stress response cycle?",
+         answer: "The four stages are: 1) Trigger (something that reminds the brain of danger), 2) Activation (fight, flight, or freeze), 3) Reaction (the behavior you see), and 4) Recovery (the window where healing happens)."
+       },
+       {
+         question: "What does the 3 R's principle in TBRI® stand for?",
+         answer: "Regulate, Relate, and Reason. You cannot reason with a dysregulated brain, so you first help the child regulate, then relate (connect), and finally reason with them."
+       },
+       {
+         question: "Why can't logic or reason work during a child's meltdown?",
+         answer: "During a meltdown, the higher brain (responsible for reasoning) is offline. The lower brain (survival mode) is in control. The child's nervous system is in threat mode, and logic is not processed until they are regulated."
+       },
+       {
+         question: "What is the good news about the brain's capacity to heal?",
+         answer: "The brain is changeable (neuroplastic). With consistent, safe relationships and experiences, children from hard places can and do heal. The connections that were shaped by trauma can be rewired by safety."
+       }
+     ],
     readingMaterial: [
       "The Developing Child by Jerome Bruner",
       "Neurobiology and the Development of Human Morality by Jean Decety & James Killen",
@@ -69,15 +89,27 @@ export const LESSONS = [
     tip: "Try 10-15 minutes of child-led play this week with no agenda — no teaching, no correcting, just following their lead.",
     worksheet: "What does your child do that tells you they feel connected? What do they do when disconnected? How can you tell the difference?",
     questions: [
-      {
-        question: "What are the four attachment needs in the TBRI® framework?",
-        answer: "The four needs are: 1) Felt safety (the child's body feels safe), 2) Attunement (you see and respond to emotions), 3) Soothing (helping regulate), and 4) Security (trusting the relationship is stable)."
-      },
-      {
-        question: "Why must connection come before correction?",
-        answer: "A child who doesn't feel connected to you cannot be effectively corrected. Trust is built through thousands of small moments of attunement, not through discipline alone."
-      }
-    ],
+       {
+         question: "What are the four attachment needs in the TBRI® framework?",
+         answer: "The four needs are: 1) Felt safety (the child's body feels safe), 2) Attunement (you see and respond to emotions), 3) Soothing (helping regulate), and 4) Security (trusting the relationship is stable)."
+       },
+       {
+         question: "Why must connection come before correction?",
+         answer: "A child who doesn't feel connected to you cannot be effectively corrected. Trust is built through thousands of small moments of attunement, not through discipline alone."
+       },
+       {
+         question: "What is child-led play and why is it a connecting practice?",
+         answer: "Child-led play is when you follow the child's lead with no agenda, no teaching, and no correcting. It communicates 'I enjoy being with you' and builds attachment because the child is in control."
+       },
+       {
+         question: "What is a connecting ritual and why does it matter?",
+         answer: "A connecting ritual is a repeated, warm interaction (like a special handshake, greeting, or bedtime moment). These rituals build attachment by creating predictable, safe moments of connection."
+       },
+       {
+         question: "What role does nurturing touch play in building attachment?",
+         answer: "Nurturing touch (with permission) signals safety to the nervous system. It helps the child feel soothed and secure. For children who had no safe touch, this is a powerful healing tool."
+       }
+     ],
     readingMaterial: [
       "Attached by Amir Levine & Rachel Heller",
       "The Neurobiology of Love by Sue Johnson",
@@ -94,15 +126,27 @@ export const LESSONS = [
     tip: "This week, add one predictable ritual to your daily routine — a morning greeting, a goodbye phrase, a bedtime moment.",
     worksheet: "Describe what 'felt safety' looks like for your child. What helps them feel safe? What destroys it quickly?",
     questions: [
-      {
-        question: "What is the difference between actual safety and felt safety?",
-        answer: "Actual safety means there is no physical threat, but felt safety is when a child's nervous system perceives that they are safe. A child can be in a safe home but not *feel* safe if their nervous system is still on high alert from past trauma."
-      },
-      {
-        question: "How can predictability help build felt safety?",
-        answer: "Consistent routines signal safety because children know what's coming next. When they can predict their environment, they don't have to stay vigilant and their nervous system can relax."
-      }
-    ],
+       {
+         question: "What is the difference between actual safety and felt safety?",
+         answer: "Actual safety means there is no physical threat, but felt safety is when a child's nervous system perceives that they are safe. A child can be in a safe home but not *feel* safe if their nervous system is still on high alert from past trauma."
+       },
+       {
+         question: "How can predictability help build felt safety?",
+         answer: "Consistent routines signal safety because children know what's coming next. When they can predict their environment, they don't have to stay vigilant and their nervous system can relax."
+       },
+       {
+         question: "Why do transitions with warning reduce alarm for children from hard places?",
+         answer: "Children from hard places learned that change meant danger or loss. Giving 5-10 minute warnings before transitions ('5 more minutes, then we're heading to the car') allows their nervous system to prepare and trust what's coming next."
+       },
+       {
+         question: "How does a calm adult presence signal safety?",
+         answer: "A child's nervous system looks to the adult's nervous system for cues about danger. A regulated, calm adult communicates 'everything is okay' better than any words. Your calmness teaches them safety."
+       },
+       {
+         question: "What does it mean when a child 'acts out at safety'?",
+         answer: "'Acting out at safety' is when a child pushes away, tests limits, or refuses care when finally safe. This is a check to see if the relationship will hold. Their history taught them adults leave. Your consistency rewrites that story."
+       }
+     ],
     readingMaterial: [
       "The Boy Who Harnessed the Wind by William Kamkwamba",
       "Safe Refuge by Karen Purvis",
@@ -120,15 +164,27 @@ export const LESSONS = [
     tip: "Track your child's behavior this week against their eating, sleep, and movement patterns. Look for correlations.",
     worksheet: "What are your child's sensory needs? Do they seek intense input or avoid it? List 5 activities that seem to calm them.",
     questions: [
-      {
-        question: "What does HALT stand for and why is it important?",
-        answer: "HALT stands for Hungry, Anxious, Lonely, Tired. Tracking these signals is important because unmet physiological needs are often the root of behavioral challenges."
-      },
-      {
-        question: "How can a sensory diet help a child from hard places?",
-        answer: "A sensory diet is a personalized set of activities that help a child maintain optimal regulation. It includes calming tools (like deep pressure), alerting tools (like jumping), and organizing tools (like heavy work) tailored to the child's needs."
-      }
-    ],
+       {
+         question: "What does HALT stand for and why is it important?",
+         answer: "HALT stands for Hungry, Anxious, Lonely, Tired. Tracking these signals is important because unmet physiological needs are often the root of behavioral challenges."
+       },
+       {
+         question: "How can a sensory diet help a child from hard places?",
+         answer: "A sensory diet is a personalized set of activities that help a child maintain optimal regulation. It includes calming tools (like deep pressure), alerting tools (like jumping), and organizing tools (like heavy work) tailored to the child's needs."
+       },
+       {
+         question: "Why is sleep so critical for children from hard places?",
+         answer: "Poor sleep escalates everything—dysregulation, impulsivity, emotional intensity. Traumatized children often have disrupted sleep patterns due to hypervigilance. Consistent sleep routines and safety signals are essential."
+       },
+       {
+         question: "How does small, frequent food matter for regulation?",
+         answer: "Blood sugar drops fuel dysregulation and escalate behavior. Offering small snacks every 2-3 hours (not just 3 meals) keeps blood sugar stable and supports the nervous system's ability to regulate."
+       },
+       {
+         question: "What is the connection between movement and stress release?",
+         answer: "The body stores stress hormones. Movement (jumping, running, dancing, heavy work) helps discharge these hormones. Building movement breaks into the day supports regulation naturally."
+       }
+     ],
     readingMaterial: [
       "The Out-of-Sync Child by Carol Kranowitz",
       "Sensory Processing 101 resources",
@@ -145,15 +201,27 @@ export const LESSONS = [
     tip: "Introduce one life value term this week. Explain it, post it somewhere visible, and use it consistently.",
     worksheet: "Which life value does your child struggle with most? Write out 3 situations where you could use life value language instead of labels like 'bad' or 'difficult.'",
     questions: [
-      {
-        question: "What is the difference between using life value terms versus calling a child 'bad' or 'naughty'?",
-        answer: "Life value terms name the skill the child needs to learn ('I need you to be responsible'), while labels like 'bad' or 'naughty' attack the child's identity. Life value terms separate the behavior from the person, reducing shame."
-      },
-      {
-        question: "What does 'redo' mean in TBRI®?",
-        answer: "A redo is when a child makes a poor choice and is asked to try the interaction again correctly. It's not punitive—it's a skill-building moment where the child practices the correct behavior."
-      }
-    ],
+       {
+         question: "What is the difference between using life value terms versus calling a child 'bad' or 'naughty'?",
+         answer: "Life value terms name the skill the child needs to learn ('I need you to be responsible'), while labels like 'bad' or 'naughty' attack the child's identity. Life value terms separate the behavior from the person, reducing shame."
+       },
+       {
+         question: "What does 'redo' mean in TBRI®?",
+         answer: "A redo is when a child makes a poor choice and is asked to try the interaction again correctly. It's not punitive—it's a skill-building moment where the child practices the correct behavior."
+       },
+       {
+         question: "Name the five core life value terms and give an example of each.",
+         answer: "1) Trustworthy - 'I need a trustworthy choice,' 2) Responsible - 'Your job is to be responsible with the toys,' 3) Respectful - 'That wasn't respectful,' 4) Kind - 'Use kind words,' 5) Self-controlled - 'I need you to pause before reacting.'"
+       },
+       {
+         question: "Why is it harmful to give a child a shame-based identity?",
+         answer: "Children from hard places often believe *they* are bad, not that their behavior was bad. When you call them 'bad' or 'naughty,' you reinforce this belief. This creates deeper shame and makes healing harder."
+       },
+       {
+         question: "How does 'redo' keep the relationship intact while teaching?",
+         answer: "Redo is not punitive—it's skill-building. It says 'I know you can do this better' instead of 'You are bad.' The relationship stays intact because you're coaching, not condemning."
+       }
+     ],
     readingMaterial: [
       "Language Matters: Using Life Value Terms article",
       "Shame-Based Identities in Traumatized Children by Brené Brown",
@@ -171,15 +239,27 @@ export const LESSONS = [
     tip: "This week, try using a choice or a compromise in one situation where you'd normally issue a direct command.",
     worksheet: "Write out your IDEAL response for one recurring behavior challenge. Make it Immediate, Direct, Efficient, Action-based, Leveled.",
     questions: [
-      {
-        question: "What does IDEAL stand for in TBRI® correcting strategies?",
-        answer: "IDEAL stands for Immediate, Direct, Efficient, Action-based, and Leveled at the behavior (not the child). It's a framework for responding to misbehavior in a way that builds trust."
-      },
-      {
-        question: "Why is offering choices so important for children from hard places?",
-        answer: "Children from hard places have often had no control over their circumstances. Offering two acceptable choices returns a sense of control, which helps them feel less powerless and more cooperative."
-      }
-    ],
+       {
+         question: "What does IDEAL stand for in TBRI® correcting strategies?",
+         answer: "IDEAL stands for Immediate, Direct, Efficient, Action-based, and Leveled at the behavior (not the child). It's a framework for responding to misbehavior in a way that builds trust."
+       },
+       {
+         question: "Why is offering choices so important for children from hard places?",
+         answer: "Children from hard places have often had no control over their circumstances. Offering two acceptable choices returns a sense of control, which helps them feel less powerless and more cooperative."
+       },
+       {
+         question: "What makes a 'good choice' in a choice-based correction?",
+         answer: "Both options must be acceptable to you. For example, 'Do you want to sit at the table or the floor?' Both work. This returns power to the child while you maintain authority."
+       },
+       {
+         question: "How does 'previewing' reduce anxiety?",
+         answer: "Previewing is walking through upcoming events in advance ('Tomorrow we have a doctor's visit. First we'll wait, then we'll go in the room, then the doctor will check your ears'). This reduces anxiety because there are no surprises."
+       },
+       {
+         question: "Why do children from hard places often need power returned in small ways?",
+         answer: "Children from hard places learned they were powerless. Powerlessness leads to aggression, defiance, or shutdown. Returning power through choices and compromises decreases these behaviors naturally."
+       }
+     ],
     readingMaterial: [
       "The Boy's Guide to Managing Emotions by Jane Nelsen",
       "Proactive Parenting Strategies",
@@ -196,15 +276,27 @@ export const LESSONS = [
     tip: "Practice one Redo this week. After a poor choice, calmly ask your child to 'try that again' with the correct behavior.",
     worksheet: "Describe one situation where a Redo could have changed the outcome. What would you have said?",
     questions: [
-      {
-        question: "What are the five TBRI® disarming strategies?",
-        answer: "The five strategies are: 1) Playful engagement, 2) Noticing, 3) Compromise and choices, 4) Empathic response, and 5) The Redo."
-      },
-      {
-        question: "Why is playfulness an effective disarming strategy during escalation?",
-        answer: "Humor and lightness can break a tension cycle before it escalates. Playfulness communicates to the child that you're not afraid of them and can help shift their nervous system out of fight mode."
-      }
-    ],
+       {
+         question: "What are the five TBRI® disarming strategies?",
+         answer: "The five strategies are: 1) Playful engagement, 2) Noticing, 3) Compromise and choices, 4) Empathic response, and 5) The Redo."
+       },
+       {
+         question: "Why is playfulness an effective disarming strategy during escalation?",
+         answer: "Humor and lightness can break a tension cycle before it escalates. Playfulness communicates to the child that you're not afraid of them and can help shift their nervous system out of fight mode."
+       },
+       {
+         question: "What is 'Noticing' and why is it a disarming strategy?",
+         answer: "'Noticing' is simply naming what you see without judgment: 'I notice you're having a really hard time right now.' It shows you see them and understand their struggle, which can reduce defensive escalation."
+       },
+       {
+         question: "What should you avoid doing during a child's escalation?",
+         answer: "Avoid yelling or matching their energy, giving long lectures (the brain can't process them), using shaming language, or physical confrontation. These all escalate further."
+       },
+       {
+         question: "When should you attempt repair after a behavior incident?",
+         answer: "You should wait until both you and the child are fully regulated and calm. Attempting repair during activation only escalates things. Clean repair comes after regulation returns."
+       }
+     ],
     readingMaterial: [
       "De-escalation Techniques for Difficult Behaviors",
       "Playfulness and Connection by Neuroscientists",
@@ -222,15 +314,27 @@ export const LESSONS = [
     tip: "When you feel yourself triggered this week, pause and ask: 'How old does this feeling feel?' That age is the voice speaking.",
     worksheet: "What were the messages you received as a child about emotions? About discipline? About worth? How do they show up in your parenting?",
     questions: [
-      {
-        question: "What are the two ways 'voices from the past' show up in our parenting?",
-        answer: "We either parent exactly as we were parented (repeating the cycle) or we parent in the opposite extreme (overcorrecting the cycle). Neither is always right—awareness is the goal."
-      },
-      {
-        question: "What does recognizing your triggers give you?",
-        answer: "Recognizing your triggers gives you a fraction of a second between stimulus and response. In that fraction, you can choose to respond differently instead of reacting automatically."
-      }
-    ],
+       {
+         question: "What are the two ways 'voices from the past' show up in our parenting?",
+         answer: "We either parent exactly as we were parented (repeating the cycle) or we parent in the opposite extreme (overcorrecting the cycle). Neither is always right—awareness is the goal."
+       },
+       {
+         question: "What does recognizing your triggers give you?",
+         answer: "Recognizing your triggers gives you a fraction of a second between stimulus and response. In that fraction, you can choose to respond differently instead of reacting automatically."
+       },
+       {
+         question: "What are the signs that your own past is driving your present?",
+         answer: "Signs include: disproportionate emotional reactions, hearing yourself repeat your parents' words, feeling young/scared/out of control, or feeling shame about the situation (not just frustration)."
+       },
+       {
+         question: "What is the connection between the caregiver's healing and the child's healing?",
+         answer: "Your child's healing and your own healing are connected. As you become more aware and regulated, you can provide the secure base your child needs. Your growth enables theirs."
+       },
+       {
+         question: "What does it mean to be a 'present and aware' parent?",
+         answer: "A present and aware parent doesn't have to be perfect. They notice their own triggers, understand their own history, and can use that awareness to choose differently in difficult moments."
+       }
+     ],
     readingMaterial: [
       "The Conscious Parent by Shefali Tsabary",
       "Parenting from the Inside Out by Dan Siegel & Mary Hartzell",
@@ -247,15 +351,27 @@ export const LESSONS = [
     tip: "Choose one PACE element to focus on this week. Notice moments where you can practice it intentionally.",
     worksheet: "Which element of PACE is hardest for you — Playfulness, Acceptance, Curiosity, or Empathy? Why? What would it take to strengthen it?",
     questions: [
-      {
-        question: "What does PACE stand for?",
-        answer: "PACE stands for Playfulness, Acceptance, Curiosity, and Empathy. It's a relational stance or attitude that caregivers use when working with children from hard places."
-      },
-      {
-        question: "Why is PACE considered an attitude rather than a technique?",
-        answer: "PACE is not something you do; it's how you show up in the relationship. It's an internal stance of genuine curiosity, warmth, and acceptance that the child can sense."
-      }
-    ],
+       {
+         question: "What does PACE stand for?",
+         answer: "PACE stands for Playfulness, Acceptance, Curiosity, and Empathy. It's a relational stance or attitude that caregivers use when working with children from hard places."
+       },
+       {
+         question: "Why is PACE considered an attitude rather than a technique?",
+         answer: "PACE is not something you do; it's how you show up in the relationship. It's an internal stance of genuine curiosity, warmth, and acceptance that the child can sense."
+       },
+       {
+         question: "What does Acceptance mean and what does it NOT mean?",
+         answer: "Acceptance means accepting the child as they are—unconditional positive regard for the person beneath the behavior. It does NOT mean you agree with or accept the behavior."
+       },
+       {
+         question: "How does Curiosity differ from judgment?",
+         answer: "Curiosity asks 'I wonder why...' instead of immediately reacting. It communicates 'I want to understand you' instead of 'You are wrong.' Curiosity disarms defensiveness."
+       },
+       {
+         question: "What happens to a child's nervous system when they feel PACE from a caregiver?",
+         answer: "Defense comes down. Trust begins to build. The nervous system shifts out of threat mode. This is the soil in which all growth and healing happen."
+       }
+     ],
     readingMaterial: [
       "Attaching in Adoption by Deborah D. Gray",
       "A Safe Place for Broken Hearts by Dan Hughes",
@@ -273,15 +389,27 @@ export const LESSONS = [
     tip: "Create a simple calm-down kit with your child — let them choose 3-5 items that help them feel better.",
     worksheet: "Is your child sensory seeking, sensory avoiding, or both? List 5 activities in each category that seem to help them regulate.",
     questions: [
-      {
-        question: "What is the difference between a sensory-seeking child and a sensory-avoiding child?",
-        answer: "Sensory-seeking children need MORE input to feel regulated (like rough play and jumping). Sensory-avoiding children are overwhelmed by sensory input and prefer less stimulation (like quiet spaces and soft textures)."
-      },
-      {
-        question: "What are the three categories of tools in a sensory diet?",
-        answer: "The three categories are: 1) Calming tools (deep pressure, weighted blankets), 2) Alerting tools (jumping, crunchy snacks), and 3) Organizing tools (heavy work, rhythmic movement)."
-      }
-    ],
+       {
+         question: "What is the difference between a sensory-seeking child and a sensory-avoiding child?",
+         answer: "Sensory-seeking children need MORE input to feel regulated (like rough play and jumping). Sensory-avoiding children are overwhelmed by sensory input and prefer less stimulation (like quiet spaces and soft textures)."
+       },
+       {
+         question: "What are the three categories of tools in a sensory diet?",
+         answer: "The three categories are: 1) Calming tools (deep pressure, weighted blankets), 2) Alerting tools (jumping, crunchy snacks), and 3) Organizing tools (heavy work, rhythmic movement)."
+       },
+       {
+         question: "Why is it important to work with an occupational therapist?",
+         answer: "An OT can assess your child's specific sensory profile and help you create a personalized sensory diet. What works for one child may not work for another."
+       },
+       {
+         question: "What behaviors might indicate a child is sensory-seeking?",
+         answer: "Rough play, crashing into things, jumping, putting things in mouth, talking loudly, invading personal space, and seeming to have no 'off switch.'"
+       },
+       {
+         question: "What behaviors might indicate a child is sensory-avoiding?",
+         answer: "Bothered by tags or seams, covers ears or eyes, overreacts to light touch, avoids crowds or noisy environments, and wants predictability and calm."
+       }
+     ],
     readingMaterial: [
       "The Out-of-Sync Child by Carol Stock Kranowitz",
       "How Does Your Engine Run? by Alert Program",
@@ -298,15 +426,27 @@ export const LESSONS = [
     tip: "Look at a challenging behavior this week and ask: 'How old does this feel? How old might my child's nervous system be right now?'",
     worksheet: "What developmental gaps do you think your child has? What needs might still need to be met? How could you meet them in age-appropriate ways?",
     questions: [
-      {
-        question: "Why might a 10-year-old have the emotional regulation of a 4-year-old?",
-        answer: "Early trauma disrupts developmental milestones. If a child experienced severe neglect in their first 3 years, those foundational developmental stages were interrupted, even though they've been chronologically aging."
-      },
-      {
-        question: "What does it mean when a child regresses and how should you respond?",
-        answer: "Regression (acting younger, wanting a bottle) is the child's way of communicating unmet developmental needs. You should meet that need rather than shame the child. Meeting these needs fills developmental gaps and allows growth to continue."
-      }
-    ],
+       {
+         question: "Why might a 10-year-old have the emotional regulation of a 4-year-old?",
+         answer: "Early trauma disrupts developmental milestones. If a child experienced severe neglect in their first 3 years, those foundational developmental stages were interrupted, even though they've been chronologically aging."
+       },
+       {
+         question: "What does it mean when a child regresses and how should you respond?",
+         answer: "Regression (acting younger, wanting a bottle) is the child's way of communicating unmet developmental needs. You should meet that need rather than shame the child. Meeting these needs fills developmental gaps and allows growth to continue."
+       },
+       {
+         question: "What is the difference between chronological age and developmental age?",
+         answer: "Chronological age is how many years old the child is. Developmental age is the stage they are actually functioning at emotionally and behaviorally, which may be significantly younger due to trauma."
+       },
+       {
+         question: "How should expectations change based on developmental age?",
+         answer: "Expectations must match developmental age, not chronological age. A 12-year-old at a 5-year-old developmental age should receive nurturing and expectations appropriate for a 5-year-old."
+       },
+       {
+         question: "What does co-regulation build in a child?",
+         answer: "Co-regulation today (you helping the child regulate) builds self-regulation tomorrow. You cannot rush this process by demanding maturity before the foundation is built."
+       }
+     ],
     readingMaterial: [
       "The Whole Brain Child by Daniel Siegel & Tina Payne Bryson",
       "Developmental Psychology books by Jean Piaget",
@@ -324,19 +464,27 @@ export const LESSONS = [
     tip: "When you catch a lie this week, try responding with curiosity first: 'I wonder if something felt scary about telling me the truth. I want to be a safe person.'",
     worksheet: "Which of these three behaviors shows up for your child? What do you think the underlying need or fear is? How could you address the need rather than just the behavior?",
     questions: [
-      {
-        question: "Why do children from hard places lie, and how is the response different from traditional parenting?",
-        answer: "For children from hard places, truth-telling was often dangerous. The cure is not harsher consequences but building enough safety and trust that telling the truth feels safe. Shame or punishment reinforces their fear of honesty."
-      },
-      {
-        question: "What does stealing communicate and how should you respond?",
-        answer: "Stealing communicates that the child experienced scarcity. Rather than punishment, respond with logical consequences (return item, repair harm) combined with empathy and consistent abundance—proving that resources are safe and available."
-      },
-      {
-        question: "Why do children hoard food and how does abundance help?",
-        answer: "Food hoarding stems from experienced neglect and hunger. Children hoard to protect themselves from future scarcity. The response is consistent abundance—proving through time and repeated experience that food is always available and safe."
-      }
-    ],
+       {
+         question: "Why do children from hard places lie, and how is the response different from traditional parenting?",
+         answer: "For children from hard places, truth-telling was often dangerous. The cure is not harsher consequences but building enough safety and trust that telling the truth feels safe. Shame or punishment reinforces their fear of honesty."
+       },
+       {
+         question: "What does stealing communicate and how should you respond?",
+         answer: "Stealing communicates that the child experienced scarcity. Rather than punishment, respond with logical consequences (return item, repair harm) combined with empathy and consistent abundance—proving that resources are safe and available."
+       },
+       {
+         question: "Why do children hoard food and how does abundance help?",
+         answer: "Food hoarding stems from experienced neglect and hunger. Children hoard to protect themselves from future scarcity. The response is consistent abundance—proving through time and repeated experience that food is always available and safe."
+       },
+       {
+         question: "What is the common thread between lying, stealing, and hoarding?",
+         answer: "All three are survival behaviors rooted in prior deprivation or danger—not moral failure. They are the child's nervous system trying to stay safe based on past experiences."
+       },
+       {
+         question: "How does empathy and meeting the underlying need work better than consequences?",
+         answer: "Harsh consequences confirm the child's belief that adults punish and that the world is unsafe. Meeting the underlying need (safety, food, trust) while setting clear behavioral expectations gradually rewires their beliefs."
+       }
+     ],
     readingMaterial: [
       "Understanding the Secret World of Childhood by Maria Montessori",
       "Reaching the Hard to Reach Child by Heather Forbes",
@@ -353,15 +501,27 @@ export const LESSONS = [
     tip: "If aggression is a recurring challenge, work with your therapist to create a specific de-escalation plan for your household.",
     worksheet: "What is your current response to aggression? What triggers it in your child? What has helped in the past? What makes it worse?",
     questions: [
-      {
-        question: "What does physical aggression communicate and what should you NOT do?",
-        answer: "Aggression communicates overwhelming emotion (fear, shame, powerlessness) and is a distress signal. You should NOT match their energy with yelling or force. Instead, ensure safety, give space, keep your voice soft, and debrief after regulation returns."
-      },
-      {
-        question: "What do sexualized behaviors in children indicate and what should you do?",
-        answer: "Sexualized behaviors almost always indicate exposure to sexual content or abuse. You should immediately seek professional consultation (therapist, DHS), respond calmly without shaming, set clear safety rules, and ensure ongoing therapeutic support."
-      }
-    ],
+       {
+         question: "What does physical aggression communicate and what should you NOT do?",
+         answer: "Aggression communicates overwhelming emotion (fear, shame, powerlessness) and is a distress signal. You should NOT match their energy with yelling or force. Instead, ensure safety, give space, keep your voice soft, and debrief after regulation returns."
+       },
+       {
+         question: "What do sexualized behaviors in children indicate and what should you do?",
+         answer: "Sexualized behaviors almost always indicate exposure to sexual content or abuse. You should immediately seek professional consultation (therapist, DHS), respond calmly without shaming, set clear safety rules, and ensure ongoing therapeutic support."
+       },
+       {
+         question: "What is the best way to respond when a child is being aggressive toward you?",
+         answer: "Ensure physical safety (yours and theirs), don't match their energy with yelling or force, give space, move your body back, lower your voice, and say 'I'm not going to hurt you. You're safe here.' Debrief only after full regulation."
+       },
+       {
+         question: "Why is professional support essential for sexualized behaviors?",
+         answer: "Sexualized behaviors are a trauma indicator and require specialized therapeutic support. This is not a behavior to manage alone in the home—DHS and a licensed therapist must be involved."
+       },
+       {
+         question: "What is the underlying message both behaviors communicate?",
+         answer: "Both aggression and sexualized behaviors communicate profound pain, fear, and unmet needs. They require safety, regulation, and professional support—not shame or punishment."
+       }
+     ],
     readingMaterial: [
       "Aggression in Children by Russell Barkley",
       "Understanding Childhood Sexual Behavior article by American Academy of Pediatrics",
@@ -379,15 +539,27 @@ export const LESSONS = [
     tip: "Start a simple binder or notes folder to track all system interactions — dates, names, decisions, and outcomes.",
     worksheet: "Who is on your child's professional team? List their names and roles. Who do you trust most? Who do you need to build a better relationship with?",
     questions: [
-      {
-        question: "What are the six practical steps for navigating the child welfare system?",
-        answer: "1) Document everything, 2) Know your team, 3) Ask for clarity, 4) Bring support to meetings, 5) Advocate for your child using TBRI® language, 6) Protect your child from adult content of the system."
-      },
-      {
-        question: "Why is documentation important when navigating the system?",
-        answer: "Documentation (dates, names, conversations, decisions) creates a clear record of your child's progress and your advocacy efforts. It helps you advocate effectively and protects you if there are disputes."
-      }
-    ],
+       {
+         question: "What are the six practical steps for navigating the child welfare system?",
+         answer: "1) Document everything, 2) Know your team, 3) Ask for clarity, 4) Bring support to meetings, 5) Advocate for your child using TBRI® language, 6) Protect your child from adult content of the system."
+       },
+       {
+         question: "Why is documentation important when navigating the system?",
+         answer: "Documentation (dates, names, conversations, decisions) creates a clear record of your child's progress and your advocacy efforts. It helps you advocate effectively and protects you if there are disputes."
+       },
+       {
+         question: "Who should be on your child's professional team?",
+         answer: "Your team typically includes: caseworker, CASA volunteer (if assigned), attorney, therapist, and other professionals. Build relationships with each and know their specific role."
+       },
+       {
+         question: "How can TBRI® language help when advocating to professionals?",
+         answer: "Using TBRI® language (felt safety, life value terms, redo, PACE) helps professionals understand your child's needs in trauma-informed terms. It shifts the conversation from 'problem behavior' to 'unmet needs.'"
+       },
+       {
+         question: "Why is it important to protect your child from adult content of the system?",
+         answer: "Court dates, caseworker visits, and system conversations can be retraumatizing. Children should be protected from adult worries, legal details, and system drama. They need to focus on being children."
+       }
+     ],
     readingMaterial: [
       "Foster Care and Adoption Advocacy guide",
       "Your Rights in the Child Welfare System",
@@ -404,15 +576,27 @@ export const LESSONS = [
     tip: "Identify one gap in your support network and take one step this week to fill it — a call, an email, a search for a TBRI® therapist.",
     worksheet: "Draw your support circle. Where are the gaps? Who do you wish you could add? What is stopping you?",
     questions: [
-      {
-        question: "What are the three categories of support you should build into your network?",
-        answer: "The three categories are: 1) Professional support (therapist, caseworker, pediatrician), 2) Community support (other families, mentors, respite care), and 3) Personal support (trusted friends, co-parents)."
-      },
-      {
-        question: "Why is it important to find other families who understand your situation?",
-        answer: "Other foster/adoptive families or parents of traumatized children understand the unique challenges you face in a way that friends or family without this experience may not. They provide validation and practical advice."
-      }
-    ],
+       {
+         question: "What are the three categories of support you should build into your network?",
+         answer: "The three categories are: 1) Professional support (therapist, caseworker, pediatrician), 2) Community support (other families, mentors, respite care), and 3) Personal support (trusted friends, co-parents)."
+       },
+       {
+         question: "Why is it important to find other families who understand your situation?",
+         answer: "Other foster/adoptive families or parents of traumatized children understand the unique challenges you face in a way that friends or family without this experience may not. They provide validation and practical advice."
+       },
+       {
+         question: "What should a trauma-informed therapist be able to do?",
+         answer: "A TBRI®-trained therapist understands trauma, the specific needs of children from hard places, and can help both the child and parents navigate healing in a coordinated way."
+       },
+       {
+         question: "What is the role of respite care in your support network?",
+         answer: "Respite care providers offer needed breaks from caregiving. Finding respite providers who understand trauma is important—they become part of your village and allow you to rest."
+       },
+       {
+         question: "Why is having a co-parent or trusted partner important?",
+         answer: "A partner who shares the TBRI® framework can support you through hard moments, validate your experience, and share the emotional weight of parenting a traumatized child."
+       }
+     ],
     readingMaterial: [
       "Creating Community for Foster and Adoptive Families",
       "The Importance of Peer Support for Caregivers",
@@ -430,19 +614,27 @@ export const LESSONS = [
     tip: "Schedule one genuine act of self-care this week — something that truly restores and replenishes you.",
     worksheet: "What are your signs that you are approaching burnout? What has helped in the past? What would real rest look like for you?",
     questions: [
-      {
-        question: "What is secondary traumatic stress (STS) and why is it important to recognize?",
-        answer: "Secondary traumatic stress is when caregivers develop trauma symptoms from bearing witness to their child's pain and history. Recognizing it is important because it's not weakness—it's an occupational hazard of deep love that requires care."
-      },
-      {
-        question: "Why can't you regulate a child beyond your own window of tolerance?",
-        answer: "Your nervous system is the template for the child. If you are dysregulated, overwhelmed, or burned out, the child will sense that. Your own regulation is essential for being able to help them regulate."
-      },
-      {
-        question: "What are six resilience practices for caregivers?",
-        answer: "1) Therapy for yourself, 2) Regular respite (time away), 3) Peer community with other caregivers, 4) Physical care (sleep, movement, nutrition), 5) Spiritual practices, 6) Celebrating small wins."
-      }
-    ],
+       {
+         question: "What is secondary traumatic stress (STS) and why is it important to recognize?",
+         answer: "Secondary traumatic stress is when caregivers develop trauma symptoms from bearing witness to their child's pain and history. Recognizing it is important because it's not weakness—it's an occupational hazard of deep love that requires care."
+       },
+       {
+         question: "Why can't you regulate a child beyond your own window of tolerance?",
+         answer: "Your nervous system is the template for the child. If you are dysregulated, overwhelmed, or burned out, the child will sense that. Your own regulation is essential for being able to help them regulate."
+       },
+       {
+         question: "What are six resilience practices for caregivers?",
+         answer: "1) Therapy for yourself, 2) Regular respite (time away), 3) Peer community with other caregivers, 4) Physical care (sleep, movement, nutrition), 5) Spiritual practices, 6) Celebrating small wins."
+       },
+       {
+         question: "What are the signs that you're approaching caregiver burnout?",
+         answer: "Signs include: emotional numbness or detachment, hypervigilance or anxiety in your own body, intrusive thoughts about your child's history, compassion fatigue, irritability, and feeling like you have nothing left."
+       },
+       {
+         question: "Why is respite care not abandonment?",
+         answer: "Respite—taking time away to rest and restore—is not abandonment. It's self-preservation. You cannot regulate a child when you are burned out. Your own rest enables your child's healing."
+       }
+     ],
     readingMaterial: [
       "The Body Keeps the Score by Bessel van der Kolk",
       "Compassion Fatigue by Charles R. Figley",
@@ -459,19 +651,27 @@ export const LESSONS = [
     tip: "Practice a repair this week — even about something small. Notice how the child responds.",
     worksheet: "Think of a recent moment you wish had gone differently. Write out what a repair would have sounded like. What stopped you from doing it?",
     questions: [
-      {
-        question: "What are the five steps for repairing after a conflict?",
-        answer: "1) Wait until calm, 2) Own your part clearly, 3) Validate their experience, 4) Reconnect (physically if welcomed), 5) Don't over-explain or justify."
-      },
-      {
-        question: "Why is repair so powerful for children from hard places?",
-        answer: "Children from hard places expect adults to hurt them and disappear. Repair teaches them that relationships survive hard moments and adults can take responsibility. This rewrites their nervous system's expectations about relationships."
-      },
-      {
-        question: "What is more important than being a perfect parent?",
-        answer: "Repairing when you mess up is more important than perfection. Repair builds trust faster than perfection ever could because it teaches the child that you're human and that relationships can heal."
-      }
-    ],
+       {
+         question: "What are the five steps for repairing after a conflict?",
+         answer: "1) Wait until calm, 2) Own your part clearly, 3) Validate their experience, 4) Reconnect (physically if welcomed), 5) Don't over-explain or justify."
+       },
+       {
+         question: "Why is repair so powerful for children from hard places?",
+         answer: "Children from hard places expect adults to hurt them and disappear. Repair teaches them that relationships survive hard moments and adults can take responsibility. This rewrites their nervous system's expectations about relationships."
+       },
+       {
+         question: "What is more important than being a perfect parent?",
+         answer: "Repairing when you mess up is more important than perfection. Repair builds trust faster than perfection ever could because it teaches the child that you're human and that relationships can heal."
+       },
+       {
+         question: "Why should you wait until both are calm before repairing?",
+         answer: "Attempting repair while either person is activated only escalates further. Both need to be regulated for the repair to land. Timing matters."
+       },
+       {
+         question: "What should you NOT do during a repair?",
+         answer: "Don't over-explain, justify, or defend yourself. A simple, clean repair is more powerful: 'I was wrong. I'm sorry. I want to make this right.' Long explanations dilute the message."
+       }
+     ],
     readingMaterial: [
       "The Power of Apology by Margaret Visser",
       "Repairing Relationships after Conflict",
@@ -489,15 +689,27 @@ export const LESSONS = [
     tip: "Begin collecting photos, documents, or information that could be part of your child's Life Book. A shoebox is a fine start.",
     worksheet: "What parts of your child's story do they know? What do they not know yet? What age-appropriate truth could you begin to share?",
     questions: [
-      {
-        question: "What should a Life Book include?",
-        answer: "A Life Book should include: early history (age-appropriate), birth family (if applicable), timeline of placements, people who cared for them, current family, and the child's strengths and hopes."
-      },
-      {
-        question: "Why do children who don't know their story often create shame-based narratives?",
-        answer: "Without accurate information, children typically fill in the gaps with shame-based stories like 'I was abandoned because I was bad.' The truth, told with love and age-appropriately, is always better than these invented stories."
-      }
-    ],
+       {
+         question: "What should a Life Book include?",
+         answer: "A Life Book should include: early history (age-appropriate), birth family (if applicable), timeline of placements, people who cared for them, current family, and the child's strengths and hopes."
+       },
+       {
+         question: "Why do children who don't know their story often create shame-based narratives?",
+         answer: "Without accurate information, children typically fill in the gaps with shame-based stories like 'I was abandoned because I was bad.' The truth, told with love and age-appropriately, is always better than these invented stories."
+       },
+       {
+         question: "Why is a Life Book a therapeutic tool?",
+         answer: "A Life Book helps children integrate their narrative and understand where they came from. This integration reduces shame and helps them make sense of their life."
+       },
+       {
+         question: "When should you start creating a Life Book?",
+         answer: "Start as early as possible, even while the child is young. It's an ongoing project that grows with the child and is updated as they mature and can understand more."
+       },
+       {
+         question: "Who should be involved in creating the Life Book?",
+         answer: "A trauma-informed therapist should be involved to help tell the story in age-appropriate, healing ways. The caregiver and child work together with professional guidance."
+       }
+     ],
     readingMaterial: [
       "Life Books: A Guide to Creating a Life Book for Children in Care by Wendy Kershaw",
       "Telling Your Child's Story by JCICS",
@@ -514,15 +726,27 @@ export const LESSONS = [
     tip: "Write down 5 things that are genuinely better now than when you started this program.",
     worksheet: "Write a letter to your child about who you believe they are becoming. Speak to their resilience, their strengths, and your hope for them.",
     questions: [
-      {
-        question: "What five conditions are necessary for resilience to develop in children?",
-        answer: "1) At least one stable, consistently caring adult, 2) Predictable, safe environment, 3) Skills for managing emotions, 4) A sense of meaning and hope, 5) Community and connection."
-      },
-      {
-        question: "What is post-traumatic growth?",
-        answer: "Post-traumatic growth is the development of strength, wisdom, and compassion through adversity. It's the capacity for children to not just heal from trauma, but to become stronger and more compassionate because of what they've overcome."
-      }
-    ],
+       {
+         question: "What five conditions are necessary for resilience to develop in children?",
+         answer: "1) At least one stable, consistently caring adult, 2) Predictable, safe environment, 3) Skills for managing emotions, 4) A sense of meaning and hope, 5) Community and connection."
+       },
+       {
+         question: "What is post-traumatic growth?",
+         answer: "Post-traumatic growth is the development of strength, wisdom, and compassion through adversity. It's the capacity for children to not just heal from trauma, but to become stronger and more compassionate because of what they've overcome."
+       },
+       {
+         question: "What is the most critical resilience factor in your child's life?",
+         answer: "You are. Your consistent presence—through regressions, rages, redos, and repairs—builds the secure base from which your child will one day launch. This relationship IS the healing."
+       },
+       {
+         question: "What do families report after completing this program?",
+         answer: "Families report: decreased problematic behaviors, increased attachment, increased parenting confidence, more compassion for their child, and reduced need for additional mental health services."
+       },
+       {
+         question: "What is the role of community and connection in resilience?",
+         answer: "Children cannot heal in isolation. Community—whether that's faith, support groups, families, mentors, or professionals—is essential. Resilience is built in relationship."
+       }
+     ],
     readingMaterial: [
       "Post-Traumatic Growth by Richard Tedeschi & Lawrence Calhoun",
       "Resilience: The Power of Bouncing Back by Sybil Elaine",
@@ -539,15 +763,27 @@ export const LESSONS = [
     tip: "Celebrate yourself and your child today. This was real, significant, meaningful work.",
     worksheet: "Write a letter to the parent you were on Day 1. What do you know now that you didn't know then? What would you tell them?",
     questions: [
-      {
-        question: "What are the ten key tools you've learned throughout this program?",
-        answer: "1) Science of trauma, 2) TBRI® Connecting Principles, 3) TBRI® Empowering Principles, 4) TBRI® Correcting Principles, 5) Sensory regulation, 6) Developmental vs. chronological age, 7) Strategies for difficult behaviors, 8) Navigation of systems, 9) Power of repair, 10) Understanding your own story."
-      },
-      {
-        question: "What is your commitment as a parent moving forward?",
-        answer: "Your commitment is to keep practicing (skills take time), return for support, reach out for professional help when needed, share what you've learned, celebrate wins, and keep repairing, connecting, and showing up for your child."
-      }
-    ],
+       {
+         question: "What are the ten key tools you've learned throughout this program?",
+         answer: "1) Science of trauma, 2) TBRI® Connecting Principles, 3) TBRI® Empowering Principles, 4) TBRI® Correcting Principles, 5) Sensory regulation, 6) Developmental vs. chronological age, 7) Strategies for difficult behaviors, 8) Navigation of systems, 9) Power of repair, 10) Understanding your own story."
+       },
+       {
+         question: "What is your commitment as a parent moving forward?",
+         answer: "Your commitment is to keep practicing (skills take time), return for support, reach out for professional help when needed, share what you've learned, celebrate wins, and keep repairing, connecting, and showing up for your child."
+       },
+       {
+         question: "What are the three pillars of TBRI® you've learned?",
+         answer: "The three pillars are: 1) Connecting Principles (attachment and safety), 2) Empowering Principles (meeting physiological needs and building skills), and 3) Correcting Principles (proactive and disarming strategies)."
+       },
+       {
+         question: "What is the core message of this entire program?",
+         answer: "Every child deserves to be seen, safe, soothed, and secure. You are giving your child that gift through consistent, trauma-informed parenting."
+       },
+       {
+         question: "Who were you on Day 1 versus who are you now?",
+         answer: "On Day 1, you may have felt confused, frustrated, or alone. Now you understand trauma, have concrete tools, and know you're part of a larger community of caregivers doing this deep work."
+       }
+     ],
     readingMaterial: [
       "Trust-Based Relational Intervention Resources",
       "Continuing Your Journey: Resources for After the Program",
