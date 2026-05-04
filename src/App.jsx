@@ -25,6 +25,7 @@ import SafetyPlan from './pages/SafetyPlan';
 import Journal from './pages/Journal';
 import SupportGuide from './pages/SupportGuide';
 import MonthlyReport from './pages/MonthlyReport';
+import Legal from './pages/Legal';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -73,6 +74,7 @@ const AuthenticatedApp = () => {
       <Route path="/journal" element={<Journal />} />
       <Route path="/support-guide" element={<SupportGuide />} />
       <Route path="/monthly-report" element={<MonthlyReport />} />
+      <Route path="/legal" element={<Legal />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -127,6 +127,14 @@ export default function Profile() {
         <p className="text-[11px] text-center" style={{ color: C.mutedText }}>
           Reminders are sent at 9am the day before each calendar event.
         </p>
+        {/* LEGAL LINK */}
+        <Link
+          to="/legal"
+          className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
+          style={{ background: C.white, border: `1px solid ${C.cream}`, textDecoration: "none", color: C.darkGreen }}
+        >
+          📋 Legal Documents & Consent Forms
+        </Link>
       </div>
     </div>
   );
