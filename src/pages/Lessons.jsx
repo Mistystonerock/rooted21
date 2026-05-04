@@ -3,9 +3,45 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { LESSONS } from "@/lib/lessons-data";
-import { CheckCircle2, ChevronLeft, Award } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Award, Download } from "lucide-react";
 import LessonDetail from "@/components/rooted/LessonDetail";
 import CompletionCertificate from "@/components/rooted/CompletionCertificate";
+
+function downloadAllLessons() {
+  const lines = [
+    `HALO PROJECT — ROOTED 21`,
+    `Complete 10-Week TBRI® Curriculum`,
+    `21 Lessons for Trauma-Informed Parenting`,
+    `${"═".repeat(55)}`,
+    ``,
+  ];
+
+  LESSONS.forEach(lesson => {
+    lines.push(`${"─".repeat(55)}`);
+    lines.push(`Week ${lesson.week} · Lesson ${lesson.id} · ${lesson.pillar}`);
+    lines.push(`${lesson.emoji}  ${lesson.title.toUpperCase()}`);
+    lines.push(`${"─".repeat(55)}`);
+    lines.push(``);
+    lines.push(lesson.content.replace(/\*\*/g, ""));
+    lines.push(``);
+    lines.push(`💡 TIP: ${lesson.tip}`);
+    lines.push(``);
+    lines.push(`📝 REFLECTION: ${lesson.worksheet}`);
+    lines.push(``);
+  });
+
+  lines.push(`${"═".repeat(55)}`);
+  lines.push(`HALO Project · Rooted 21 Parenting Network`);
+  lines.push(`Crisis support: call or text 988`);
+
+  const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "HALO-Rooted21-Complete-Curriculum.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function Lessons() {
   const [completed, setCompleted] = useState(new Set());
@@ -52,8 +88,18 @@ export default function Lessons() {
           <p className="font-serif font-bold" style={{ color: C.cream }}>HALO 10-Week Curriculum</p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>{completedCount} of 21 lessons complete</p>
         </div>
-        <div className="ml-auto text-sm font-bold" style={{ color: C.gold }}>
-          {Math.round((completedCount / 21) * 100)}%
+        <div className="flex items-center gap-2 ml-auto">
+          <span className="text-sm font-bold" style={{ color: C.gold }}>
+            {Math.round((completedCount / 21) * 100)}%
+          </span>
+          <button
+            onClick={downloadAllLessons}
+            className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-[11px] font-bold"
+            style={{ background: "#ffffff18", border: "none", color: C.lightGreen, cursor: "pointer" }}
+            title="Download all 21 lessons for offline reading"
+          >
+            <Download size={13} /> All
+          </button>
         </div>
       </div>
 
@@ -66,7 +112,6 @@ export default function Lessons() {
       </div>
 
       <div className="max-w-[520px] mx-auto px-4 py-4">
-        {/* Group by week */}
         {Array.from({ length: 10 }, (_, i) => i + 1).map(week => {
           const weekLessons = LESSONS.filter(l => l.lesson_week === week || l.week === week);
           if (!weekLessons.length) return null;
