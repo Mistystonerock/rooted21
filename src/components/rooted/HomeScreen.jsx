@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
+import { Clock } from "lucide-react";
 import TreeLogo from "./TreeLogo";
 import BehaviorGrid from "./BehaviorGrid";
 
-export default function HomeScreen({ onHelp, error }) {
+export default function HomeScreen({ onHelp, error, onOpenHistory }) {
   const [txt, setTxt] = useState("");
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       {/* Header */}
-      <div className="text-center" style={{ background: C.darkGreen, padding: "28px 20px 22px" }}>
+      <div className="relative text-center" style={{ background: C.darkGreen, padding: "28px 20px 22px" }}>
+        <button
+          onClick={onOpenHistory}
+          className="absolute top-4 right-4 flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-opacity hover:opacity-80"
+          style={{ background: "#ffffff18", border: "none", color: C.lightGreen }}
+        >
+          <Clock size={13} />
+          History
+        </button>
         <div className="flex justify-center mb-3.5">
           <TreeLogo size={64} />
         </div>

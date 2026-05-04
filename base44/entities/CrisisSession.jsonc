@@ -1,0 +1,22 @@
+{
+  "name": "CrisisSession",
+  "type": "object",
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "description": "The original question or behavior description from the parent"
+    },
+    "response": {
+      "type": "string",
+      "description": "The AI guidance response"
+    },
+    "label": {
+      "type": "string",
+      "description": "Short auto-generated label for the session"
+    }
+  },
+  "required": [
+    "prompt",
+    "response"
+  ]
+}

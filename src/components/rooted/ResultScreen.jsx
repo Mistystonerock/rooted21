@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { C, SYSTEM_PROMPT } from "@/lib/rooted-constants";
 import { base44 } from "@/api/base44Client";
+import { Clock } from "lucide-react";
 import TreeLogo from "./TreeLogo";
 import LoadingDots from "./LoadingDots";
 import ResponseContent from "./ResponseContent";
 
-export default function ResultScreen({ response, onReset, initialMessages }) {
+export default function ResultScreen({ response, onReset, initialMessages, onOpenHistory }) {
   const [followTxt, setFollowTxt] = useState("");
   const [followResp, setFollowResp] = useState("");
   const [history, setHistory] = useState(initialMessages || []);
@@ -58,6 +59,14 @@ export default function ResultScreen({ response, onReset, initialMessages }) {
         <div className="font-serif font-bold" style={{ color: C.white }}>
           Rooted <span style={{ color: C.gold }}>21</span>
         </div>
+        <button
+          onClick={onOpenHistory}
+          className="ml-auto flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-opacity hover:opacity-80"
+          style={{ background: "#ffffff18", border: "none", color: C.lightGreen }}
+        >
+          <Clock size={13} />
+          History
+        </button>
       </div>
 
       <div className="max-w-[520px] mx-auto p-4">

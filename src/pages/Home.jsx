@@ -4,12 +4,14 @@ import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
 import HomeScreen from "@/components/rooted/HomeScreen";
 import LoadingScreen from "@/components/rooted/LoadingScreen";
 import ResultScreen from "@/components/rooted/ResultScreen";
+import HistorySidebar from "@/components/rooted/HistorySidebar";
 
 export default function Home() {
   const [screen, setScreen] = useState("home");
   const [response, setResponse] = useState("");
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   async function handleHelp(prompt) {
     setError("");
@@ -28,6 +30,14 @@ export default function Home() {
       return;
     }
 
+    // Save session to DB (fire and forget)
+    const label = prompt.length > 60 ? prompt.slice(0, 57) + "…" : prompt;
+    base44.entities.CrisisSession.create({
+      prompt,
+      response: replyText,
+      label,
+    });
+
     const msgs = [
       { role: "user", content: prompt },
       { role: "assistant", content: replyText },
@@ -44,15 +54,40 @@ export default function Home() {
     setError("");
   }
 
-  if (screen === "loading") return <LoadingScreen />;
-  if (screen === "result") {
-    return (
-      <ResultScreen
-        response={response}
-        onReset={handleReset}
-        initialMessages={messages}
-      />
-    );
+  function handleRestore(session) {
+    const msgs = [
+      { role: "user", content: session.prompt },
+      { role: "assistant", content: session.response },
+    ];
+    setMessages(msgs);
+    setResponse(session.response);
+    setScreen("result");
   }
-  return <HomeScreen onHelp={handleHelp} error={error} />;
+
+  return (
+    <>
+      <HistorySidebar
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        onRestore={handleRestore}
+      />
+
+      {screen === "loading" && <LoadingScreen />}
+      {screen === "result" && (
+        <ResultScreen
+          response={response}
+          onReset={handleReset}
+          initialMessages={messages}
+          onOpenHistory={() => setHistoryOpen(true)}
+        />
+      )}
+      {screen === "home" && (
+        <HomeScreen
+          onHelp={handleHelp}
+          error={error}
+          onOpenHistory={() => setHistoryOpen(true)}
+        />
+      )}
+    </>
+  );
 }
