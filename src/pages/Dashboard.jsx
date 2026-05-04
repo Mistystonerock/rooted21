@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -91,6 +91,11 @@ export default function Dashboard() {
             <BookMarked size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Reflection Journal</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Private daily reflections</p>
+          </Link>
+          <Link to="/support-guide" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <MessageSquare size={22} color={C.midGreen} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Support Conversation</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>AI talking points for your team</p>
           </Link>
           <Link to="/family-dashboard" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <Calendar size={22} color={C.midGreen} />
