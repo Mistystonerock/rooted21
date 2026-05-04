@@ -1,0 +1,48 @@
+{
+  "name": "ParentMilestone",
+  "type": "object",
+  "properties": {
+    "parent_email": {
+      "type": "string",
+      "description": "Email of the parent"
+    },
+    "badge_type": {
+      "type": "string",
+      "enum": [
+        "lesson_starter",
+        "lesson_master",
+        "consistent_checkin",
+        "checkin_streak",
+        "program_champion",
+        "mindful_parent"
+      ],
+      "description": "Type of badge earned"
+    },
+    "badge_name": {
+      "type": "string",
+      "description": "Display name for the badge"
+    },
+    "badge_emoji": {
+      "type": "string",
+      "description": "Emoji representation of the badge"
+    },
+    "description": {
+      "type": "string",
+      "description": "Badge description"
+    },
+    "requirement": {
+      "type": "string",
+      "description": "What was needed to earn this badge"
+    },
+    "milestone_level": {
+      "type": "number",
+      "description": "Which milestone tier (1-5)"
+    }
+  },
+  "required": [
+    "parent_email",
+    "badge_type",
+    "badge_name",
+    "badge_emoji"
+  ]
+}

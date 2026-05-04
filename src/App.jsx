@@ -33,6 +33,7 @@ import BehaviorLogs from './pages/BehaviorLogs';
 import CoParentPortal from './pages/CoParentPortal';
 import CoParentMessaging from './pages/CoParentMessaging';
 import CoParentingResources from './pages/CoParentingResources';
+import Milestones from './pages/Milestones';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -93,6 +94,7 @@ const AuthenticatedApp = () => {
       <Route path="/co-parent-portal" element={<CoParentPortal />} />
       <Route path="/co-parent-messaging/:partnershipId" element={<CoParentMessaging />} />
       <Route path="/co-parenting-resources" element={<CoParentingResources />} />
+      <Route path="/milestones" element={<Milestones />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />

@@ -177,6 +177,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
             <p className="text-[11px]" style={{ color: C.lightGreen }}>Trends, patterns & insights</p>
           </Link>
+          <Link to="/milestones" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>🏅</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Milestones</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Badges & rewards</p>
+          </Link>
           <Link to="/co-parent-portal" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <Users size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Co-Parent Portal</p>
