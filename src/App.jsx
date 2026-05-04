@@ -29,6 +29,7 @@ import MonthlyReport from './pages/MonthlyReport';
 import Legal from './pages/Legal';
 import Billing from './pages/Billing';
 import OwnerDashboard from './pages/OwnerDashboard';
+import BehaviorLogs from './pages/BehaviorLogs';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -85,6 +86,7 @@ const AuthenticatedApp = () => {
       <Route path="/legal" element={<Legal />} />
       <Route path="/billing" element={<Billing />} />
       <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+      <Route path="/behavior-logs" element={<BehaviorLogs />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />

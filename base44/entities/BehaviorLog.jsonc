@@ -1,0 +1,46 @@
+{
+  "name": "BehaviorLog",
+  "type": "object",
+  "properties": {
+    "entry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the behavior log entry"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of day (e.g. 2:30 PM)"
+    },
+    "behavior_description": {
+      "type": "string",
+      "description": "What behavior occurred"
+    },
+    "trigger": {
+      "type": "string",
+      "description": "What triggered the behavior"
+    },
+    "parent_response": {
+      "type": "string",
+      "description": "How the parent responded"
+    },
+    "outcome": {
+      "type": "string",
+      "description": "How the situation resolved"
+    },
+    "child_mood": {
+      "type": "string",
+      "enum": [
+        "calm",
+        "sad",
+        "anxious",
+        "angry",
+        "dysregulated"
+      ],
+      "description": "Child's mood during the incident"
+    }
+  },
+  "required": [
+    "entry_date",
+    "behavior_description"
+  ]
+}

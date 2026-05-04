@@ -167,6 +167,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Monthly Report</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>PDF for care team</p>
           </Link>
+          <Link to="/behavior-logs" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <BarChart2 size={22} color={C.brown} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Behavior Logs</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Daily behavior tracking</p>
+          </Link>
           <Link to="/analytics" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
             <BarChart2 size={22} color={C.gold} />
             <p className="font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
