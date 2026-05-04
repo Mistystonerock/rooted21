@@ -1,0 +1,46 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user receiving the notification"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "message",
+        "appointment",
+        "system"
+      ],
+      "description": "Type of notification"
+    },
+    "title": {
+      "type": "string",
+      "description": "Notification title"
+    },
+    "body": {
+      "type": "string",
+      "description": "Notification message"
+    },
+    "related_id": {
+      "type": "string",
+      "description": "ID of related entity (message ID, appointment ID, etc)"
+    },
+    "related_link": {
+      "type": "string",
+      "description": "Link to view the related content"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether notification has been read"
+    }
+  },
+  "required": [
+    "user_email",
+    "type",
+    "title",
+    "body"
+  ]
+}

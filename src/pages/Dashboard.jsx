@@ -6,6 +6,7 @@ import { C } from "@/lib/rooted-constants";
 import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
+import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
 
@@ -81,11 +82,14 @@ export default function Dashboard() {
             PARENTING NETWORK
           </div>
         </div>
-        <Link to="/profile" className="ml-auto">
-          <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: C.midGreen, color: C.white }}>
-            {user?.full_name?.[0] || "?"}
-          </div>
-        </Link>
+        <div className="ml-auto flex items-center gap-2">
+          <NotificationBell />
+          <Link to="/profile">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: C.midGreen, color: C.white }}>
+              {user?.full_name?.[0] || "?"}
+            </div>
+          </Link>
+        </div>
       </div>
 
       <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
