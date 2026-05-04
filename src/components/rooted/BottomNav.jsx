@@ -1,10 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
-import { Home, BookOpen, Target, TrendingUp, LayoutGrid } from "lucide-react";
+import { Home, BookOpen, Target, TrendingUp, MessageCircle } from "lucide-react";
 
 const NAV = [
-  { path: "/", label: "Help", icon: Home },
-  { path: "/dashboard", label: "Dashboard", icon: LayoutGrid },
+  { path: "/", label: "Home", icon: Home },
+  { path: "/chat", label: "AI Chat", icon: MessageCircle },
   { path: "/lessons", label: "Lessons", icon: BookOpen },
   { path: "/goals", label: "Goals", icon: Target },
   { path: "/progress", label: "Progress", icon: TrendingUp },

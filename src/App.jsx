@@ -13,6 +13,7 @@ import Progress from './pages/Progress';
 import ChildProfile from './pages/ChildProfile';
 import ProfessionalPortal from './pages/ProfessionalPortal';
 import Resources from './pages/Resources';
+import Chat from './pages/Chat';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -49,6 +50,7 @@ const AuthenticatedApp = () => {
       <Route path="/child-profile" element={<ChildProfile />} />
       <Route path="/professional" element={<ProfessionalPortal />} />
       <Route path="/resources" element={<Resources />} />
+      <Route path="/chat" element={<Chat />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

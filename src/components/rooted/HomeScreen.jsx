@@ -69,7 +69,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
             What's happening right now?
           </h2>
           <p className="m-0 mb-3 text-[13px]" style={{ color: C.mutedText }}>
-            Describe the behavior and get trauma-informed help immediately.
+            Describe the situation and get TBRI®-based guidance immediately.
           </p>
 
           <textarea
@@ -90,18 +90,27 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
             </p>
           )}
 
-          <button
-            onClick={() => txt.trim() && onHelp(txt.trim())}
-            disabled={!txt.trim()}
-            className="w-full mt-3 py-3.5 rounded-xl border-none font-extrabold text-[15px] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-            style={{
-              background: txt.trim() ? C.darkGreen : C.cream,
-              color: txt.trim() ? C.white : C.mutedText,
-              cursor: txt.trim() ? "pointer" : "default",
-            }}
-          >
-            Get Support Right Now →
-          </button>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => txt.trim() && onHelp(txt.trim())}
+              disabled={!txt.trim()}
+              className="flex-1 py-3.5 rounded-xl border-none font-extrabold text-[14px] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              style={{
+                background: txt.trim() ? C.darkGreen : C.cream,
+                color: txt.trim() ? C.white : C.mutedText,
+                cursor: txt.trim() ? "pointer" : "default",
+              }}
+            >
+              Get Help →
+            </button>
+            <Link
+              to="/chat"
+              className="flex items-center gap-1.5 px-4 py-3.5 rounded-xl font-extrabold text-[14px] transition-all hover:opacity-90"
+              style={{ background: C.midGreen, color: C.white, textDecoration: "none", flexShrink: 0 }}
+            >
+              💬 Chat
+            </Link>
+          </div>
         </div>
 
         {/* Divider */}
