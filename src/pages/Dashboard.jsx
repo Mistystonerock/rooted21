@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, User, AlertTriangle, Zap, KeyRound } from "lucide-react";
+import { BookOpen, Target, TrendingUp, User, AlertTriangle, Zap, KeyRound, Users } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -81,6 +81,11 @@ export default function Dashboard() {
             <TrendingUp size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Progress</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>View your growth</p>
+          </Link>
+          <Link to="/my-team" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md col-span-2" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Users size={22} color={C.brown} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>My Support Team</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Secure messages with your professionals</p>
           </Link>
         </div>
 

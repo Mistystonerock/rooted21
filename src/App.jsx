@@ -14,6 +14,7 @@ import ChildProfile from './pages/ChildProfile';
 import ProfessionalPortal from './pages/ProfessionalPortal';
 import Resources from './pages/Resources';
 import Chat from './pages/Chat';
+import MyTeam from './pages/MyTeam';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -51,6 +52,7 @@ const AuthenticatedApp = () => {
       <Route path="/professional" element={<ProfessionalPortal />} />
       <Route path="/resources" element={<Resources />} />
       <Route path="/chat" element={<Chat />} />
+      <Route path="/my-team" element={<MyTeam />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

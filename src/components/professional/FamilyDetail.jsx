@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Key } from "lucide-react";
+import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Key, MessageCircle } from "lucide-react";
 import GenerateCodeModal from "./GenerateCodeModal";
+import SecureMessageThread from "@/components/messaging/SecureMessageThread";
 import { LESSONS } from "@/lib/lessons-data";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -56,7 +57,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
     onNoteSaved?.();
   }
 
-  const TABS = ["overview", "trends", "lessons", "notes"];
+  const TABS = ["overview", "trends", "lessons", "notes", "messages"];
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
@@ -298,6 +299,18 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
               </div>
             ))}
           </>
+        )}
+
+        {/* ── MESSAGES TAB ── */}
+        {tab === "messages" && user && (
+          <div className="rounded-2xl overflow-hidden" style={{ background: C.white, border: `1px solid ${C.cream}`, height: 480 }}>
+            <SecureMessageThread
+              familyEmail={family.family_email}
+              professionalEmail={user.email}
+              currentUser={user}
+              senderRole={family.professional_role || "Professional"}
+            />
+          </div>
         )}
 
       </div>

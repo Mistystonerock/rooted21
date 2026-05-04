@@ -1,0 +1,41 @@
+{
+  "name": "SecureMessage",
+  "type": "object",
+  "properties": {
+    "family_email": {
+      "type": "string",
+      "description": "Email of the parent/family \u2014 used to thread the conversation"
+    },
+    "professional_email": {
+      "type": "string",
+      "description": "Email of the professional involved in this thread"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the person who sent this message"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Display name of the sender"
+    },
+    "sender_role": {
+      "type": "string",
+      "description": "Role label: 'parent' or the professional's role"
+    },
+    "body": {
+      "type": "string",
+      "description": "Message text content"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the recipient has read this message"
+    }
+  },
+  "required": [
+    "family_email",
+    "professional_email",
+    "sender_email",
+    "body"
+  ]
+}
