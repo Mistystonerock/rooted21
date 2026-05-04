@@ -1,0 +1,33 @@
+{
+  "name": "ChildProfile",
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    },
+    "strengths": {
+      "type": "string"
+    },
+    "concerns": {
+      "type": "string"
+    },
+    "triggers": {
+      "type": "string"
+    },
+    "coping_tools": {
+      "type": "string"
+    },
+    "behavior_patterns": {
+      "type": "string"
+    },
+    "school_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "first_name"
+  ]
+}

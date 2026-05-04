@@ -1,0 +1,27 @@
+{
+  "name": "ProfessionalNote",
+  "type": "object",
+  "properties": {
+    "family_email": {
+      "type": "string"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "recommendation": {
+      "type": "string"
+    },
+    "professional_name": {
+      "type": "string"
+    },
+    "professional_role": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "note"
+  ]
+}

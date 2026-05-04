@@ -1,0 +1,16 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user",
+        "professional"
+      ],
+      "default": "user",
+      "description": "User role: user = parent/caregiver, professional = agency staff (counselor, CPS, court, etc.), admin = platform admin"
+    }
+  }
+}

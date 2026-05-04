@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
-import { Clock, TrendingUp } from "lucide-react";
+import { Clock, TrendingUp, LayoutGrid, Shield, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 import TreeLogo from "./TreeLogo";
 import BehaviorGrid from "./BehaviorGrid";
 
@@ -112,6 +113,22 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
         </p>
 
         <BehaviorGrid onSelect={onHelp} />
+
+        {/* Platform links */}
+        <div className="grid grid-cols-3 gap-2 mt-5">
+          <Link to="/dashboard" className="flex flex-col items-center gap-1.5 rounded-xl py-3 px-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}`, textDecoration: "none" }}>
+            <LayoutGrid size={18} color={C.darkGreen} />
+            <span className="text-[10px] font-bold text-center" style={{ color: C.darkGreen }}>Dashboard</span>
+          </Link>
+          <Link to="/lessons" className="flex flex-col items-center gap-1.5 rounded-xl py-3 px-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}`, textDecoration: "none" }}>
+            <BookOpen size={18} color={C.midGreen} />
+            <span className="text-[10px] font-bold text-center" style={{ color: C.darkGreen }}>21 Lessons</span>
+          </Link>
+          <Link to="/professional" className="flex flex-col items-center gap-1.5 rounded-xl py-3 px-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}`, textDecoration: "none" }}>
+            <Shield size={18} color={C.brown} />
+            <span className="text-[10px] font-bold text-center" style={{ color: C.darkGreen }}>Professionals</span>
+          </Link>
+        </div>
 
         {/* Footer */}
         <p

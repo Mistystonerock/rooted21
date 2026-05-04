@@ -1,0 +1,33 @@
+{
+  "name": "Goal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed"
+      ],
+      "default": "not_started"
+    },
+    "barriers": {
+      "type": "string"
+    },
+    "next_steps": {
+      "type": "string"
+    },
+    "who_is_helping": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "LessonProgress",
+  "type": "object",
+  "properties": {
+    "lesson_id": {
+      "type": "number"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "lesson_id"
+  ]
+}

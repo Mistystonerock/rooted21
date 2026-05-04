@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
 import HomeScreen from "@/components/rooted/HomeScreen";

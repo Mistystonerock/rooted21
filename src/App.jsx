@@ -6,6 +6,13 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import Lessons from './pages/Lessons';
+import Goals from './pages/Goals';
+import Progress from './pages/Progress';
+import ChildProfile from './pages/ChildProfile';
+import ProfessionalPortal from './pages/ProfessionalPortal';
+import Resources from './pages/Resources';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -35,6 +42,13 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/lessons" element={<Lessons />} />
+      <Route path="/goals" element={<Goals />} />
+      <Route path="/progress" element={<Progress />} />
+      <Route path="/child-profile" element={<ChildProfile />} />
+      <Route path="/professional" element={<ProfessionalPortal />} />
+      <Route path="/resources" element={<Resources />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
