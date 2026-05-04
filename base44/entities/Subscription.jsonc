@@ -1,0 +1,81 @@
+{
+  "name": "Subscription",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user (parent)"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "private",
+        "professional",
+        "agency"
+      ],
+      "description": "Type of account"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "trial",
+        "active",
+        "past_due",
+        "canceled"
+      ],
+      "default": "trial",
+      "description": "Current subscription status"
+    },
+    "trial_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the 7-day trial began"
+    },
+    "trial_end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trial expires"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID for this user"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Active Stripe subscription ID"
+    },
+    "current_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current billing period start"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current billing period end"
+    },
+    "last_payment_status": {
+      "type": "string",
+      "enum": [
+        "succeeded",
+        "failed",
+        "pending"
+      ],
+      "description": "Status of last payment"
+    },
+    "last_payment_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the last payment was processed"
+    },
+    "cancel_at_period_end": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, subscription will cancel at the end of current period"
+    }
+  },
+  "required": [
+    "user_email",
+    "account_type"
+  ]
+}

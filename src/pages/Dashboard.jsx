@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -131,6 +131,11 @@ export default function Dashboard() {
             <BarChart2 size={22} color={C.gold} />
             <p className="font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
             <p className="text-[11px]" style={{ color: C.lightGreen }}>Trends, patterns & insights</p>
+          </Link>
+          <Link to="/billing" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <CreditCard size={22} color={C.brown} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Billing</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Subscription & pricing</p>
           </Link>
         </div>
 
