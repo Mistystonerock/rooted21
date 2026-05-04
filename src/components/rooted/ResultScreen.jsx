@@ -30,7 +30,8 @@ export default function ResultScreen({ response, onReset, initialMessages }) {
       .join("\n\n");
 
     const reply = await base44.integrations.Core.InvokeLLM({
-      prompt: `${SYSTEM_PROMPT}\n\nConversation so far:\n${conversationText}\n\nProvide your next response as Rooted 21:`,
+      prompt: `${SYSTEM_PROMPT}\n\nConversation so far:\n${conversationText}`,
+      model: "claude_sonnet_4_6",
     });
 
     const replyText = typeof reply === "string" ? reply : reply?.text || "Please try again in a moment.";

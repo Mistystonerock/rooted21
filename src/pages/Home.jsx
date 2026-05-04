@@ -16,7 +16,8 @@ export default function Home() {
     setScreen("loading");
 
     const reply = await base44.integrations.Core.InvokeLLM({
-      prompt: `${SYSTEM_PROMPT}\n\nParent says: ${prompt}\n\nProvide your response as Rooted 21:`,
+      prompt: `${SYSTEM_PROMPT}\n\nParent says: ${prompt}`,
+      model: "claude_sonnet_4_6",
     });
 
     const replyText = typeof reply === "string" ? reply : reply?.text || "";
