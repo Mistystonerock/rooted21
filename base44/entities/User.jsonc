@@ -11,6 +11,16 @@
       ],
       "default": "user",
       "description": "User role: user = parent/caregiver, professional = agency staff (counselor, CPS, court, etc.), admin = platform admin"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Mobile phone number in E.164 format (e.g. +15551234567) for SMS reminders"
+    },
+    "sms_reminders": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the user wants SMS reminders for upcoming calendar events"
     }
-  }
+  },
+  "required": []
 }

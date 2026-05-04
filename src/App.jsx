@@ -18,6 +18,7 @@ import MyTeam from './pages/MyTeam';
 import FamilyDashboard from './pages/FamilyDashboard';
 import RespiteCare from './pages/RespiteCare';
 import ResourceLibrary from './pages/ResourceLibrary';
+import Profile from './pages/Profile';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -59,6 +60,7 @@ const AuthenticatedApp = () => {
       <Route path="/family-dashboard" element={<FamilyDashboard />} />
       <Route path="/respite-care" element={<RespiteCare />} />
       <Route path="/resource-library" element={<ResourceLibrary />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
