@@ -81,7 +81,7 @@ const RESOURCES = [
   {
     id: 7, category: "sensory", type: "pdf",
     title: "Printable Sensory Diet Template",
-    author: "HALO Project / OT Toolkit",
+    author: "Rooted 21 / OT Toolkit",
     desc: "A fill-in-the-blank daily sensory diet template you can use with an occupational therapist to support your child's regulation.",
     url: "https://www.ot-resource.com/sensory-diet.shtml",
     free: true,
@@ -183,7 +183,7 @@ const RESOURCES = [
   {
     id: 19, category: "behavior", type: "pdf",
     title: "Behavior as Communication: A Parent Cheat Sheet",
-    author: "HALO Project",
+    author: "Rooted 21 Program",
     desc: "One-page printable guide for decoding what common challenging behaviors are communicating underneath.",
     url: "https://mistystonerock.github.io/Rooted-Parenting-Support/index.html",
     free: true,
@@ -243,7 +243,7 @@ const RESOURCES = [
   {
     id: 26, category: "system", type: "pdf",
     title: "Court Preparation Checklist for Families",
-    author: "HALO Project",
+    author: "Rooted 21 Program",
     desc: "A printable checklist to help families prepare for court dates — documentation, questions, and support.",
     url: "https://mistystonerock.github.io/Rooted-Parenting-Support/index.html",
     free: true,

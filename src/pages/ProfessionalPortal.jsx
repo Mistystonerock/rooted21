@@ -108,7 +108,7 @@ export default function ProfessionalPortal() {
         <Shield size={16} color={C.lightGreen} />
         <div>
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Professional Portal</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>HALO Project · TBRI® Dashboard</p>
+          <p className="text-[10px]" style={{ color: C.lightGreen }}>Rooted 21 · TBRI® Dashboard</p>
         </div>
         {isProOrAdmin && (
           <button

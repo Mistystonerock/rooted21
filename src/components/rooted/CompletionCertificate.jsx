@@ -53,7 +53,7 @@ export default function CompletionCertificate({ onClose }) {
     doc.setFont("times", "bold");
     doc.setFontSize(28);
     doc.setTextColor(232, 223, 207); // cream
-    doc.text("HALO Project", W / 2, 18, { align: "center" });
+    doc.text("Rooted 21 Parenting Program", W / 2, 18, { align: "center" });
 
     doc.setFontSize(13);
     doc.setFont("times", "italic");
@@ -89,7 +89,7 @@ export default function CompletionCertificate({ onClose }) {
     doc.setFontSize(12);
     doc.setTextColor(92, 74, 53);
     doc.text(
-      "has successfully completed all 21 lessons of the HALO 10-Week Parenting Reset Program",
+      "has successfully completed all 21 lessons of the Rooted 21 Trauma-Informed Parenting Program",
       W / 2, 84, { align: "center" }
     );
 
@@ -167,7 +167,7 @@ export default function CompletionCertificate({ onClose }) {
     doc.setFontSize(8);
     doc.setTextColor(167, 184, 154);
     doc.text(
-      "HALO Project  ·  Rooted 21 Parenting Reset  ·  Created by Misty Stonerock, Community Behavioral Health Worker & Parent Advocate",
+      "Rooted 21 Parenting Network  ·  Created by Misty Stonerock, Community Behavioral Health Worker & Parent Advocate",
       W / 2, H - 10, { align: "center" }
     );
     doc.setTextColor(201, 168, 76);
@@ -175,7 +175,7 @@ export default function CompletionCertificate({ onClose }) {
     doc.setFontSize(8);
     doc.text("Every child deserves to be seen, safe, soothed, and secure.", W / 2, H - 4, { align: "center" });
 
-    const filename = `HALO_Certificate_${(parentName).replace(/\s+/g, "_")}.pdf`;
+    const filename = `Rooted21_Certificate_${(parentName).replace(/\s+/g, "_")}.pdf`;
     doc.save(filename);
     setGenerating(false);
   }
@@ -188,7 +188,7 @@ export default function CompletionCertificate({ onClose }) {
           <Award size={20} color={C.gold} />
           <div className="flex-1">
             <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Program Certificate</p>
-            <p className="text-[10px]" style={{ color: C.lightGreen }}>HALO 10-Week TBRI® Curriculum</p>
+            <p className="text-[10px]" style={{ color: C.lightGreen }}>Rooted 21 · 10-Week TBRI® Curriculum</p>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none" }}>
             <X size={18} color={C.lightGreen} />
@@ -202,7 +202,7 @@ export default function CompletionCertificate({ onClose }) {
             <p className="font-serif font-bold text-lg leading-snug" style={{ color: C.darkGreen }}>
               Certificate of Completion
             </p>
-            <p className="text-xs mt-1 mb-3" style={{ color: C.mutedText }}>HALO Project · Rooted 21 Program</p>
+            <p className="text-xs mt-1 mb-3" style={{ color: C.mutedText }}>Rooted 21 · Trauma-Informed Parenting</p>
 
             <div className="rounded-xl px-4 py-3 mb-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
               <p className="text-[10px] font-bold mb-0.5" style={{ color: C.mutedText }}>Awarded to</p>
