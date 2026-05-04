@@ -5,12 +5,14 @@ import { Clock } from "lucide-react";
 import TreeLogo from "./TreeLogo";
 import LoadingDots from "./LoadingDots";
 import ResponseContent from "./ResponseContent";
+import CheckInCard from "./CheckInCard";
 
-export default function ResultScreen({ response, onReset, initialMessages, onOpenHistory }) {
+export default function ResultScreen({ response, onReset, initialMessages, onOpenHistory, sessionId }) {
   const [followTxt, setFollowTxt] = useState("");
   const [followResp, setFollowResp] = useState("");
   const [history, setHistory] = useState(initialMessages || []);
   const [busy, setBusy] = useState(false);
+  const [checkedIn, setCheckedIn] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -139,6 +141,10 @@ export default function ResultScreen({ response, onReset, initialMessages, onOpe
           >
             <ResponseContent text={followResp} />
           </div>
+        )}
+
+        {!checkedIn && (
+          <CheckInCard sessionId={sessionId} onDone={() => setCheckedIn(true)} />
         )}
 
         <div ref={bottomRef} />

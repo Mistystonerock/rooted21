@@ -5,6 +5,7 @@ import HomeScreen from "@/components/rooted/HomeScreen";
 import LoadingScreen from "@/components/rooted/LoadingScreen";
 import ResultScreen from "@/components/rooted/ResultScreen";
 import HistorySidebar from "@/components/rooted/HistorySidebar";
+import TrendsScreen from "@/components/rooted/TrendsScreen";
 
 export default function Home() {
   const [screen, setScreen] = useState("home");
@@ -12,6 +13,8 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [trendsOpen, setTrendsOpen] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
 
   async function handleHelp(prompt) {
     setError("");
@@ -30,13 +33,14 @@ export default function Home() {
       return;
     }
 
-    // Save session to DB (fire and forget)
+    // Save session to DB
     const label = prompt.length > 60 ? prompt.slice(0, 57) + "…" : prompt;
-    base44.entities.CrisisSession.create({
+    const session = await base44.entities.CrisisSession.create({
       prompt,
       response: replyText,
       label,
     });
+    setCurrentSessionId(session?.id || null);
 
     const msgs = [
       { role: "user", content: prompt },
@@ -52,6 +56,7 @@ export default function Home() {
     setResponse("");
     setMessages([]);
     setError("");
+    setCurrentSessionId(null);
   }
 
   function handleRestore(session) {
@@ -71,6 +76,7 @@ export default function Home() {
         onClose={() => setHistoryOpen(false)}
         onRestore={handleRestore}
       />
+      <TrendsScreen open={trendsOpen} onClose={() => setTrendsOpen(false)} />
 
       {screen === "loading" && <LoadingScreen />}
       {screen === "result" && (
@@ -79,6 +85,7 @@ export default function Home() {
           onReset={handleReset}
           initialMessages={messages}
           onOpenHistory={() => setHistoryOpen(true)}
+          sessionId={currentSessionId}
         />
       )}
       {screen === "home" && (
@@ -86,6 +93,7 @@ export default function Home() {
           onHelp={handleHelp}
           error={error}
           onOpenHistory={() => setHistoryOpen(true)}
+          onOpenTrends={() => setTrendsOpen(true)}
         />
       )}
     </>

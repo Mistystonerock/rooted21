@@ -1,0 +1,26 @@
+{
+  "name": "CheckIn",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "ID of the linked CrisisSession"
+    },
+    "child_regulation": {
+      "type": "number",
+      "description": "Parent's rating of child emotional regulation 1-5"
+    },
+    "parent_calm": {
+      "type": "number",
+      "description": "Parent's rating of their own calm level 1-5"
+    },
+    "note": {
+      "type": "string",
+      "description": "Optional reflection note"
+    }
+  },
+  "required": [
+    "child_regulation",
+    "parent_calm"
+  ]
+}
