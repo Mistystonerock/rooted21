@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
     }
 
     // Only owner/admin can create codes
-    if (user.email !== 'misty@rooted21.org') {
+    if (user.email !== 'rooted21parenting@rooted21.org') {
       return Response.json({ error: 'Only the owner can create owner codes' }, { status: 403 });
     }
 
