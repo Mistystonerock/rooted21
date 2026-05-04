@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { LESSONS } from "@/lib/lessons-data";
-import { CheckCircle2, Circle, ChevronLeft } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Award } from "lucide-react";
 import LessonDetail from "@/components/rooted/LessonDetail";
+import CompletionCertificate from "@/components/rooted/CompletionCertificate";
 
 export default function Lessons() {
   const [completed, setCompleted] = useState(new Set());
   const [selected, setSelected] = useState(null);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   useEffect(() => {
     base44.entities.LessonProgress.list().then((rows) => {
@@ -106,8 +108,20 @@ export default function Lessons() {
           <div className="rounded-2xl p-5 text-center mt-3" style={{ background: C.darkGreen }}>
             <p className="text-3xl mb-2">🌳</p>
             <p className="font-serif font-bold text-base" style={{ color: C.cream }}>HALO Program Complete!</p>
-            <p className="text-xs mt-1" style={{ color: C.lightGreen }}>You completed the full 10-week TBRI® curriculum.</p>
+            <p className="text-xs mt-1 mb-4" style={{ color: C.lightGreen }}>You completed the full 10-week TBRI® curriculum.</p>
+            <button
+              onClick={() => setShowCertificate(true)}
+              className="flex items-center gap-2 mx-auto px-5 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+              style={{ background: C.gold, color: C.darkGreen, border: "none", cursor: "pointer" }}
+            >
+              <Award size={16} />
+              Download Your Certificate
+            </button>
           </div>
+        )}
+
+        {showCertificate && (
+          <CompletionCertificate onClose={() => setShowCertificate(false)} />
         )}
         <div className="pb-6" />
       </div>
