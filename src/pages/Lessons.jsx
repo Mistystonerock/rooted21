@@ -38,7 +38,7 @@ function downloadAllLessons() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "HALO-Rooted21-Complete-Curriculum.txt";
+  a.download = "Rooted21-Complete-Curriculum.txt";
   a.click();
   URL.revokeObjectURL(url);
 }
