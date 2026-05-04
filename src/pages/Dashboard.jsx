@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
+import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [lessonProgress, setLessonProgress] = useState([]);
   const [recentCheckins, setRecentCheckins] = useState([]);
   const [showCodeEntry, setShowCodeEntry] = useState(false);
+  const [showInvitationModal, setShowInvitationModal] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser);
@@ -203,17 +205,42 @@ export default function Dashboard() {
             onDismiss={() => setShowCodeEntry(false)}
           />
         ) : (
-          <button
-            onClick={() => setShowCodeEntry(true)}
-            className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
-            style={{ background: C.white, border: `1.5px dashed ${C.midGreen}` }}
-          >
-            <KeyRound size={20} color={C.midGreen} />
-            <div>
-              <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Enter Professional Access Code</p>
-              <p className="text-[11px]" style={{ color: C.mutedText }}>Link your account to your assigned professional</p>
-            </div>
-          </button>
+          <>
+            <button
+              onClick={() => setShowCodeEntry(true)}
+              className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
+              style={{ background: C.white, border: `1.5px dashed ${C.midGreen}` }}
+            >
+              <KeyRound size={20} color={C.midGreen} />
+              <div>
+                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Enter Professional Access Code</p>
+                <p className="text-[11px]" style={{ color: C.mutedText }}>Link your account to your assigned professional</p>
+              </div>
+            </button>
+
+            {child && (
+              <button
+                onClick={() => setShowInvitationModal(true)}
+                className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
+                style={{ background: C.white, border: `1.5px dashed ${C.brown}` }}
+              >
+                <QrCode size={20} color={C.brown} />
+                <div>
+                  <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Generate Invitation Code</p>
+                  <p className="text-[11px]" style={{ color: C.mutedText }}>Share with a professional to auto-link them</p>
+                </div>
+              </button>
+            )}
+          </>
+        )}
+
+        {/* INVITATION MODAL */}
+        {showInvitationModal && (
+          <GenerateInvitationModal
+            childName={child?.first_name}
+            onClose={() => setShowInvitationModal(false)}
+            onSuccess={() => setShowInvitationModal(false)}
+          />
         )}
 
         <div className="pb-16" />

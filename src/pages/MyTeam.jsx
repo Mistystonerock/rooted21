@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Users, MessageCircle, ChevronRight } from "lucide-react";
+import { ChevronLeft, Users, MessageCircle, ChevronRight, QrCode } from "lucide-react";
 import SecureMessageThread from "@/components/messaging/SecureMessageThread";
+import RedeemInvitationModal from "@/components/rooted/RedeemInvitationModal";
 
 export default function MyTeam() {
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeThread, setActiveThread] = useState(null); // AssignedFamily record
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async u => {
@@ -73,49 +75,80 @@ export default function MyTeam() {
         )}
 
         {!loading && team.length === 0 && (
-          <div className="rounded-2xl p-6 text-center" style={{ background: C.white, border: `1.5px dashed ${C.cream}` }}>
-            <Users size={32} color={C.cream} className="mx-auto mb-3" />
-            <p className="font-serif font-bold text-sm mb-1" style={{ color: C.darkGreen }}>No team members yet</p>
-            <p className="text-xs mb-4" style={{ color: C.mutedText }}>
-              When a counselor, caseworker, or professional links to your account, they'll appear here.
+          <div className="rounded-2xl p-6 text-center space-y-3" style={{ background: C.white, border: `1.5px dashed ${C.cream}` }}>
+            <Users size={32} color={C.cream} className="mx-auto" />
+            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>No families linked yet</p>
+            <p className="text-xs" style={{ color: C.mutedText }}>
+              Enter an invitation code from a parent to link your account and access their family data.
             </p>
-            <Link
-              to="/dashboard"
-              className="inline-block text-xs font-bold px-4 py-2.5 rounded-xl"
-              style={{ background: C.darkGreen, color: C.white, textDecoration: "none" }}
+            <button
+              onClick={() => setShowRedeemModal(true)}
+              className="inline-flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-xl"
+              style={{ background: C.darkGreen, color: C.white, border: 'none', cursor: 'pointer' }}
             >
-              Enter Access Code →
-            </Link>
+              <QrCode size={13} /> Enter Code
+            </button>
           </div>
         )}
 
-        {team.map(member => (
-          <button
-            key={member.id}
-            onClick={() => setActiveThread(member)}
-            className="w-full text-left rounded-2xl p-4 flex items-center gap-3 transition-all hover:shadow-md"
-            style={{ background: C.white, border: `1.5px solid ${C.cream}` }}
-          >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
-              style={{ background: C.cream, color: C.darkGreen }}
+        {/* REDEEM MODAL */}
+        {showRedeemModal && (
+          <RedeemInvitationModal
+            onClose={() => setShowRedeemModal(false)}
+            onSuccess={() => {
+              setShowRedeemModal(false);
+              // Refresh team list
+              base44.auth.me().then(async (u) => {
+                const assignments = await base44.entities.AssignedFamily.filter(
+                  { family_email: u.email },
+                  "-created_date",
+                  50
+                );
+                setTeam(assignments);
+              });
+            }}
+          />
+        )}
+
+        {team.length > 0 && (
+          <>
+            {team.map(member => (
+              <button
+                key={member.id}
+                onClick={() => setActiveThread(member)}
+                className="w-full text-left rounded-2xl p-4 flex items-center gap-3 transition-all hover:shadow-md"
+                style={{ background: C.white, border: `1.5px solid ${C.cream}` }}
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
+                  style={{ background: C.cream, color: C.darkGreen }}
+                >
+                  {member.professional_email?.[0]?.toUpperCase() || "P"}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm truncate" style={{ color: C.darkGreen }}>
+                    {member.professional_email}
+                  </p>
+                  <p className="text-[11px]" style={{ color: C.mutedText }}>
+                    {member.professional_role} · {member.status}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle size={16} color={C.midGreen} />
+                  <ChevronRight size={14} color={C.mutedText} />
+                </div>
+              </button>
+            ))}
+
+            <button
+              onClick={() => setShowRedeemModal(true)}
+              className="w-full py-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2"
+              style={{ background: C.cream, color: C.darkGreen, border: 'none', cursor: 'pointer' }}
             >
-              {member.professional_email?.[0]?.toUpperCase() || "P"}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-sm truncate" style={{ color: C.darkGreen }}>
-                {member.professional_email}
-              </p>
-              <p className="text-[11px]" style={{ color: C.mutedText }}>
-                {member.professional_role} · {member.status}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <MessageCircle size={16} color={C.midGreen} />
-              <ChevronRight size={14} color={C.mutedText} />
-            </div>
-          </button>
-        ))}
+              <QrCode size={13} /> Add Another Professional
+            </button>
+          </>
+        )}
 
         {!loading && team.length > 0 && (
           <p className="text-center text-[11px] pt-2" style={{ color: C.mutedText }}>

@@ -1,0 +1,50 @@
+{
+  "name": "InvitationCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Unique 6-digit alphanumeric code"
+    },
+    "parent_email": {
+      "type": "string",
+      "description": "Email of the parent who generated this code"
+    },
+    "parent_name": {
+      "type": "string",
+      "description": "Display name of the parent"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child's name for context"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this code expires (30 days)"
+    },
+    "used": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this code has been redeemed"
+    },
+    "used_by_email": {
+      "type": "string",
+      "description": "Email of the professional who used this code"
+    },
+    "used_by_name": {
+      "type": "string",
+      "description": "Name of the professional who used this code"
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this code was redeemed"
+    }
+  },
+  "required": [
+    "code",
+    "parent_email",
+    "expires_at"
+  ]
+}
