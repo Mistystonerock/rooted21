@@ -1,0 +1,54 @@
+{
+  "name": "CoParentingPartnership",
+  "type": "object",
+  "properties": {
+    "parent_1_email": {
+      "type": "string",
+      "description": "Email of first parent"
+    },
+    "parent_1_name": {
+      "type": "string",
+      "description": "Name of first parent"
+    },
+    "parent_2_email": {
+      "type": "string",
+      "description": "Email of second parent"
+    },
+    "parent_2_name": {
+      "type": "string",
+      "description": "Name of second parent"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of child in co-parenting arrangement"
+    },
+    "court_email": {
+      "type": "string",
+      "description": "Court staff email who set up this partnership"
+    },
+    "court_staff_name": {
+      "type": "string",
+      "description": "Name of court staff member"
+    },
+    "court_case_number": {
+      "type": "string",
+      "description": "Court case reference number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "pending"
+      ],
+      "default": "active",
+      "description": "Status of co-parenting partnership"
+    }
+  },
+  "required": [
+    "parent_1_email",
+    "parent_2_email",
+    "child_name",
+    "court_email"
+  ]
+}

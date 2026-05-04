@@ -1,0 +1,45 @@
+{
+  "name": "CoParentingMessage",
+  "type": "object",
+  "properties": {
+    "partnership_id": {
+      "type": "string",
+      "description": "ID of the CoParentingPartnership"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the parent who sent the message"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Name of the parent who sent the message"
+    },
+    "body": {
+      "type": "string",
+      "description": "Message content"
+    },
+    "read_by_court": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether court staff has read this message"
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "schedule",
+        "health",
+        "education",
+        "behavior",
+        "finances",
+        "general"
+      ],
+      "default": "general",
+      "description": "Topic category for the message"
+    }
+  },
+  "required": [
+    "partnership_id",
+    "sender_email",
+    "body"
+  ]
+}

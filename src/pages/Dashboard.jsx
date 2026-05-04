@@ -177,6 +177,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
             <p className="text-[11px]" style={{ color: C.lightGreen }}>Trends, patterns & insights</p>
           </Link>
+          <Link to="/co-parent-portal" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Users size={22} color={C.midGreen} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Co-Parent Portal</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Court-supervised messaging</p>
+          </Link>
           <Link to="/billing" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <CreditCard size={22} color={C.brown} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Billing</p>

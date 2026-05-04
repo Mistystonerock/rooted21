@@ -30,6 +30,9 @@ import Legal from './pages/Legal';
 import Billing from './pages/Billing';
 import OwnerDashboard from './pages/OwnerDashboard';
 import BehaviorLogs from './pages/BehaviorLogs';
+import CoParentPortal from './pages/CoParentPortal';
+import CoParentMessaging from './pages/CoParentMessaging';
+import CoParentingResources from './pages/CoParentingResources';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -87,6 +90,9 @@ const AuthenticatedApp = () => {
       <Route path="/billing" element={<Billing />} />
       <Route path="/owner-dashboard" element={<OwnerDashboard />} />
       <Route path="/behavior-logs" element={<BehaviorLogs />} />
+      <Route path="/co-parent-portal" element={<CoParentPortal />} />
+      <Route path="/co-parent-messaging/:partnershipId" element={<CoParentMessaging />} />
+      <Route path="/co-parenting-resources" element={<CoParentingResources />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />
