@@ -6,15 +6,28 @@ export default function LessonQuiz({ questions }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealed, setRevealed] = useState({});
   const [completed, setCompleted] = useState(new Set());
+  const [selected, setSelected] = useState({});
 
   if (!questions || questions.length === 0) return null;
 
   const currentQ = questions[currentIndex];
   const isRevealed = revealed[currentIndex];
-  const isAnswered = completed.has(currentIndex);
+  const isMultipleChoice = currentQ.options && Array.isArray(currentQ.options);
+  const selectedAnswers = selected[currentIndex] || new Set();
+
   const progress = Math.round((completed.size / questions.length) * 100);
 
-  function handleReveal() {
+  function handleSelectAnswer(option) {
+    const newSelected = new Set(selectedAnswers);
+    if (newSelected.has(option)) {
+      newSelected.delete(option);
+    } else {
+      newSelected.add(option);
+    }
+    setSelected(prev => ({ ...prev, [currentIndex]: newSelected }));
+  }
+
+  function handleSubmit() {
     setRevealed(prev => ({ ...prev, [currentIndex]: true }));
     setCompleted(prev => new Set([...prev, currentIndex]));
   }
@@ -58,33 +71,104 @@ export default function LessonQuiz({ questions }) {
           {currentQ.question}
         </p>
 
-        {/* Answer reveal */}
-        {isRevealed ? (
-          <div className="rounded-xl p-3" style={{ background: "#E8F4EA", border: `1px solid ${C.midGreen}` }}>
-            <div className="flex items-start gap-2">
-              <CheckCircle2 size={16} color={C.midGreen} className="flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-[11px] font-bold mb-1" style={{ color: C.midGreen }}>Answer</p>
-                <p className="text-xs leading-relaxed" style={{ color: C.darkText }}>
-                  {currentQ.answer}
+        {isMultipleChoice ? (
+          <>
+            {/* Multiple choice options */}
+            <div className="space-y-2">
+              {currentQ.options.map((option, idx) => {
+                const letter = String.fromCharCode(97 + idx); // a, b, c, d
+                const isSelected = selectedAnswers.has(letter);
+                const isCorrect = currentQ.correctAnswers?.includes(letter);
+                const shouldHighlight = isRevealed && isCorrect;
+                const shouldShowWrong = isRevealed && isSelected && !isCorrect;
+
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => !isRevealed && handleSelectAnswer(letter)}
+                    disabled={isRevealed}
+                    className="w-full text-left p-3 rounded-lg text-sm font-bold transition-all"
+                    style={{
+                      background: shouldHighlight
+                        ? "#E8F4EA"
+                        : shouldShowWrong
+                        ? "#FEF3EE"
+                        : isSelected && !isRevealed
+                        ? C.offWhite
+                        : C.white,
+                      border: shouldHighlight
+                        ? `2px solid ${C.midGreen}`
+                        : shouldShowWrong
+                        ? "2px solid #B84C2A"
+                        : `1px solid ${C.cream}`,
+                      color: C.darkGreen,
+                      cursor: isRevealed ? "default" : "pointer",
+                      opacity: isRevealed && !isCorrect && !isSelected ? 0.6 : 1
+                    }}
+                  >
+                    <span className="font-extrabold">{letter.toUpperCase()}.</span> {option}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Reveal/Submit button */}
+            {!isRevealed ? (
+              <button
+                onClick={handleSubmit}
+                disabled={selectedAnswers.size === 0}
+                className="w-full py-3 rounded-xl font-bold text-sm transition-all"
+                style={{
+                  background: selectedAnswers.size > 0 ? C.darkGreen : C.cream,
+                  color: selectedAnswers.size > 0 ? C.white : C.mutedText,
+                  border: "none",
+                  cursor: selectedAnswers.size > 0 ? "pointer" : "default",
+                  opacity: selectedAnswers.size > 0 ? 1 : 0.5
+                }}
+              >
+                Check Answer
+              </button>
+            ) : (
+              <div className="rounded-xl p-3 text-center" style={{ background: "#E8F4EA", border: `1px solid ${C.midGreen}` }}>
+                <p className="text-xs font-bold" style={{ color: C.midGreen }}>
+                  {selectedAnswers.size > 0 && Array.from(selectedAnswers).every(a => currentQ.correctAnswers?.includes(a)) && currentQ.correctAnswers?.length === selectedAnswers.size
+                    ? "✓ Correct!"
+                    : "Review the correct answers above"}
                 </p>
               </div>
-            </div>
-          </div>
+            )}
+          </>
         ) : (
-          <button
-            onClick={handleReveal}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all"
-            style={{
-              background: C.darkGreen,
-              color: C.white,
-              border: "none",
-              cursor: "pointer"
-            }}
-          >
-            <Eye size={14} />
-            Reveal Answer
-          </button>
+          <>
+            {/* Text answer reveal */}
+            {isRevealed ? (
+              <div className="rounded-xl p-3" style={{ background: "#E8F4EA", border: `1px solid ${C.midGreen}` }}>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={16} color={C.midGreen} className="flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[11px] font-bold mb-1" style={{ color: C.midGreen }}>Answer</p>
+                    <p className="text-xs leading-relaxed" style={{ color: C.darkText }}>
+                      {currentQ.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all"
+                style={{
+                  background: C.darkGreen,
+                  color: C.white,
+                  border: "none",
+                  cursor: "pointer"
+                }}
+              >
+                <Eye size={14} />
+                Reveal Answer
+              </button>
+            )}
+          </>
         )}
       </div>
 
