@@ -1,0 +1,61 @@
+{
+  "name": "DailySchedule",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Schedule name (e.g. Morning Routine)"
+    },
+    "routine_type": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "after_school",
+        "bedtime",
+        "weekend",
+        "custom"
+      ],
+      "default": "morning",
+      "description": "Type of routine"
+    },
+    "tasks": {
+      "type": "array",
+      "description": "Ordered list of task blocks",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "emoji": {
+            "type": "string"
+          },
+          "duration_min": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child this schedule is for"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "routine_type"
+  ]
+}

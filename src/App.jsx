@@ -20,6 +20,7 @@ import RespiteCare from './pages/RespiteCare';
 import ResourceLibrary from './pages/ResourceLibrary';
 import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
+import ScheduleCreator from './pages/ScheduleCreator';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -63,6 +64,7 @@ const AuthenticatedApp = () => {
       <Route path="/resource-library" element={<ResourceLibrary />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route path="/schedule" element={<ScheduleCreator />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
