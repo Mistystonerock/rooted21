@@ -6,12 +6,26 @@ import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
 import { ChevronLeft, Send, AlertTriangle, RefreshCw } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import ChatMessage from "@/components/rooted/ChatMessage";
+import { FOLLOW_UP_DEFAULTS } from "@/lib/rooted-constants";
+
+function parseFollowUps(text) {
+  try {
+    const match = text.match(/FOLLOWUPS:(\[.*?\])/s);
+    if (match) return JSON.parse(match[1]);
+  } catch {}
+  return null;
+}
+
+function stripFollowUps(text) {
+  return text.replace(/\nFOLLOWUPS:\[.*?\]/s, "").trim();
+}
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [followUps, setFollowUps] = useState([]);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -61,8 +75,11 @@ export default function Chat() {
       model: "claude_sonnet_4_6",
     });
 
-    const replyText = typeof reply === "string" ? reply : reply?.text || "I'm having trouble connecting. Please try again.";
+    const raw = typeof reply === "string" ? reply : reply?.text || "I'm having trouble connecting. Please try again.";
+    const replyText = stripFollowUps(raw);
+    const suggestions = parseFollowUps(raw) || FOLLOW_UP_DEFAULTS;
     setMessages([...nextMessages, { role: "assistant", content: replyText }]);
+    setFollowUps(suggestions);
     setLoading(false);
 
     const label = txt.length > 60 ? txt.slice(0, 57) + "…" : txt;
@@ -92,11 +109,14 @@ export default function Chat() {
       model: "claude_sonnet_4_6",
     });
 
-    const replyText = typeof reply === "string" ? reply : reply?.text || "I'm having trouble connecting. Please try again.";
+    const raw = typeof reply === "string" ? reply : reply?.text || "I'm having trouble connecting. Please try again.";
+    const replyText = stripFollowUps(raw);
+    const suggestions = parseFollowUps(raw) || FOLLOW_UP_DEFAULTS;
 
     const assistantMsg = { role: "assistant", content: replyText };
     const finalMessages = [...nextMessages, assistantMsg];
     setMessages(finalMessages);
+    setFollowUps(suggestions);
     setLoading(false);
 
     // Save/update session on first real exchange
@@ -121,6 +141,7 @@ export default function Chat() {
     ]);
     setSessionId(null);
     setInput("");
+    setFollowUps([]);
   }
 
   return (
@@ -200,6 +221,22 @@ export default function Chat() {
         )}
         <div ref={bottomRef} />
       </div>
+
+      {/* Follow-up suggestions */}
+      {followUps.length > 0 && !loading && (
+        <div className="flex-shrink-0 px-4 pt-2 pb-1 flex gap-2 overflow-x-auto" style={{ borderTop: `1px solid ${C.cream}`, background: C.offWhite }}>
+          {followUps.map((q, i) => (
+            <button
+              key={i}
+              onClick={() => { setInput(q); inputRef.current?.focus(); }}
+              className="flex-shrink-0 text-[11px] font-bold px-3 py-2 rounded-full transition-all hover:opacity-80 whitespace-nowrap"
+              style={{ background: C.cream, color: C.darkGreen, border: `1px solid ${C.midGreen}` }}
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Input */}
       <div
