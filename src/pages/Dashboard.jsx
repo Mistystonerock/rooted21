@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -91,6 +91,11 @@ export default function Dashboard() {
             <Calendar size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Family Dashboard</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Calendar & inbox</p>
+          </Link>
+          <Link to="/respite-care" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Heart size={22} color="#B84C2A" />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Respite Care</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Find vetted providers</p>
           </Link>
         </div>
 
