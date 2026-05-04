@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, HelpCircle } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
+import OnboardingTour from "@/components/onboarding/OnboardingTour";
 
 export default function Dashboard() {
   const queryClient = useQueryClient();
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [recentCheckins, setRecentCheckins] = useState([]);
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
+  const [showTour, setShowTour] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const touchStartY = useRef(0);
 
@@ -58,6 +60,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     handleRefresh();
+    // Show tour if user is new (first visit)
+    const hasSeenTour = localStorage.getItem("rooted21_tour_seen");
+    if (!hasSeenTour) {
+      setShowTour(true);
+    }
   }, []);
 
   const completedLessons = lessonProgress.length;
@@ -83,6 +90,9 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="ml-auto flex items-center gap-2">
+          <Link to="/help" className="rounded-lg p-1.5 transition-opacity hover:opacity-70" style={{ background: "#ffffff18", border: "none" }}>
+            <HelpCircle size={18} color={C.lightGreen} />
+          </Link>
           <NotificationBell />
           <Link to="/profile">
             <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: C.midGreen, color: C.white }}>
@@ -310,6 +320,16 @@ export default function Dashboard() {
         </div>
       </div>
       <BottomNav />
+
+      {/* Onboarding Tour */}
+      {showTour && (
+        <OnboardingTour
+          onComplete={() => {
+            setShowTour(false);
+            localStorage.setItem("rooted21_tour_seen", "true");
+          }}
+        />
+      )}
     </div>
   );
 }
