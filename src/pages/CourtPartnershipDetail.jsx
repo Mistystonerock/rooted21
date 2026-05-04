@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, MessageSquare, Calendar, AlertTriangle, Eye } from "lucide-react";
+import { ChevronLeft, MessageSquare, Calendar, AlertTriangle, Eye, Shield } from "lucide-react";
 
 export default function CourtPartnershipDetail() {
   const { partnershipId } = useParams();
@@ -12,6 +12,7 @@ export default function CourtPartnershipDetail() {
   const [behaviors, setBehaviors] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [safetyPlan, setSafetyPlan] = useState(null);
   const [tab, setTab] = useState("overview");
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +30,7 @@ export default function CourtPartnershipDetail() {
       setPartnership(p);
 
       if (p) {
-        const [msgs, behav, scheds, appts] = await Promise.all([
+        const [msgs, behav, scheds, appts, plan] = await Promise.all([
           base44.entities.CoParentingMessage.filter({ partnership_id: partnershipId }, "-created_date", 100),
           base44.entities.BehaviorLog.filter({ created_by: p.parent_1_email }, "-created_date", 50).then(r1 =>
             r1.concat(
@@ -38,11 +39,13 @@ export default function CourtPartnershipDetail() {
           ),
           base44.entities.DailySchedule.filter({ child_name: p.child_name }, "-created_date", 10),
           base44.entities.CourtAppointment.filter({ partnership_id: partnershipId }, "-created_date", 20),
+          base44.entities.PartnershipSafetyPlan.filter({ partnership_id: partnershipId }, "-created_date", 1).then(r => r[0] || null),
         ]);
         setMessages(msgs);
         setBehaviors(behav);
         setSchedules(scheds);
         setAppointments(appts);
+        setSafetyPlan(plan);
       }
 
       setLoading(false);
@@ -88,6 +91,7 @@ export default function CourtPartnershipDetail() {
           { id: "behavior", label: "Behavior", icon: "📊" },
           { id: "schedules", label: "Schedules", icon: "📅" },
           { id: "appointments", label: "Appointments", icon: "🗓️" },
+          { id: "safety", label: "Safety Plan", icon: "🛡️" },
         ].map(t => (
           <button
             key={t.id}
@@ -247,6 +251,109 @@ export default function CourtPartnershipDetail() {
                   {a.location && <p className="text-[10px]" style={{ color: C.mutedText }}>📍 {a.location}</p>}
                 </div>
               ))
+            )}
+          </div>
+        )}
+
+        {/* SAFETY PLAN */}
+        {tab === "safety" && (
+          <div className="space-y-3">
+            {!safetyPlan ? (
+              <div className="rounded-2xl p-4 text-center" style={{ background: C.cream, border: `1px solid ${C.midGreen}` }}>
+                <Shield size={32} color={C.midGreen} className="mx-auto mb-2" />
+                <p className="text-xs font-bold" style={{ color: C.darkGreen }}>No Safety Plan Yet</p>
+                <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>Parents must create and agree to the plan first</p>
+              </div>
+            ) : (
+              <>
+                {/* Agreement Status */}
+                <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                  <p className="text-xs font-bold mb-2" style={{ color: C.mutedText }}>AGREEMENT STATUS</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{partnership.parent_1_name}</p>
+                      <p className="text-[10px]" style={{ color: safetyPlan.parent1_agreed ? C.midGreen : C.mutedText }}>
+                        {safetyPlan.parent1_agreed ? "✓ Agreed" : "Pending"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{partnership.parent_2_name}</p>
+                      <p className="text-[10px]" style={{ color: safetyPlan.parent2_agreed ? C.midGreen : C.mutedText }}>
+                        {safetyPlan.parent2_agreed ? "✓ Agreed" : "Pending"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Warning Signs */}
+                {safetyPlan.warning_signs && (
+                  <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                    <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>🚨 Warning Signs</p>
+                    <p className="text-xs" style={{ color: C.darkText }}>{safetyPlan.warning_signs}</p>
+                  </div>
+                )}
+
+                {/* De-escalation */}
+                {safetyPlan.de_escalation_strategies && (
+                  <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                    <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>💬 De-escalation Strategies</p>
+                    <p className="text-xs" style={{ color: C.darkText }}>{safetyPlan.de_escalation_strategies}</p>
+                  </div>
+                )}
+
+                {/* Emergency Contacts */}
+                {safetyPlan.emergency_contacts?.length > 0 && (
+                  <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                    <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>📞 Emergency Contacts</p>
+                    <div className="space-y-2">
+                      {safetyPlan.emergency_contacts.map((contact, i) => (
+                        <div key={i} className="text-xs p-2 rounded" style={{ background: C.offWhite }}>
+                          <p className="font-bold" style={{ color: C.darkGreen }}>{contact.name}</p>
+                          <p style={{ color: C.mutedText }}>{contact.role} • {contact.phone}</p>
+                          {contact.when_to_call && <p style={{ color: C.mutedText }}>When: {contact.when_to_call}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Safe Locations */}
+                {safetyPlan.safe_locations?.length > 0 && (
+                  <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                    <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>🏡 Safe Locations</p>
+                    <div className="space-y-2">
+                      {safetyPlan.safe_locations.map((loc, i) => (
+                        <div key={i} className="text-xs p-2 rounded" style={{ background: C.offWhite }}>
+                          <p className="font-bold" style={{ color: C.darkGreen }}>{loc.name}</p>
+                          {loc.address && <p style={{ color: C.mutedText }}>{loc.address}</p>}
+                          {loc.phone && <p style={{ color: C.mutedText }}>{loc.phone}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Calming Activities */}
+                {safetyPlan.calming_activities?.length > 0 && (
+                  <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                    <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>🧘 Calming Activities</p>
+                    <div className="space-y-2">
+                      {safetyPlan.calming_activities.map((act, i) => (
+                        <div key={i} className="text-xs p-2 rounded" style={{ background: C.offWhite }}>
+                          <p className="font-bold" style={{ color: C.darkGreen }}>{act.activity}</p>
+                          {act.description && <p style={{ color: C.mutedText }}>{act.description}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {safetyPlan.last_reviewed_date && (
+                  <p className="text-[10px]" style={{ color: C.mutedText }}>
+                    Last reviewed: {safetyPlan.last_reviewed_date}
+                  </p>
+                )}
+              </>
             )}
           </div>
         )}

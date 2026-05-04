@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Users, BookOpen, MessageCircle, ChevronRight } from "lucide-react";
+import { Users, BookOpen, MessageCircle, ChevronRight, Shield } from "lucide-react";
 
 export default function CoParentPortal() {
   const [user, setUser] = useState(null);
@@ -81,15 +81,27 @@ export default function CoParentPortal() {
                     </span>
                   </div>
                   
-                  <Link
-                    to={`/co-parent-messaging/${p.id}`}
-                    className="flex items-center gap-2 text-sm font-bold p-3 rounded-lg transition-all hover:shadow-md"
-                    style={{ background: C.offWhite, border: `1px solid ${C.cream}`, color: C.darkGreen, textDecoration: "none" }}
-                  >
-                    <MessageCircle size={14} />
-                    Send Message
-                    <ChevronRight size={14} className="ml-auto" />
-                  </Link>
+                  <div className="space-y-2">
+                    <Link
+                      to={`/co-parent-messaging/${p.id}`}
+                      className="flex items-center gap-2 text-sm font-bold p-3 rounded-lg transition-all hover:shadow-md"
+                      style={{ background: C.offWhite, border: `1px solid ${C.cream}`, color: C.darkGreen, textDecoration: "none" }}
+                    >
+                      <MessageCircle size={14} />
+                      Send Message
+                      <ChevronRight size={14} className="ml-auto" />
+                    </Link>
+
+                    <Link
+                      to={`/partnership-safety-plan/${p.id}`}
+                      className="flex items-center gap-2 text-sm font-bold p-3 rounded-lg transition-all hover:shadow-md"
+                      style={{ background: C.offWhite, border: `1px solid ${C.cream}`, color: C.darkGreen, textDecoration: "none" }}
+                    >
+                      <Shield size={14} />
+                      Safety Plan
+                      <ChevronRight size={14} className="ml-auto" />
+                    </Link>
+                  </div>
                 </div>
               );
             })}

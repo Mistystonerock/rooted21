@@ -1,0 +1,108 @@
+{
+  "name": "PartnershipSafetyPlan",
+  "type": "object",
+  "properties": {
+    "partnership_id": {
+      "type": "string",
+      "description": "ID of the CoParentingPartnership"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child's name"
+    },
+    "warning_signs": {
+      "type": "string",
+      "description": "Observable signs that child is dysregulating"
+    },
+    "de_escalation_strategies": {
+      "type": "string",
+      "description": "Specific techniques both parents agree to use"
+    },
+    "emergency_contacts": {
+      "type": "array",
+      "description": "Emergency contacts and when to call them",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "when_to_call": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "safe_locations": {
+      "type": "array",
+      "description": "Safe places during crisis",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "calming_activities": {
+      "type": "array",
+      "description": "Activities that help calm the child",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parent1_agreed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Parent 1 has reviewed and agreed to plan"
+    },
+    "parent2_agreed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Parent 2 has reviewed and agreed to plan"
+    },
+    "last_reviewed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Last date plan was reviewed/updated"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "partnership_id",
+    "child_name"
+  ]
+}
