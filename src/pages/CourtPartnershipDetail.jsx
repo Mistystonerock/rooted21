@@ -190,17 +190,46 @@ export default function CourtPartnershipDetail() {
 
         {/* SCHEDULES */}
         {tab === "schedules" && (
-          <div className="space-y-2">
+          <div className="space-y-3">
+            <div className="rounded-2xl p-4" style={{ background: C.cream, border: `1px solid ${C.midGreen}` }}>
+              <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Household Routines</p>
+              <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>Each parent manages their own household schedule</p>
+            </div>
+
             {schedules.length === 0 ? (
-              <p className="text-center text-xs" style={{ color: C.mutedText }}>No schedules added yet</p>
+              <p className="text-center text-xs" style={{ color: C.mutedText }}>No routines added yet</p>
             ) : (
-              schedules.map(s => (
-                <div key={s.id} className="rounded-xl p-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-                  <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{s.name}</p>
-                  <p className="text-[10px]" style={{ color: C.mutedText }}>{s.routine_type}</p>
-                  <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>{s.tasks?.length || 0} tasks</p>
-                </div>
-              ))
+              <div className="space-y-2">
+                {schedules.map(s => {
+                  const createdByParent = s.created_by === partnership.parent_1_email ? partnership.parent_1_name : partnership.parent_2_name;
+                  return (
+                    <div key={s.id} className="rounded-2xl p-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{s.name}</p>
+                          <p className="text-[10px]" style={{ color: C.mutedText }}>
+                            {createdByParent}'s Household
+                          </p>
+                        </div>
+                        <span className="text-[9px] px-2 py-1 rounded-full" style={{ background: `${C.midGreen}20`, color: C.midGreen }}>
+                          {s.routine_type}
+                        </span>
+                      </div>
+                      {s.tasks && s.tasks.length > 0 && (
+                        <div className="space-y-1 mt-2">
+                          {s.tasks.map(task => (
+                            <div key={task.id} className="flex items-center gap-2 text-[10px]" style={{ color: C.mutedText }}>
+                              <span>{task.emoji}</span>
+                              <span>{task.label}</span>
+                              <span className="ml-auto">{task.duration_min}m</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </div>
         )}

@@ -157,10 +157,10 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Safety Plan</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Crisis prep & resources</p>
           </Link>
-          <Link to="/schedule" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <Link to="/household-routine" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <CalendarDays size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Visual Schedules</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Build daily routines</p>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>My Household Routine</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Your home's daily schedule</p>
           </Link>
           <Link to="/monthly-report" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <FileText size={22} color={C.brown} />
