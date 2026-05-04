@@ -13,7 +13,6 @@ import Progress from './pages/Progress';
 import ChildProfile from './pages/ChildProfile';
 import ProfessionalPortal from './pages/ProfessionalPortal';
 import Resources from './pages/Resources';
-import Chat from './pages/Chat';
 import MyTeam from './pages/MyTeam';
 import FamilyDashboard from './pages/FamilyDashboard';
 import RespiteCare from './pages/RespiteCare';
@@ -64,7 +63,6 @@ const AuthenticatedApp = () => {
       <Route path="/child-profile" element={<ChildProfile />} />
       <Route path="/professional" element={<ProfessionalPortal />} />
       <Route path="/resources" element={<Resources />} />
-      <Route path="/chat" element={<Chat />} />
       <Route path="/my-team" element={<MyTeam />} />
       <Route path="/family-dashboard" element={<FamilyDashboard />} />
       <Route path="/respite-care" element={<RespiteCare />} />
