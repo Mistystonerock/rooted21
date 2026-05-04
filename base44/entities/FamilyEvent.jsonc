@@ -1,0 +1,61 @@
+{
+  "name": "FamilyEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "appointment",
+        "court_date",
+        "meeting",
+        "therapy",
+        "school",
+        "other"
+      ],
+      "default": "appointment",
+      "description": "Type of event"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the event"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of event (e.g. 2:30 PM)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Location or address"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or details"
+    },
+    "family_email": {
+      "type": "string",
+      "description": "Email of the parent/family this event belongs to"
+    },
+    "added_by_email": {
+      "type": "string",
+      "description": "Email of the person who added this event (parent or professional)"
+    },
+    "added_by_name": {
+      "type": "string",
+      "description": "Display name of who added it"
+    },
+    "added_by_role": {
+      "type": "string",
+      "description": "Role of who added it"
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "family_email"
+  ]
+}

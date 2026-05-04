@@ -4,6 +4,7 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Key, MessageCircle } from "lucide-react";
 import GenerateCodeModal from "./GenerateCodeModal";
 import SecureMessageThread from "@/components/messaging/SecureMessageThread";
+import FamilyCalendar from "@/components/family/FamilyCalendar";
 import { LESSONS } from "@/lib/lessons-data";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -21,6 +22,15 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
   const [noteForm, setNoteForm] = useState({ note: "", recommendation: "" });
   const [notes, setNotes] = useState(initialNotes || []);
   const [saving, setSaving] = useState(false);
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [calendarLoaded, setCalendarLoaded] = useState(false);
+
+  async function loadCalendar() {
+    if (calendarLoaded) return;
+    const evts = await base44.entities.FamilyEvent.filter({ family_email: family.family_email }, "date", 100);
+    setCalendarEvents(evts);
+    setCalendarLoaded(true);
+  }
 
   const completedLessons = lessons.filter(l => l.completed).length;
   const progressPct = Math.round((completedLessons / 21) * 100);
@@ -57,7 +67,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
     onNoteSaved?.();
   }
 
-  const TABS = ["overview", "trends", "lessons", "notes", "messages"];
+  const TABS = ["overview", "trends", "lessons", "notes", "calendar", "messages"];
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
@@ -98,7 +108,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
         {TABS.map(t => (
           <button
             key={t}
-            onClick={() => setTab(t)}
+            onClick={() => { setTab(t); if (t === "calendar") loadCalendar(); }}
             className="flex-1 py-2.5 text-[11px] font-bold capitalize transition-all"
             style={{
               background: "transparent",
@@ -299,6 +309,18 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
               </div>
             ))}
           </>
+        )}
+
+        {/* ── CALENDAR TAB ── */}
+        {tab === "calendar" && user && (
+          <FamilyCalendar
+            events={calendarEvents}
+            familyEmail={family.family_email}
+            currentUser={user}
+            senderRole={family.professional_role || "Professional"}
+            onEventAdded={evt => setCalendarEvents(prev => [...prev, evt])}
+            onEventDeleted={id => setCalendarEvents(prev => prev.filter(e => e.id !== id))}
+          />
         )}
 
         {/* ── MESSAGES TAB ── */}
