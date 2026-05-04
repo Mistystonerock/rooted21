@@ -1,0 +1,46 @@
+{
+  "name": "CourtAppointment",
+  "type": "object",
+  "properties": {
+    "partnership_id": {
+      "type": "string",
+      "description": "ID of the CoParentingPartnership this appointment is for"
+    },
+    "title": {
+      "type": "string",
+      "description": "Appointment title (e.g., Court Hearing, Check-in, Mediation)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the appointment"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of appointment (e.g., 2:30 PM)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Court location or virtual meeting link"
+    },
+    "description": {
+      "type": "string",
+      "description": "Details about the appointment"
+    },
+    "court_staff_email": {
+      "type": "string",
+      "description": "Email of court staff who scheduled this"
+    },
+    "notify_parents": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to notify both parents of this appointment"
+    }
+  },
+  "required": [
+    "partnership_id",
+    "title",
+    "date",
+    "court_staff_email"
+  ]
+}

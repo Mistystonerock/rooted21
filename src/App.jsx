@@ -34,6 +34,10 @@ import CoParentPortal from './pages/CoParentPortal';
 import CoParentMessaging from './pages/CoParentMessaging';
 import CoParentingResources from './pages/CoParentingResources';
 import Milestones from './pages/Milestones';
+import CourtDashboard from './pages/CourtDashboard';
+import CourtPartnershipDetail from './pages/CourtPartnershipDetail';
+import CourtMessaging from './pages/CourtMessaging';
+import CourtAddAppointment from './pages/CourtAddAppointment';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -95,6 +99,10 @@ const AuthenticatedApp = () => {
       <Route path="/co-parent-messaging/:partnershipId" element={<CoParentMessaging />} />
       <Route path="/co-parenting-resources" element={<CoParentingResources />} />
       <Route path="/milestones" element={<Milestones />} />
+      <Route path="/court-dashboard" element={<CourtDashboard />} />
+      <Route path="/court-partnership/:partnershipId" element={<CourtPartnershipDetail />} />
+      <Route path="/court-messaging/:partnershipId" element={<CourtMessaging />} />
+      <Route path="/court-add-appointment/:partnershipId" element={<CourtAddAppointment />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />
