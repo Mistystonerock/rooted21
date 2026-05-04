@@ -24,6 +24,7 @@ import ScheduleCreator from './pages/ScheduleCreator';
 import SafetyPlan from './pages/SafetyPlan';
 import Journal from './pages/Journal';
 import SupportGuide from './pages/SupportGuide';
+import MonthlyReport from './pages/MonthlyReport';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -71,6 +72,7 @@ const AuthenticatedApp = () => {
       <Route path="/safety-plan" element={<SafetyPlan />} />
       <Route path="/journal" element={<Journal />} />
       <Route path="/support-guide" element={<SupportGuide />} />
+      <Route path="/monthly-report" element={<MonthlyReport />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
