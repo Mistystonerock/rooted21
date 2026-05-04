@@ -39,6 +39,7 @@ import CourtPartnershipDetail from './pages/CourtPartnershipDetail';
 import CourtMessaging from './pages/CourtMessaging';
 import CourtAddAppointment from './pages/CourtAddAppointment';
 import HouseholdRoutine from './pages/HouseholdRoutine';
+import DailyCheckIn from './pages/DailyCheckIn';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -105,6 +106,7 @@ const AuthenticatedApp = () => {
       <Route path="/court-messaging/:partnershipId" element={<CourtMessaging />} />
       <Route path="/court-add-appointment/:partnershipId" element={<CourtAddAppointment />} />
       <Route path="/household-routine" element={<HouseholdRoutine />} />
+      <Route path="/daily-checkin" element={<DailyCheckIn />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />

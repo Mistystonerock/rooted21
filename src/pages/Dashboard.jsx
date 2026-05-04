@@ -117,10 +117,10 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Goals</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>{goals.length} active</p>
           </Link>
-          <Link to="/progress" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <Link to="/daily-checkin" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <TrendingUp size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Progress</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>View your growth</p>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Daily Check-In</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Quick mood & calm log</p>
           </Link>
           <Link to="/my-team" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <Users size={22} color={C.brown} />
