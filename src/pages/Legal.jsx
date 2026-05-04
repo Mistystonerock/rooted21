@@ -18,42 +18,52 @@ const CONTENT = {
       {
         heading: "1. Acceptance of Terms",
         content:
-          "By accessing and using Rooted 21, you accept and agree to be bound by the terms of this agreement. If you do not agree to these terms, please do not use this service.",
+          "By accessing and using Rooted 21, you accept and agree to be bound by the terms of this agreement. If you do not agree to these terms, please do not use this service. These terms constitute a binding legal agreement between you and Rooted 21, LLC.",
       },
       {
-        heading: "2. Use License",
+        heading: "2. Use License & Intellectual Property",
         content:
-          "Permission is granted to temporarily download one copy of the materials (information or software) on Rooted 21 for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not: modify or copy the materials; use the materials for any commercial purpose or for any public display; attempt to decompile or reverse engineer any software contained on Rooted 21; remove any copyright or other proprietary notations from the materials; transfer the materials to another person or \"mirror\" the materials on any other server.",
+          "Permission is granted to temporarily download one copy of the materials (information or software) on Rooted 21 for personal, non-commercial use only. This is a license, not a transfer of ownership. You may NOT: copy, modify, reverse engineer, or decompile the software or curriculum; use scrapers, bots, or automated tools to extract content; remove copyright, trademark, or proprietary notices; republish or sell the content; or create derivative works. All content, including lessons, assessments, therapeutic protocols, and branding are owned by Rooted 21, LLC and protected by copyright law. Unauthorized copying or redistribution is illegal and may result in civil and criminal penalties.",
       },
       {
-        heading: "3. Disclaimer",
+        heading: "3. User Conduct & Prohibited Activities",
         content:
-          "The materials on Rooted 21 are provided 'as is'. Rooted 21 makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
+          "You agree not to: use Rooted 21 for unlawful purposes or in violation of any applicable laws; attempt to gain unauthorized access to the platform; interfere with platform operations; harass, abuse, or threaten other users; upload malicious code or content; or violate intellectual property rights. Any unauthorized use of content will be pursued to the fullest extent of the law, including DMCA takedown notices and civil litigation.",
       },
       {
-        heading: "4. Limitations",
+        heading: "4. Limitation of Liability & Indemnification",
         content:
-          "In no event shall Rooted 21 or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Rooted 21, even if Rooted 21 or a representative has been notified orally or in writing of the possibility of such damage.",
+          "IN NO EVENT SHALL ROOTED 21, LLC OR ITS DIRECTORS, EMPLOYEES, AGENTS BE LIABLE FOR: indirect, incidental, special, or consequential damages; loss of data, profits, or business opportunity; or damages from unauthorized access or data breaches beyond our reasonable control. Your sole remedy is refund of subscription fees. By using Rooted 21, you indemnify and hold harmless the company from any claims arising from your use of the platform, breach of these terms, or violation of law.",
       },
       {
-        heading: "5. Accuracy of Materials",
+        heading: "5. Warranty Disclaimer & Service 'AS-IS'",
         content:
-          "The materials appearing on Rooted 21 could include technical, typographical, or photographic errors. Rooted 21 does not warrant that any of the materials on its website are accurate, complete, or current. Rooted 21 may make changes to the materials contained on its website at any time without notice.",
+          "THE PLATFORM IS PROVIDED 'AS-IS' WITHOUT WARRANTY OF ANY KIND. Rooted 21, LLC DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not warrant that: the platform will be uninterrupted or error-free; all content is accurate or complete; or your use will meet your expectations.",
       },
       {
-        heading: "6. Links",
+        heading: "6. External Links & Third-Party Content",
         content:
-          "Rooted 21 has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Rooted 21 of the site. Use of any such linked website is at the user's own risk.",
+          "Rooted 21 is not responsible for external links, third-party services (Twilio, Stripe), or linked content. We do not endorse external sites. Your use of third-party services is governed by their own terms and privacy policies.",
       },
       {
-        heading: "7. Modifications",
+        heading: "7. Modification & Termination of Service",
         content:
-          "Rooted 21 may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.",
+          "Rooted 21 may revise these terms, modify features, or terminate the service at any time with 30 days' notice. Continued use after modification indicates acceptance. We may suspend or terminate accounts that violate these terms or engage in illegal activity.",
       },
       {
-        heading: "8. Governing Law",
+        heading: "8. Dispute Resolution & Arbitration",
         content:
-          "These terms and conditions are governed by and construed in accordance with the laws of the United States, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.",
+          "Any dispute arising from these terms shall be resolved through binding arbitration under JAMS rules. You waive the right to a jury trial or class action. Arbitration shall be conducted in English and governed by New York law. Each party bears its own legal costs unless arbitration rules provide otherwise.",
+      },
+      {
+        heading: "9. Severability",
+        content:
+          "If any provision of these terms is found invalid, that provision shall be severed and the remainder shall remain in effect.",
+      },
+      {
+        heading: "10. Contact & Notices",
+        content:
+          "Legal notices should be sent to: Rooted 21, LLC, attention Legal Department. By using this platform, you consent to electronic service of documents.",
       },
     ],
   },
@@ -65,47 +75,52 @@ const CONTENT = {
       {
         heading: "1. Information We Collect",
         content:
-          "We collect information you provide directly, such as your name, email, phone number, and child profile information. We also collect information about your usage of the app, including check-ins, goals, lessons completed, and journal entries. All data is encrypted and stored securely.",
+          "We collect: (a) Information you provide: name, email, phone, child profile, behavioral observations, goals, journal entries, health notes; (b) Usage data: login activity, check-in logs, feature usage, session duration; (c) Device info: IP address, browser type, device ID; (d) Payment info: processed securely through Stripe (we do not store credit card numbers). All personally identifiable information is encrypted.",
       },
       {
         heading: "2. How We Use Your Information",
         content:
-          "Your information is used to: provide and improve the Rooted 21 service; send notifications about your progress and account; connect you with assigned professionals via secure messaging; generate personalized insights and reports; and comply with legal obligations.",
+          "Your information is used to: provide, maintain, and improve Rooted 21; send notifications and reminders; create personalized insights and behavioral reports; connect you with assigned professionals; comply with legal and regulatory obligations; prevent fraud or misuse; and analyze platform usage to enhance features.",
       },
       {
-        heading: "3. Data Sharing with Professionals",
+        heading: "3. Sensitive Data: Children's Information",
         content:
-          "Only when you explicitly grant access via an access code does a professional (therapist, caseworker, counselor) gain permission to view your family's data. You control exactly which professionals have access and can revoke access at any time.",
+          "Rooted 21 processes sensitive information about children (names, ages, behavioral health, traumatic history). Parents/guardians are responsible for ensuring this information is accurate and necessary. We do NOT sell, share, or use child data for marketing. Child data is shared with professionals ONLY via explicit access code consent, which you can revoke anytime.",
       },
       {
-        heading: "4. Data Security",
+        heading: "4. Professional Data Sharing",
         content:
-          "We implement industry-standard security measures to protect your personal information, including encryption at rest and in transit, regular security audits, and limited access controls. However, no method of transmission over the internet is 100% secure.",
+          "When you provide a professional with an access code, you explicitly consent to share your complete family profile, behavioral data, notes, and assessments with that specific person. You control access and can revoke it immediately. Professionals must maintain confidentiality and comply with HIPAA and applicable laws.",
       },
       {
-        heading: "5. Data Retention",
+        heading: "5. Data Security & Encryption",
         content:
-          "Your data is retained for as long as your account is active. Upon account deletion, personal data is removed within 30 days, though aggregated analytics may be retained indefinitely.",
+          "We use industry-standard protections: AES-256 encryption at rest, TLS 1.2+ encryption in transit, secure API authentication, access controls, and regular security audits. However, no online system is 100% secure. We are not liable for breaches from unauthorized access, server compromise, or third-party vulnerability beyond our reasonable control.",
       },
       {
-        heading: "6. Third-Party Services",
+        heading: "6. Data Retention & Deletion",
         content:
-          "We use third-party services (SMS notifications via Twilio, email services) to deliver certain features. These services are bound by their own privacy policies. We do not sell or rent your personal information to third parties.",
+          "Active account data is retained indefinitely while your account is active. Upon account deletion, personal and child data is removed within 30 days. Backup copies may take up to 90 days to fully purge. Aggregated, anonymized analytics are retained indefinitely and cannot identify you.",
       },
       {
-        heading: "7. Children's Privacy",
+        heading: "7. Third-Party Service Providers",
         content:
-          "Parents/guardians are responsible for managing account data. We do not knowingly collect information directly from children. All data collected about children is managed by their parent or legal guardian.",
+          "We use: Twilio (SMS delivery), Stripe (payments), Base44 (hosting/database). These providers have access to limited data necessary for their service. We do NOT sell personal data to advertisers or data brokers. Your information is never shared for marketing purposes.",
       },
       {
-        heading: "8. Your Rights",
+        heading: "8. Your Privacy Rights",
         content:
-          "You have the right to access, correct, or delete your personal data at any time. Contact support to exercise these rights. Residents of certain states/regions may have additional privacy rights.",
+          "You have the right to: access your data; correct inaccurate information; delete your account and data (subject to legal holds); opt out of non-critical notifications. To exercise rights, contact support@rooted21.org. Residents of California (CCPA), Virginia (VCDPA), and EU (GDPR) have additional rights to data portability and deletion timelines.",
       },
       {
-        heading: "9. Contact Us",
+        heading: "9. Policy Changes & Legal Compliance",
         content:
-          'If you have questions about our privacy practices, please contact us at privacy@rooted21.org or through the contact form in the app.',
+          "We may update this policy. Significant changes will trigger email notification. Continued use indicates acceptance. Rooted 21 complies with FERPA (educational records), state behavioral health laws, and applicable data protection regulations.",
+      },
+      {
+        heading: "10. Contact & Data Requests",
+        content:
+          'Email privacy@rooted21.org or contact through the app. For legal requests (subpoenas, warrants), we will notify you unless legally prohibited. Data Subject Access Requests (DSAR) are fulfilled within 45 days.',
       },
     ],
   },
@@ -147,17 +162,32 @@ const CONTENT = {
       {
         heading: "6. No Liability for Outcomes",
         content:
-          "Rooted 21 is provided 'as is' without warranty. We are not liable for any outcomes, improvements, or worsening of your child's behavior or your parenting situation resulting from use of this app.",
+          "Rooted 21, LLC IS NOT LIABLE for any outcomes, behavioral changes (positive or negative), emotional impacts, or consequences resulting from use of this app. We provide educational support only. Any negative outcomes, therapeutic harm, or dependency on platform guidance are not the responsibility of Rooted 21. You assume all risk related to use.",
       },
       {
-        heading: "7. Parental Responsibility",
+        heading: "7. No Doctor-Patient or Therapist-Client Relationship",
         content:
-          "Parents and guardians remain fully responsible for their child's care, safety, and wellbeing. Use of Rooted 21 does not create a therapeutic or fiduciary relationship between you and Rooted 21.",
+          "Use of Rooted 21 does NOT create a medical, therapeutic, counseling, or fiduciary relationship. You do not have a duty of care or confidentiality from Rooted 21. Professionals integrated into the platform (therapists, caseworkers) create their own separate professional relationships with you outside of this app.",
       },
       {
-        heading: "8. Acknowledgment",
+        heading: "8. Parental Responsibility & Guardianship",
         content:
-          "By using Rooted 21, you acknowledge that you have read and understand these disclaimers and accept responsibility for any decisions made based on information provided by this app.",
+          "You represent that you are the biological parent, adoptive parent, legal guardian, or authorized caregiver of the child whose information is entered. You assume FULL LEGAL RESPONSIBILITY for your child's care, safety, medical decisions, and wellbeing. Rooted 21 is a tool only—not a substitute for professional judgment, parental oversight, or legal guardianship responsibilities.",
+      },
+      {
+        heading: "9. Assumption of Risk",
+        content:
+          "By using Rooted 21, you acknowledge: (a) the risks of AI-generated advice; (b) the limitations of digital mental health support; (c) that you understand when to seek immediate professional help; and (d) that you accept all consequences of relying on this app's features. YOU ASSUME ALL RISK.",
+      },
+      {
+        heading: "10. No Replacement for Emergency Services",
+        content:
+          "Rooted 21 does NOT replace emergency mental health services, crisis intervention, or medical treatment. If you or your child experience suicidal thoughts, self-harm, abuse, or medical emergency, YOU MUST immediately call 911, text 988, or go to an emergency room. Failure to seek emergency care is YOUR responsibility, not Rooted 21's.",
+      },
+      {
+        heading: "11. Acknowledgment & Binding Agreement",
+        content:
+          "By using Rooted 21, you certify that you: (a) have read all health disclaimers; (b) understand Rooted 21 is not medical care; (c) accept all liability and risk; (d) will seek professional care when needed; and (e) release Rooted 21, LLC from liability for outcomes. This is a binding legal waiver.",
       },
     ],
   },
