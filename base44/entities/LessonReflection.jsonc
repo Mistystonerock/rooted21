@@ -1,0 +1,32 @@
+{
+  "name": "LessonReflection",
+  "type": "object",
+  "properties": {
+    "lesson_id": {
+      "type": "number",
+      "description": "ID of the lesson this reflection is for"
+    },
+    "lesson_title": {
+      "type": "string",
+      "description": "Title of the lesson"
+    },
+    "worksheet_answer": {
+      "type": "string",
+      "description": "User's answer to the lesson's worksheet question"
+    },
+    "reflection_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the reflection was created"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional personal notes or insights"
+    }
+  },
+  "required": [
+    "lesson_id",
+    "lesson_title",
+    "worksheet_answer"
+  ]
+}

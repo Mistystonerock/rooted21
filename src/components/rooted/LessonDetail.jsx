@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
-import { CheckCircle2, ChevronLeft, Download, BookOpen, Zap } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Download, BookOpen, Zap, BookMarked } from "lucide-react";
 import LessonActivities from "./LessonActivities";
+import ReflectionForm from "./ReflectionForm";
 
 const TABS = [
   { id: "lesson", label: "Lesson", icon: BookOpen },
   { id: "activities", label: "Activities", icon: Zap },
+  { id: "reflection", label: "Reflection", icon: BookMarked },
 ];
 
 function downloadLesson(lesson) {
@@ -45,6 +47,7 @@ function downloadLesson(lesson) {
 
 export default function LessonDetail({ lesson, isCompleted, onMarkComplete, onBack }) {
   const [tab, setTab] = useState("lesson");
+  const [showReflectionForm, setShowReflectionForm] = useState(false);
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -170,7 +173,66 @@ export default function LessonDetail({ lesson, isCompleted, onMarkComplete, onBa
           <LessonActivities lessonId={lesson.id} />
         )}
 
+        {/* ── REFLECTION TAB ── */}
+        {tab === "reflection" && (
+          <div className="space-y-4">
+            <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+              <p className="text-xs font-bold mb-2" style={{ color: C.mutedText }}>WORKSHEET QUESTION</p>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: C.darkText }}>{lesson.worksheet}</p>
+              <button
+                onClick={() => setShowReflectionForm(true)}
+                className="w-full py-3 rounded-xl font-bold text-sm"
+                style={{
+                  background: C.darkGreen,
+                  color: C.white,
+                  border: "none",
+                  cursor: "pointer"
+                }}
+              >
+                + Record My Reflection
+              </button>
+            </div>
+
+            {/* Q&A Section */}
+            {lesson.questions && lesson.questions.length > 0 && (
+              <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Key Questions & Answers</p>
+                {lesson.questions.map((qa, i) => (
+                  <div key={i} className="space-y-1 pb-3" style={{ borderBottom: i < lesson.questions.length - 1 ? `1px solid ${C.cream}` : "none" }}>
+                    <p className="text-xs font-bold" style={{ color: C.brown }}>Q: {qa.question}</p>
+                    <p className="text-xs leading-relaxed" style={{ color: C.darkText }}>A: {qa.answer}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Reading Material */}
+            {lesson.readingMaterial && lesson.readingMaterial.length > 0 && (
+              <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+                <p className="font-bold text-sm mb-3" style={{ color: C.darkGreen }}>📚 Reading Material</p>
+                <ul className="space-y-2">
+                  {lesson.readingMaterial.map((resource, i) => (
+                    <li key={i} className="text-xs flex gap-2" style={{ color: C.darkText }}>
+                      <span style={{ color: C.midGreen }}>•</span>
+                      <span>{resource}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
+
+      {/* Reflection Form Modal */}
+      {showReflectionForm && (
+        <ReflectionForm
+          lesson={lesson}
+          onSubmit={() => setShowReflectionForm(false)}
+          onCancel={() => setShowReflectionForm(false)}
+        />
+      )}
     </div>
   );
 }

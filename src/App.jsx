@@ -44,6 +44,7 @@ import Notifications from './pages/Notifications';
 import PartnershipSafetyPlan from './pages/PartnershipSafetyPlan';
 import CourtGenerateReport from './pages/CourtGenerateReport';
 import Help from './pages/Help';
+import MyReflections from './pages/MyReflections';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -115,6 +116,7 @@ const AuthenticatedApp = () => {
       <Route path="/partnership-safety-plan/:partnershipId" element={<PartnershipSafetyPlan />} />
       <Route path="/court-generate-report" element={<CourtGenerateReport />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/my-reflections" element={<MyReflections />} />
       <Route path="*" element={
         <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
           <PageNotFound />
