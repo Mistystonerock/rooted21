@@ -67,7 +67,7 @@ export default function Chat() {
 
     const convoHistory = nextMessages
       .filter(m => m.role !== "system")
-      .map(m => `${m.role === "user" ? "Parent" : "HALO Support"}: ${m.content}`)
+      .map(m => `${m.role === "user" ? "Parent" : "Rooted 21 Support"}: ${m.content}`)
       .join("\n\n");
 
     const reply = await base44.integrations.Core.InvokeLLM({
@@ -101,7 +101,7 @@ export default function Chat() {
     // Build conversation context (skip the welcome message)
     const convoHistory = nextMessages
       .filter(m => m.role !== "system")
-      .map(m => `${m.role === "user" ? "Parent" : "HALO Support"}: ${m.content}`)
+      .map(m => `${m.role === "user" ? "Parent" : "Rooted 21 Support"}: ${m.content}`)
       .join("\n\n");
 
     const reply = await base44.integrations.Core.InvokeLLM({
@@ -159,7 +159,7 @@ export default function Chat() {
         <TreeLogo size={28} />
         <div>
           <p className="font-serif font-bold text-sm leading-none" style={{ color: C.cream }}>
-            HALO Support Chat
+            Rooted 21 Parenting Support
           </p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>
             Trauma-informed · TBRI® based

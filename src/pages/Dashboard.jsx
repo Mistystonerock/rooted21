@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
@@ -65,6 +65,11 @@ export default function Dashboard() {
         {/* Quick actions */}
         <div className="grid grid-cols-2 gap-3">
 
+          <Link to="/chat" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Zap size={22} color={C.gold} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Parenting Support</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Real-time guidance</p>
+          </Link>
           <Link to="/lessons" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <BookOpen size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Lessons</p>
