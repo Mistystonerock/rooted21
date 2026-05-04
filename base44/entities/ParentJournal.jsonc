@@ -1,0 +1,46 @@
+{
+  "name": "ParentJournal",
+  "type": "object",
+  "properties": {
+    "entry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the journal entry"
+    },
+    "regulation_reflection": {
+      "type": "string",
+      "description": "Parent's reflection on their own emotional regulation that day"
+    },
+    "wins_of_day": {
+      "type": "string",
+      "description": "Positive moments, wins, or good interactions with child"
+    },
+    "gratitude": {
+      "type": "string",
+      "description": "Things the parent is grateful for"
+    },
+    "what_i_learned": {
+      "type": "string",
+      "description": "Parenting insights, lessons learned, or areas for growth"
+    },
+    "mood": {
+      "type": "string",
+      "enum": [
+        "peaceful",
+        "calm",
+        "okay",
+        "stressed",
+        "overwhelmed"
+      ],
+      "default": "okay",
+      "description": "Parent's overall mood for the day"
+    },
+    "is_private": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "entry_date"
+  ]
+}
