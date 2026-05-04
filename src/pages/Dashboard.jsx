@@ -1,17 +1,21 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, HelpCircle } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
+import MobileHeader from "@/components/mobile/MobileHeader";
+import MobileRefresh from "@/components/mobile/MobileRefresh";
+import MobileText from "@/components/mobile/MobileText";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [child, setChild] = useState(null);
@@ -21,11 +25,8 @@ export default function Dashboard() {
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
   const [showTour, setShowTour] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const touchStartY = useRef(0);
 
   async function handleRefresh() {
-    setIsRefreshing(true);
     await Promise.all([
       base44.auth.me().then(setUser),
       base44.entities.ChildProfile.list("-created_date", 1).then(r => setChild(r[0] || null)),
@@ -34,33 +35,10 @@ export default function Dashboard() {
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
     ]);
     queryClient.invalidateQueries();
-    setIsRefreshing(false);
   }
-
-  function handleTouchStart(e) {
-    touchStartY.current = e.touches[0].clientY;
-  }
-
-  function handleTouchMove(e) {
-    const touchY = e.touches[0].clientY;
-    const scrollTop = window.scrollY;
-    if (scrollTop === 0 && touchY > touchStartY.current + 80 && !isRefreshing) {
-      handleRefresh();
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-    return () => {
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [isRefreshing]);
 
   useEffect(() => {
     handleRefresh();
-    // Show tour if user is new (first visit)
     const hasSeenTour = localStorage.getItem("rooted21_tour_seen");
     if (!hasSeenTour) {
       setShowTour(true);
@@ -75,34 +53,46 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{
-        background: C.darkGreen,
-        paddingTop: "max(1rem, calc(1rem + env(safe-area-inset-top)))"
-      }}>
-        <TreeLogo size={36} />
+      {/* Custom iOS-style header */}
+      <div
+        className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10"
+        style={{
+          background: C.darkGreen,
+          paddingTop: "max(0.75rem, calc(0.75rem + env(safe-area-inset-top)))",
+        }}
+      >
+        <TreeLogo size={32} />
         <div>
-          <div className="font-serif font-bold text-lg" style={{ color: C.cream }}>
+          <div className="font-serif font-bold text-base" style={{ color: C.cream }}>
             Rooted <span style={{ color: C.gold }}>21</span>
           </div>
-          <div className="text-[10px] font-bold tracking-widest" style={{ color: C.lightGreen }}>
+          <MobileText variant="caption" style={{ color: C.lightGreen }}>
             PARENTING NETWORK
-          </div>
+          </MobileText>
         </div>
-        <div className="ml-auto flex items-center gap-2">
-          <Link to="/help" className="rounded-lg p-1.5 transition-opacity hover:opacity-70" style={{ background: "#ffffff18", border: "none" }}>
-            <HelpCircle size={18} color={C.lightGreen} />
-          </Link>
+        <div className="ml-auto flex items-center gap-1.5">
+          <button
+            onClick={() => navigate("/help")}
+            className="rounded-lg p-2.5 transition-opacity hover:opacity-70"
+            style={{ background: "#ffffff18", border: "none", cursor: "pointer" }}
+            aria-label="Help"
+          >
+            <span className="text-lg">❓</span>
+          </button>
           <NotificationBell />
-          <Link to="/profile">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: C.midGreen, color: C.white }}>
-              {user?.full_name?.[0] || "?"}
-            </div>
-          </Link>
+          <button
+            onClick={() => navigate("/profile")}
+            className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+            style={{ background: C.midGreen, color: C.white, border: "none", cursor: "pointer" }}
+            aria-label="Profile"
+          >
+            {user?.full_name?.[0] || "?"}
+          </button>
         </div>
       </div>
 
-      <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
+      <MobileRefresh onRefresh={handleRefresh}>
+        <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
         {/* Welcome */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-serif font-bold text-lg" style={{ color: C.cream }}>
@@ -319,6 +309,7 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+      </MobileRefresh>
       <BottomNav />
 
       {/* Onboarding Tour */}

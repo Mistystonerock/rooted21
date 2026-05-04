@@ -3,48 +3,12 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Suspense } from 'react';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import Lessons from './pages/Lessons';
-import Goals from './pages/Goals';
-import Progress from './pages/Progress';
-import ChildProfile from './pages/ChildProfile';
-import ProfessionalPortal from './pages/ProfessionalPortal';
-import Resources from './pages/Resources';
-import Chat from './pages/Chat';
-import MyTeam from './pages/MyTeam';
-import FamilyDashboard from './pages/FamilyDashboard';
-import RespiteCare from './pages/RespiteCare';
-import ResourceLibrary from './pages/ResourceLibrary';
-import Profile from './pages/Profile';
-import Analytics from './pages/Analytics';
-import ScheduleCreator from './pages/ScheduleCreator';
-import SafetyPlan from './pages/SafetyPlan';
-import Journal from './pages/Journal';
-import SupportGuide from './pages/SupportGuide';
-import MonthlyReport from './pages/MonthlyReport';
-import Legal from './pages/Legal';
-import Billing from './pages/Billing';
-import OwnerDashboard from './pages/OwnerDashboard';
-import BehaviorLogs from './pages/BehaviorLogs';
-import CoParentPortal from './pages/CoParentPortal';
-import CoParentMessaging from './pages/CoParentMessaging';
-import CoParentingResources from './pages/CoParentingResources';
-import Milestones from './pages/Milestones';
-import CourtDashboard from './pages/CourtDashboard';
-import CourtPartnershipDetail from './pages/CourtPartnershipDetail';
-import CourtMessaging from './pages/CourtMessaging';
-import CourtAddAppointment from './pages/CourtAddAppointment';
-import HouseholdRoutine from './pages/HouseholdRoutine';
-import DailyCheckIn from './pages/DailyCheckIn';
-import Notifications from './pages/Notifications';
-import PartnershipSafetyPlan from './pages/PartnershipSafetyPlan';
-import CourtGenerateReport from './pages/CourtGenerateReport';
-import Help from './pages/Help';
-import MyReflections from './pages/MyReflections';
+import LoadingFallback from '@/components/mobile/LoadingFallback';
+import routes from '@/hooks/useLazyLoadRoutes';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -70,59 +34,90 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Render the main app
+  // Render the main app with lazy loading
   return (
     <AnimatePresence mode="wait">
       <Routes>
-      <Route path="/" element={
-        <motion.div key="home" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
-          <Home />
-        </motion.div>
-      } />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/lessons" element={<Lessons />} />
-      <Route path="/goals" element={<Goals />} />
-      <Route path="/progress" element={<Progress />} />
-      <Route path="/child-profile" element={<ChildProfile />} />
-      <Route path="/professional" element={<ProfessionalPortal />} />
-      <Route path="/resources" element={<Resources />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/my-team" element={<MyTeam />} />
-      <Route path="/family-dashboard" element={<FamilyDashboard />} />
-      <Route path="/respite-care" element={<RespiteCare />} />
-      <Route path="/resource-library" element={<ResourceLibrary />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/analytics" element={<Analytics />} />
-      <Route path="/schedule" element={<ScheduleCreator />} />
-      <Route path="/safety-plan" element={<SafetyPlan />} />
-      <Route path="/journal" element={<Journal />} />
-      <Route path="/support-guide" element={<SupportGuide />} />
-      <Route path="/monthly-report" element={<MonthlyReport />} />
-      <Route path="/legal" element={<Legal />} />
-      <Route path="/billing" element={<Billing />} />
-      <Route path="/owner-dashboard" element={<OwnerDashboard />} />
-      <Route path="/behavior-logs" element={<BehaviorLogs />} />
-      <Route path="/co-parent-portal" element={<CoParentPortal />} />
-      <Route path="/co-parent-messaging/:partnershipId" element={<CoParentMessaging />} />
-      <Route path="/co-parenting-resources" element={<CoParentingResources />} />
-      <Route path="/milestones" element={<Milestones />} />
-      <Route path="/court-dashboard" element={<CourtDashboard />} />
-      <Route path="/court-partnership/:partnershipId" element={<CourtPartnershipDetail />} />
-      <Route path="/court-messaging/:partnershipId" element={<CourtMessaging />} />
-      <Route path="/court-add-appointment/:partnershipId" element={<CourtAddAppointment />} />
-      <Route path="/household-routine" element={<HouseholdRoutine />} />
-      <Route path="/daily-checkin" element={<DailyCheckIn />} />
-      <Route path="/notifications" element={<Notifications />} />
-      <Route path="/partnership-safety-plan/:partnershipId" element={<PartnershipSafetyPlan />} />
-      <Route path="/court-generate-report" element={<CourtGenerateReport />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/my-reflections" element={<MyReflections />} />
-      <Route path="*" element={
-        <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
-          <PageNotFound />
-        </motion.div>
-      } />
-    </Routes>
+        <Route path="/" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <motion.div key="home" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
+              <routes.Home />
+            </motion.div>
+          </Suspense>
+        } />
+        <Route path="/dashboard" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Dashboard />
+          </Suspense>
+        } />
+        <Route path="/lessons" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Lessons />
+          </Suspense>
+        } />
+        <Route path="/goals" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Goals />
+          </Suspense>
+        } />
+        <Route path="/progress" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Progress />
+          </Suspense>
+        } />
+        <Route path="/chat" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Chat />
+          </Suspense>
+        } />
+        <Route path="/profile" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Profile />
+          </Suspense>
+        } />
+        <Route path="/help" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <routes.Help />
+          </Suspense>
+        } />
+        {/* Secondary routes */}
+        <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><routes.ChildProfile /></Suspense>} />
+        <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><routes.ProfessionalPortal /></Suspense>} />
+        <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><routes.Resources /></Suspense>} />
+        <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><routes.MyTeam /></Suspense>} />
+        <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.FamilyDashboard /></Suspense>} />
+        <Route path="/respite-care" element={<Suspense fallback={<LoadingFallback />}><routes.RespiteCare /></Suspense>} />
+        <Route path="/resource-library" element={<Suspense fallback={<LoadingFallback />}><routes.ResourceLibrary /></Suspense>} />
+        <Route path="/analytics" element={<Suspense fallback={<LoadingFallback />}><routes.Analytics /></Suspense>} />
+        <Route path="/schedule" element={<Suspense fallback={<LoadingFallback />}><routes.ScheduleCreator /></Suspense>} />
+        <Route path="/safety-plan" element={<Suspense fallback={<LoadingFallback />}><routes.SafetyPlan /></Suspense>} />
+        <Route path="/journal" element={<Suspense fallback={<LoadingFallback />}><routes.Journal /></Suspense>} />
+        <Route path="/support-guide" element={<Suspense fallback={<LoadingFallback />}><routes.SupportGuide /></Suspense>} />
+        <Route path="/monthly-report" element={<Suspense fallback={<LoadingFallback />}><routes.MonthlyReport /></Suspense>} />
+        <Route path="/legal" element={<Suspense fallback={<LoadingFallback />}><routes.Legal /></Suspense>} />
+        <Route path="/billing" element={<Suspense fallback={<LoadingFallback />}><routes.Billing /></Suspense>} />
+        <Route path="/owner-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.OwnerDashboard /></Suspense>} />
+        <Route path="/behavior-logs" element={<Suspense fallback={<LoadingFallback />}><routes.BehaviorLogs /></Suspense>} />
+        <Route path="/co-parent-portal" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentPortal /></Suspense>} />
+        <Route path="/co-parent-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentMessaging /></Suspense>} />
+        <Route path="/co-parenting-resources" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentingResources /></Suspense>} />
+        <Route path="/milestones" element={<Suspense fallback={<LoadingFallback />}><routes.Milestones /></Suspense>} />
+        <Route path="/court-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.CourtDashboard /></Suspense>} />
+        <Route path="/court-partnership/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtPartnershipDetail /></Suspense>} />
+        <Route path="/court-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtMessaging /></Suspense>} />
+        <Route path="/court-add-appointment/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtAddAppointment /></Suspense>} />
+        <Route path="/household-routine" element={<Suspense fallback={<LoadingFallback />}><routes.HouseholdRoutine /></Suspense>} />
+        <Route path="/daily-checkin" element={<Suspense fallback={<LoadingFallback />}><routes.DailyCheckIn /></Suspense>} />
+        <Route path="/notifications" element={<Suspense fallback={<LoadingFallback />}><routes.Notifications /></Suspense>} />
+        <Route path="/partnership-safety-plan/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.PartnershipSafetyPlan /></Suspense>} />
+        <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><routes.CourtGenerateReport /></Suspense>} />
+        <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><routes.MyReflections /></Suspense>} />
+        <Route path="*" element={
+          <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
+            <PageNotFound />
+          </motion.div>
+        } />
+      </Routes>
     </AnimatePresence>
   );
 };

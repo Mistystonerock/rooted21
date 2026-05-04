@@ -1,0 +1,50 @@
+import { lazy } from "react";
+
+/**
+ * Lazy-load all routes to optimize initial bundle size.
+ * Returns a map of lazy components and Suspense wrapper.
+ */
+
+const routes = {
+  Home: lazy(() => import("@/pages/Home")),
+  Dashboard: lazy(() => import("@/pages/Dashboard")),
+  Lessons: lazy(() => import("@/pages/Lessons")),
+  Goals: lazy(() => import("@/pages/Goals")),
+  Progress: lazy(() => import("@/pages/Progress")),
+  ChildProfile: lazy(() => import("@/pages/ChildProfile")),
+  ProfessionalPortal: lazy(() => import("@/pages/ProfessionalPortal")),
+  Resources: lazy(() => import("@/pages/Resources")),
+  Chat: lazy(() => import("@/pages/Chat")),
+  MyTeam: lazy(() => import("@/pages/MyTeam")),
+  FamilyDashboard: lazy(() => import("@/pages/FamilyDashboard")),
+  RespiteCare: lazy(() => import("@/pages/RespiteCare")),
+  ResourceLibrary: lazy(() => import("@/pages/ResourceLibrary")),
+  Profile: lazy(() => import("@/pages/Profile")),
+  Analytics: lazy(() => import("@/pages/Analytics")),
+  ScheduleCreator: lazy(() => import("@/pages/ScheduleCreator")),
+  SafetyPlan: lazy(() => import("@/pages/SafetyPlan")),
+  Journal: lazy(() => import("@/pages/Journal")),
+  SupportGuide: lazy(() => import("@/pages/SupportGuide")),
+  MonthlyReport: lazy(() => import("@/pages/MonthlyReport")),
+  Legal: lazy(() => import("@/pages/Legal")),
+  Billing: lazy(() => import("@/pages/Billing")),
+  OwnerDashboard: lazy(() => import("@/pages/OwnerDashboard")),
+  BehaviorLogs: lazy(() => import("@/pages/BehaviorLogs")),
+  CoParentPortal: lazy(() => import("@/pages/CoParentPortal")),
+  CoParentMessaging: lazy(() => import("@/pages/CoParentMessaging")),
+  CoParentingResources: lazy(() => import("@/pages/CoParentingResources")),
+  Milestones: lazy(() => import("@/pages/Milestones")),
+  CourtDashboard: lazy(() => import("@/pages/CourtDashboard")),
+  CourtPartnershipDetail: lazy(() => import("@/pages/CourtPartnershipDetail")),
+  CourtMessaging: lazy(() => import("@/pages/CourtMessaging")),
+  CourtAddAppointment: lazy(() => import("@/pages/CourtAddAppointment")),
+  HouseholdRoutine: lazy(() => import("@/pages/HouseholdRoutine")),
+  DailyCheckIn: lazy(() => import("@/pages/DailyCheckIn")),
+  Notifications: lazy(() => import("@/pages/Notifications")),
+  PartnershipSafetyPlan: lazy(() => import("@/pages/PartnershipSafetyPlan")),
+  CourtGenerateReport: lazy(() => import("@/pages/CourtGenerateReport")),
+  Help: lazy(() => import("@/pages/Help")),
+  MyReflections: lazy(() => import("@/pages/MyReflections")),
+};
+
+export default routes;
