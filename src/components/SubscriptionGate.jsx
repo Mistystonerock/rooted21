@@ -96,27 +96,6 @@ export default function SubscriptionGate({ children }) {
           </p>
         </div>
 
-        {/* What's included */}
-        <div className="rounded-2xl p-5 space-y-3" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
-          <p className="font-bold text-xs tracking-wider" style={{ color: C.mutedText }}>EVERYTHING INCLUDED</p>
-          {[
-            ["📚", "Full 21-Lesson TBRI® Curriculum"],
-            ["💬", "AI Parenting Support Chat (unlimited)"],
-            ["📊", "Behavior Logs & Analytics"],
-            ["👥", "Professional Team Messaging"],
-            ["🗓️", "Family Calendar & Care Coordination"],
-            ["🛡️", "Safety Plan Builder"],
-            ["🏅", "Milestones, Habits & Progress Tracking"],
-            ["📄", "Monthly PDF Report for Court/Care Team"],
-          ].map(([emoji, label]) => (
-            <div key={label} className="flex items-center gap-3">
-              <span className="text-base">{emoji}</span>
-              <p className="text-xs font-medium" style={{ color: C.darkGreen }}>{label}</p>
-              <Check size={12} color={C.midGreen} className="ml-auto flex-shrink-0" />
-            </div>
-          ))}
-        </div>
-
         {/* Pricing card */}
         <div className="rounded-2xl p-5 text-center" style={{ background: C.cream }}>
           <p className="text-3xl font-extrabold" style={{ color: C.darkGreen }}>$14.99<span className="text-sm font-normal">/month</span></p>
@@ -144,6 +123,27 @@ export default function SubscriptionGate({ children }) {
         <p className="text-center text-[11px]" style={{ color: C.mutedText }}>
           You won't be charged until your trial ends. Cancel before then and pay nothing.
         </p>
+
+        {/* What's included */}
+        <div className="rounded-2xl p-5 space-y-3" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+          <p className="font-bold text-xs tracking-wider" style={{ color: C.mutedText }}>EVERYTHING INCLUDED</p>
+          {[
+            ["📚", "Full 21-Lesson TBRI® Curriculum"],
+            ["💬", "AI Parenting Support Chat (unlimited)"],
+            ["📊", "Behavior Logs & Analytics"],
+            ["👥", "Professional Team Messaging"],
+            ["🗓️", "Family Calendar & Care Coordination"],
+            ["🛡️", "Safety Plan Builder"],
+            ["🏅", "Milestones, Habits & Progress Tracking"],
+            ["📄", "Monthly PDF Report for Court/Care Team"],
+          ].map(([emoji, label]) => (
+            <div key={label} className="flex items-center gap-3">
+              <span className="text-base">{emoji}</span>
+              <p className="text-xs font-medium" style={{ color: C.darkGreen }}>{label}</p>
+              <Check size={12} color={C.midGreen} className="ml-auto flex-shrink-0" />
+            </div>
+          ))}
+        </div>
 
         {/* Skip for now */}
         <button
