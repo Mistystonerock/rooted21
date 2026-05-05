@@ -30,6 +30,11 @@
       "type": "boolean",
       "default": true,
       "description": "Whether this class is visible to users"
+    },
+    "max_capacity": {
+      "type": "number",
+      "default": 30,
+      "description": "Maximum enrollment capacity"
     }
   },
   "required": [

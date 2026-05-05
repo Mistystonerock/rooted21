@@ -1,0 +1,43 @@
+{
+  "name": "ClassWaitlist",
+  "type": "object",
+  "properties": {
+    "class_id": {
+      "type": "string",
+      "description": "ID of the LiveClass"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of person on waitlist"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Full name of person on waitlist"
+    },
+    "position": {
+      "type": "number",
+      "description": "Position in the waitlist (1, 2, 3...)"
+    },
+    "notified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether they've been notified of a spot opening"
+    },
+    "enrolled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether they've been auto-enrolled from waitlist"
+    },
+    "waitlist_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When they joined the waitlist"
+    }
+  },
+  "required": [
+    "class_id",
+    "user_email",
+    "position",
+    "waitlist_date"
+  ]
+}

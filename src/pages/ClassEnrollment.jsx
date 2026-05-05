@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Check, X, Loader2, ChevronRight } from "lucide-react";
+import { Check, X, Loader2, ChevronRight, Bell } from "lucide-react";
 
-function EnrollmentCard({ cls, isEnrolled, onEnroll, loading }) {
+function EnrollmentCard({ cls, isEnrolled, isOnWaitlist, enrollmentCount, onEnroll, onJoinWaitlist, loading }) {
+  const isFull = enrollmentCount >= (cls.max_capacity || 30);
+  
   return (
     <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.cream}` }}>
       <div className="px-4 py-3" style={{ background: C.darkGreen }}>
@@ -25,11 +27,41 @@ function EnrollmentCard({ cls, isEnrolled, onEnroll, loading }) {
           <p className="text-xs" style={{ color: C.mutedText }}>{cls.date || "Date TBA"}</p>
         </div>
 
+        <div className="flex items-center gap-2 text-[10px]">
+          <span style={{ color: C.mutedText }}>👥</span>
+          <p style={{ color: C.mutedText }}>{enrollmentCount}/{cls.max_capacity || 30} spots filled</p>
+        </div>
+
         {isEnrolled ? (
           <div className="flex items-center gap-2 py-3 px-4 rounded-lg" style={{ background: "#EAF4EA" }}>
             <Check size={16} color={C.midGreen} />
             <p className="text-xs font-bold" style={{ color: C.midGreen }}>You're enrolled!</p>
           </div>
+        ) : isOnWaitlist ? (
+          <div className="flex items-center gap-2 py-3 px-4 rounded-lg" style={{ background: C.cream }}>
+            <p className="text-xs font-bold" style={{ color: C.brown }}>✓ On waitlist</p>
+          </div>
+        ) : isFull ? (
+          <button
+            onClick={() => onJoinWaitlist(cls)}
+            disabled={loading}
+            className="w-full py-3 rounded-xl font-bold text-sm transition-all"
+            style={{
+              background: C.cream,
+              color: C.brown,
+              border: "none",
+              cursor: loading ? "default" : "pointer",
+              opacity: loading ? 0.7 : 1,
+            }}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-1">
+                <Loader2 size={14} className="animate-spin" /> Adding to waitlist...
+              </span>
+            ) : (
+              "Join Waitlist"
+            )}
+          </button>
         ) : (
           <button
             onClick={() => onEnroll(cls)}
@@ -61,8 +93,10 @@ export default function ClassEnrollment() {
   const [user, setUser] = useState(null);
   const [classes, setClasses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
+  const [waitlist, setWaitlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [enrollingId, setEnrollingId] = useState(null);
+  const [enrollmentCounts, setEnrollmentCounts] = useState({});
 
   useEffect(() => {
     Promise.all([
@@ -73,10 +107,23 @@ export default function ClassEnrollment() {
       setClasses(cls);
 
       if (u) {
-        base44.entities.ClassEnrollment.filter({ user_email: u.email }).then(enr => {
+        Promise.all([
+          base44.entities.ClassEnrollment.filter({ user_email: u.email }),
+          base44.entities.ClassWaitlist.filter({ user_email: u.email }),
+        ]).then(([enr, wait]) => {
           setEnrollments(enr);
+          setWaitlist(wait);
         });
       }
+
+      // Count enrollments per class
+      base44.entities.ClassEnrollment.list("-created_date", 1000).then(allEnr => {
+        const counts = {};
+        allEnr.forEach(e => {
+          counts[e.class_id] = (counts[e.class_id] || 0) + 1;
+        });
+        setEnrollmentCounts(counts);
+      });
 
       setLoading(false);
     });
@@ -98,6 +145,10 @@ export default function ClassEnrollment() {
       });
 
       setEnrollments(prev => [...prev, newEnrollment]);
+      setEnrollmentCounts(prev => ({
+        ...prev,
+        [cls.id]: (prev[cls.id] || 0) + 1,
+      }));
     } catch (err) {
       console.error("Enrollment failed:", err);
     } finally {
@@ -105,7 +156,32 @@ export default function ClassEnrollment() {
     }
   }
 
+  async function handleJoinWaitlist(cls) {
+    if (!user) return;
+    setEnrollingId(cls.id);
+
+    try {
+      const currentWaitlistCount = waitlist.filter(w => w.class_id === cls.id).length;
+      const position = currentWaitlistCount + 1;
+
+      const newWaitlistEntry = await base44.entities.ClassWaitlist.create({
+        class_id: cls.id,
+        user_email: user.email,
+        user_name: user.full_name || "Unknown",
+        position: position,
+        waitlist_date: new Date().toISOString(),
+      });
+
+      setWaitlist(prev => [...prev, newWaitlistEntry]);
+    } catch (err) {
+      console.error("Waitlist join failed:", err);
+    } finally {
+      setEnrollingId(null);
+    }
+  }
+
   const enrolledClassIds = new Set(enrollments.map(e => e.class_id));
+  const waitlistedClassIds = new Set(waitlist.map(w => w.class_id));
   const publishedClasses = classes.filter(c => c.is_published !== false);
 
   return (
@@ -181,7 +257,10 @@ export default function ClassEnrollment() {
                   key={cls.id}
                   cls={cls}
                   isEnrolled={enrolledClassIds.has(cls.id)}
+                  isOnWaitlist={waitlistedClassIds.has(cls.id)}
+                  enrollmentCount={enrollmentCounts[cls.id] || 0}
                   onEnroll={handleEnroll}
+                  onJoinWaitlist={handleJoinWaitlist}
                   loading={enrollingId === cls.id}
                 />
               ))}
