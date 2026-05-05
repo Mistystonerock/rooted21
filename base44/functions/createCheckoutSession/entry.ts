@@ -73,7 +73,9 @@ Deno.serve(async (req) => {
           quantity: 1
         }
       ],
-      trial_period_days: 7,
+      subscription_data: {
+        trial_period_days: 7
+      },
       success_url: successUrl || 'https://rooted21.app/billing?success=true',
       cancel_url: cancelUrl || 'https://rooted21.app/billing?canceled=true'
     });
