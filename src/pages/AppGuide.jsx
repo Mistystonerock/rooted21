@@ -226,7 +226,7 @@ Milestones celebrate your growth and give you visible proof of the hard work you
     emoji: "🎓",
     title: "Live Parenting Classes",
     color: C.darkGreen,
-    content: `Rooted 21 offers live, virtual 6-week parenting classes taught by a certified facilitator. Classes are held weekly via Teams or Zoom and are open to all parents and caregivers in the community.\n\n**Current class offerings:**\n• Parenting for Positive Self Worth (PPSW)\n• Making Sense of Your Worth Training (MSOYW)\n\n**What to expect:**\n- 6 weekly live sessions per course\n- Facilitated group learning — come ready to participate\n- No curriculum materials or handouts distributed\n- Certificate of completion available upon finishing all 6 sessions\n\n**How to join:**\nVisit the Live Classes page to see the current schedule and grab the Teams or Zoom link when available. Classes are posted as soon as they are scheduled.`,
+    content: `Rooted 21 offers live, virtual 6-week parenting classes taught by a certified facilitator. Classes are held weekly via Teams or Zoom and are open to all parents and caregivers in the community.\n\n**Current class offerings:**\n• Parenting for Positive Self Worth (PPSW)\n• Making Sense of Your Worth (MSOYW)\n\n**What to expect:**\n- 6 weekly live sessions per course\n- Facilitated group learning — come ready to participate\n- No curriculum materials or handouts distributed\n- Certificate of completion available upon finishing all 6 sessions\n\n**How to join:**\nVisit the Live Classes page to see the current schedule and grab the Teams or Zoom link when available. Classes are posted as soon as they are scheduled.`,
     link: "/live-classes",
     linkLabel: "View Live Classes →",
   },
