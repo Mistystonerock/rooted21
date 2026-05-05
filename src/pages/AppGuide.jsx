@@ -213,6 +213,16 @@ Milestones celebrate your growth and give you visible proof of the hard work you
     linkLabel: "Monthly Report →",
   },
   {
+    emoji: "🏫",
+    title: "School Support Tools",
+    color: "#5B8DB8",
+    content: `Navigating school can be one of the hardest parts of parenting a child from a hard place. Rooted 21 provides tools to help you show up prepared and confident:
+
+• Guidance for handling behaviors in the classroom — trauma-informed strategies you can share with teachers and school staff
+• Tools to prepare for IEP and behavior meetings — know your rights, what to bring, and how to advocate for your child
+• Ways for teachers and parents to stay aligned instead of working against each other — scripts, talking points, and frameworks for productive school partnerships`,
+  },
+  {
     emoji: "📞",
     title: "Crisis Resources",
     color: "#B84C2A",
