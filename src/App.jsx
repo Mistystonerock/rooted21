@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import TabStack from '@/components/mobile/TabStack';
+import ConsentGate from '@/components/ConsentGate';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -117,7 +118,9 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <AuthenticatedApp />
+          <ConsentGate>
+            <AuthenticatedApp />
+          </ConsentGate>
         </Router>
         <Toaster />
       </QueryClientProvider>
