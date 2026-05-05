@@ -56,6 +56,7 @@ const routes = {
   ClassEnrollment: lazy(() => import("@/pages/ClassEnrollment")),
   ClassProgress: lazy(() => import("@/pages/ClassProgress")),
   InstructorFeedbackDashboard: lazy(() => import("@/pages/InstructorFeedbackDashboard")),
+  InstructorAnalytics: lazy(() => import("@/pages/InstructorAnalytics")),
 };
 
 export default routes;
