@@ -106,6 +106,7 @@ const AuthenticatedApp = () => {
         <Route path="/live-classes" element={<Suspense fallback={<LoadingFallback />}><routes.LiveClasses /></Suspense>} />
         <Route path="/class-enrollment" element={<Suspense fallback={<LoadingFallback />}><routes.ClassEnrollment /></Suspense>} />
         <Route path="/class-progress/:enrollmentId" element={<Suspense fallback={<LoadingFallback />}><routes.ClassProgress /></Suspense>} />
+        <Route path="/instructor-feedback" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorFeedbackDashboard /></Suspense>} />
         <Route path="*" element={
           <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
             <PageNotFound />
