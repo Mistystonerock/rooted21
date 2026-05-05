@@ -13,7 +13,7 @@ const TABS = [
 
 function downloadLesson(lesson) {
   const lines = [
-    `HALO PROJECT — ROOTED 21`,
+    `ROOTED 21 — PARENTING NETWORK`,
     `Week ${lesson.week} · Lesson ${lesson.id} · ${lesson.pillar}`,
     ``,
     `${lesson.emoji}  ${lesson.title}`,
@@ -32,7 +32,7 @@ function downloadLesson(lesson) {
     lesson.worksheet,
     ``,
     `${"─".repeat(50)}`,
-    `Downloaded from the HALO Project · Rooted 21 Parenting Network`,
+    `Downloaded from Rooted 21 Parenting Network`,
     `For crisis support: call or text 988`,
   ];
 
@@ -41,7 +41,7 @@ function downloadLesson(lesson) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `HALO-Lesson-${lesson.id}-${lesson.title.replace(/[^a-z0-9]/gi, "-")}.txt`;
+  a.download = `Rooted21-Lesson-${lesson.id}-${lesson.title.replace(/[^a-z0-9]/gi, "-")}.txt`;
   a.click();
   URL.revokeObjectURL(url);
 }

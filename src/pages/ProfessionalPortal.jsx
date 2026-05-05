@@ -129,7 +129,7 @@ export default function ProfessionalPortal() {
             <Shield size={32} color={C.cream} className="mx-auto mb-3" />
             <p className="font-serif font-bold text-sm mb-2" style={{ color: C.darkGreen }}>Professional Access Required</p>
             <p className="text-xs mb-4" style={{ color: C.mutedText }}>
-              This dashboard is for therapists, CPS workers, caseworkers, court staff, and behavioral health professionals assigned to families in the HALO program.
+              This dashboard is for therapists, CPS workers, caseworkers, court staff, and behavioral health professionals assigned to families in the Rooted 21 program.
             </p>
             <div className="rounded-xl p-3.5 text-left" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
               <p className="text-xs font-bold mb-1.5" style={{ color: C.darkGreen }}>To request access:</p>
@@ -140,7 +140,7 @@ export default function ProfessionalPortal() {
               </ul>
             </div>
             <p className="text-[11px] mt-3" style={{ color: C.mutedText }}>
-              Contact: <strong style={{ color: C.darkGreen }}>Misty Stonerock</strong> — HALO Project Program
+              Contact your program administrator to request access.
             </p>
           </div>
         )}
