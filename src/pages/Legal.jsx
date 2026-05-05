@@ -19,7 +19,7 @@ const CONTENT = {
       {
         heading: "1. Acceptance of Terms",
         content:
-          "By accessing and using Rooted 21, you accept and agree to be bound by the terms of this agreement. If you do not agree to these terms, please do not use this service. These terms constitute a binding legal agreement between you and Rooted 21, LLC.",
+          "By accessing and using Rooted 21, you accept and agree to be bound by the terms of this agreement. If you do not agree to these terms, please do not use this service. These terms constitute a binding legal agreement between you and Rooted 21.",
       },
       {
         heading: "2. Use License & Intellectual Property",
@@ -34,12 +34,12 @@ const CONTENT = {
       {
         heading: "4. Limitation of Liability & Indemnification",
         content:
-          "IN NO EVENT SHALL ROOTED 21, LLC OR ITS DIRECTORS, EMPLOYEES, AGENTS BE LIABLE FOR: indirect, incidental, special, or consequential damages; loss of data, profits, or business opportunity; or damages from unauthorized access or data breaches beyond our reasonable control. Your sole remedy is refund of subscription fees. By using Rooted 21, you indemnify and hold harmless the company from any claims arising from your use of the platform, breach of these terms, or violation of law.",
+          "IN NO EVENT SHALL ROOTED 21 OR ITS OPERATORS BE LIABLE FOR: indirect, incidental, special, or consequential damages; loss of data, profits, or business opportunity; or damages from unauthorized access or data breaches beyond our reasonable control. Your sole remedy is refund of subscription fees. By using Rooted 21, you indemnify and hold harmless the platform from any claims arising from your use, breach of these terms, or violation of law.",
       },
       {
         heading: "5. Warranty Disclaimer & Service 'AS-IS'",
         content:
-          "THE PLATFORM IS PROVIDED 'AS-IS' WITHOUT WARRANTY OF ANY KIND. Rooted 21, LLC DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not warrant that: the platform will be uninterrupted or error-free; all content is accurate or complete; or your use will meet your expectations.",
+          "THE PLATFORM IS PROVIDED 'AS-IS' WITHOUT WARRANTY OF ANY KIND. ROOTED 21 DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not warrant that: the platform will be uninterrupted or error-free; all content is accurate or complete; or your use will meet your expectations.",
       },
       {
         heading: "6. External Links & Third-Party Content",
@@ -54,7 +54,7 @@ const CONTENT = {
       {
         heading: "8. Dispute Resolution & Arbitration",
         content:
-          "Any dispute arising from these terms shall be resolved through binding arbitration under JAMS rules. You waive the right to a jury trial or class action. Arbitration shall be conducted in English and governed by New York law. Each party bears its own legal costs unless arbitration rules provide otherwise.",
+          "Any dispute arising from these terms shall be resolved through binding arbitration under JAMS rules. You waive the right to a jury trial or class action. Arbitration shall be conducted in English and governed by Ohio law. Each party bears its own legal costs unless arbitration rules provide otherwise.",
       },
       {
         heading: "9. Severability",
@@ -64,7 +64,7 @@ const CONTENT = {
       {
         heading: "10. Contact & Notices",
         content:
-          "Legal notices should be sent to: Rooted 21, LLC, attention Legal Department. By using this platform, you consent to electronic service of documents.",
+          "Legal notices should be sent to: mstonerock@rooted21parenting.com. By using this platform, you consent to electronic service of documents.",
       },
     ],
   },
@@ -111,7 +111,7 @@ const CONTENT = {
       {
         heading: "8. Your Privacy Rights",
         content:
-          "You have the right to: access your data; correct inaccurate information; delete your account and data (subject to legal holds); opt out of non-critical notifications. To exercise rights, contact support@rooted21.org. Residents of California (CCPA), Virginia (VCDPA), and EU (GDPR) have additional rights to data portability and deletion timelines.",
+          "You have the right to: access your data; correct inaccurate information; delete your account and data (subject to legal holds); opt out of non-critical notifications. To exercise these rights, email mstonerock@rooted21parenting.com.",
       },
       {
         heading: "9. Policy Changes & Legal Compliance",
@@ -121,7 +121,7 @@ const CONTENT = {
       {
         heading: "10. Contact & Data Requests",
         content:
-          'Email privacy@rooted21.org or contact through the app. For legal requests (subpoenas, warrants), we will notify you unless legally prohibited. Data Subject Access Requests (DSAR) are fulfilled within 45 days.',
+          'Email mstonerock@rooted21parenting.com or contact through the app. For legal requests (subpoenas, warrants), we will notify you unless legally prohibited. Data requests are fulfilled within 45 days.',
       },
     ],
   },
@@ -163,7 +163,7 @@ const CONTENT = {
       {
         heading: "6. No Liability for Outcomes",
         content:
-          "Rooted 21, LLC IS NOT LIABLE for any outcomes, behavioral changes (positive or negative), emotional impacts, or consequences resulting from use of this app. We provide educational support only. Any negative outcomes, therapeutic harm, or dependency on platform guidance are not the responsibility of Rooted 21. You assume all risk related to use.",
+          "ROOTED 21 IS NOT LIABLE for any outcomes, behavioral changes (positive or negative), emotional impacts, or consequences resulting from use of this app. We provide educational support only. Any negative outcomes, therapeutic harm, or dependency on platform guidance are not the responsibility of Rooted 21. You assume all risk related to use.",
       },
       {
         heading: "7. No Doctor-Patient or Therapist-Client Relationship",
@@ -188,7 +188,7 @@ const CONTENT = {
       {
         heading: "11. Acknowledgment & Binding Agreement",
         content:
-          "By using Rooted 21, you certify that you: (a) have read all health disclaimers; (b) understand Rooted 21 is not medical care; (c) accept all liability and risk; (d) will seek professional care when needed; and (e) release Rooted 21, LLC from liability for outcomes. This is a binding legal waiver.",
+          "By using Rooted 21, you certify that you: (a) have read all health disclaimers; (b) understand Rooted 21 is not medical care; (c) accept all liability and risk; (d) will seek professional care when needed; and (e) release Rooted 21 from liability for outcomes. This is a binding legal waiver.",
       },
     ],
   },
