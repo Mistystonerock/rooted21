@@ -120,11 +120,11 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <ConsentGate>
-            <SubscriptionGate>
+          <SubscriptionGate>
+            <ConsentGate>
               <AuthenticatedApp />
-            </SubscriptionGate>
-          </ConsentGate>
+            </ConsentGate>
+          </SubscriptionGate>
         </Router>
         <Toaster />
       </QueryClientProvider>
