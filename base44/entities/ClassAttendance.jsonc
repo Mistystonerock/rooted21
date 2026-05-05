@@ -1,0 +1,46 @@
+{
+  "name": "ClassAttendance",
+  "type": "object",
+  "properties": {
+    "enrollment_id": {
+      "type": "string",
+      "description": "ID of the ClassEnrollment record"
+    },
+    "class_id": {
+      "type": "string",
+      "description": "ID of the LiveClass"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the participant"
+    },
+    "session_number": {
+      "type": "number",
+      "description": "Week/session number (1-6)"
+    },
+    "session_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the session"
+    },
+    "attended": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether they attended this session"
+    },
+    "attendance_marked_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When attendance was recorded"
+    },
+    "marked_by_email": {
+      "type": "string",
+      "description": "Email of admin/instructor who marked attendance"
+    }
+  },
+  "required": [
+    "enrollment_id",
+    "session_number",
+    "session_date"
+  ]
+}

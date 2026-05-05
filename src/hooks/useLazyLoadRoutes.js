@@ -53,6 +53,8 @@ const routes = {
   SensoryToolbox: lazy(() => import("@/pages/SensoryToolbox")),
   ChildProfiles: lazy(() => import("@/pages/ChildProfiles")),
   LiveClasses: lazy(() => import("@/pages/LiveClasses")),
+  ClassEnrollment: lazy(() => import("@/pages/ClassEnrollment")),
+  ClassProgress: lazy(() => import("@/pages/ClassProgress")),
 };
 
 export default routes;

@@ -1,0 +1,57 @@
+{
+  "name": "ClassEnrollment",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of enrolled parent"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Full name of enrolled parent"
+    },
+    "class_id": {
+      "type": "string",
+      "description": "ID of the LiveClass"
+    },
+    "class_title": {
+      "type": "string",
+      "description": "Title of the class (e.g. PPSW)"
+    },
+    "enrollment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When they enrolled"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "dropped"
+      ],
+      "default": "active",
+      "description": "Current enrollment status"
+    },
+    "sessions_attended": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of sessions attended (0-6)"
+    },
+    "certificate_issued": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether completion certificate has been issued"
+    },
+    "certificate_issued_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date certificate was issued"
+    }
+  },
+  "required": [
+    "user_email",
+    "class_id",
+    "enrollment_date"
+  ]
+}

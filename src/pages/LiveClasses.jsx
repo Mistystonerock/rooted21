@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Calendar, Video, Clock, Users, ExternalLink, Bell, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import { Calendar, Video, Clock, Users, ExternalLink, Bell, Plus, Pencil, Trash2, X, Check, BarChart3 } from "lucide-react";
 
 function ClassForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(initial || {
@@ -111,30 +112,39 @@ function ClassCard({ cls, isAdmin, onEdit, onDelete }) {
           <p className="text-xs leading-relaxed" style={{ color: "#3a3028" }}>{cls.description}</p>
         )}
 
-        {cls.join_url ? (
-          <a
-            href={cls.join_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
-            style={{ background: C.darkGreen, color: "#fff", textDecoration: "none" }}
+        <div className="flex gap-2">
+          {cls.join_url ? (
+            <a
+              href={cls.join_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+              style={{ background: C.darkGreen, color: "#fff", textDecoration: "none" }}
+            >
+              <Video size={15} /> Join <ExternalLink size={12} />
+            </a>
+          ) : (
+            <button
+              onClick={() => setInterested(!interested)}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all"
+              style={{
+                background: interested ? C.midGreen : C.cream,
+                color: interested ? "#fff" : C.darkGreen,
+                border: "none", cursor: "pointer",
+              }}
+            >
+              <Bell size={14} />
+              {interested ? "✓" : "Notify"}
+            </button>
+          )}
+          <Link
+            to="/class-enrollment"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+            style={{ background: C.midGreen, color: "#fff", textDecoration: "none" }}
           >
-            <Video size={15} /> Join Live Class <ExternalLink size={12} />
-          </a>
-        ) : (
-          <button
-            onClick={() => setInterested(!interested)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all"
-            style={{
-              background: interested ? C.midGreen : C.cream,
-              color: interested ? "#fff" : C.darkGreen,
-              border: "none", cursor: "pointer",
-            }}
-          >
-            <Bell size={14} />
-            {interested ? "✓ We'll notify you when the link is ready" : "Notify Me When Link is Available"}
-          </button>
-        )}
+            📝 Enroll
+          </Link>
+        </div>
       </div>
     </div>
   );
