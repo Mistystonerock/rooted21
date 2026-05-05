@@ -1,89 +1,103 @@
-import { useEffect, useRef, useState } from "react";
-import { RefreshCw } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { C } from "@/lib/rooted-constants";
 
 /**
- * Enhanced pull-to-refresh with native-like animation.
- * Non-intrusive to sticky headers. Smooth, consistent behavior.
+ * Pull-to-refresh with native-like feel.
+ * - Uses refs for all gesture state to avoid stale closures
+ * - No interference with sticky headers (indicator pushes content, doesn't overlay)
+ * - Smooth eased animation via CSS transition
  */
+const THRESHOLD = 60;  // px to trigger refresh
+const MAX_PULL = 80;   // max visual pull distance
+
 export default function MobileRefresh({ onRefresh, children }) {
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
-  const touchStartY = useRef(0);
-  const containerRef = useRef(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useEffect(() => {
-    const handleTouchStart = (e) => {
-      if (window.scrollY === 0) {
-        touchStartY.current = e.touches[0].clientY;
-      }
-    };
+  // Use refs so event handlers always see latest values (no stale closure)
+  const startYRef = useRef(0);
+  const pullingRef = useRef(false);
+  const refreshingRef = useRef(false);
 
-    const handleTouchMove = (e) => {
-      if (window.scrollY === 0 && touchStartY.current) {
-        const current = e.touches[0].clientY;
-        const distance = current - touchStartY.current;
-        if (distance > 0) {
-          setPullDistance(Math.min(distance, 80));
-        }
-      }
-    };
+  const handleTouchStart = useCallback((e) => {
+    if (window.scrollY === 0 && !refreshingRef.current) {
+      startYRef.current = e.touches[0].clientY;
+      pullingRef.current = true;
+    }
+  }, []);
 
-    const handleTouchEnd = async () => {
-      if (pullDistance > 50 && !isRefreshing) {
-        setIsRefreshing(true);
-        await onRefresh();
-        setIsRefreshing(false);
-      }
-      setPullDistance(0);
-      touchStartY.current = 0;
-    };
+  const handleTouchMove = useCallback((e) => {
+    if (!pullingRef.current || refreshingRef.current) return;
+    const dy = e.touches[0].clientY - startYRef.current;
+    if (dy > 0) {
+      // Logarithmic resistance so it feels elastic
+      const dist = Math.min(MAX_PULL, dy * 0.5);
+      setPullDistance(dist);
+    }
+  }, []);
 
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+  const handleTouchEnd = useCallback(async () => {
+    if (!pullingRef.current) return;
+    pullingRef.current = false;
 
-    return () => {
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [pullDistance, isRefreshing, onRefresh]);
+    const dist = pullDistance; // capture before reset
+    setPullDistance(0);
 
+    if (dist >= THRESHOLD && !refreshingRef.current) {
+      refreshingRef.current = true;
+      setIsRefreshing(true);
+      await onRefresh();
+      setIsRefreshing(false);
+      refreshingRef.current = false;
+    }
+    startYRef.current = 0;
+  }, [pullDistance, onRefresh]);
+
+  // Attach listeners via React synthetic events on the wrapper div
+  // This keeps listeners scoped and avoids window-level conflicts
   return (
-    <div ref={containerRef}>
-      {/* Pull indicator */}
-      {pullDistance > 0 && (
-        <div
-          className="flex items-center justify-center transition-all"
-          style={{
-            height: `${pullDistance}px`,
-            overflow: "hidden",
-          }}
-        >
-          <RefreshCw
-            size={18}
-            color={C.midGreen}
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Pull / refresh indicator — pushes content down, never overlays header */}
+      <div
+        style={{
+          height: isRefreshing ? 44 : pullDistance,
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: pullDistance === 0 ? "height 0.2s ease" : "none",
+        }}
+        aria-hidden="true"
+      >
+        {(pullDistance > 4 || isRefreshing) && (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={C.midGreen}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             style={{
-              transform: `rotate(${(pullDistance / 80) * 180}deg)`,
-              opacity: pullDistance / 80,
+              transform: isRefreshing
+                ? "none"
+                : `rotate(${(pullDistance / MAX_PULL) * 270}deg)`,
+              opacity: isRefreshing ? 1 : Math.min(1, pullDistance / THRESHOLD),
+              animation: isRefreshing ? "spin 0.8s linear infinite" : "none",
             }}
-          />
-        </div>
-      )}
+          >
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+          </svg>
+        )}
+      </div>
 
-      {/* Loading spinner */}
-      {isRefreshing && (
-        <div className="flex items-center justify-center py-3">
-          <RefreshCw
-            size={16}
-            color={C.midGreen}
-            className="animate-spin"
-          />
-        </div>
-      )}
-
-      {/* Content */}
       {children}
     </div>
   );

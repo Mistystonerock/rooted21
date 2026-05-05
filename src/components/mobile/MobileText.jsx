@@ -1,31 +1,35 @@
 /**
- * Mobile-optimized text component with enforced minimum font sizes.
- * Ensures WCAG compliance: body ≥14px, caption ≥12px.
- * Adds ARIA attributes for screen readers.
+ * Mobile-optimized text component.
+ * Enforces minimum font sizes per WCAG:
+ *   body    → 14px (text-sm)
+ *   caption → 12px (text-xs)
+ *   label   → 12px bold
+ *   heading → 16px bold
+ *
+ * Pass `as` prop to render as any HTML element (default: span).
  */
 export default function MobileText({
   children,
-  variant = "body", // "body" | "caption" | "label" | "heading"
+  variant = "body",
+  as: Tag = "span",
   className = "",
-  ariaLabel = null,
-  role = null,
-  ...props
+  style,
+  ...rest
 }) {
-  const variantClasses = {
-    body: "text-sm font-normal leading-relaxed", // 14px
-    caption: "text-xs font-normal", // 12px
-    label: "text-xs font-semibold", // 12px
-    heading: "text-base font-bold", // 16px
+  const styles = {
+    body:    { fontSize: 14, fontWeight: 400, lineHeight: 1.5 },
+    caption: { fontSize: 12, fontWeight: 400, lineHeight: 1.4 },
+    label:   { fontSize: 12, fontWeight: 600, lineHeight: 1.4 },
+    heading: { fontSize: 16, fontWeight: 700, lineHeight: 1.3 },
   };
 
   return (
-    <span
-      className={`${variantClasses[variant]} ${className}`}
-      aria-label={ariaLabel}
-      role={role}
-      {...props}
+    <Tag
+      className={className}
+      style={{ ...styles[variant], ...style }}
+      {...rest}
     >
       {children}
-    </span>
+    </Tag>
   );
 }

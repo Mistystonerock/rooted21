@@ -1,97 +1,76 @@
-import { ChevronLeft, HelpCircle } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 
 /**
- * iOS-native style header with back button, title, and safe area.
- * Min tap targets 44x44px. Proper alignment and sizing.
+ * iOS-style navigation bar.
+ * - 44px minimum tap targets on all interactive elements
+ * - Proper safe-area-inset-top handling
+ * - Left: back button | Center: title | Right: actions slot
  */
 export default function MobileHeader({
   title,
   subtitle,
-  onBack,
-  showHelp = false,
-  showNotifications = false,
-  showProfile = false,
-  notificationBadge = null,
-  profileInitial = "?",
+  backTo,        // string path — renders a <Link>
+  onBack,        // function — renders a <button>
+  rightSlot,     // arbitrary JSX for right side
 }) {
+  const hasBack = backTo || onBack;
+
   return (
     <div
-      className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10"
+      role="banner"
       style={{
         background: C.darkGreen,
-        paddingTop: "max(0.75rem, calc(0.75rem + env(safe-area-inset-top)))",
-        paddingBottom: "max(0.75rem, calc(0.75rem + env(safe-area-inset-bottom)))",
+        paddingTop: "max(12px, env(safe-area-inset-top))",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
       }}
     >
-      {/* Back button - 44x44 tap target */}
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="rounded-lg p-2.5 transition-opacity hover:opacity-70"
-          style={{ background: "#ffffff18", border: "none", cursor: "pointer" }}
-          aria-label="Go back"
-        >
-          <ChevronLeft size={20} color={C.cream} />
-        </button>
-      )}
-
-      {/* Title section */}
-      <div className="flex-1">
-        <p className="font-serif font-bold text-sm leading-none" style={{ color: C.cream }}>
-          {title}
-        </p>
-        {subtitle && (
-          <p className="text-[10px] mt-0.5" style={{ color: C.lightGreen }}>
-            {subtitle}
-          </p>
-        )}
-      </div>
-
-      {/* Right actions */}
-      <div className="flex items-center gap-1.5">
-        {showHelp && (
-          <Link
-            to="/help"
-            className="rounded-lg p-2.5 transition-opacity hover:opacity-70"
-            style={{ background: "#ffffff18", border: "none" }}
-            aria-label="Help"
-          >
-            <HelpCircle size={18} color={C.lightGreen} />
-          </Link>
-        )}
-
-        {showNotifications && (
-          <Link
-            to="/notifications"
-            className="rounded-lg p-2.5 relative transition-opacity hover:opacity-70"
-            style={{ background: "#ffffff18", border: "none" }}
-            aria-label="Notifications"
-          >
-            <span className="text-lg">🔔</span>
-            {notificationBadge && (
-              <span
-                className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center"
-                style={{ background: "#B84C2A", color: "white" }}
-              >
-                {notificationBadge}
-              </span>
-            )}
-          </Link>
-        )}
-
-        {showProfile && (
-          <Link to="/profile">
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm"
-              style={{ background: C.midGreen, color: C.white }}
-              aria-label="Profile"
+      <div className="flex items-center gap-2 px-3 pb-3">
+        {/* Back button — always 44×44 */}
+        {hasBack ? (
+          backTo ? (
+            <Link
+              to={backTo}
+              aria-label="Go back"
+              className="flex items-center justify-center rounded-xl"
+              style={{ width: 44, height: 44, background: "#ffffff18", flexShrink: 0 }}
             >
-              {profileInitial}
-            </div>
-          </Link>
+              <ChevronLeft size={22} color={C.cream} />
+            </Link>
+          ) : (
+            <button
+              onClick={onBack}
+              aria-label="Go back"
+              className="flex items-center justify-center rounded-xl"
+              style={{ width: 44, height: 44, background: "#ffffff18", flexShrink: 0, border: "none", cursor: "pointer" }}
+            >
+              <ChevronLeft size={22} color={C.cream} />
+            </button>
+          )
+        ) : (
+          // Placeholder keeps title centered when no back button
+          <div style={{ width: 44, flexShrink: 0 }} />
         )}
+
+        {/* Title — centered */}
+        <div className="flex-1 text-center">
+          <p className="font-serif font-bold text-sm leading-tight" style={{ color: C.cream }}>
+            {title}
+          </p>
+          {subtitle && (
+            <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>
+              {subtitle}
+            </p>
+          )}
+        </div>
+
+        {/* Right slot — must be 44×44 if interactive */}
+        <div style={{ minWidth: 44, flexShrink: 0, display: "flex", justifyContent: "flex-end" }}>
+          {rightSlot ?? null}
+        </div>
       </div>
     </div>
   );

@@ -1,77 +1,101 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerClose,
 } from "@/components/ui/drawer";
 
 /**
- * Native-style mobile select using custom bottom sheet (Drawer).
- * Replaces HTML <select> for consistent mobile UX.
+ * Mobile-native single-select using a bottom-sheet Drawer.
+ * Replaces <select> for consistent iOS feel.
+ *
+ * Props:
+ *   value       — current selected value
+ *   onChange    — (value) => void
+ *   options     — [{ label, value }]
+ *   label       — string shown in drawer title and trigger aria-label
+ *   placeholder — string shown when no value selected
+ *   disabled    — bool
  */
 export default function MobileSelect({
   value,
   onChange,
-  options, // [{ label: string, value: any }, ...]
-  label = "",
-  placeholder = "Select...",
+  options = [],
+  label = "Select",
+  placeholder = "Select…",
   disabled = false,
-  ariaLabel = null,
 }) {
   const [open, setOpen] = useState(false);
-  const selectedLabel = options.find((o) => o.value === value)?.label || placeholder;
+  const selected = options.find((o) => o.value === value);
 
   return (
     <>
-      {/* Trigger button */}
+      {/* Trigger — min 44px height */}
       <button
+        type="button"
         onClick={() => !disabled && setOpen(true)}
         disabled={disabled}
-        className="w-full flex items-center justify-between rounded-lg px-3 py-3 text-left"
-        style={{
-          border: `1.5px solid ${C.cream}`,
-          background: C.offWhite,
-          color: C.darkGreen,
-          cursor: disabled ? "default" : "pointer",
-          opacity: disabled ? 0.5 : 1,
-        }}
-        aria-label={ariaLabel || label}
         aria-haspopup="listbox"
+        aria-label={label}
+        aria-expanded={open}
+        className="w-full flex items-center justify-between gap-2 rounded-xl px-4 text-sm font-medium"
+        style={{
+          minHeight: 44,
+          border: `1.5px solid ${C.cream}`,
+          background: disabled ? C.cream : C.offWhite,
+          color: selected ? C.darkGreen : C.mutedText,
+          cursor: disabled ? "default" : "pointer",
+          opacity: disabled ? 0.6 : 1,
+        }}
       >
-        <span className="text-sm font-medium">{selectedLabel}</span>
-        <ChevronDown size={16} color={C.mutedText} />
+        <span>{selected ? selected.label : placeholder}</span>
+        <ChevronDown size={16} color={C.mutedText} aria-hidden="true" />
       </button>
 
-      {/* Bottom sheet drawer */}
+      {/* Bottom sheet */}
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle className="text-base" style={{ color: C.darkGreen }}>
-              {label || "Select Option"}
+          <DrawerHeader className="pb-2">
+            <DrawerTitle className="text-base font-bold" style={{ color: C.darkGreen }}>
+              {label}
             </DrawerTitle>
           </DrawerHeader>
-          <div className="px-4 pb-6 space-y-2 max-h-96 overflow-y-auto">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
-                }}
-                className="w-full text-left py-3.5 px-3 rounded-lg font-medium transition-all"
-                style={{
-                  background: value === option.value ? C.darkGreen : C.white,
-                  color: value === option.value ? C.cream : C.darkGreen,
-                  border: `1px solid ${C.cream}`,
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
+
+          <div
+            role="listbox"
+            aria-label={label}
+            className="px-4 pb-8 space-y-2 overflow-y-auto"
+            style={{ maxHeight: "60vh" }}
+          >
+            {options.map((option) => {
+              const isActive = option.value === value;
+              return (
+                <button
+                  key={option.value}
+                  role="option"
+                  aria-selected={isActive}
+                  type="button"
+                  onClick={() => {
+                    onChange(option.value);
+                    setOpen(false);
+                  }}
+                  className="w-full flex items-center justify-between gap-3 rounded-xl px-4 text-sm font-medium transition-all"
+                  style={{
+                    minHeight: 48,
+                    background: isActive ? C.darkGreen : C.white,
+                    color: isActive ? C.cream : C.darkGreen,
+                    border: `1.5px solid ${isActive ? C.darkGreen : C.cream}`,
+                    cursor: "pointer",
+                  }}
+                >
+                  <span>{option.label}</span>
+                  {isActive && <Check size={16} color={C.cream} aria-hidden="true" />}
+                </button>
+              );
+            })}
           </div>
         </DrawerContent>
       </Drawer>

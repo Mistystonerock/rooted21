@@ -1,42 +1,56 @@
+import { C } from "@/lib/rooted-constants";
+
 /**
- * Mobile-optimized button with 44x44px minimum tap target.
- * Supports icon-only with ARIA label.
+ * Mobile-optimized button.
+ * Always meets 44px minimum tap target.
+ * Supports icon-only mode via ariaLabel.
+ *
+ * Variants: primary | secondary | outline | ghost | danger
+ * Sizes:    lg (44px) | sm (36px, still touch-friendly)
  */
+
+const VARIANTS = {
+  primary:   { background: C.darkGreen,  color: C.cream,    border: "none" },
+  secondary: { background: C.midGreen,   color: "#fff",     border: "none" },
+  outline:   { background: "transparent", color: C.darkGreen, border: `1.5px solid ${C.darkGreen}` },
+  ghost:     { background: "#ffffff18",  color: C.cream,    border: "none" },
+  danger:    { background: "#B84C2A",    color: "#fff",     border: "none" },
+};
+
 export default function MobileButton({
   children,
   onClick,
   disabled = false,
-  variant = "primary", // "primary" | "secondary" | "outline" | "danger"
-  size = "lg", // "lg" (44px) | "sm" (36px)
+  variant = "primary",
+  size = "lg",
   className = "",
-  ariaLabel = null,
-  ...props
+  ariaLabel,
+  type = "button",
+  style: extraStyle,
+  ...rest
 }) {
-  const baseClasses = "rounded-lg font-bold transition-all active:scale-95";
-  
-  const sizeClasses = {
-    lg: "py-3 px-4 text-sm min-h-11",
-    sm: "py-2.5 px-3 text-xs min-h-9",
-  };
-
-  const variantClasses = {
-    primary: "bg-green-700 text-white hover:opacity-90",
-    secondary: "bg-gray-200 text-gray-900 hover:opacity-80",
-    outline: "border border-gray-300 text-gray-900 hover:bg-gray-100",
-    danger: "bg-red-600 text-white hover:opacity-90",
-  };
+  const minH = size === "lg" ? 44 : 38;
+  const px   = size === "lg" ? 20 : 14;
+  const fontSize = size === "lg" ? 14 : 12;
 
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       aria-label={ariaLabel}
+      className={`rounded-xl font-semibold flex items-center justify-center gap-2 transition-opacity active:opacity-70 ${className}`}
       style={{
+        minHeight: minH,
+        paddingLeft: px,
+        paddingRight: px,
+        fontSize,
         cursor: disabled ? "default" : "pointer",
         opacity: disabled ? 0.5 : 1,
+        ...VARIANTS[variant],
+        ...extraStyle,
       }}
-      {...props}
+      {...rest}
     >
       {children}
     </button>

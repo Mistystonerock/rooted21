@@ -53,41 +53,46 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* Custom iOS-style header */}
+      {/* iOS-style dashboard header */}
       <div
-        className="px-4 py-3 flex items-center gap-3 sticky top-0 z-10"
+        role="banner"
         style={{
           background: C.darkGreen,
-          paddingTop: "max(0.75rem, calc(0.75rem + env(safe-area-inset-top)))",
+          paddingTop: "max(12px, env(safe-area-inset-top))",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
-        <TreeLogo size={32} />
-        <div>
-          <div className="font-serif font-bold text-base" style={{ color: C.cream }}>
-            Rooted <span style={{ color: C.gold }}>21</span>
+        <div className="flex items-center gap-3 px-4 pb-3">
+          <TreeLogo size={32} />
+          <div>
+            <div className="font-serif font-bold text-base" style={{ color: C.cream }}>
+              Rooted <span style={{ color: C.gold }}>21</span>
+            </div>
+            <MobileText variant="caption" style={{ color: C.lightGreen }}>
+              PARENTING NETWORK
+            </MobileText>
           </div>
-          <MobileText variant="caption" style={{ color: C.lightGreen }}>
-            PARENTING NETWORK
-          </MobileText>
-        </div>
-        <div className="ml-auto flex items-center gap-1.5">
-          <button
-            onClick={() => navigate("/help")}
-            className="rounded-lg p-2.5 transition-opacity hover:opacity-70"
-            style={{ background: "#ffffff18", border: "none", cursor: "pointer" }}
-            aria-label="Help"
-          >
-            <span className="text-lg">❓</span>
-          </button>
-          <NotificationBell />
-          <button
-            onClick={() => navigate("/profile")}
-            className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
-            style={{ background: C.midGreen, color: C.white, border: "none", cursor: "pointer" }}
-            aria-label="Profile"
-          >
-            {user?.full_name?.[0] || "?"}
-          </button>
+          <div className="ml-auto flex items-center gap-1.5">
+            <button
+              onClick={() => navigate("/help")}
+              aria-label="Help"
+              className="rounded-xl flex items-center justify-center"
+              style={{ width: 44, height: 44, background: "#ffffff18", border: "none", cursor: "pointer", flexShrink: 0 }}
+            >
+              <span aria-hidden="true" style={{ fontSize: 18 }}>❓</span>
+            </button>
+            <NotificationBell />
+            <button
+              onClick={() => navigate("/profile")}
+              aria-label="My profile"
+              className="rounded-full flex items-center justify-center font-bold text-sm"
+              style={{ width: 44, height: 44, background: C.midGreen, color: C.white, border: "none", cursor: "pointer", flexShrink: 0 }}
+            >
+              {user?.full_name?.[0] || "?"}
+            </button>
+          </div>
         </div>
       </div>
 
