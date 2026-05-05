@@ -60,6 +60,7 @@ const routes = {
   CaseManagement: lazy(() => import("@/pages/CaseManagement")),
   LegalKnowledgeBase: lazy(() => import("@/pages/LegalKnowledgeBase")),
   SystemGuides: lazy(() => import("@/pages/SystemGuides")),
+  MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),
 };
 
 export default routes;

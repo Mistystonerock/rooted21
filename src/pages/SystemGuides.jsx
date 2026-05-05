@@ -146,11 +146,14 @@ export default function SystemGuides() {
         </div>
 
         {/* Bottom note */}
-        <div className="rounded-xl p-3.5 text-center" style={{ background: C.cream }}>
+        <a href="/meeting-prep-chatbot" className="block rounded-xl p-3.5 text-center transition-all hover:shadow-md" style={{ background: C.cream, textDecoration: "none" }}>
           <p className="text-xs font-bold" style={{ color: C.darkGreen }}>
-            Need more help? Talk to our Meeting Prep Assistant.
+            💬 Open Meeting Prep Assistant
           </p>
-        </div>
+          <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>
+            Simulate meetings & practice tough questions
+          </p>
+        </a>
 
         <div className="pb-8" />
       </div>
