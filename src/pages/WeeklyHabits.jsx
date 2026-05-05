@@ -9,7 +9,7 @@ import ReactMarkdown from "react-markdown";
 const HABITS = [
   { id: "regulate_first", emoji: "🧘", label: "Regulate myself first", desc: "Before responding to my child, I paused and checked my own state." },
   { id: "connection_moment", emoji: "💛", label: "Connection before correction", desc: "I had at least one warm connecting moment before redirecting behavior." },
-  { id: "pace_curiosity", emoji: "🔍", label: "PACE: Got curious", desc: "I asked 'I wonder why...' instead of reacting to behavior." },
+  { id: "pace_curiosity", emoji: "🔍", label: "Got curious", desc: "I asked 'I wonder why...' instead of reacting to behavior." },
   { id: "felt_safety", emoji: "🏡", label: "Built felt safety", desc: "I used predictable routines or calm voice to help my child feel safe." },
   { id: "life_value", emoji: "🗣️", label: "Used life value language", desc: "I named a value (trustworthy, kind, responsible) instead of labeling behavior." },
   { id: "sensory_check", emoji: "🎯", label: "Checked HALT signals", desc: "I checked if my child was Hungry, Anxious, Lonely, or Tired before reacting." },
@@ -135,7 +135,7 @@ export default function WeeklyHabits() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      <MobileHeader title="Weekly Habits" subtitle="Daily TBRI® practice tracker" backTo="/dashboard" />
+      <MobileHeader title="Weekly Habits" subtitle="Daily parenting practice tracker" backTo="/dashboard" />
 
       <div className="max-w-[520px] mx-auto px-4 py-5 space-y-5">
 
@@ -187,7 +187,7 @@ export default function WeeklyHabits() {
 
         {/* Habit checklist */}
         <div>
-          <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: C.mutedText }}>TODAY'S TBRI® HABITS</p>
+          <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: C.mutedText }}>TODAY'S HABITS</p>
           <div className="space-y-2">
             {HABITS.map(habit => {
               const checked = todayChecked.has(habit.id);
@@ -294,7 +294,7 @@ export default function WeeklyHabits() {
                 <p className="text-2xl mb-2">🌱</p>
                 <p className="text-sm font-bold mb-1" style={{ color: C.darkGreen }}>Your personalized coaching insight</p>
                 <p className="text-xs mb-4" style={{ color: C.mutedText }}>
-                  AI analyzes your habit data and journal entries to generate a tailored TBRI® growth summary for this week.
+                  AI analyzes your habit data and journal entries to generate a tailored growth summary for this week.
                 </p>
                 <button
                   onClick={fetchGrowthInsight}
