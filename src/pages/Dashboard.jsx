@@ -85,6 +85,14 @@ export default function Dashboard() {
             </button>
             <NotificationBell />
             <button
+              onClick={() => base44.auth.logout("/")}
+              aria-label="Sign out"
+              className="rounded-xl flex items-center justify-center"
+              style={{ width: 44, height: 44, background: "#ffffff18", border: "none", cursor: "pointer", flexShrink: 0 }}
+            >
+              <span aria-hidden="true" style={{ fontSize: 16 }}>🚪</span>
+            </button>
+            <button
               onClick={() => navigate("/profile")}
               aria-label="My profile"
               className="rounded-full flex items-center justify-center font-bold text-sm"
