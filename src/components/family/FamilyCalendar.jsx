@@ -9,6 +9,7 @@ const EVENT_TYPES = [
   { value: "meeting", label: "Meeting", color: C.brown, emoji: "🤝" },
   { value: "therapy", label: "Therapy", color: C.gold, emoji: "💛" },
   { value: "school", label: "School", color: "#5B8DB8", emoji: "🏫" },
+  { value: "sports", label: "Sports / Activity", color: "#E07B39", emoji: "⚽" },
   { value: "other", label: "Other", color: C.mutedText, emoji: "📅" },
 ];
 
