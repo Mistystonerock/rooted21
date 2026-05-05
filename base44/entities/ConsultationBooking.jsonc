@@ -1,0 +1,67 @@
+{
+  "name": "ConsultationBooking",
+  "type": "object",
+  "properties": {
+    "professional_id": {
+      "type": "string",
+      "description": "ID of the ProfessionalListing"
+    },
+    "professional_name": {
+      "type": "string"
+    },
+    "professional_email": {
+      "type": "string"
+    },
+    "parent_email": {
+      "type": "string"
+    },
+    "parent_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Booked date (YYYY-MM-DD)"
+    },
+    "time_slot": {
+      "type": "string",
+      "description": "Booked time slot e.g. 10:00 AM"
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "virtual",
+        "in_person"
+      ],
+      "default": "virtual"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Brief reason for consultation"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "confirmation_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "professional_id",
+    "parent_email",
+    "date",
+    "time_slot"
+  ]
+}

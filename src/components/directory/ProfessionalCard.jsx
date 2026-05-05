@@ -10,7 +10,7 @@ const SPECIALTY_META = {
   other:      { label: "Professional",        color: C.mutedText,emoji: "👤" },
 };
 
-export default function ProfessionalCard({ pro, onRequest }) {
+export default function ProfessionalCard({ pro, onRequest, onBook }) {
   const meta = SPECIALTY_META[pro.specialty] || SPECIALTY_META.other;
 
   return (
@@ -109,13 +109,22 @@ export default function ProfessionalCard({ pro, onRequest }) {
             <Globe size={10} /> Website
           </a>
         )}
-        <button
-          onClick={() => onRequest(pro)}
-          className="ml-auto flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg"
-          style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
-        >
-          ✉️ Request Consultation
-        </button>
+        <div className="ml-auto flex gap-1.5">
+          <button
+            onClick={() => onBook && onBook(pro)}
+            className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg"
+            style={{ background: C.midGreen, color: "#fff", border: "none", cursor: "pointer" }}
+          >
+            📅 Book Slot
+          </button>
+          <button
+            onClick={() => onRequest(pro)}
+            className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg"
+            style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+          >
+            ✉️ Request
+          </button>
+        </div>
       </div>
     </div>
   );

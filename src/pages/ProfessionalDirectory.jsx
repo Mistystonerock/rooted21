@@ -5,6 +5,7 @@ import { Search, X, Users, ExternalLink } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ProfessionalCard from "@/components/directory/ProfessionalCard";
 import ConsultationModal from "@/components/directory/ConsultationModal";
+import BookingCalendarModal from "@/components/directory/BookingCalendarModal";
 
 const NATIONAL_DIRECTORIES = [
   {
@@ -210,6 +211,7 @@ export default function ProfessionalDirectory() {
   const [filterInsurance, setFilterInsurance] = useState(false);
   const [filterSliding, setFilterSliding] = useState(false);
   const [selectedPro, setSelectedPro] = useState(null);
+  const [bookingPro, setBookingPro] = useState(null);
   const [zipCode, setZipCode] = useState("");
 
   useEffect(() => {
@@ -354,7 +356,7 @@ export default function ProfessionalDirectory() {
         ) : (
           <div className="space-y-3">
             {filtered.map(pro => (
-              <ProfessionalCard key={pro.id} pro={pro} onRequest={setSelectedPro} />
+              <ProfessionalCard key={pro.id} pro={pro} onRequest={setSelectedPro} onBook={setBookingPro} />
             ))}
           </div>
         )}
@@ -442,12 +444,21 @@ export default function ProfessionalDirectory() {
         <div className="pb-8" />
       </div>
 
-      {/* Consultation modal */}
+      {/* Consultation request modal */}
       {selectedPro && user && (
         <ConsultationModal
           pro={selectedPro}
           user={user}
           onClose={() => setSelectedPro(null)}
+        />
+      )}
+
+      {/* Booking calendar modal */}
+      {bookingPro && user && (
+        <BookingCalendarModal
+          pro={bookingPro}
+          user={user}
+          onClose={() => setBookingPro(null)}
         />
       )}
     </div>
