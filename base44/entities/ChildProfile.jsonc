@@ -3,28 +3,62 @@
   "type": "object",
   "properties": {
     "first_name": {
-      "type": "string"
+      "type": "string",
+      "description": "Child's first name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Child's last name (optional)"
     },
     "age": {
-      "type": "number"
+      "type": "number",
+      "description": "Child's age"
+    },
+    "placement_type": {
+      "type": "string",
+      "enum": [
+        "biological",
+        "foster",
+        "adoptive",
+        "kinship",
+        "other"
+      ],
+      "description": "Type of placement/relationship"
+    },
+    "care_goals": {
+      "type": "array",
+      "description": "Specific care goals for AI-personalized insights",
+      "items": {
+        "type": "string"
+      }
     },
     "strengths": {
-      "type": "string"
+      "type": "string",
+      "description": "Child's strengths and positive qualities"
     },
     "concerns": {
-      "type": "string"
+      "type": "string",
+      "description": "Current behavioral or emotional concerns"
     },
     "triggers": {
-      "type": "string"
+      "type": "string",
+      "description": "Known triggers for dysregulation"
     },
     "coping_tools": {
-      "type": "string"
+      "type": "string",
+      "description": "Tools and strategies that help this child"
     },
     "behavior_patterns": {
-      "type": "string"
+      "type": "string",
+      "description": "Observed behavior patterns"
     },
     "school_notes": {
-      "type": "string"
+      "type": "string",
+      "description": "School-related notes (IEP, accommodations, etc.)"
+    },
+    "photo_emoji": {
+      "type": "string",
+      "description": "Emoji avatar for this child"
     }
   },
   "required": [

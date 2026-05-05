@@ -102,6 +102,7 @@ const AuthenticatedApp = () => {
         <Route path="/app-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AppGuide /></Suspense>} />
         <Route path="/care-calendar" element={<Suspense fallback={<LoadingFallback />}><routes.CareCalendar /></Suspense>} />
         <Route path="/sensory-toolbox" element={<Suspense fallback={<LoadingFallback />}><routes.SensoryToolbox /></Suspense>} />
+        <Route path="/child-profiles" element={<Suspense fallback={<LoadingFallback />}><routes.ChildProfiles /></Suspense>} />
         <Route path="*" element={
           <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
             <PageNotFound />
