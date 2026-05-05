@@ -52,6 +52,7 @@ const routes = {
   CareCalendar: lazy(() => import("@/pages/CareCalendar")),
   SensoryToolbox: lazy(() => import("@/pages/SensoryToolbox")),
   ChildProfiles: lazy(() => import("@/pages/ChildProfiles")),
+  LiveClasses: lazy(() => import("@/pages/LiveClasses")),
 };
 
 export default routes;
