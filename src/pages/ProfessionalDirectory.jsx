@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Search, X, Users, ExternalLink } from "lucide-react";
+import { Search, X, Users, ExternalLink, Star } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ProfessionalCard from "@/components/directory/ProfessionalCard";
 import ConsultationModal from "@/components/directory/ConsultationModal";
 import BookingCalendarModal from "@/components/directory/BookingCalendarModal";
+import ReviewModal from "@/components/directory/ReviewModal";
 
 const NATIONAL_DIRECTORIES = [
   {
@@ -212,18 +213,49 @@ export default function ProfessionalDirectory() {
   const [filterSliding, setFilterSliding] = useState(false);
   const [selectedPro, setSelectedPro] = useState(null);
   const [bookingPro, setBookingPro] = useState(null);
+  const [reviewBooking, setReviewBooking] = useState(null);
+  const [myBookings, setMyBookings] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [zipCode, setZipCode] = useState("");
 
   useEffect(() => {
     Promise.all([
       base44.auth.me(),
       base44.entities.ProfessionalListing.list("-created_date", 100),
-    ]).then(([u, pros]) => {
+      base44.entities.ConsultationReview.list("-created_date", 500),
+    ]).then(([u, pros, revs]) => {
       setUser(u);
       setDbPros(pros);
+      setReviews(revs);
+      // load current user's bookings
+      if (u) {
+        base44.entities.ConsultationBooking.filter({ parent_email: u.email }, "-created_date", 50)
+          .then(setMyBookings);
+      }
       setLoading(false);
     });
   }, []);
+
+  // Build a map: professional_id -> { avgRating, count }
+  const ratingMap = useMemo(() => {
+    const map = {};
+    reviews.forEach(r => {
+      if (!map[r.professional_id]) map[r.professional_id] = { sum: 0, count: 0 };
+      map[r.professional_id].sum += r.rating;
+      map[r.professional_id].count += 1;
+    });
+    const result = {};
+    Object.entries(map).forEach(([id, { sum, count }]) => {
+      result[id] = { avgRating: Math.round((sum / count) * 10) / 10, count };
+    });
+    return result;
+  }, [reviews]);
+
+  // Bookings that are "completed" and not yet reviewed by this user
+  const reviewableBookings = useMemo(() => {
+    const reviewedBookingIds = new Set(reviews.filter(r => r.parent_email === user?.email).map(r => r.booking_id));
+    return myBookings.filter(b => b.status === "completed" && !reviewedBookingIds.has(b.id));
+  }, [myBookings, reviews, user]);
 
   // Merge seed + DB listings (DB listings override seeds by id)
   const allPros = useMemo(() => {
@@ -356,7 +388,14 @@ export default function ProfessionalDirectory() {
         ) : (
           <div className="space-y-3">
             {filtered.map(pro => (
-              <ProfessionalCard key={pro.id} pro={pro} onRequest={setSelectedPro} onBook={setBookingPro} />
+              <ProfessionalCard
+                key={pro.id}
+                pro={pro}
+                onRequest={setSelectedPro}
+                onBook={setBookingPro}
+                liveRating={ratingMap[pro.id]?.avgRating}
+                reviewCount={ratingMap[pro.id]?.count ?? 0}
+              />
             ))}
           </div>
         )}
@@ -434,6 +473,37 @@ export default function ProfessionalDirectory() {
           </div>
         </div>
 
+        {/* My Bookings — leave a review */}
+        {reviewableBookings.length > 0 && (
+          <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.gold}` }}>
+            <div className="px-4 py-3" style={{ background: C.darkGreen }}>
+              <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>⭐ Leave a Review</p>
+              <p className="text-[10px] mt-0.5" style={{ color: C.lightGreen }}>
+                You have completed consultations waiting for your feedback.
+              </p>
+            </div>
+            <div className="divide-y" style={{ background: "#fff" }}>
+              {reviewableBookings.map(b => (
+                <div key={b.id} className="flex items-center gap-3 px-4 py-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{b.professional_name}</p>
+                    <p className="text-[10px]" style={{ color: C.mutedText }}>
+                      {new Date(b.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })} · {b.time_slot}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setReviewBooking(b)}
+                    className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg"
+                    style={{ background: C.gold, color: "#fff", border: "none", cursor: "pointer" }}
+                  >
+                    <Star size={10} fill="#fff" /> Rate
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Note */}
         <div className="rounded-xl p-3.5 text-center" style={{ background: C.cream }}>
           <p className="text-[10px] leading-relaxed" style={{ color: C.mutedText }}>
@@ -459,6 +529,20 @@ export default function ProfessionalDirectory() {
           pro={bookingPro}
           user={user}
           onClose={() => setBookingPro(null)}
+        />
+      )}
+
+      {/* Review modal */}
+      {reviewBooking && user && (
+        <ReviewModal
+          booking={reviewBooking}
+          user={user}
+          onClose={() => {
+            setReviewBooking(null);
+            // Refresh reviews after submission
+            base44.entities.ConsultationReview.list("-created_date", 500).then(setReviews);
+            base44.entities.ConsultationBooking.filter({ parent_email: user.email }, "-created_date", 50).then(setMyBookings);
+          }}
         />
       )}
     </div>

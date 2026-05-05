@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, MapPin, CheckSquare, UserSearch } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, MapPin, CheckSquare, UserSearch, Info } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import NotificationBell from "@/components/rooted/NotificationBell";
@@ -215,6 +215,11 @@ export default function Dashboard() {
             <UserSearch size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Find a Professional</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Therapists, coaches & advocates</p>
+          </Link>
+          <Link to="/app-guide" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <Info size={22} color={C.brown} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>App Guide</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Everything this app can do</p>
           </Link>
         </div>
 

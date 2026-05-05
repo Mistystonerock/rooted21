@@ -1,0 +1,37 @@
+{
+  "name": "ConsultationReview",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string",
+      "description": "ID of the ConsultationBooking being reviewed"
+    },
+    "professional_id": {
+      "type": "string",
+      "description": "ID of the ProfessionalListing"
+    },
+    "professional_name": {
+      "type": "string"
+    },
+    "parent_email": {
+      "type": "string"
+    },
+    "parent_name": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "description": "Star rating 1-5"
+    },
+    "review_text": {
+      "type": "string",
+      "description": "Brief written review"
+    }
+  },
+  "required": [
+    "booking_id",
+    "professional_id",
+    "parent_email",
+    "rating"
+  ]
+}

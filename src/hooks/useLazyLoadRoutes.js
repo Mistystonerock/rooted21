@@ -48,6 +48,7 @@ const routes = {
   LocalResourceFinder: lazy(() => import("@/pages/LocalResourceFinder")),
   WeeklyHabits: lazy(() => import("@/pages/WeeklyHabits")),
   ProfessionalDirectory: lazy(() => import("@/pages/ProfessionalDirectory")),
+  AppGuide: lazy(() => import("@/pages/AppGuide")),
 };
 
 export default routes;

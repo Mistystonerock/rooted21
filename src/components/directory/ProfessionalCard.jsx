@@ -10,8 +10,21 @@ const SPECIALTY_META = {
   other:      { label: "Professional",        color: C.mutedText,emoji: "👤" },
 };
 
-export default function ProfessionalCard({ pro, onRequest, onBook }) {
+function StarDisplay({ rating, count }) {
+  if (!rating && !count) return null;
+  return (
+    <span className="flex items-center gap-0.5 text-[10px] font-bold" style={{ color: C.gold }}>
+      <Star size={9} fill={C.gold} />
+      {rating ? rating.toFixed(1) : "–"}
+      {count > 0 && <span style={{ color: C.mutedText, fontWeight: 400 }}>({count})</span>}
+    </span>
+  );
+}
+
+export default function ProfessionalCard({ pro, onRequest, onBook, liveRating, reviewCount }) {
   const meta = SPECIALTY_META[pro.specialty] || SPECIALTY_META.other;
+  const displayRating = liveRating ?? pro.rating;
+  const displayCount = reviewCount ?? null;
 
   return (
     <div
@@ -41,11 +54,7 @@ export default function ProfessionalCard({ pro, onRequest, onBook }) {
               style={{ background: `${meta.color}15`, color: meta.color }}>
               {meta.emoji} {meta.label}
             </span>
-            {pro.rating && (
-              <span className="flex items-center gap-0.5 text-[10px] font-bold" style={{ color: C.gold }}>
-                <Star size={9} fill={C.gold} /> {pro.rating.toFixed(1)}
-              </span>
-            )}
+            <StarDisplay rating={displayRating} count={displayCount} />
             {pro.years_experience && (
               <span className="text-[10px]" style={{ color: C.mutedText }}>{pro.years_experience} yrs exp.</span>
             )}
