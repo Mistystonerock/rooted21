@@ -62,9 +62,9 @@ Deno.serve(async (req) => {
             currency: 'usd',
             product_data: {
               name: 'Rooted 21 Private Membership',
-              description: '7-day free trial, then $19.99/month'
+              description: '7-day free trial, then $14.99/month. Cancel anytime.'
             },
-            unit_amount: 1999,
+            unit_amount: 1499,
             recurring: {
               interval: 'month',
               interval_count: 1

@@ -94,20 +94,20 @@ export default function Billing() {
                   <h3 className="font-bold text-sm" style={{ color: C.darkGreen }}>Private Account</h3>
                   <p className="text-[11px] mt-0.5" style={{ color: C.mutedText }}>For parents & families</p>
                 </div>
-                <span className="text-sm font-extrabold" style={{ color: C.gold }}>$19.99</span>
+                <span className="text-sm font-extrabold" style={{ color: C.gold }}>$14.99/mo</span>
               </div>
               <p className="text-xs leading-relaxed mb-4" style={{ color: '#3a3028' }}>
-                Full access to HALO curriculum, crisis support, behavioral tracking, and professional messaging.
+                Full access to all Rooted 21 features — curriculum, crisis support, behavioral tracking, and professional messaging.
               </p>
               <ul className="space-y-1.5 mb-4">
                 <li className="flex items-center gap-2 text-xs" style={{ color: C.darkGreen }}>
-                  <Check size={12} color={C.midGreen} /> 7-day free trial
+                  <Check size={12} color={C.midGreen} /> 7-day free trial — no charge today
                 </li>
                 <li className="flex items-center gap-2 text-xs" style={{ color: C.darkGreen }}>
-                  <Check size={12} color={C.midGreen} /> Monthly subscription
+                  <Check size={12} color={C.midGreen} /> $14.99/month after trial
                 </li>
                 <li className="flex items-center gap-2 text-xs" style={{ color: C.darkGreen }}>
-                  <Check size={12} color={C.midGreen} /> Cancel anytime
+                  <Check size={12} color={C.midGreen} /> Cancel anytime — no penalties
                 </li>
               </ul>
               

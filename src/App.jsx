@@ -11,6 +11,7 @@ import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import TabStack from '@/components/mobile/TabStack';
 import ConsentGate from '@/components/ConsentGate';
+import SubscriptionGate from '@/components/SubscriptionGate';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -119,7 +120,9 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ConsentGate>
-            <AuthenticatedApp />
+            <SubscriptionGate>
+              <AuthenticatedApp />
+            </SubscriptionGate>
           </ConsentGate>
         </Router>
         <Toaster />
