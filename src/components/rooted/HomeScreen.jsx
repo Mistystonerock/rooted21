@@ -81,6 +81,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
             style={{
               border: `1.5px solid ${C.cream}`,
               background: C.offWhite,
+              color: "#000000",
             }}
           />
 

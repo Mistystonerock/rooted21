@@ -264,6 +264,7 @@ export default function Chat() {
             border: `1.5px solid ${C.cream}`,
             background: C.offWhite,
             maxHeight: 120,
+            color: "#000000",
           }}
         />
         <button
