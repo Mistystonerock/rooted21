@@ -11,7 +11,7 @@ const GUIDES = {
       content: `
         1. Create a child profile with basic info about your child's needs and strengths
         2. Take your first daily check-in to track emotional regulation
-        3. Start with the first lesson in the HALO curriculum
+        3. Start with the first lesson in the Rooted 21 curriculum
         4. Set up your safety plan with emergency contacts and de-escalation strategies
       `,
     },
