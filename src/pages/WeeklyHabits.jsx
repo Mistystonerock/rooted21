@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { CheckCircle2, Circle, Flame, ChevronLeft } from "lucide-react";
+import { CheckCircle2, Circle, Flame, Sparkles, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import ReactMarkdown from "react-markdown";
 
 const HABITS = [
   { id: "regulate_first", emoji: "🧘", label: "Regulate myself first", desc: "Before responding to my child, I paused and checked my own state." },
@@ -107,6 +108,20 @@ export default function WeeklyHabits() {
 
   const streak = calcStreak();
   const pct = Math.round((todayCount / totalHabits) * 100);
+
+  // Growth Insight state
+  const [insight, setInsight] = useState(null);
+  const [insightStats, setInsightStats] = useState(null);
+  const [insightLoading, setInsightLoading] = useState(false);
+
+  async function fetchGrowthInsight() {
+    setInsightLoading(true);
+    setInsight(null);
+    const res = await base44.functions.invoke("generateGrowthInsight", {});
+    setInsight(res.data?.insight || "");
+    setInsightStats(res.data?.stats || null);
+    setInsightLoading(false);
+  }
 
   // For calendar: color by % complete
   function dayColor(dateStr) {
@@ -252,6 +267,93 @@ export default function WeeklyHabits() {
                 <span className="text-[9px]" style={{ color: C.mutedText }}>{l.label}</span>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Growth Insight card */}
+        <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.midGreen}` }}>
+          <div className="flex items-center justify-between px-4 py-3" style={{ background: C.darkGreen }}>
+            <div className="flex items-center gap-2">
+              <Sparkles size={16} color={C.gold} />
+              <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Weekly Growth Insight</p>
+            </div>
+            <button
+              onClick={fetchGrowthInsight}
+              disabled={insightLoading}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:opacity-80"
+              style={{ background: "#ffffff18", color: C.lightGreen, border: "none", cursor: "pointer" }}
+            >
+              <RefreshCw size={11} className={insightLoading ? "animate-spin" : ""} />
+              {insight ? "Refresh" : "Generate"}
+            </button>
+          </div>
+
+          <div className="p-4" style={{ background: C.white }}>
+            {!insight && !insightLoading && (
+              <div className="text-center py-4">
+                <p className="text-2xl mb-2">🌱</p>
+                <p className="text-sm font-bold mb-1" style={{ color: C.darkGreen }}>Your personalized coaching insight</p>
+                <p className="text-xs mb-4" style={{ color: C.mutedText }}>
+                  AI analyzes your habit data and journal entries to generate a tailored TBRI® growth summary for this week.
+                </p>
+                <button
+                  onClick={fetchGrowthInsight}
+                  className="px-5 py-2.5 rounded-xl font-bold text-sm"
+                  style={{ background: C.darkGreen, color: C.cream, border: "none", cursor: "pointer" }}
+                >
+                  ✨ Generate My Growth Insight
+                </button>
+              </div>
+            )}
+
+            {insightLoading && (
+              <div className="text-center py-6">
+                <div className="flex justify-center gap-1.5 mb-3">
+                  {[0,1,2].map(i => (
+                    <div key={i} className="w-2 h-2 rounded-full" style={{ background: C.midGreen, animation: `blink 1.4s ease-in-out ${i * 0.2}s infinite` }} />
+                  ))}
+                </div>
+                <p className="text-xs font-bold" style={{ color: C.midGreen }}>Analyzing your week...</p>
+                <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>Reading your habits & journal reflections</p>
+              </div>
+            )}
+
+            {insight && !insightLoading && (
+              <div>
+                {insightStats && (
+                  <div className="flex gap-3 mb-4 flex-wrap">
+                    <div className="flex-1 min-w-[70px] rounded-lg p-2.5 text-center" style={{ background: C.offWhite }}>
+                      <p className="text-xl font-extrabold" style={{ color: C.midGreen }}>{insightStats.daysActive}/7</p>
+                      <p className="text-[9px] font-bold" style={{ color: C.mutedText }}>ACTIVE DAYS</p>
+                    </div>
+                    <div className="flex-1 min-w-[70px] rounded-lg p-2.5 text-center" style={{ background: C.offWhite }}>
+                      <p className="text-xl font-extrabold" style={{ color: C.gold }}>{insightStats.totalChecked}</p>
+                      <p className="text-[9px] font-bold" style={{ color: C.mutedText }}>HABITS DONE</p>
+                    </div>
+                    <div className="flex-1 min-w-[70px] rounded-lg p-2.5 text-center" style={{ background: C.offWhite }}>
+                      <p className="text-xl font-extrabold" style={{ color: C.brown }}>{insightStats.avgPerDay}</p>
+                      <p className="text-[9px] font-bold" style={{ color: C.mutedText }}>AVG/DAY</p>
+                    </div>
+                  </div>
+                )}
+                <div
+                  className="prose prose-sm max-w-none text-xs leading-relaxed"
+                  style={{ color: C.darkGreen }}
+                >
+                  <ReactMarkdown
+                    components={{
+                      strong: ({ children }) => <strong style={{ color: C.darkGreen, fontWeight: 700 }}>{children}</strong>,
+                      p: ({ children }) => <p className="mb-2 text-xs leading-relaxed" style={{ color: "#3a3028" }}>{children}</p>,
+                      h1: ({ children }) => <p className="font-bold text-sm mt-3 mb-1" style={{ color: C.darkGreen }}>{children}</p>,
+                      h2: ({ children }) => <p className="font-bold text-sm mt-3 mb-1" style={{ color: C.darkGreen }}>{children}</p>,
+                      li: ({ children }) => <li className="text-xs mb-1" style={{ color: "#3a3028" }}>{children}</li>,
+                    }}
+                  >
+                    {insight}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
