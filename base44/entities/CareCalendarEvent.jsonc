@@ -1,0 +1,91 @@
+{
+  "name": "CareCalendarEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "school_meeting",
+        "medication",
+        "therapy",
+        "court_date",
+        "appointment",
+        "activity",
+        "other"
+      ],
+      "default": "appointment",
+      "description": "Type of event"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the event (YYYY-MM-DD)"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of event (e.g. 2:30 PM)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Location or virtual link"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or details"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "pending",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Confirmation status"
+    },
+    "family_email": {
+      "type": "string",
+      "description": "Parent/family email this event belongs to"
+    },
+    "added_by_email": {
+      "type": "string",
+      "description": "Who added this event"
+    },
+    "added_by_name": {
+      "type": "string",
+      "description": "Display name of who added it"
+    },
+    "recurrence": {
+      "type": "string",
+      "enum": [
+        "none",
+        "daily",
+        "weekly",
+        "monthly"
+      ],
+      "default": "none",
+      "description": "Recurrence pattern"
+    },
+    "medication_name": {
+      "type": "string",
+      "description": "For medication events: name of medication"
+    },
+    "medication_dose": {
+      "type": "string",
+      "description": "For medication events: dosage"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this event is for"
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "family_email"
+  ]
+}

@@ -49,6 +49,7 @@ const routes = {
   WeeklyHabits: lazy(() => import("@/pages/WeeklyHabits")),
   ProfessionalDirectory: lazy(() => import("@/pages/ProfessionalDirectory")),
   AppGuide: lazy(() => import("@/pages/AppGuide")),
+  CareCalendar: lazy(() => import("@/pages/CareCalendar")),
 };
 
 export default routes;

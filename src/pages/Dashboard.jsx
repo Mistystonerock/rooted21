@@ -221,6 +221,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>App Guide</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Everything this app can do</p>
           </Link>
+          <Link to="/care-calendar" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <CalendarDays size={22} color={C.midGreen} />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Care Calendar</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Shared family & care team events</p>
+          </Link>
         </div>
 
         {/* Lesson progress bar */}
