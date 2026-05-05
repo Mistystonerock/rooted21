@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import CaseDetail from '@/pages/CaseDetail';
+import CaseStatusReport from '@/pages/CaseStatusReport';
 import TabStack from '@/components/mobile/TabStack';
 import ConsentGate from '@/components/ConsentGate';
 import SubscriptionGate from '@/components/SubscriptionGate';
@@ -111,6 +112,7 @@ const AuthenticatedApp = () => {
         <Route path="/instructor-analytics" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorAnalytics /></Suspense>} />
         <Route path="/case-management" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagement /></Suspense>} />
         <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseDetail /></Suspense>} />
+        <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseStatusReport /></Suspense>} />
         <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><routes.LegalKnowledgeBase /></Suspense>} />
         <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><routes.SystemGuides /></Suspense>} />
         <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />

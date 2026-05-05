@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X } from "lucide-react";
+import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X, Download } from "lucide-react";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -147,6 +147,15 @@ export default function CaseDetail() {
             </div>
           </div>
         </div>
+
+        {/* Generate report button */}
+        <Link
+          to={`/case-status-report/${caseId}`}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+          style={{ background: C.gold, color: "#fff", textDecoration: "none" }}
+        >
+          <Download size={16} /> Generate Case Status Report
+        </Link>
 
         {/* Tabs */}
         <div className="flex gap-1 border-b" style={{ borderColor: C.cream }}>
