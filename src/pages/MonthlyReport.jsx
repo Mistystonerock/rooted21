@@ -171,7 +171,7 @@ export default function MonthlyReport() {
 
         <div class="footer">
           <p>This report is for the family's personal records and to share with their care team.</p>
-          <p>Rooted 21 • HALO Project • Strengthening Families Through Trauma-Informed Parenting</p>
+          <p>Rooted 21 • Strengthening Families Through Trauma-Informed Parenting</p>
         </div>
       </div>
     `;
@@ -275,7 +275,7 @@ export default function MonthlyReport() {
               <div className="flex items-center justify-between py-2.5 px-3 rounded-lg" style={{ background: C.offWhite }}>
                 <div>
                   <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Lessons Completed</p>
-                  <p className="text-[10px]" style={{ color: C.mutedText }}>HALO curriculum progress</p>
+                  <p className="text-[10px]" style={{ color: C.mutedText }}>Curriculum progress</p>
                 </div>
                 <p className="text-lg font-bold" style={{ color: C.brown }}>
                   {lessons.filter((l) => {
