@@ -94,6 +94,7 @@ const AuthenticatedApp = () => {
         <Route path="/partnership-safety-plan/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.PartnershipSafetyPlan /></Suspense>} />
         <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><routes.CourtGenerateReport /></Suspense>} />
         <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><routes.MyReflections /></Suspense>} />
+        <Route path="/local-resources" element={<Suspense fallback={<LoadingFallback />}><routes.LocalResourceFinder /></Suspense>} />
         <Route path="*" element={
           <motion.div key="404" initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.3 }}>
             <PageNotFound />

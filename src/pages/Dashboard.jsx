@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode } from "lucide-react";
+import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, MapPin } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import NotificationBell from "@/components/rooted/NotificationBell";
@@ -200,6 +200,11 @@ export default function Dashboard() {
             <CreditCard size={22} color={C.brown} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Billing</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Subscription & pricing</p>
+          </Link>
+          <Link to="/local-resources" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <MapPin size={22} color="#B84C2A" />
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Local Resources</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Crisis lines & centers near you</p>
           </Link>
         </div>
 

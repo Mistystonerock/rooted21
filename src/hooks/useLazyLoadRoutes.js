@@ -45,6 +45,7 @@ const routes = {
   CourtGenerateReport: lazy(() => import("@/pages/CourtGenerateReport")),
   Help: lazy(() => import("@/pages/Help")),
   MyReflections: lazy(() => import("@/pages/MyReflections")),
+  LocalResourceFinder: lazy(() => import("@/pages/LocalResourceFinder")),
 };
 
 export default routes;
