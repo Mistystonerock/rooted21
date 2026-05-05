@@ -1,0 +1,111 @@
+{
+  "name": "CaseTask",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the CaseFile"
+    },
+    "case_name": {
+      "type": "string",
+      "description": "Child's name for easy reference"
+    },
+    "title": {
+      "type": "string",
+      "description": "Task title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the task"
+    },
+    "assigned_to_email": {
+      "type": "string",
+      "description": "Email of team member assigned to this task"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Name of assigned team member"
+    },
+    "assigned_to_role": {
+      "type": "string",
+      "description": "Role of assigned team member"
+    },
+    "assigned_by_email": {
+      "type": "string",
+      "description": "Email of person who created/assigned the task"
+    },
+    "assigned_by_name": {
+      "type": "string",
+      "description": "Name of person who assigned the task"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Task due date"
+    },
+    "due_time": {
+      "type": "string",
+      "description": "Task due time (e.g. 2:00 PM)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium",
+      "description": "Task priority level"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "open",
+      "description": "Current task status"
+    },
+    "completed_by_email": {
+      "type": "string",
+      "description": "Email of person who completed the task"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the task was completed"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Completion notes or additional context"
+    },
+    "reminder_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether deadline reminder was sent"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "document",
+        "meeting",
+        "follow_up",
+        "review",
+        "approval",
+        "other"
+      ],
+      "default": "other",
+      "description": "Type of task"
+    }
+  },
+  "required": [
+    "case_id",
+    "title",
+    "assigned_to_email",
+    "assigned_by_email",
+    "due_date"
+  ]
+}

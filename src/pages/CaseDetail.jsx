@@ -5,6 +5,7 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X, Download } from "lucide-react";
 import DocumentManager from "@/components/case/DocumentManager";
+import TaskManager from "@/components/case/TaskManager";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -169,8 +170,8 @@ export default function CaseDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 border-b" style={{ borderColor: C.cream }}>
-          {["overview", "team", "documents", "notes"].map(tab => (
+        <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>
+          {["overview", "team", "documents", "tasks", "notes"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -240,6 +241,15 @@ export default function CaseDetail() {
               onRefresh={() => setRefreshKey(prev => prev + 1)}
             />
           </div>
+        )}
+
+        {activeTab === "tasks" && (
+          <TaskManager 
+            caseId={caseId} 
+            caseFile={caseFile} 
+            user={user}
+            onRefresh={() => setRefreshKey(prev => prev + 1)}
+          />
         )}
 
         {activeTab === "notes" && (
