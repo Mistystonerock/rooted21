@@ -167,7 +167,7 @@ export default function CompletionCertificate({ onClose }) {
     doc.setFontSize(8);
     doc.setTextColor(167, 184, 154);
     doc.text(
-      "Rooted 21 Parenting Network  ·  Created by Misty Stonerock, Community Behavioral Health Worker & Parent Advocate",
+      "Rooted 21 Parenting Network  ·  Stronger Parents. Stronger Kids. Stronger Families.",
       W / 2, H - 10, { align: "center" }
     );
     doc.setTextColor(201, 168, 76);

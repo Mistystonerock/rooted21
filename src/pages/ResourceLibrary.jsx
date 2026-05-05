@@ -483,7 +483,7 @@ export default function ResourceLibrary() {
         {/* Footer note */}
         <div className="rounded-xl p-3.5" style={{ background: C.cream }}>
           <p className="text-[11px] leading-relaxed text-center" style={{ color: C.mutedText }}>
-            Resources link to external sites. HALO Project does not own or control external content.
+            Resources link to external sites. Rooted 21 does not own or control external content.
             Free resources are prioritized. Book links go to author or publisher websites.
           </p>
         </div>

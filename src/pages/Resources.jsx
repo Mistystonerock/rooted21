@@ -31,7 +31,7 @@ const RESOURCES = [
   {
     section: "🏛️ Agency & Professional Info",
     items: [
-      { title: "Professional Access Request", desc: "CPS, courts, counselors, schools: contact Misty Stonerock to request approved access", url: "https://mistystonerock.github.io/Rooted-Parenting-Support/index.html", type: "agency" },
+      { title: "Professional Access Request", desc: "CPS, courts, counselors, schools: contact us to request approved access", url: "https://mistystonerock.github.io/Rooted-Parenting-Support/index.html", type: "agency" },
       { title: "Agency Implementation Guide", desc: "Information for organizations interested in adopting the Rooted 21 curriculum", url: "https://mistystonerock.github.io/Rooted-Parenting-Support/rooted-parenting-network-feature-map.html", type: "agency" },
     ]
   }
@@ -89,9 +89,8 @@ export default function Resources() {
         ))}
 
         <div className="rounded-2xl p-4 text-center" style={{ background: C.darkGreen }}>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Created by Misty Stonerock</p>
-          <p className="text-xs mt-1" style={{ color: C.lightGreen }}>Community Behavioral Health Worker & Parent Advocate</p>
-          <p className="text-xs mt-1" style={{ color: C.lightGreen }}>Rooted 21 — Stronger Parents. Stronger Kids. Stronger Families.</p>
+          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Rooted 21 Parenting Network</p>
+          <p className="text-xs mt-1" style={{ color: C.lightGreen }}>Stronger Parents. Stronger Kids. Stronger Families.</p>
         </div>
       </div>
     </div>

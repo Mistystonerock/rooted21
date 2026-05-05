@@ -158,9 +158,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
           className="text-center text-[11px] mt-5 leading-loose"
           style={{ color: C.mutedText }}
         >
-          Created by Misty Stonerock
-          <br />
-          Community Behavioral Health Worker & Parent Advocate
+          Rooted 21 Parenting Network
           <br />
           Crisis: call or text <strong>988</strong>
         </p>
