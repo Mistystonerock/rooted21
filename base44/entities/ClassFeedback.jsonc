@@ -1,0 +1,50 @@
+{
+  "name": "ClassFeedback",
+  "type": "object",
+  "properties": {
+    "class_id": {
+      "type": "string",
+      "description": "ID of the LiveClass"
+    },
+    "enrollment_id": {
+      "type": "string",
+      "description": "ID of the ClassEnrollment"
+    },
+    "instructor_rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Instructor rating 1-5"
+    },
+    "content_rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Content quality rating 1-5"
+    },
+    "would_recommend": {
+      "type": "boolean",
+      "description": "Would recommend this class to others"
+    },
+    "improvements": {
+      "type": "string",
+      "description": "What could be improved (optional feedback)"
+    },
+    "feedback_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When feedback was submitted"
+    },
+    "is_anonymous": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether feedback is anonymous"
+    }
+  },
+  "required": [
+    "class_id",
+    "enrollment_id",
+    "instructor_rating",
+    "content_rating"
+  ]
+}

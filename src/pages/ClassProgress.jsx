@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { CheckCircle2, Circle, Download, Award } from "lucide-react";
+import PostClassSurvey from "@/components/rooted/PostClassSurvey";
 
 export default function ClassProgress() {
   const { enrollmentId } = useParams();
@@ -11,6 +12,8 @@ export default function ClassProgress() {
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [showSurvey, setShowSurvey] = useState(false);
+  const [hasSurvey, setHasSurvey] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -21,10 +24,17 @@ export default function ClassProgress() {
       if (enr.length > 0) {
         setEnrollment(enr[0]);
         
-        base44.entities.ClassAttendance.filter(
-          { enrollment_id: enr[0].id }
-        ).then(att => {
+        Promise.all([
+          base44.entities.ClassAttendance.filter({ enrollment_id: enr[0].id }),
+          base44.entities.ClassFeedback.filter({ enrollment_id: enr[0].id }),
+        ]).then(([att, fb]) => {
           setAttendance(att.sort((a, b) => a.session_number - b.session_number));
+          setHasSurvey(fb.length > 0);
+          
+          // Show survey if completed but no feedback yet
+          const isCompleted = enr[0].sessions_attended >= 6;
+          setShowSurvey(isCompleted && fb.length === 0);
+          
           setLoading(false);
         });
       } else {
@@ -226,6 +236,14 @@ export default function ClassProgress() {
 
         <div className="pb-8" />
       </div>
+
+      {/* Post-class survey modal */}
+      {showSurvey && enrollment && (
+        <PostClassSurvey
+          enrollment={enrollment}
+          onComplete={() => setShowSurvey(false)}
+        />
+      )}
     </div>
   );
 }
