@@ -50,6 +50,7 @@ const routes = {
   ProfessionalDirectory: lazy(() => import("@/pages/ProfessionalDirectory")),
   AppGuide: lazy(() => import("@/pages/AppGuide")),
   CareCalendar: lazy(() => import("@/pages/CareCalendar")),
+  SensoryToolbox: lazy(() => import("@/pages/SensoryToolbox")),
 };
 
 export default routes;

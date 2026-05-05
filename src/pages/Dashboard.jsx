@@ -226,6 +226,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Care Calendar</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Shared family & care team events</p>
           </Link>
+          <Link to="/sensory-toolbox" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>🧠</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Sensory Toolbox</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>3-min regulation activities</p>
+          </Link>
         </div>
 
         {/* Lesson progress bar */}
