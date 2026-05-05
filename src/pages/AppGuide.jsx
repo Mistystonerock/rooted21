@@ -11,15 +11,15 @@ const SECTIONS = [
     color: C.darkGreen,
     content: `Rooted 21 is a parenting support community built to help parents, families, and communities thrive together. Whether you're navigating tough moments at home, building stronger connections with your children, or looking for support from others who get it — you're in the right place.
 
-Every feature is grounded in TBRI® (Trust-Based Relational Intervention), developed by Dr. Karyn Purvis at TCU. Our mission is simple: help parents feel seen, supported, and equipped — and strengthen the communities around every child.`,
+Our mission is simple: help parents feel seen, supported, and equipped — and strengthen the communities around every child.`,
   },
   {
     emoji: "🧠",
     title: "Parenting Support Chat",
     color: C.midGreen,
-    content: `The AI-powered chat gives you immediate, trauma-informed guidance when you're in a hard parenting moment. Describe what's happening — meltdown, behavior challenge, defiance, fear — and get TBRI®-based scripts and strategies you can use right now.
+    content: `The AI-powered chat gives you immediate, compassionate guidance when you're in a hard parenting moment. Describe what's happening — meltdown, behavior challenge, defiance, fear — and get practical scripts and strategies you can use right now.
 
-You can start a new conversation anytime or browse your past sessions. The chat uses Claude, one of the most advanced AI models available, with a custom trauma-parenting system prompt written by experts.`,
+You can start a new conversation anytime or browse your past sessions. The chat is powered by advanced AI with a system built specifically for parenting support.`,
     link: "/chat",
     linkLabel: "Open Chat →",
   },
@@ -30,7 +30,7 @@ You can start a new conversation anytime or browse your past sessions. The chat 
     content: `The Lessons section contains the complete Rooted 21 parenting curriculum — 21 structured lessons organized into 3 weeks. Each lesson includes:
 
 • A video or reading topic
-• Key TBRI® principles explained simply
+• Key parenting principles explained simply
 • A reflection worksheet question
 • Quizzes to reinforce learning
 • Activities to practice with your child
@@ -43,7 +43,7 @@ Progress is tracked automatically and you can earn a completion certificate when
     emoji: "🎯",
     title: "Goals & Progress",
     color: C.gold,
-    content: `Set meaningful parenting goals and track your progress over time. Goals can be tied to TBRI® principles, behavior patterns, or personal growth areas.
+    content: `Set meaningful parenting goals and track your progress over time. Goals can be tied to connection-building, behavior patterns, or personal growth areas.
 
 The Progress dashboard shows your regulation trends (child and parent calm scores), lesson completion, behavior log patterns, and more — all visualized in easy-to-read charts.`,
     link: "/goals",
@@ -57,7 +57,7 @@ The Progress dashboard shows your regulation trends (child and parent calm score
 • Child regulation (1–5): How emotionally regulated was your child today?
 • Your calm level (1–5): How calm and regulated were you as a parent?
 
-Over time, this builds a powerful data picture of trends, triggers, and progress. You can use your check-in data to generate a Monthly Report PDF to share with your care team or court.`,
+Over time, this builds a powerful picture of trends, triggers, and progress. You can use your check-in data to generate a Monthly Report PDF to share with your care team or support network.`,
     link: "/daily-checkin",
     linkLabel: "Daily Check-In →",
   },
@@ -65,7 +65,7 @@ Over time, this builds a powerful data picture of trends, triggers, and progress
     emoji: "✅",
     title: "Weekly Habits Tracker",
     color: C.darkGreen,
-    content: `Seven daily TBRI® habits to check off each day — things like "Regulate myself first," "Connection before correction," and "Checked HALT signals."
+    content: `Seven daily parenting habits to check off each day — things like "Regulate myself first," "Connection before correction," and "Checked HALT signals."
 
 Track your streak, view a 30-day habit calendar, and generate a personalized AI Growth Insight that analyzes your habit data and journal reflections to give you a coaching-style summary for the week.`,
     link: "/weekly-habits",
@@ -112,7 +112,7 @@ Professionals can be invited via an Access Code (you enter theirs) or an Invitat
     emoji: "🔍",
     title: "Professional Directory",
     color: C.midGreen,
-    content: `Browse verified therapists, TBRI® practitioners, co-parenting coaches, caseworkers, and child welfare advocates.
+    content: `Browse verified therapists, parenting coaches, caseworkers, counselors, and community advocates.
 
 Each card shows their specialty, rating, experience, and available services (virtual, insurance, sliding scale). You can:
 • 📅 Book a consultation slot directly (picks a date + time, sends email confirmation to both parties)
@@ -176,7 +176,7 @@ Court staff have their own dashboard to manage partnerships, review messages, sc
     emoji: "🤝",
     title: "Respite Care Directory",
     color: "#B84C2A",
-    content: `Find vetted respite care providers in your area. Browse by specialty, read bios and ratings, and connect directly. Respite care gives foster and adoptive parents critical time to rest and recharge — which is essential for sustainable trauma-informed parenting.`,
+    content: `Find vetted respite care providers in your area. Browse by specialty, read bios and ratings, and connect directly. Respite care gives parents critical time to rest and recharge — which is essential for sustainable, healthy parenting.`,
     link: "/respite-care",
     linkLabel: "Respite Care →",
   },
@@ -208,7 +208,7 @@ Milestones celebrate your growth and give you visible proof of the hard work you
     emoji: "📄",
     title: "Monthly Report",
     color: C.brown,
-    content: `Generate a professional PDF summary of your month's activity — regulation trends, completed lessons, goal progress, and check-in data. The report is formatted to share with your care team, court, or caseworker as evidence of your engagement in the program.`,
+    content: `Generate a PDF summary of your month's activity — regulation trends, completed lessons, goal progress, and check-in data. The report is formatted to share with your care team, family, or support network.`,
     link: "/monthly-report",
     linkLabel: "Monthly Report →",
   },
@@ -218,7 +218,7 @@ Milestones celebrate your growth and give you visible proof of the hard work you
     color: "#5B8DB8",
     content: `Navigating school can be one of the hardest parts of parenting a child from a hard place. Rooted 21 provides tools to help you show up prepared and confident:
 
-• Guidance for handling behaviors in the classroom — trauma-informed strategies you can share with teachers and school staff
+• Guidance for handling behaviors in the classroom — supportive strategies you can share with teachers and school staff
 • Tools to prepare for IEP and behavior meetings — know your rights, what to bring, and how to advocate for your child
 • Ways for teachers and parents to stay aligned instead of working against each other — scripts, talking points, and frameworks for productive school partnerships`,
   },
@@ -297,7 +297,7 @@ export default function AppGuide() {
             Welcome to Rooted 21
           </p>
           <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>
-            A complete trauma-informed parenting support system — built for families from hard places.
+            A complete parenting support community — built for every family that just needs a little more help.
             Tap any section below to learn what it does.
           </p>
         </div>
