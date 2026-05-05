@@ -7,7 +7,7 @@ import {
   Users, CreditCard, Key, Search, ChevronDown, ChevronUp, AlertTriangle, Check
 } from 'lucide-react';
 
-const OWNER_EMAIL = 'rooted21parenting@rooted21.org';
+const OWNER_EMAIL = 'mstonerock@rooted21parenting.com';
 const ROLES = ["Counselor", "Caseworker", "CPS Worker", "Court Staff", "Mentor", "Behavioral Health Worker", "School Staff", "Therapist", "Juvenile Probation", "Other"];
 const USER_ROLES = ["user", "admin", "court_staff", "professional"];
 const SUB_STATUSES = ["trial", "active", "past_due", "canceled"];
