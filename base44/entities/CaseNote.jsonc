@@ -1,0 +1,56 @@
+{
+  "name": "CaseNote",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the CaseFile"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of person who created the note"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Name of the author"
+    },
+    "author_role": {
+      "type": "string",
+      "description": "Role of the author (parent, teacher, therapist, etc.)"
+    },
+    "note_type": {
+      "type": "string",
+      "enum": [
+        "update",
+        "concern",
+        "win",
+        "action_item",
+        "meeting_notes"
+      ],
+      "description": "Type of note"
+    },
+    "title": {
+      "type": "string",
+      "description": "Brief title of the note"
+    },
+    "body": {
+      "type": "string",
+      "description": "Full note content"
+    },
+    "visible_to_team": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this note is visible to team members"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "case_id",
+    "author_email",
+    "note_type",
+    "body"
+  ]
+}

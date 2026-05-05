@@ -1,0 +1,114 @@
+{
+  "name": "CaseFile",
+  "type": "object",
+  "properties": {
+    "parent_email": {
+      "type": "string",
+      "description": "Email of the parent/caregiver managing the case"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child the case is for"
+    },
+    "case_type": {
+      "type": "string",
+      "enum": [
+        "school",
+        "court",
+        "medical",
+        "multi"
+      ],
+      "description": "Type of case"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "pending",
+        "resolved",
+        "closed"
+      ],
+      "default": "active",
+      "description": "Current case status"
+    },
+    "description": {
+      "type": "string",
+      "description": "Overview of the case and key issues"
+    },
+    "case_number": {
+      "type": "string",
+      "description": "Reference number (school, court, or medical)"
+    },
+    "next_milestone": {
+      "type": "string",
+      "description": "What's coming next (e.g. IEP meeting, court date, medical appointment)"
+    },
+    "next_milestone_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of next milestone"
+    },
+    "team_members": {
+      "type": "array",
+      "description": "List of professionals/team members assigned to case",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "description": "Important documents (IEPs, court orders, medical records)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "file_url": {
+            "type": "string"
+          },
+          "date_added": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    "key_issues": {
+      "type": "array",
+      "description": "List of key issues or concerns",
+      "items": {
+        "type": "string"
+      }
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "parent_email",
+    "child_name",
+    "case_type"
+  ]
+}
