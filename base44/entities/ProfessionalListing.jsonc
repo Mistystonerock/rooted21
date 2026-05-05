@@ -1,0 +1,85 @@
+{
+  "name": "ProfessionalListing",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Professional's full name"
+    },
+    "title": {
+      "type": "string",
+      "description": "Professional title (e.g. Licensed Therapist, CPS Caseworker)"
+    },
+    "specialty": {
+      "type": "string",
+      "enum": [
+        "therapist",
+        "caseworker",
+        "coach",
+        "counselor",
+        "advocate",
+        "other"
+      ],
+      "description": "Primary specialty"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Short professional biography"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website or booking link"
+    },
+    "location": {
+      "type": "string",
+      "description": "City, State or 'Virtual / Nationwide'"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Specialty tags (e.g. TBRI, trauma-informed, co-parenting)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "accepts_insurance": {
+      "type": "boolean",
+      "default": false
+    },
+    "offers_sliding_scale": {
+      "type": "boolean",
+      "default": false
+    },
+    "virtual_available": {
+      "type": "boolean",
+      "default": true
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Verified by Rooted 21 admin"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Profile photo URL"
+    },
+    "years_experience": {
+      "type": "number"
+    },
+    "rating": {
+      "type": "number",
+      "description": "Average rating 1-5"
+    }
+  },
+  "required": [
+    "full_name",
+    "specialty"
+  ]
+}

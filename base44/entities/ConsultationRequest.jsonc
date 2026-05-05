@@ -1,0 +1,51 @@
+{
+  "name": "ConsultationRequest",
+  "type": "object",
+  "properties": {
+    "professional_id": {
+      "type": "string",
+      "description": "ID of the ProfessionalListing"
+    },
+    "professional_name": {
+      "type": "string"
+    },
+    "parent_email": {
+      "type": "string"
+    },
+    "parent_name": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string",
+      "description": "Parent's message / reason for consultation"
+    },
+    "preferred_contact": {
+      "type": "string",
+      "enum": [
+        "email",
+        "phone",
+        "either"
+      ],
+      "default": "email"
+    },
+    "preferred_time": {
+      "type": "string",
+      "description": "Preferred time window (e.g. mornings, weekends)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "contacted",
+        "scheduled",
+        "closed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "professional_id",
+    "parent_email",
+    "message"
+  ]
+}
