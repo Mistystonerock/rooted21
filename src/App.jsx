@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
+import TabStack from '@/components/mobile/TabStack';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -45,31 +46,12 @@ const AuthenticatedApp = () => {
             </motion.div>
           </Suspense>
         } />
-        <Route path="/dashboard" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Dashboard />
-          </Suspense>
-        } />
-        <Route path="/lessons" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Lessons />
-          </Suspense>
-        } />
-        <Route path="/goals" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Goals />
-          </Suspense>
-        } />
-        <Route path="/progress" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Progress />
-          </Suspense>
-        } />
-        <Route path="/chat" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Chat />
-          </Suspense>
-        } />
+        {/* ── Bottom-tab routes: kept mounted for instant tab switching ── */}
+        <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.Dashboard /></Suspense>} />
+        <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><routes.Chat /></Suspense>} />
+        <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><routes.Lessons /></Suspense>} />
+        <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><routes.Goals /></Suspense>} />
+        <Route path="/progress" element={<Suspense fallback={<LoadingFallback />}><routes.Progress /></Suspense>} />
         <Route path="/profile" element={
           <Suspense fallback={<LoadingFallback />}>
             <routes.Profile />

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Download, Loader, Calendar } from "lucide-react";
+import { Download, Loader, Calendar } from "lucide-react";
+import MobileHeader from "@/components/mobile/MobileHeader";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -211,19 +212,11 @@ export default function MonthlyReport() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
-        <Link to="/dashboard">
-          <ChevronLeft size={20} color={C.cream} />
-        </Link>
-        <div>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>
-            Monthly Report
-          </p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>
-            Progress summary for care team
-          </p>
-        </div>
-      </div>
+      <MobileHeader
+        title="Monthly Report"
+        subtitle="Progress summary for care team"
+        backTo="/dashboard"
+      />
 
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-4">
         {/* INFO BANNER */}

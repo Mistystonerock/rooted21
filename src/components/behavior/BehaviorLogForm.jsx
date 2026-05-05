@@ -30,8 +30,8 @@ export default function BehaviorLogForm({ onClose, onSuccess }) {
 
     setLoading(true);
     try {
-      await base44.entities.BehaviorLog.create(formData);
-      onSuccess?.();
+      const created = await base44.entities.BehaviorLog.create(formData);
+      onSuccess?.(created);
     } catch (error) {
       console.error('Error saving behavior log:', error);
     } finally {

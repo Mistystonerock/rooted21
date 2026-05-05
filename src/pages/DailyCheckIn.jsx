@@ -23,28 +23,30 @@ export default function DailyCheckIn() {
 
   async function handleSave() {
     if (!user) return;
-
     setSaving(true);
-    try {
-      await base44.entities.CheckIn.create({
-        child_regulation: childRegulation,
-        parent_calm: parentCalm,
-        note: note || null,
-      });
 
-      setSaved(true);
-      setNote("");
+    // Optimistic update — show immediately
+    const optimisticEntry = {
+      id: `optimistic-${Date.now()}`,
+      child_regulation: childRegulation,
+      parent_calm: parentCalm,
+      note: note || null,
+      created_date: new Date().toISOString(),
+    };
+    setRecentCheckins(prev => [optimisticEntry, ...prev].slice(0, 10));
+    setSaved(true);
+    setNote("");
+    setTimeout(() => setSaved(false), 2000);
 
-      // Refresh checkins
-      const updated = await base44.entities.CheckIn.list("-created_date", 10);
-      setRecentCheckins(updated);
-
-      setTimeout(() => setSaved(false), 2000);
-    } catch (error) {
-      console.error("Error saving check-in:", error);
-    } finally {
-      setSaving(false);
-    }
+    // Persist in background then reconcile
+    const saved = await base44.entities.CheckIn.create({
+      child_regulation: childRegulation,
+      parent_calm: parentCalm,
+      note: optimisticEntry.note,
+    });
+    const updated = await base44.entities.CheckIn.list("-created_date", 10);
+    setRecentCheckins(updated);
+    setSaving(false);
   }
 
   const emoticons = {

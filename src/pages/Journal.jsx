@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // kept for internal links
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Save, CheckCircle2, LockIcon } from "lucide-react";
+import { Save, CheckCircle2, LockIcon } from "lucide-react";
+import MobileHeader from "@/components/mobile/MobileHeader";
+import MobileRefresh from "@/components/mobile/MobileRefresh";
 import { format, startOfToday } from "date-fns";
 import JournalEntryForm from "@/components/journal/JournalEntryForm";
 import JournalEntryCard from "@/components/journal/JournalEntryCard";
@@ -96,16 +98,22 @@ export default function Journal() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* HEADER */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
-        <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
-        <div className="flex-1">
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Daily Reflection Journal</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>Private · Just for you</p>
-        </div>
-        <LockIcon size={14} color={C.lightGreen} />
-      </div>
+      <MobileHeader
+        title="Daily Reflection Journal"
+        subtitle="Private · Just for you"
+        backTo="/dashboard"
+        rightSlot={<LockIcon size={16} color={C.lightGreen} />}
+      />
 
+      <MobileRefresh onRefresh={async () => {
+        const today = format(startOfToday(), "yyyy-MM-dd");
+        const [entries, allEntries] = await Promise.all([
+          base44.entities.ParentJournal.filter({ entry_date: today, created_by: user?.email }, "-created_date", 1),
+          base44.entities.ParentJournal.filter({ created_by: user?.email }, "-entry_date", 100),
+        ]);
+        if (entries.length > 0) setTodayEntry(entries[0]);
+        setPastEntries(allEntries.filter(e => e.entry_date !== today));
+      }}>
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-6">
         {/* TODAY'S ENTRY */}
         <div>
@@ -186,6 +194,7 @@ export default function Journal() {
 
         <div className="pb-8" />
       </div>
+      </MobileRefresh>
     </div>
   );
 }

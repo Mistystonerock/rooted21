@@ -2,7 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, TrendingUp, TrendingDown, Minus, AlertTriangle, Star, Lightbulb, Activity, Target, BookOpen, Zap } from "lucide-react";
+import MobileHeader from "@/components/mobile/MobileHeader";
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, Star, Lightbulb, Activity, Target, BookOpen, Zap } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, Cell, RadarChart,
@@ -239,28 +240,26 @@ export default function Analytics() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
-        <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
-        <div>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>Trends · Patterns · Insights</p>
-        </div>
-        {/* Range selector */}
-        <div className="ml-auto flex gap-1">
-          {RANGES.map(r => (
-            <button key={r.label} onClick={() => setRange(r.days)}
-              className="text-[10px] font-bold px-2 py-1 rounded-lg"
-              style={{
-                background: range === r.days ? C.gold : "#ffffff18",
-                color: range === r.days ? C.darkGreen : C.lightGreen,
-                border: "none", cursor: "pointer",
-              }}>
-              {r.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <MobileHeader
+        title="Behavior Analytics"
+        subtitle="Trends · Patterns · Insights"
+        backTo="/dashboard"
+        rightSlot={
+          <div className="flex gap-1">
+            {RANGES.map(r => (
+              <button key={r.label} onClick={() => setRange(r.days)}
+                className="text-[10px] font-bold px-2 py-1 rounded-lg"
+                style={{
+                  background: range === r.days ? C.gold : "#ffffff18",
+                  color: range === r.days ? C.darkGreen : C.lightGreen,
+                  border: "none", cursor: "pointer",
+                }}>
+                {r.label}
+              </button>
+            ))}
+          </div>
+        }
+      />
 
       <div className="max-w-[560px] mx-auto px-4 py-5 space-y-6">
 

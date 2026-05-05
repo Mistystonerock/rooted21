@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // kept for potential links
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, FileText, ScrollText, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { FileText, ScrollText, AlertTriangle, CheckCircle2 } from "lucide-react";
+import MobileHeader from "@/components/mobile/MobileHeader";
 
 const SECTIONS = [
   { id: "terms", label: "Terms of Service", icon: FileText },
@@ -258,20 +259,11 @@ export default function Legal() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* HEADER */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
-        <Link to="/dashboard">
-          <ChevronLeft size={20} color={C.cream} />
-        </Link>
-        <div>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>
-            Legal Documents
-          </p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>
-            Terms, Privacy, Disclaimers & Consent
-          </p>
-        </div>
-      </div>
+      <MobileHeader
+        title="Legal Documents"
+        subtitle="Terms, Privacy, Disclaimers & Consent"
+        backTo="/dashboard"
+      />
 
       <div className="max-w-[540px] mx-auto px-4 py-5">
         {/* TABS */}

@@ -5,6 +5,8 @@ import {
   ChevronLeft, Search, Phone, Mail, MapPin, Clock, CheckCircle2,
   Heart, Star, Filter, MessageCircle
 } from "lucide-react";
+import MobileHeader from "@/components/mobile/MobileHeader";
+import MobileRefresh from "@/components/mobile/MobileRefresh";
 
 const EXPERTISE_TAGS = [
   "Trauma-Informed",
@@ -336,7 +338,7 @@ function ProviderProfile({ provider, onBack }) {
             <p className="text-[10px]" style={{ color: C.lightGreen }}>{provider.phone}</p>
           </div>
         </a>
-        <a href={`mailto:${provider.email}?subject=Respite Care Request — HALO Project`}
+        <a href={`mailto:${provider.email}?subject=Respite Care Request — Rooted 21`}
           className="flex items-center gap-3 rounded-xl px-4 py-3"
           style={{ background: C.cream, textDecoration: "none" }}>
           <Mail size={16} color={C.darkGreen} />
@@ -368,20 +370,19 @@ export default function RespiteCare() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
-        <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
-        <div>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Respite Care Directory</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>Vetted Providers · Short-Term Relief</p>
-        </div>
-        <div className="ml-auto flex items-center gap-1 rounded-full px-2.5 py-1"
-          style={{ background: `${C.gold}30` }}>
-          <Heart size={11} color={C.gold} />
-          <span className="text-[10px] font-bold" style={{ color: C.gold }}>{PROVIDERS.length} Providers</span>
-        </div>
-      </div>
+      <MobileHeader
+        title="Respite Care Directory"
+        subtitle="Vetted Providers · Short-Term Relief"
+        backTo="/dashboard"
+        rightSlot={
+          <div className="flex items-center gap-1 rounded-full px-2.5 py-1" style={{ background: `${C.gold}30` }}>
+            <Heart size={11} color={C.gold} />
+            <span className="text-[10px] font-bold" style={{ color: C.gold }}>{PROVIDERS.length}</span>
+          </div>
+        }
+      />
 
+      <MobileRefresh onRefresh={async () => {}}>
       <div className="max-w-[520px] mx-auto px-4 py-4 space-y-4">
 
         {/* Intro banner */}
@@ -483,6 +484,7 @@ export default function RespiteCare() {
 
         <div className="pb-6" />
       </div>
+      </MobileRefresh>
     </div>
   );
 }

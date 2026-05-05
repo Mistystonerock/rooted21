@@ -57,8 +57,12 @@ export default function BehaviorLogs() {
         {showForm && (
           <BehaviorLogForm
             onClose={() => setShowForm(false)}
-            onSuccess={() => {
+            onSuccess={(newLog) => {
               setShowForm(false);
+              // Optimistic update — prepend immediately, then reconcile
+              if (newLog) {
+                setLogs(prev => [{ ...newLog, id: newLog.id || `optimistic-${Date.now()}` }, ...prev]);
+              }
               loadLogs();
             }}
           />
