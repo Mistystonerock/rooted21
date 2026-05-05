@@ -1,5 +1,5 @@
-// 21-Lesson Curriculum — TBRI® (Trust-Based Relational Intervention)
-// Trauma-Informed Parenting Program
+// 21-Lesson Curriculum — Rooted 21 Parenting Program
+// Connection-Based Parenting
 // Connecting Principles • Empowering Principles • Correcting Principles
 
 export const LESSONS = [
@@ -47,7 +47,7 @@ export const LESSONS = [
     pillar: "Foundation",
     title: "The Science of Trauma and the Brain",
     emoji: "🧠",
-    content: `Trauma changes the brain — literally. When a child experiences overwhelming stress early in life, the areas of the brain responsible for fear, survival, and reactivity (the lower brain) become overactive, while the areas responsible for thinking, reasoning, and connection (the higher brain) become underdeveloped.\n\n**What this means in everyday behavior:**\n- The child reacts before thinking\n- Small things feel like emergencies\n- Logic and reason don't work during meltdowns\n- The child struggles to trust or accept comfort\n\n**The stress response cycle:**\n1. Trigger (something that reminds the brain of danger)\n2. Activation (fight, flight, or freeze)\n3. Reaction (the behavior you see)\n4. Recovery (the window where healing happens)\n\n**TBRI® principle:**\nYou cannot reason with a dysregulated brain. First you must regulate — then you can relate — then you can reason. This is the "3 R's" of TBRI®.\n\nThe good news: the brain is changeable. With consistent, safe relationships, children from hard places can and do heal.`,
+    content: `Trauma changes the brain — literally. When a child experiences overwhelming stress early in life, the areas of the brain responsible for fear, survival, and reactivity (the lower brain) become overactive, while the areas responsible for thinking, reasoning, and connection (the higher brain) become underdeveloped.\n\n**What this means in everyday behavior:**\n- The child reacts before thinking\n- Small things feel like emergencies\n- Logic and reason don't work during meltdowns\n- The child struggles to trust or accept comfort\n\n**The stress response cycle:**\n1. Trigger (something that reminds the brain of danger)\n2. Activation (fight, flight, or freeze)\n3. Reaction (the behavior you see)\n4. Recovery (the window where healing happens)\n\n**Core principle:**\nYou cannot reason with a dysregulated brain. First you must regulate — then you can relate — then you can reason. This is the "3 R's" of connection-based parenting.\n\nThe good news: the brain is changeable. With consistent, safe relationships, children from hard places can and do heal.`,
     tip: "Practice identifying which 'R' your child needs in the moment: Regulate, Relate, or Reason.",
     worksheet: "Think of a recent escalation. Which stage was your child in — regulate, relate, or reason? What did you try? What might have worked better?",
     questions: [
@@ -62,35 +62,35 @@ export const LESSONS = [
        {
          question: "What does the 3 R's principle in TBRI® stand for?",
          answer: "Regulate, Relate, and Reason. You cannot reason with a dysregulated brain, so you first help the child regulate, then relate (connect), and finally reason with them."
-       },
-       {
-         question: "Why can't logic or reason work during a child's meltdown?",
-         answer: "During a meltdown, the higher brain (responsible for reasoning) is offline. The lower brain (survival mode) is in control. The child's nervous system is in threat mode, and logic is not processed until they are regulated."
-       },
-       {
-         question: "What is the good news about the brain's capacity to heal?",
-         answer: "The brain is changeable (neuroplastic). With consistent, safe relationships and experiences, children from hard places can and do heal. The connections that were shaped by trauma can be rewired by safety."
-       }
-     ],
-    readingMaterial: [
-      "The Developing Child by Jerome Bruner",
-      "Neurobiology and the Development of Human Morality by Jean Decety & James Killen",
-      "Parenting from the Inside Out by Dan Siegel & Mary Hartzell"
-    ]
-  },
-  // ── WEEK 2: CONNECTING PRINCIPLES ─────────────────────────────────────────
-  {
-    id: 3,
-    week: 2,
-    pillar: "Connecting",
-    title: "TBRI® Connecting Principles — Attachment",
+             },
+             {
+               question: "Why can't logic or reason work during a child's meltdown?",
+               answer: "During a meltdown, the higher brain (responsible for reasoning) is offline. The lower brain (survival mode) is in control. The child's nervous system is in threat mode, and logic is not processed until they are regulated."
+             },
+             {
+               question: "What is the good news about the brain's capacity to heal?",
+               answer: "The brain is changeable (neuroplastic). With consistent, safe relationships and experiences, children from hard places can and do heal. The connections that were shaped by trauma can be rewired by safety."
+             }
+           ],
+          readingMaterial: [
+            "The Developing Child by Jerome Bruner",
+            "Neurobiology and the Development of Human Morality by Jean Decety & James Killen",
+            "Parenting from the Inside Out by Dan Siegel & Mary Hartzell"
+          ]
+         },
+         // ── WEEK 2: CONNECTING PRINCIPLES ─────────────────────────────────────────
+         {
+         id: 3,
+         week: 2,
+         pillar: "Connecting",
+         title: "Connecting Principles — Attachment",
     emoji: "💛",
-    content: `The TBRI® Connecting Principles focus on building attachment — the foundation of trust between a caregiver and child. For children from hard places, healthy attachment was often disrupted or never formed. Your job is to build it now, one interaction at a time.\n\n**The four attachment needs (TBRI® framework):**\n- **Felt safety:** The child's body and nervous system feel safe\n- **Attunement:** You see and respond to the child's emotional state\n- **Soothing:** You help regulate when the child cannot self-regulate\n- **Security:** The child trusts the relationship is stable and won't end\n\n**Connecting practices:**\n- Maintain eye contact at the child's level\n- Use the child's name with warmth\n- Follow the child's lead during play\n- Use nurturing touch (with permission)\n- Create rituals: special handshakes, greetings, routines\n\n**Why connection must come before correction:**\nA child who doesn't feel connected to you cannot be effectively corrected by you. Trust is built through thousands of small moments of attunement — not through discipline alone.`,
+    content: `The Connecting Principles focus on building attachment — the foundation of trust between a caregiver and child. For children from hard places, healthy attachment was often disrupted or never formed. Your job is to build it now, one interaction at a time.\n\n**The four attachment needs:**\n- **Felt safety:** The child's body and nervous system feel safe\n- **Attunement:** You see and respond to the child's emotional state\n- **Soothing:** You help regulate when the child cannot self-regulate\n- **Security:** The child trusts the relationship is stable and won't end\n\n**Connecting practices:**\n- Maintain eye contact at the child's level\n- Use the child's name with warmth\n- Follow the child's lead during play\n- Use nurturing touch (with permission)\n- Create rituals: special handshakes, greetings, routines\n\n**Why connection must come before correction:**\nA child who doesn't feel connected to you cannot be effectively corrected by you. Trust is built through thousands of small moments of attunement — not through discipline alone.`,
     tip: "Try 10-15 minutes of child-led play this week with no agenda — no teaching, no correcting, just following their lead.",
     worksheet: "What does your child do that tells you they feel connected? What do they do when disconnected? How can you tell the difference?",
     questions: [
        {
-         question: "What are the four attachment needs in the TBRI® framework?",
+         question: "What are the four attachment needs?",
          answer: "The four needs are: 1) Felt safety (the child's body feels safe), 2) Attunement (you see and respond to emotions), 3) Soothing (helping regulate), and 4) Security (trusting the relationship is stable)."
        },
        {
@@ -150,7 +150,7 @@ export const LESSONS = [
     readingMaterial: [
       "The Boy Who Harnessed the Wind by William Kamkwamba",
       "Safe Refuge by Karen Purvis",
-      "Trust-Based Relational Intervention handbook"
+      "Connection-Based Parenting: A Practical Handbook"
     ]
   },
   // ── WEEK 3: EMPOWERING PRINCIPLES ─────────────────────────────────────────
@@ -158,9 +158,9 @@ export const LESSONS = [
     id: 5,
     week: 3,
     pillar: "Empowering",
-    title: "TBRI® Empowering Principles — Physiological Needs",
+    title: "Empowering Principles — Physiological Needs",
     emoji: "⚡",
-    content: `The TBRI® Empowering Principles address a child's physical and physiological needs. Many children from hard places have underlying sensory, nutritional, and regulatory needs that, when unmet, dramatically increase behavioral challenges.\n\n**Physiological checklist:**\n- **Hunger:** Blood sugar drops fuel dysregulation. Small snacks every 2-3 hours can shift behavior.\n- **Hydration:** Even mild dehydration affects mood and impulse control.\n- **Sleep:** Traumatized children often have disrupted sleep patterns. Poor sleep escalates everything.\n- **Sensory regulation:** Some children are sensory-seeking, others sensory-avoiding. Both can look like "behavior problems."\n- **Movement:** The body needs movement to discharge stress hormones.\n\n**Practical empowering tools:**\n- Offer a snack before a challenging activity\n- Build movement breaks into the day\n- Use a "sensory diet" with your child (tools that calm or alert their system)\n- Watch for the HALT signals: Hungry, Anxious, Lonely, Tired\n\n**Insight:**\nWhen a child's basic physiological needs are met consistently, behavioral challenges decrease — not because of discipline, but because the body is no longer in a state of threat.`,
+    content: `The Empowering Principles address a child's physical and physiological needs. Many children from hard places have underlying sensory, nutritional, and regulatory needs that, when unmet, dramatically increase behavioral challenges.\n\n**Physiological checklist:**\n- **Hunger:** Blood sugar drops fuel dysregulation. Small snacks every 2-3 hours can shift behavior.\n- **Hydration:** Even mild dehydration affects mood and impulse control.\n- **Sleep:** Traumatized children often have disrupted sleep patterns. Poor sleep escalates everything.\n- **Sensory regulation:** Some children are sensory-seeking, others sensory-avoiding. Both can look like "behavior problems."\n- **Movement:** The body needs movement to discharge stress hormones.\n\n**Practical empowering tools:**\n- Offer a snack before a challenging activity\n- Build movement breaks into the day\n- Use a "sensory diet" with your child (tools that calm or alert their system)\n- Watch for the HALT signals: Hungry, Anxious, Lonely, Tired\n\n**Insight:**\nWhen a child's basic physiological needs are met consistently, behavioral challenges decrease — not because of discipline, but because the body is no longer in a state of threat.`,
     tip: "Track your child's behavior this week against their eating, sleep, and movement patterns. Look for correlations.",
     worksheet: "What are your child's sensory needs? Do they seek intense input or avoid it? List 5 activities that seem to calm them.",
     questions: [
@@ -197,7 +197,7 @@ export const LESSONS = [
     pillar: "Empowering",
     title: "Life Value Terms and Behavior Language",
     emoji: "🗣️",
-    content: `TBRI® uses "life value terms" — specific language that names the skills and values children from hard places need to develop. Rather than labeling behavior as bad or naughty, life value terms identify what the child needs to *learn*.\n\n**Core life value terms:**\n- **Trustworthy** — doing what you say you'll do\n- **Responsible** — taking care of your space, your body, your words\n- **Respectful** — treating others as you want to be treated\n- **Kind** — using words and touch that help, not hurt\n- **Self-controlled** — pausing before reacting\n\n**How to use them:**\n- "I need a trustworthy choice right now."\n- "Your job is to be responsible with the toys."\n- "That wasn't respectful. Let's try that again."\n\n**Why this matters:**\nChildren from hard places often have shame-based identities — they believe *they* are bad, not that their behavior was bad. Life value terms separate the behavior from the identity.\n\n**Redo:**\nWhen a child makes a poor choice, they don't just get a consequence — they *redo* the interaction correctly, practicing the skill they need to build.`,
+    content: `Connection-based parenting uses "life value terms" — specific language that names the skills and values children from hard places need to develop. Rather than labeling behavior as bad or naughty, life value terms identify what the child needs to *learn*.\n\n**Core life value terms:**\n- **Trustworthy** — doing what you say you'll do\n- **Responsible** — taking care of your space, your body, your words\n- **Respectful** — treating others as you want to be treated\n- **Kind** — using words and touch that help, not hurt\n- **Self-controlled** — pausing before reacting\n\n**How to use them:**\n- "I need a trustworthy choice right now."\n- "Your job is to be responsible with the toys."\n- "That wasn't respectful. Let's try that again."\n\n**Why this matters:**\nChildren from hard places often have shame-based identities — they believe *they* are bad, not that their behavior was bad. Life value terms separate the behavior from the identity.\n\n**Redo:**\nWhen a child makes a poor choice, they don't just get a consequence — they *redo* the interaction correctly, practicing the skill they need to build.`,
     tip: "Introduce one life value term this week. Explain it, post it somewhere visible, and use it consistently.",
     worksheet: "Which life value does your child struggle with most? Write out 3 situations where you could use life value language instead of labels like 'bad' or 'difficult.'",
     questions: [
@@ -206,7 +206,7 @@ export const LESSONS = [
          answer: "Life value terms name the skill the child needs to learn ('I need you to be responsible'), while labels like 'bad' or 'naughty' attack the child's identity. Life value terms separate the behavior from the person, reducing shame."
        },
        {
-         question: "What does 'redo' mean in TBRI®?",
+         question: "What does 'redo' mean in connection-based parenting?",
          answer: "A redo is when a child makes a poor choice and is asked to try the interaction again correctly. It's not punitive—it's a skill-building moment where the child practices the correct behavior."
        },
        {
@@ -233,14 +233,14 @@ export const LESSONS = [
     id: 7,
     week: 4,
     pillar: "Correcting",
-    title: "TBRI® Correcting Principles — Proactive Strategies",
+    title: "Correcting Principles — Proactive Strategies",
     emoji: "🛡️",
-    content: `The TBRI® Correcting Principles teach caregivers to respond to misbehavior in ways that build trust rather than destroy it. The first set of correcting strategies are *proactive* — things you put in place before problems occur.\n\n**Proactive TBRI® strategies:**\n\n1. **IDEAL response** — Immediate, Direct, Efficient, Action-based, Leveled at the behavior (not the child)\n\n2. **Choices** — Offering two acceptable choices returns a sense of control to a child who has had very little. "Do you want to sit at the table or the floor?" — both work for you.\n\n3. **Compromise** — "I need you to do X. You want Y. Let's find a middle ground."\n\n4. **Give-and-take** — "You can have screen time after homework. You decide how quickly homework gets done."\n\n5. **Previewing** — Walking through upcoming events or transitions in advance to reduce anxiety.\n\n**Key insight:**\nChildren from hard places often act out because they feel powerless. Proactive strategies give power back *without* giving up your authority. The goal is felt safety and cooperation, not compliance through fear.`,
+    content: `The Correcting Principles teach caregivers to respond to misbehavior in ways that build trust rather than destroy it. The first set of correcting strategies are *proactive* — things you put in place before problems occur.\n\n**Proactive strategies:**\n\n1. **IDEAL response** — Immediate, Direct, Efficient, Action-based, Leveled at the behavior (not the child)\n\n2. **Choices** — Offering two acceptable choices returns a sense of control to a child who has had very little. "Do you want to sit at the table or the floor?" — both work for you.\n\n3. **Compromise** — "I need you to do X. You want Y. Let's find a middle ground."\n\n4. **Give-and-take** — "You can have screen time after homework. You decide how quickly homework gets done."\n\n5. **Previewing** — Walking through upcoming events or transitions in advance to reduce anxiety.\n\n**Key insight:**\nChildren from hard places often act out because they feel powerless. Proactive strategies give power back *without* giving up your authority. The goal is felt safety and cooperation, not compliance through fear.`,
     tip: "This week, try using a choice or a compromise in one situation where you'd normally issue a direct command.",
     worksheet: "Write out your IDEAL response for one recurring behavior challenge. Make it Immediate, Direct, Efficient, Action-based, Leveled.",
     questions: [
        {
-         question: "What does IDEAL stand for in TBRI® correcting strategies?",
+         question: "What does IDEAL stand for in the correcting strategies?",
          answer: "IDEAL stands for Immediate, Direct, Efficient, Action-based, and Leveled at the behavior (not the child). It's a framework for responding to misbehavior in a way that builds trust."
        },
        {
@@ -272,12 +272,12 @@ export const LESSONS = [
     pillar: "Correcting",
     title: "Disarming Strategies and the Redo",
     emoji: "🔄",
-    content: `When a child escalates, traditional consequences often make things worse. TBRI® Disarming Strategies de-escalate without surrendering your boundaries or your relationship.\n\n**TBRI® Disarming Strategies:**\n\n1. **Playful engagement** — Humor and lightness can break a tension cycle before it escalates. "You seem really determined! Let's use that energy for something good."\n\n2. **Noticing** — "I notice you're having a really hard time right now."\n\n3. **Compromise and choices** — Returning control in small ways during escalation\n\n4. **Empathic response** — "That must feel really frustrating. I get it."\n\n5. **The Redo** — After a child has made a poor behavioral choice, ask them to try again correctly. "Let's redo that. This time, use your respectful voice."\n\n**Why Redo works:**\nIt's not punitive — it's a skill-building moment. The child *practices* the correct behavior, which builds the neural pathway for doing it right the next time. It also keeps the relationship intact.\n\n**What to avoid during escalation:**\n- Yelling or matching their energy\n- Long lectures (the brain cannot process them)\n- Shaming language\n- Physical confrontation`,
+    content: `When a child escalates, traditional consequences often make things worse. These disarming strategies de-escalate without surrendering your boundaries or your relationship.\n\n**Disarming Strategies:**\n\n1. **Playful engagement** — Humor and lightness can break a tension cycle before it escalates. "You seem really determined! Let's use that energy for something good."\n\n2. **Noticing** — "I notice you're having a really hard time right now."\n\n3. **Compromise and choices** — Returning control in small ways during escalation\n\n4. **Empathic response** — "That must feel really frustrating. I get it."\n\n5. **The Redo** — After a child has made a poor behavioral choice, ask them to try again correctly. "Let's redo that. This time, use your respectful voice."\n\n**Why Redo works:**\nIt's not punitive — it's a skill-building moment. The child *practices* the correct behavior, which builds the neural pathway for doing it right the next time. It also keeps the relationship intact.\n\n**What to avoid during escalation:**\n- Yelling or matching their energy\n- Long lectures (the brain cannot process them)\n- Shaming language\n- Physical confrontation`,
     tip: "Practice one Redo this week. After a poor choice, calmly ask your child to 'try that again' with the correct behavior.",
     worksheet: "Describe one situation where a Redo could have changed the outcome. What would you have said?",
     questions: [
        {
-         question: "What are the five TBRI® disarming strategies?",
+         question: "What are the five disarming strategies?",
          answer: "The five strategies are: 1) Playful engagement, 2) Noticing, 3) Compromise and choices, 4) Empathic response, and 5) The Redo."
        },
        {
@@ -347,7 +347,7 @@ export const LESSONS = [
     pillar: "Connecting",
     title: "Playfulness, Acceptance, Curiosity, Empathy (PACE)",
     emoji: "🎈",
-    content: `Dan Hughes' PACE model is a framework used throughout trauma-informed care. PACE describes the *relational stance* a caregiver holds when working with a child from a hard place.\n\n**PACE:**\n\n**Playfulness** — Lightness and joy break down defenses. Play is the child's natural language. Playfulness communicates: *I like being with you.*\n\n**Acceptance** — Accepting the child as they are — not as you wish they were. Acceptance is not agreeing with behavior. It is unconditional positive regard for the person beneath the behavior.\n\n**Curiosity** — Getting curious about *why* rather than immediately reacting to *what*. "I wonder what was happening for you when..." Curiosity communicates: *I want to understand you.*\n\n**Empathy** — Reflecting the child's experience back with warmth. "That must have felt really scary." Empathy communicates: *Your feelings make sense to me.*\n\n**PACE is not a technique. It is an attitude.**\n\nWhen children feel PACE from a caregiver, their nervous systems shift. Defense comes down. Trust begins to build. This is the soil in which all growth happens.`,
+    content: `Dan Hughes' PACE model is a framework used throughout connection-based parenting. PACE describes the *relational stance* a caregiver holds when working with a child from a hard place.\n\n**PACE:**\n\n**Playfulness** — Lightness and joy break down defenses. Play is the child's natural language. Playfulness communicates: *I like being with you.*\n\n**Acceptance** — Accepting the child as they are — not as you wish they were. Acceptance is not agreeing with behavior. It is unconditional positive regard for the person beneath the behavior.\n\n**Curiosity** — Getting curious about *why* rather than immediately reacting to *what*. "I wonder what was happening for you when..." Curiosity communicates: *I want to understand you.*\n\n**Empathy** — Reflecting the child's experience back with warmth. "That must have felt really scary." Empathy communicates: *Your feelings make sense to me.*\n\n**PACE is not a technique. It is an attitude.**\n\nWhen children feel PACE from a caregiver, their nervous systems shift. Defense comes down. Trust begins to build. This is the soil in which all growth happens.`,
     tip: "Choose one PACE element to focus on this week. Notice moments where you can practice it intentionally.",
     worksheet: "Which element of PACE is hardest for you — Playfulness, Acceptance, Curiosity, or Empathy? Why? What would it take to strengthen it?",
     questions: [
@@ -385,7 +385,7 @@ export const LESSONS = [
     pillar: "Empowering",
     title: "Sensory Processing and Regulation",
     emoji: "🎯",
-    content: `Many children from hard places have disrupted sensory processing systems — a direct result of early trauma, prenatal exposure, or chronic stress. Understanding sensory needs is one of the most practical tools available.\n\n**Two sensory profiles:**\n\n**Sensory seeking (hyposensitive):**\nThe child needs MORE input to feel regulated.\n- Seeks rough play, crashing, or jumping\n- Puts things in mouth\n- Talks loudly, invades space\n- Seems to have no "off" switch\n\n**Sensory avoiding (hypersensitive):**\nThe child is overwhelmed by LESS input.\n- Bothered by tags, seams, or textures\n- Covers ears or eyes\n- Overreacts to light touch\n- Avoids crowds or noisy environments\n\n**Building a sensory diet:**\nA sensory diet is a personalized set of activities that help a child maintain optimal regulation throughout the day.\n\n- Calming tools: deep pressure, weighted blanket, slow rocking, cold water\n- Alerting tools: jumping, crunchy snacks, bright light, movement\n- Organizing tools: heavy work (carrying, pushing, pulling), rhythmic movement\n\n**Insight:** Work with an occupational therapist when possible to identify your child's specific sensory profile.`,
+    content: `Many children from hard places have disrupted sensory processing systems — a result of early stress, prenatal exposure, or chronic instability. Understanding sensory needs is one of the most practical tools available.\n\n**Two sensory profiles:**\n\n**Sensory seeking (hyposensitive):**\nThe child needs MORE input to feel regulated.\n- Seeks rough play, crashing, or jumping\n- Puts things in mouth\n- Talks loudly, invades space\n- Seems to have no "off" switch\n\n**Sensory avoiding (hypersensitive):**\nThe child is overwhelmed by LESS input.\n- Bothered by tags, seams, or textures\n- Covers ears or eyes\n- Overreacts to light touch\n- Avoids crowds or noisy environments\n\n**Building a sensory diet:**\nA sensory diet is a personalized set of activities that help a child maintain optimal regulation throughout the day.\n\n- Calming tools: deep pressure, weighted blanket, slow rocking, cold water\n- Alerting tools: jumping, crunchy snacks, bright light, movement\n- Organizing tools: heavy work (carrying, pushing, pulling), rhythmic movement\n\n**Insight:** Work with an occupational therapist when possible to identify your child's specific sensory profile.`,
     tip: "Create a simple calm-down kit with your child — let them choose 3-5 items that help them feel better.",
     worksheet: "Is your child sensory seeking, sensory avoiding, or both? List 5 activities in each category that seem to help them regulate.",
     questions: [
@@ -422,7 +422,7 @@ export const LESSONS = [
     pillar: "Empowering",
     title: "Developmental vs. Chronological Age",
     emoji: "📊",
-    content: `One of the most important shifts in understanding trauma-informed parenting is realizing that a child's *developmental* age may be significantly younger than their *chronological* age.\n\nEarly trauma disrupts developmental milestones. A 10-year-old who experienced severe neglect in their first 3 years may have the emotional regulation of a 4-year-old — not because they are choosing to act immature, but because those developmental stages were interrupted.\n\n**What this means practically:**\n- Expectations need to match developmental, not chronological, age\n- Nurturing practices for younger children may be appropriate\n- Regression is normal and healthy — it's the child returning to fill developmental gaps\n\n**Meeting regression with curiosity:**\nWhen a child regresses (acts younger, wants a bottle, wants to be carried), caregivers are encouraged to meet that need rather than shame it. The child is communicating: *I missed something. Can I have it now?*\n\nMeeting these needs does not create dependency — it fills the gap and allows development to continue forward.\n\n**TBRI® principle:**\nCo-regulation today builds self-regulation tomorrow. You cannot rush the process by demanding maturity before the foundation is built.`,
+    content: `One of the most important shifts in understanding connection-based parenting is realizing that a child's *developmental* age may be significantly younger than their *chronological* age.\n\nEarly trauma disrupts developmental milestones. A 10-year-old who experienced severe neglect in their first 3 years may have the emotional regulation of a 4-year-old — not because they are choosing to act immature, but because those developmental stages were interrupted.\n\n**What this means practically:**\n- Expectations need to match developmental, not chronological, age\n- Nurturing practices for younger children may be appropriate\n- Regression is normal and healthy — it's the child returning to fill developmental gaps\n\n**Meeting regression with curiosity:**\nWhen a child regresses (acts younger, wants a bottle, wants to be carried), caregivers are encouraged to meet that need rather than shame it. The child is communicating: *I missed something. Can I have it now?*\n\nMeeting these needs does not create dependency — it fills the gap and allows development to continue forward.\n\n**Core principle:**\nCo-regulation today builds self-regulation tomorrow. You cannot rush the process by demanding maturity before the foundation is built.`,
     tip: "Look at a challenging behavior this week and ask: 'How old does this feel? How old might my child's nervous system be right now?'",
     worksheet: "What developmental gaps do you think your child has? What needs might still need to be met? How could you meet them in age-appropriate ways?",
     questions: [
@@ -488,7 +488,7 @@ export const LESSONS = [
     readingMaterial: [
       "Understanding the Secret World of Childhood by Maria Montessori",
       "Reaching the Hard to Reach Child by Heather Forbes",
-      "Trust-Based Parenting article on survival behaviors"
+      "Connection-Based Parenting article on survival behaviors"
     ]
   },
   {
@@ -535,13 +535,13 @@ export const LESSONS = [
     pillar: "Foundation",
     title: "Navigating the Child Welfare System",
     emoji: "⚖️",
-    content: `Many families are simultaneously navigating DHS, courts, foster care systems, or adoption processes. These systems can feel dehumanizing, confusing, and even retraumatizing — for both parents and children.\n\n**Practical guidance:**\n\n1. **Document everything** — Dates, names, conversations, decisions, and your child's behaviors and progress.\n\n2. **Know your team** — Caseworker, CASA volunteer, attorney, therapist. Build relationships. Ask who is who.\n\n3. **Ask for clarity** — You have the right to understand what is happening in your case. Ask for things in writing.\n\n4. **Bring support** — Take a trusted person to meetings. Two sets of ears help.\n\n5. **Advocate for your child** — You know your child best. Use TBRI® language when talking to professionals: "My child needs felt safety. Here's what that looks like for them."\n\n6. **Protect your child from adult content** — Court dates, caseworker visits, and system conversations should be kept away from children's ears when possible.\n\n**Insight:**\nThe system is often not trauma-informed. You can be the bridge. Sharing what you've learned about your child's needs with teachers, caseworkers, and court staff can change outcomes.`,
+    content: `Many families are simultaneously navigating support systems, courts, or child welfare processes. These systems can feel confusing and overwhelming — for both parents and children.\n\n**Practical guidance:**\n\n1. **Document everything** — Dates, names, conversations, decisions, and your child's behaviors and progress.\n\n2. **Know your team** — Caseworker, CASA volunteer, attorney, therapist. Build relationships. Ask who is who.\n\n3. **Ask for clarity** — You have the right to understand what is happening in your case. Ask for things in writing.\n\n4. **Bring support** — Take a trusted person to meetings. Two sets of ears help.\n\n5. **Advocate for your child** — You know your child best. Use what you've learned when talking to professionals: "My child needs felt safety. Here's what that looks like for them."\n\n6. **Protect your child from adult content** — Court dates, caseworker visits, and system conversations should be kept away from children's ears when possible.\n\n**Insight:**\nThe system is often not connection-focused. You can be the bridge. Sharing what you've learned about your child's needs with teachers, caseworkers, and court staff can change outcomes.`,
     tip: "Start a simple binder or notes folder to track all system interactions — dates, names, decisions, and outcomes.",
     worksheet: "Who is on your child's professional team? List their names and roles. Who do you trust most? Who do you need to build a better relationship with?",
     questions: [
        {
          question: "What are the six practical steps for navigating the child welfare system?",
-         answer: "1) Document everything, 2) Know your team, 3) Ask for clarity, 4) Bring support to meetings, 5) Advocate for your child using TBRI® language, 6) Protect your child from adult content of the system."
+         answer: "1) Document everything, 2) Know your team, 3) Ask for clarity, 4) Bring support to meetings, 5) Advocate for your child using what you've learned, 6) Protect your child from adult content of the system."
        },
        {
          question: "Why is documentation important when navigating the system?",
@@ -552,8 +552,8 @@ export const LESSONS = [
          answer: "Your team typically includes: caseworker, CASA volunteer (if assigned), attorney, therapist, and other professionals. Build relationships with each and know their specific role."
        },
        {
-         question: "How can TBRI® language help when advocating to professionals?",
-         answer: "Using TBRI® language (felt safety, life value terms, redo, PACE) helps professionals understand your child's needs in trauma-informed terms. It shifts the conversation from 'problem behavior' to 'unmet needs.'"
+         question: "How can connection-based language help when advocating to professionals?",
+         answer: "Using connection-based language (felt safety, life value terms, redo, PACE) helps professionals understand your child's needs. It shifts the conversation from 'problem behavior' to 'unmet needs.'"
        },
        {
          question: "Why is it important to protect your child from adult content of the system?",
@@ -572,7 +572,7 @@ export const LESSONS = [
     pillar: "Connecting",
     title: "Building a Support Network",
     emoji: "🤝",
-    content: `Parenting a child from a hard place can feel profoundly isolating. Traditional support networks often don't understand. Friends and family offer well-meaning but misguided advice. The unique challenges you face require a unique kind of support.\n\n**Building your support circle:**\n\n**Professional support:**\n- A TBRI®-trained therapist (for your child and/or you)\n- A knowledgeable caseworker or CASA advocate\n- A trauma-informed pediatrician\n- A trauma-informed teacher or school counselor\n\n**Community support:**\n- Other foster/adoptive families who understand\n- A mentor or faith community member with appropriate boundaries\n- Respite care providers who understand trauma\n\n**Personal support:**\n- A close friend or family member who listens without judgment\n- A partner or co-parent who shares the TBRI® framework\n\n**Insight:**\nAsking for help is not failure. It is wisdom. The most effective caregivers are not the ones going it alone — they are the ones who have built a network around their family.\n\nNo family is an island. Healing happens in community.`,
+    content: `Parenting a child from a hard place can feel profoundly isolating. Traditional support networks often don't understand. Friends and family offer well-meaning but misguided advice. The unique challenges you face require a unique kind of support.\n\n**Building your support circle:**\n\n**Professional support:**\n- A trauma-aware therapist (for your child and/or you)\n- A knowledgeable caseworker or CASA advocate\n- A trauma-informed pediatrician\n- A trauma-informed teacher or school counselor\n\n**Community support:**\n- Other foster/adoptive families who understand\n- A mentor or faith community member with appropriate boundaries\n- Respite care providers who understand trauma\n\n**Personal support:**\n- A close friend or family member who listens without judgment\n- A partner or co-parent who shares your parenting values\n\n**Insight:**\nAsking for help is not failure. It is wisdom. The most effective caregivers are not the ones going it alone — they are the ones who have built a network around their family.\n\nNo family is an island. Healing happens in community.`,
     tip: "Identify one gap in your support network and take one step this week to fill it — a call, an email, a search for a TBRI® therapist.",
     worksheet: "Draw your support circle. Where are the gaps? Who do you wish you could add? What is stopping you?",
     questions: [
@@ -585,8 +585,8 @@ export const LESSONS = [
          answer: "Other foster/adoptive families or parents of traumatized children understand the unique challenges you face in a way that friends or family without this experience may not. They provide validation and practical advice."
        },
        {
-         question: "What should a trauma-informed therapist be able to do?",
-         answer: "A TBRI®-trained therapist understands trauma, the specific needs of children from hard places, and can help both the child and parents navigate healing in a coordinated way."
+         question: "What should a trauma-aware therapist be able to do?",
+         answer: "A trauma-aware therapist understands the specific needs of children from hard places and can help both the child and parents navigate healing in a coordinated way."
        },
        {
          question: "What is the role of respite care in your support network?",
@@ -594,7 +594,7 @@ export const LESSONS = [
        },
        {
          question: "Why is having a co-parent or trusted partner important?",
-         answer: "A partner who shares the TBRI® framework can support you through hard moments, validate your experience, and share the emotional weight of parenting a traumatized child."
+         answer: "A partner who shares your parenting values can support you through hard moments, validate your experience, and share the emotional weight of parenting a child from a hard place."
        }
      ],
     readingMaterial: [
@@ -759,20 +759,20 @@ export const LESSONS = [
     pillar: "Foundation",
     title: "Your Commitment — Graduation",
     emoji: "🌳",
-    content: `You made it. Ten weeks. Twenty-one lessons. Hundreds of moments of showing up — for your child, and for yourself.\n\nThat is not nothing. That is everything.\n\n**What you now carry:**\n\n✦ The science of trauma and how it shapes your child's brain\n✦ TBRI® Connecting Principles — attachment, felt safety, PACE\n✦ TBRI® Empowering Principles — physiological needs, life value terms\n✦ TBRI® Correcting Principles — IDEAL responses, choices, Redo\n✦ Sensory regulation tools\n✦ Understanding of developmental vs. chronological age\n✦ Strategies for the hardest behaviors\n✦ A framework for navigating systems\n✦ The power and practice of repair\n✦ Your own story — and how it shows up\n\n**Your commitment:**\n- Keep practicing. Skills take time.\n- Return to this app when you need support.\n- Reach out for professional help when the challenges exceed what you can hold.\n- Share what you've learned with other caregivers.\n- Celebrate your wins — all of them.\n- Keep repairing. Keep connecting. Keep showing up.\n\n*Every child deserves to be seen, safe, soothed, and secure.*\n*You are giving your child that gift.*\n\n— Rooted 21`,
+    content: `You made it. Ten weeks. Twenty-one lessons. Hundreds of moments of showing up — for your child, and for yourself.\n\nThat is not nothing. That is everything.\n\n**What you now carry:**\n\n✦ The science of trauma and how it shapes your child's brain\n✦ Connecting Principles — attachment, felt safety, PACE\n✦ Empowering Principles — physiological needs, life value terms\n✦ Correcting Principles — IDEAL responses, choices, Redo\n✦ Sensory regulation tools\n✦ Understanding of developmental vs. chronological age\n✦ Strategies for the hardest behaviors\n✦ A framework for navigating systems\n✦ The power and practice of repair\n✦ Your own story — and how it shows up\n\n**Your commitment:**\n- Keep practicing. Skills take time.\n- Return to this app when you need support.\n- Reach out for professional help when the challenges exceed what you can hold.\n- Share what you've learned with other caregivers.\n- Celebrate your wins — all of them.\n- Keep repairing. Keep connecting. Keep showing up.\n\n*Every child deserves to be seen, safe, soothed, and secure.*\n*You are giving your child that gift.*\n\n— Rooted 21`,
     tip: "Celebrate yourself and your child today. This was real, significant, meaningful work.",
     worksheet: "Write a letter to the parent you were on Day 1. What do you know now that you didn't know then? What would you tell them?",
     questions: [
        {
          question: "What are the ten key tools you've learned throughout this program?",
-         answer: "1) Science of trauma, 2) TBRI® Connecting Principles, 3) TBRI® Empowering Principles, 4) TBRI® Correcting Principles, 5) Sensory regulation, 6) Developmental vs. chronological age, 7) Strategies for difficult behaviors, 8) Navigation of systems, 9) Power of repair, 10) Understanding your own story."
+         answer: "1) Science of trauma, 2) Connecting Principles, 3) Empowering Principles, 4) Correcting Principles, 5) Sensory regulation, 6) Developmental vs. chronological age, 7) Strategies for difficult behaviors, 8) Navigation of systems, 9) Power of repair, 10) Understanding your own story."
        },
        {
          question: "What is your commitment as a parent moving forward?",
          answer: "Your commitment is to keep practicing (skills take time), return for support, reach out for professional help when needed, share what you've learned, celebrate wins, and keep repairing, connecting, and showing up for your child."
        },
        {
-         question: "What are the three pillars of TBRI® you've learned?",
+         question: "What are the three pillars of the program you've learned?",
          answer: "The three pillars are: 1) Connecting Principles (attachment and safety), 2) Empowering Principles (meeting physiological needs and building skills), and 3) Correcting Principles (proactive and disarming strategies)."
        },
        {
@@ -785,7 +785,7 @@ export const LESSONS = [
        }
      ],
     readingMaterial: [
-      "Trust-Based Relational Intervention Resources",
+      "Connection-Based Parenting Resources",
       "Continuing Your Journey: Resources for After the Program",
       "The Ongoing Work of Parenting Children from Hard Places"
     ]

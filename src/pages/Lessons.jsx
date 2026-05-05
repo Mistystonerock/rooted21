@@ -10,8 +10,8 @@ import CompletionCertificate from "@/components/rooted/CompletionCertificate";
 function downloadAllLessons() {
   const lines = [
     `ROOTED 21 — 21-Lesson Program`,
-    `Complete 10-Week TBRI® Curriculum`,
-    `21 Lessons for Trauma-Informed Parenting`,
+    `Complete 10-Week Parenting Curriculum`,
+    `21 Lessons for Connection-Based Parenting`,
     `${"═".repeat(55)}`,
     ``,
   ];
