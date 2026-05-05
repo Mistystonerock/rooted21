@@ -90,6 +90,11 @@
           "date_added": {
             "type": "string",
             "format": "date"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "description": "When the document is due (for deadlines)"
           }
         }
       }
