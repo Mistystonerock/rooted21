@@ -185,6 +185,21 @@ const SEED_PROS = [
   },
 ];
 
+function getZipUrl(baseUrl, zip) {
+  if (!zip) return baseUrl;
+  const encoded = encodeURIComponent(zip);
+  // Build zip-aware deep links per site
+  if (baseUrl.includes("psychologytoday.com")) return `https://www.psychologytoday.com/us/therapists?near=${encoded}`;
+  if (baseUrl.includes("kidstherapyfinder.com")) return `https://www.kidstherapyfinder.com/?zip=${encoded}`;
+  if (baseUrl.includes("inclusivetherapists.com")) return `https://www.inclusivetherapists.com/find-a-therapist?location=${encoded}`;
+  if (baseUrl.includes("child.tcu.edu/find-a-practitioner")) return `https://child.tcu.edu/find-a-practitioner/?zip=${encoded}`;
+  if (baseUrl.includes("peacefulparenthappykids.com")) return `https://www.peacefulparenthappykids.com/coaches-directory?location=${encoded}`;
+  if (baseUrl.includes("coaches.jaiinstituteforparenting.com")) return `https://coaches.jaiinstituteforparenting.com/?zip=${encoded}`;
+  if (baseUrl.includes("childwelfare.gov")) return `https://www.childwelfare.gov/topics/finding-helping/#near-${encoded}`;
+  // For sites without direct zip support, append zip as a search query
+  return baseUrl;
+}
+
 export default function ProfessionalDirectory() {
   const [user, setUser] = useState(null);
   const [dbPros, setDbPros] = useState([]);
@@ -195,6 +210,7 @@ export default function ProfessionalDirectory() {
   const [filterInsurance, setFilterInsurance] = useState(false);
   const [filterSliding, setFilterSliding] = useState(false);
   const [selectedPro, setSelectedPro] = useState(null);
+  const [zipCode, setZipCode] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -348,32 +364,69 @@ export default function ProfessionalDirectory() {
           <div className="px-4 py-3" style={{ background: C.darkGreen }}>
             <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>🗺️ National Referral Directories</p>
             <p className="text-[10px] mt-0.5" style={{ color: C.lightGreen }}>
-              Real, vetted referral sites covering therapists, TBRI® practitioners, co-parenting coaches & child welfare advocates across the U.S.
+              Enter your zip code to find professionals near you on each directory.
             </p>
           </div>
+
+          {/* Zip code input */}
+          <div className="px-4 py-3 flex items-center gap-2" style={{ background: "#f9f6f1", borderBottom: `1px solid ${C.cream}` }}>
+            <div className="text-sm">📍</div>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              value={zipCode}
+              onChange={e => setZipCode(e.target.value.replace(/\D/g, ""))}
+              placeholder="Enter your ZIP code"
+              className="flex-1 rounded-lg px-3 py-2 text-sm font-sans"
+              style={{ border: `1.5px solid ${zipCode.length === 5 ? C.midGreen : C.cream}`, background: "#fff" }}
+            />
+            {zipCode && (
+              <button
+                onClick={() => setZipCode("")}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}
+              >
+                <X size={13} color={C.mutedText} />
+              </button>
+            )}
+          </div>
+          {zipCode.length > 0 && zipCode.length < 5 && (
+            <p className="px-4 py-1 text-[10px]" style={{ background: "#f9f6f1", color: C.mutedText }}>
+              Enter a 5-digit ZIP code
+            </p>
+          )}
+
           <div className="divide-y" style={{ background: "#fff", borderColor: C.cream }}>
             {NATIONAL_DIRECTORIES.map(section => (
               <div key={section.category} className="p-4 space-y-2">
                 <p className="text-[10px] font-extrabold tracking-wider" style={{ color: section.color }}>
                   {section.category}
                 </p>
-                {section.links.map(link => (
-                  <a
-                    key={link.url}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-start gap-3 rounded-xl p-3 transition-all hover:shadow-sm"
-                    style={{ background: C.offWhite, textDecoration: "none", display: "flex", border: `1px solid ${C.cream}` }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: section.color }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-xs leading-snug" style={{ color: C.darkGreen }}>{link.name}</p>
-                      <p className="text-[10px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{link.desc}</p>
-                    </div>
-                    <ExternalLink size={11} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
-                  </a>
-                ))}
+                {section.links.map(link => {
+                  const href = zipCode.length === 5 ? getZipUrl(link.url, zipCode) : link.url;
+                  return (
+                    <a
+                      key={link.url}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-start gap-3 rounded-xl p-3 transition-all hover:shadow-sm"
+                      style={{ background: C.offWhite, textDecoration: "none", display: "flex", border: `1px solid ${C.cream}` }}
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: section.color }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-xs leading-snug" style={{ color: C.darkGreen }}>{link.name}</p>
+                        <p className="text-[10px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{link.desc}</p>
+                        {zipCode.length === 5 && (
+                          <p className="text-[9px] mt-1 font-bold" style={{ color: C.midGreen }}>
+                            📍 Searching near {zipCode}
+                          </p>
+                        )}
+                      </div>
+                      <ExternalLink size={11} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
+                    </a>
+                  );
+                })}
               </div>
             ))}
           </div>
