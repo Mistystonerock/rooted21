@@ -100,10 +100,10 @@
 
 @layer base {
   input, textarea, select {
-    color: #2A1F14 !important;
+    color: #000000 !important;
   }
   input::placeholder, textarea::placeholder {
-    color: #9e9284 !important;
+    color: #888070 !important;
     opacity: 1;
   }
 
