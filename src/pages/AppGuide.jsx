@@ -9,9 +9,9 @@ const SECTIONS = [
     emoji: "🌳",
     title: "What is Rooted 21?",
     color: C.darkGreen,
-    content: `Rooted 21 is a trauma-informed parenting support network built specifically for foster, adoptive, and kinship families — and the professionals who serve them.
+    content: `Rooted 21 is a parenting support community built to help parents, families, and communities thrive together. Whether you're navigating tough moments at home, building stronger connections with your children, or looking for support from others who get it — you're in the right place.
 
-The app is grounded in TBRI® (Trust-Based Relational Intervention), developed by Dr. Karyn Purvis at TCU. Every feature is designed to help parents feel less alone, build stronger connections with their children, and get the right support at the right time.`,
+Every feature is grounded in TBRI® (Trust-Based Relational Intervention), developed by Dr. Karyn Purvis at TCU. Our mission is simple: help parents feel seen, supported, and equipped — and strengthen the communities around every child.`,
   },
   {
     emoji: "🧠",
