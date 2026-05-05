@@ -164,10 +164,10 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Respite Care</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Find vetted providers</p>
           </Link>
-          <Link to="/resource-library" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <Link to="/personalized-legal-feed" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <Library size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Resource Library</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Guides, books & articles</p>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Legal Feed</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Articles for your cases</p>
           </Link>
           <Link to="/safety-plan" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <Shield size={22} color={C.brown} />

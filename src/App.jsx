@@ -12,6 +12,7 @@ import routes from '@/hooks/useLazyLoadRoutes';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
+import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
 import TabStack from '@/components/mobile/TabStack';
 import ConsentGate from '@/components/ConsentGate';
 import SubscriptionGate from '@/components/SubscriptionGate';
@@ -115,6 +116,7 @@ const AuthenticatedApp = () => {
         <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseDetail /></Suspense>} />
         <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseStatusReport /></Suspense>} />
         <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><ScheduleFamilyMeeting /></Suspense>} />
+        <Route path="/personalized-legal-feed" element={<Suspense fallback={<LoadingFallback />}><PersonalizedLegalFeed /></Suspense>} />
         <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><routes.LegalKnowledgeBase /></Suspense>} />
         <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><routes.SystemGuides /></Suspense>} />
         <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />
