@@ -148,14 +148,23 @@ export default function CaseDetail() {
           </div>
         </div>
 
-        {/* Generate report button */}
-        <Link
-          to={`/case-status-report/${caseId}`}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
-          style={{ background: C.gold, color: "#fff", textDecoration: "none" }}
-        >
-          <Download size={16} /> Generate Case Status Report
-        </Link>
+        {/* Action buttons */}
+        <div className="grid grid-cols-2 gap-3">
+          <Link
+            to={`/case-status-report/${caseId}`}
+            className="flex items-center justify-center gap-1 py-3 rounded-xl font-bold text-xs"
+            style={{ background: C.gold, color: "#fff", textDecoration: "none" }}
+          >
+            <Download size={14} /> Report
+          </Link>
+          <Link
+            to={`/schedule-family-meeting/${caseId}`}
+            className="flex items-center justify-center gap-1 py-3 rounded-xl font-bold text-xs"
+            style={{ background: C.midGreen, color: "#fff", textDecoration: "none" }}
+          >
+            <Users size={14} /> Meeting
+          </Link>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-1 border-b" style={{ borderColor: C.cream }}>

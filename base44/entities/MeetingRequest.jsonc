@@ -1,0 +1,108 @@
+{
+  "name": "MeetingRequest",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the CaseFile this meeting relates to"
+    },
+    "case_name": {
+      "type": "string",
+      "description": "Child's name for easy reference"
+    },
+    "parent_email": {
+      "type": "string",
+      "description": "Email of parent requesting the meeting"
+    },
+    "parent_name": {
+      "type": "string",
+      "description": "Name of parent requesting the meeting"
+    },
+    "meeting_type": {
+      "type": "string",
+      "enum": [
+        "team_check_in",
+        "strategic_planning",
+        "crisis_response",
+        "progress_review",
+        "other"
+      ],
+      "default": "team_check_in",
+      "description": "Type of meeting being requested"
+    },
+    "requested_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Preferred date for the meeting"
+    },
+    "requested_time": {
+      "type": "string",
+      "description": "Preferred time (e.g. 2:00 PM)"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 60,
+      "description": "Estimated meeting duration in minutes"
+    },
+    "agenda": {
+      "type": "string",
+      "description": "Topics to discuss"
+    },
+    "meeting_format": {
+      "type": "string",
+      "enum": [
+        "virtual",
+        "in_person",
+        "hybrid"
+      ],
+      "default": "virtual",
+      "description": "How the meeting will be held"
+    },
+    "meeting_link": {
+      "type": "string",
+      "description": "Video conference link (if virtual)"
+    },
+    "meeting_location": {
+      "type": "string",
+      "description": "Physical location (if in-person)"
+    },
+    "invited_team_members": {
+      "type": "array",
+      "description": "Team members invited",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "confirmed",
+        "completed",
+        "cancelled"
+      ],
+      "default": "requested",
+      "description": "Current status of the meeting request"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or requests"
+    }
+  },
+  "required": [
+    "case_id",
+    "parent_email",
+    "meeting_type"
+  ]
+}
