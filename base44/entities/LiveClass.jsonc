@@ -1,0 +1,39 @@
+{
+  "name": "LiveClass",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Class title"
+    },
+    "abbr": {
+      "type": "string",
+      "description": "Short abbreviation label (e.g. PPSW)"
+    },
+    "date": {
+      "type": "string",
+      "description": "Date of the class (e.g. Friday, June 6, 2025)"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of the class (e.g. 6:00 PM EST)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the class"
+    },
+    "join_url": {
+      "type": "string",
+      "description": "Teams or Zoom join link"
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this class is visible to users"
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ]
+}
