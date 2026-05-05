@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X, Download } from "lucide-react";
+import DocumentManager from "@/components/case/DocumentManager";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -14,6 +15,7 @@ export default function CaseDetail() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showNoteForm, setShowNoteForm] = useState(false);
   const [newNote, setNewNote] = useState({ title: "", body: "", note_type: "update" });
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -230,31 +232,13 @@ export default function CaseDetail() {
         )}
 
         {activeTab === "documents" && (
-          <div className="space-y-3">
-            {caseFile.documents && caseFile.documents.length > 0 ? (
-              caseFile.documents.map(doc => (
-                <div key={doc.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
-                  <div className="flex items-start gap-2">
-                    <FileText size={16} color={C.brown} className="mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{doc.title}</p>
-                      {doc.due_date && (
-                        <p className="text-[10px] mt-1" style={{ color: new Date(doc.due_date) < new Date() ? "#B84C2A" : C.mutedText }}>
-                          📅 Due: {new Date(doc.due_date).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                    {doc.file_url && (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-2 py-1 rounded" style={{ background: C.cream, color: C.brown, textDecoration: "none" }}>
-                        View
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-xs text-center" style={{ color: C.mutedText }}>No documents uploaded yet</p>
-            )}
+          <div key={refreshKey}>
+            <DocumentManager 
+              caseId={caseId} 
+              caseFile={caseFile} 
+              user={user}
+              onRefresh={() => setRefreshKey(prev => prev + 1)}
+            />
           </div>
         )}
 

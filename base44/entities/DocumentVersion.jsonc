@@ -1,0 +1,99 @@
+{
+  "name": "DocumentVersion",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the CaseFile"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Unique ID for the document (shared across versions)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "agreement",
+        "form",
+        "medical",
+        "legal",
+        "court_order",
+        "iep",
+        "other"
+      ],
+      "description": "Type of document"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to the document file"
+    },
+    "version_number": {
+      "type": "number",
+      "description": "Version number (1, 2, 3...)"
+    },
+    "uploaded_by_email": {
+      "type": "string",
+      "description": "Email of person who uploaded this version"
+    },
+    "uploaded_by_name": {
+      "type": "string",
+      "description": "Name of person who uploaded"
+    },
+    "change_description": {
+      "type": "string",
+      "description": "What changed in this version"
+    },
+    "requires_signature": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this document needs e-signatures"
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": [
+        "unsigned",
+        "pending",
+        "signed"
+      ],
+      "default": "unsigned",
+      "description": "Current signature status"
+    },
+    "signatories": {
+      "type": "array",
+      "description": "Who needs to/has signed",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "signed": {
+            "type": "boolean"
+          },
+          "signed_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "case_id",
+    "document_id",
+    "title",
+    "file_url",
+    "version_number",
+    "uploaded_by_email"
+  ]
+}
