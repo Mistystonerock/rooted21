@@ -1,10 +1,108 @@
 import { useEffect, useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Search, X, Users } from "lucide-react";
+import { Search, X, Users, ExternalLink } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ProfessionalCard from "@/components/directory/ProfessionalCard";
 import ConsultationModal from "@/components/directory/ConsultationModal";
+
+const NATIONAL_DIRECTORIES = [
+  {
+    category: "🧠 Therapists & Counselors",
+    color: C.gold,
+    links: [
+      {
+        name: "Psychology Today – Find a Therapist",
+        desc: "Largest U.S. therapist directory. Filter by insurance, issue, and distance.",
+        url: "https://www.psychologytoday.com/us/therapists",
+      },
+      {
+        name: "Kids Therapy Finder",
+        desc: "11,000+ pediatric counselors, therapists & specialists across the U.S.",
+        url: "https://www.kidstherapyfinder.com/",
+      },
+      {
+        name: "Inclusive Therapists",
+        desc: "Verified mental health providers centering BIPOC, LGBTQ+, and marginalized communities.",
+        url: "https://www.inclusivetherapists.com/",
+      },
+      {
+        name: "Childhelp Partnership – Find a Therapist",
+        desc: "Guide and directory for finding trauma-trained child therapists nationwide.",
+        url: "https://www.childhelppartnership.org/parents-and-caregivers/find-a-therapist/",
+      },
+    ],
+  },
+  {
+    category: "🌱 TBRI® Practitioners",
+    color: C.midGreen,
+    links: [
+      {
+        name: "TCU KPICD – TBRI® Practitioner Directory",
+        desc: "Official directory of TBRI®-trained practitioners in all 50 states and 69 countries.",
+        url: "https://child.tcu.edu/find-a-practitioner/",
+      },
+      {
+        name: "OLS TBRI® Practitioner Directory",
+        desc: "Searchable online directory of certified TBRI® practitioners.",
+        url: "https://myols.net/kpicd/user-directory/practitioner",
+      },
+    ],
+  },
+  {
+    category: "👨‍👩‍👧 Co-Parenting Coaches",
+    color: C.brown,
+    links: [
+      {
+        name: "Peaceful Parent Happy Kids – Coach Directory",
+        desc: "Certified coaches specializing in co-parenting, divorce, blended families & more.",
+        url: "https://www.peacefulparenthappykids.com/coaches-directory",
+      },
+      {
+        name: "Jai Institute – Parenting Coach Directory",
+        desc: "Find a parenting coach near you for co-parenting and family support.",
+        url: "https://coaches.jaiinstituteforparenting.com/",
+      },
+      {
+        name: "ABC Parenting – Find a Parent Coach",
+        desc: "Locate an ABC-certified parent coach by state.",
+        url: "https://www.abcparenting.org/findaparentcoach/",
+      },
+      {
+        name: "Family Life Coaching Association – Coach Directory",
+        desc: "Browse certified family life coaches across the U.S.",
+        url: "https://flcassociation.org/coach-directory/",
+      },
+    ],
+  },
+  {
+    category: "⚖️ Child Welfare & Advocacy",
+    color: "#B84C2A",
+    links: [
+      {
+        name: "Child Welfare Information Gateway",
+        desc: "Federal resource hub for child welfare research, services, and professional referrals.",
+        url: "https://www.childwelfare.gov/",
+      },
+      {
+        name: "Parent Advocacy – Referral Platform USA",
+        desc: "Helps parents navigate the child welfare system and find legal advocates.",
+        url: "https://parentadvocacy.net/ldbrp/the-referral-platform-usa/",
+      },
+    ],
+  },
+  {
+    category: "🏡 Foster & Adoptive Family Support",
+    color: "#5B8DB8",
+    links: [
+      {
+        name: "National Directory of Adoption Competent Professionals",
+        desc: "Hundreds of mental health therapists nationwide with adoption-competency training.",
+        url: "https://adoptionsupport.org/national-directory/",
+      },
+    ],
+  },
+];
 
 const SPECIALTIES = [
   { value: "all",        label: "All",              emoji: "👥" },
@@ -244,6 +342,42 @@ export default function ProfessionalDirectory() {
             ))}
           </div>
         )}
+
+        {/* National Referral Directories */}
+        <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.midGreen}` }}>
+          <div className="px-4 py-3" style={{ background: C.darkGreen }}>
+            <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>🗺️ National Referral Directories</p>
+            <p className="text-[10px] mt-0.5" style={{ color: C.lightGreen }}>
+              Real, vetted referral sites covering therapists, TBRI® practitioners, co-parenting coaches & child welfare advocates across the U.S.
+            </p>
+          </div>
+          <div className="divide-y" style={{ background: "#fff", borderColor: C.cream }}>
+            {NATIONAL_DIRECTORIES.map(section => (
+              <div key={section.category} className="p-4 space-y-2">
+                <p className="text-[10px] font-extrabold tracking-wider" style={{ color: section.color }}>
+                  {section.category}
+                </p>
+                {section.links.map(link => (
+                  <a
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-start gap-3 rounded-xl p-3 transition-all hover:shadow-sm"
+                    style={{ background: C.offWhite, textDecoration: "none", display: "flex", border: `1px solid ${C.cream}` }}
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: section.color }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-xs leading-snug" style={{ color: C.darkGreen }}>{link.name}</p>
+                      <p className="text-[10px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{link.desc}</p>
+                    </div>
+                    <ExternalLink size={11} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Note */}
         <div className="rounded-xl p-3.5 text-center" style={{ background: C.cream }}>
