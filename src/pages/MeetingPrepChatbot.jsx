@@ -136,15 +136,28 @@ Recent Notes: ${notes.slice(0, 3).map(n => `${n.title}: ${n.body.substring(0, 10
             </p>
           </div>
 
+          {/* Start without a case */}
+          <button
+            onClick={() => {
+              setSelectedCase(null);
+              setConversationContext("No specific case selected. Help the parent prepare for a meeting.");
+              setPhase("chatting");
+              setMessages([{
+                role: "assistant",
+                content: "I'm your Meeting Prep Assistant! I can help you:\n\n1. **Simulate a meeting** — I'll roleplay as school staff, court officials, or doctors\n2. **Practice tough questions** — get comfortable before the real thing\n3. **Generate talking points** — a cheat sheet to bring with you\n\nWhat type of meeting are you preparing for? (e.g., IEP meeting, court hearing, therapy session)"
+              }]);
+            }}
+            className="w-full rounded-2xl p-4 text-left transition-all hover:shadow-md"
+            style={{ background: C.darkGreen, border: "none", cursor: "pointer" }}
+          >
+            <p className="font-bold text-sm" style={{ color: C.cream }}>💬 Start General Meeting Prep</p>
+            <p className="text-xs mt-0.5" style={{ color: C.lightGreen }}>No case needed — just start chatting</p>
+          </button>
+
           {/* Select case */}
-          <div>
-            <p className="text-xs font-bold mb-3" style={{ color: C.mutedText }}>SELECT A CASE TO PREP FOR</p>
-            {cases.length === 0 ? (
-              <div className="rounded-2xl p-6 text-center" style={{ background: C.cream }}>
-                <p className="text-sm font-bold" style={{ color: C.darkGreen }}>No cases found</p>
-                <p className="text-xs mt-1" style={{ color: C.mutedText }}>Create a case first to prepare for meetings</p>
-              </div>
-            ) : (
+          {cases.length > 0 && (
+            <div>
+              <p className="text-xs font-bold mb-3" style={{ color: C.mutedText }}>OR PREP FOR A SPECIFIC CASE</p>
               <div className="space-y-2">
                 {cases.map(caseFile => (
                   <button
@@ -167,8 +180,8 @@ Recent Notes: ${notes.slice(0, 3).map(n => `${n.title}: ${n.body.substring(0, 10
                   </button>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="pb-8" />
         </div>
