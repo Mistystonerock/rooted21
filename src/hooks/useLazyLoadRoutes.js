@@ -58,6 +58,7 @@ const routes = {
   InstructorFeedbackDashboard: lazy(() => import("@/pages/InstructorFeedbackDashboard")),
   InstructorAnalytics: lazy(() => import("@/pages/InstructorAnalytics")),
   CaseManagement: lazy(() => import("@/pages/CaseManagement")),
+  CaseManagementNew: lazy(() => import("@/pages/CaseManagementNew")),
   LegalKnowledgeBase: lazy(() => import("@/pages/LegalKnowledgeBase")),
   SystemGuides: lazy(() => import("@/pages/SystemGuides")),
   MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),

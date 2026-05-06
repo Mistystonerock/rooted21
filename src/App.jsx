@@ -113,6 +113,7 @@ const AuthenticatedApp = () => {
         <Route path="/instructor-feedback" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorFeedbackDashboard /></Suspense>} />
         <Route path="/instructor-analytics" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorAnalytics /></Suspense>} />
         <Route path="/case-management" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagement /></Suspense>} />
+        <Route path="/case-management-new" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagementNew /></Suspense>} />
         <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseDetail /></Suspense>} />
         <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseStatusReport /></Suspense>} />
         <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><ScheduleFamilyMeeting /></Suspense>} />
