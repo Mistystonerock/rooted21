@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -146,14 +147,14 @@ export default function SystemGuides() {
         </div>
 
         {/* Bottom note */}
-        <a href="/meeting-prep-chatbot" className="block rounded-xl p-3.5 text-center transition-all hover:shadow-md" style={{ background: C.cream, textDecoration: "none" }}>
+        <Link to="/meeting-prep-chatbot" className="block rounded-xl p-3.5 text-center transition-all hover:shadow-md" style={{ background: C.cream, textDecoration: "none" }}>
           <p className="text-xs font-bold" style={{ color: C.darkGreen }}>
             💬 Open Meeting Prep Assistant
           </p>
           <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>
             Simulate meetings & practice tough questions
           </p>
-        </a>
+        </Link>
 
         <div className="pb-8" />
       </div>

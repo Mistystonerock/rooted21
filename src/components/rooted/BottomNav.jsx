@@ -3,7 +3,7 @@ import { C } from "@/lib/rooted-constants";
 import { Home, BookOpen, Target, TrendingUp, MessageCircle } from "lucide-react";
 
 const NAV = [
-  { path: "/", label: "Home", icon: Home },
+  { path: "/dashboard", label: "Dashboard", icon: Home },
   { path: "/chat", label: "AI Chat", icon: MessageCircle },
   { path: "/lessons", label: "Lessons", icon: BookOpen },
   { path: "/goals", label: "Goals", icon: Target },

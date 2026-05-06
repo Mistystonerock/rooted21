@@ -231,6 +231,83 @@ Milestones celebrate your growth and give you visible proof of the hard work you
     linkLabel: "View Live Classes →",
   },
   {
+    emoji: "⚖️",
+    title: "Case Management",
+    color: C.darkGreen,
+    content: `Organize your family's school, court, and medical cases in one place. For each case you can:
+
+• Track key issues, milestones, and deadlines
+• Upload and manage case documents with version history
+• Add team members (therapists, attorneys, teachers)
+• Create and assign tasks to team members
+• Write case notes (updates, wins, concerns, meeting notes)
+• Generate a full case status report PDF
+• Schedule family team meetings`,
+    link: "/case-management",
+    linkLabel: "Case Management →",
+  },
+  {
+    emoji: "🔒",
+    title: "Secure Document Repository",
+    color: C.darkGreen,
+    content: `A private vault for all your sensitive documents — court orders, IEPs, medical records, legal filings, and more.
+
+• Upload any file type (PDF, images, Word docs)
+• Tag and categorize every document
+• Set expiry/review reminder dates
+• Keep documents private or share with specific team members
+• Generate personal access codes emailed directly to professionals — they enter the code to unlock and view the file
+• Full audit trail of who viewed or downloaded each document`,
+    link: "/documents",
+    linkLabel: "Secure Documents →",
+  },
+  {
+    emoji: "🗺️",
+    title: "System Navigation Guides",
+    color: C.brown,
+    content: `Step-by-step guides for navigating complex systems:
+
+• IEP Meeting Preparation & Navigation
+• Court Hearing Preparation
+• Medical Appointment Advocacy
+• Working with CPS or Child Welfare
+• School Discipline & Due Process
+• 504 Plan vs. IEP: Which Do You Need?
+
+Each guide walks you through exactly what to do, say, and bring.`,
+    link: "/system-guides",
+    linkLabel: "System Guides →",
+  },
+  {
+    emoji: "📖",
+    title: "Legal Knowledge Base",
+    color: C.brown,
+    content: `A searchable library of legal rights and resources covering:
+
+• Education Rights (IDEA, FAPE, LRE, IEP rights)
+• Family Law (child support, custody, visitation)
+• Child Welfare (reunification, TPR, ICWA)
+• Medical Rights (HIPAA, informed consent, treatment decisions)
+
+Search by keyword or browse by category.`,
+    link: "/legal-knowledge-base",
+    linkLabel: "Legal Knowledge Base →",
+  },
+  {
+    emoji: "💬",
+    title: "Meeting Prep Assistant",
+    color: C.midGreen,
+    content: `An AI chatbot that helps you prepare for critical meetings:
+
+• Simulate an IEP meeting, court hearing, or therapy session — the AI plays the role of school staff, judge, or doctor
+• Practice answering tough questions before the real thing
+• Generate a downloadable talking points cheat sheet you can bring to any meeting
+
+Works with or without a linked case file.`,
+    link: "/meeting-prep-chatbot",
+    linkLabel: "Meeting Prep Assistant →",
+  },
+  {
     emoji: "📞",
     title: "Crisis Resources",
     color: "#B84C2A",
