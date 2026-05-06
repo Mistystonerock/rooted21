@@ -62,6 +62,7 @@ const routes = {
   LegalKnowledgeBase: lazy(() => import("@/pages/LegalKnowledgeBase")),
   SystemGuides: lazy(() => import("@/pages/SystemGuides")),
   MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),
+  SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
 };
 
 export default routes;

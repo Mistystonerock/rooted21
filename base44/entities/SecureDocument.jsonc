@@ -1,0 +1,87 @@
+{
+  "name": "SecureDocument",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "Email of the user who uploaded this document"
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the document"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "court_order",
+        "iep",
+        "medical",
+        "legal",
+        "school",
+        "therapy",
+        "financial",
+        "other"
+      ],
+      "description": "Document category"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Custom tags for searching",
+      "items": {
+        "type": "string"
+      }
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL of the uploaded file"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this document relates to"
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Associated case ID (optional)"
+    },
+    "shared_with": {
+      "type": "array",
+      "description": "Emails of team members this document is shared with",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_private": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether document is private (only owner) or shared"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Document expiry or review date (optional)"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Version number"
+    }
+  },
+  "required": [
+    "owner_email",
+    "title",
+    "category",
+    "file_url"
+  ]
+}
