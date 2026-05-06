@@ -34,17 +34,29 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
           <TreeLogo size={64} />
         </div>
         <div className="font-serif text-4xl font-bold" style={{ color: C.cream }}>
-          Rooted <span className="italic" style={{ color: C.gold }}>21</span>
+          Rooted <span className="italic" style={{ color: C.gold }}>Parenting Network</span>
         </div>
         <div
-          className="text-[11px] font-extrabold tracking-[3px]"
+          className="text-[11px] font-extrabold tracking-[3px] mt-1"
           style={{ color: C.lightGreen }}
         >
-          PARENTING RESET PROGRAM
+          PROFESSIONAL FEATURE MAP &amp; APP BLUEPRINT
         </div>
-        <p className="font-serif text-sm italic mt-1" style={{ color: C.cream }}>
-          Stronger Parents. Stronger Kids. Stronger Families.
+        <p className="text-xs mt-2 leading-relaxed max-w-[320px] mx-auto" style={{ color: C.cream }}>
+          A trauma-informed parenting and child-support platform designed to help parents, courts, CPS, counselors, schools, and support teams stay informed, organized, and consistent around a child's needs.
         </p>
+        {/* Badge row */}
+        <div className="flex flex-wrap justify-center gap-2 mt-3">
+          {["Trauma-Informed", "Parent + Provider Aligned", "Agency Ready", "Mobile-First"].map(badge => (
+            <span
+              key={badge}
+              className="text-[10px] font-bold px-2.5 py-1 rounded-full"
+              style={{ background: "rgba(255,255,255,0.12)", color: C.gold, border: `1px solid ${C.gold}40` }}
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Subheader */}
@@ -159,7 +171,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
           className="text-center text-[11px] mt-5 leading-loose"
           style={{ color: C.mutedText }}
         >
-          Rooted 21 Parenting Network
+          Rooted Parenting Network
           <br />
           Crisis: call or text <strong>988</strong>
         </p>
