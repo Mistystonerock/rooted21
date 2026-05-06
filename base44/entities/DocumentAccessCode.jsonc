@@ -1,0 +1,69 @@
+{
+  "name": "DocumentAccessCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Unique 8-character access code"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "ID of the SecureDocument this grants access to"
+    },
+    "document_title": {
+      "type": "string",
+      "description": "Title of the document (for display)"
+    },
+    "document_category": {
+      "type": "string",
+      "description": "Category of the document"
+    },
+    "granted_by_email": {
+      "type": "string",
+      "description": "Email of the person who created this access code"
+    },
+    "granted_by_name": {
+      "type": "string",
+      "description": "Name of the person who created this access code"
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email of the person the code was sent to"
+    },
+    "recipient_name": {
+      "type": "string",
+      "description": "Name of the recipient"
+    },
+    "is_used": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the code has been redeemed"
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the code was used"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the code expires (default 30 days)"
+    },
+    "is_revoked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the owner has revoked this code"
+    },
+    "access_note": {
+      "type": "string",
+      "description": "Optional message to recipient explaining the access"
+    }
+  },
+  "required": [
+    "code",
+    "document_id",
+    "granted_by_email",
+    "recipient_email",
+    "expires_at"
+  ]
+}

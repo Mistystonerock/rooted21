@@ -4,7 +4,8 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import DocumentCard from "@/components/documents/DocumentCard";
 import DocumentUploadModal from "@/components/documents/DocumentUploadModal";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search } from "lucide-react";
+import RedeemCodePanel from "@/components/documents/RedeemCodePanel";
 
 const CATEGORY_FILTERS = [
   { value: "all", label: "All", emoji: "📁" },
@@ -118,6 +119,9 @@ export default function SecureDocumentRepository() {
             )}
           </div>
         </div>
+
+        {/* Redeem code panel */}
+        <RedeemCodePanel onRedeemed={handleUploaded} />
 
         {/* Upload button */}
         <button

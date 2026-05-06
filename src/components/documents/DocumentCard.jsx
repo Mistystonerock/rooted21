@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Eye, Download, Share2, Trash2, Lock, Users, Calendar, Tag } from "lucide-react";
+import { Eye, Download, Share2, Trash2, Lock, Users, Calendar, KeyRound } from "lucide-react";
+import SendAccessCodeModal from "./SendAccessCodeModal";
 
 const CATEGORY_META = {
   court_order: { emoji: "⚖️", label: "Court Order", color: "#B84C2A" },
@@ -16,6 +17,7 @@ const CATEGORY_META = {
 
 export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShareUpdated }) {
   const [showShareEdit, setShowShareEdit] = useState(false);
+  const [showSendCode, setShowSendCode] = useState(false);
   const [shareInput, setShareInput] = useState(doc.shared_with?.join(", ") || "");
   const [saving, setSaving] = useState(false);
 
@@ -148,6 +150,10 @@ export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShare
           </button>
           {isOwner && (
             <>
+              <button onClick={() => setShowSendCode(true)} className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
+                style={{ background: C.gold, color: "#fff", border: "none", cursor: "pointer" }} title="Send Access Code">
+                <KeyRound size={12} />
+              </button>
               <button onClick={() => setShowShareEdit(!showShareEdit)} className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
                 style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}>
                 <Share2 size={12} />
@@ -160,6 +166,13 @@ export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShare
           )}
         </div>
       </div>
+
+      {showSendCode && (
+        <SendAccessCodeModal
+          doc={doc}
+          onClose={() => setShowSendCode(false)}
+        />
+      )}
     </div>
   );
 }
