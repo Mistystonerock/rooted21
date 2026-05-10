@@ -49,7 +49,7 @@ const PILLARS = [
   { emoji: "🌳", title: "Trauma-Informed Parenting", desc: "Evidence-based tools grounded in attachment science and trust-based principles — translated into daily, doable steps." },
   { emoji: "💙", title: "For Foster, Adoptive & Kinship Families", desc: "Built specifically for caregivers of children from hard places. No one-size-fits-all advice here." },
   { emoji: "🤝", title: "Community Without Judgment", desc: "A safe space where parents can be honest about the hard days and celebrate the wins together." },
-  { emoji: "🏛️", title: "Nonprofit. Free at Heart.", desc: "We believe every family deserves support, regardless of income. Our mission is access, not profit." },
+  { emoji: "🏛️", title: "Accessible & Affordable", desc: "We believe every family deserves support, regardless of income. Our mission is access for the families who need it most." },
 ];
 
 const FAMILY_TYPES = [
@@ -105,7 +105,7 @@ export default function Launch() {
           className="mb-6 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase"
           style={{ background: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.2)" }}
         >
-          501(c)(3) Nonprofit Organization
+          Parenting Support Network
         </span>
 
         <TreeLogo size={64} />
@@ -165,7 +165,7 @@ export default function Launch() {
           </span>
           <h2 className="font-serif font-bold text-2xl mt-4 mb-3" style={{ color: C.darkGreen, lineHeight: 1.3 }}>
             Every family deserves support —<br />
-            <span style={{ color: C.gold }}>not just the ones who can afford it.</span>
+            <span style={{ color: C.gold }}>wherever they are.</span>
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
             In too many towns across America, there are no parenting classes, no trauma-informed support groups, 
@@ -173,8 +173,8 @@ export default function Launch() {
             Rooted 21 exists to change that.
           </p>
           <p className="text-sm leading-relaxed mt-3" style={{ color: "#3a3028" }}>
-            We are a nonprofit bringing <strong>research-backed, trauma-informed parenting tools</strong> directly 
-            to families — through a free app, live classes, and a community built on grace, not judgment.
+            We are bringing <strong>research-backed, trauma-informed parenting tools</strong> directly 
+            to families — through an app, live classes, and a community built on grace, not judgment.
           </p>
         </div>
 
@@ -377,7 +377,7 @@ export default function Launch() {
             Rooted 21 Parenting Network
           </p>
           <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>
-            A 501(c)(3) Nonprofit Organization · Stronger Parents. Stronger Kids. Stronger Families.
+            Stronger Parents. Stronger Kids. Stronger Families.
           </p>
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function Dashboard() {
               Rooted <span style={{ color: C.gold }}>21</span>
             </div>
             <MobileText variant="caption" style={{ color: C.lightGreen }}>
-              NONPROFIT · PARENTING NETWORK
+              PARENTING NETWORK
             </MobileText>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
@@ -112,7 +112,7 @@ export default function Dashboard() {
             Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌳
           </p>
           <p className="text-xs mt-0.5" style={{ color: C.lightGreen }}>
-            You are not alone in this journey. · Rooted 21 is a 501(c)(3) nonprofit — free for every family.
+            You are not alone in this journey.
           </p>
         </div>
 
