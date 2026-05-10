@@ -79,6 +79,7 @@ const routes = {
   AgingOutGuide: lazy(() => import("@/pages/AgingOutGuide")),
   RightsCard: lazy(() => import("@/pages/RightsCard")),
   ChildLifeStory: lazy(() => import("@/pages/ChildLifeStory")),
+  PeerSupport: lazy(() => import("@/pages/PeerSupport")),
 };
 
 export default routes;
