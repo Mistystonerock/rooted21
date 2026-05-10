@@ -16,6 +16,7 @@ import PersonalizedChat from '@/pages/PersonalizedChat';
 import GrowthInsights from '@/pages/GrowthInsights';
 import EmergencyToolbox from '@/pages/EmergencyToolbox';
 import Launch from '@/pages/Launch';
+import CourtReadyExport from '@/pages/CourtReadyExport';
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
               <Route path="/behavioral-trends" element={<Suspense fallback={<LoadingFallback />}><routes.BehavioralTrends /></Suspense>} />
               <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><routes.JobResources /></Suspense>} />
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><EmergencyToolbox /></Suspense>} />
+              <Route path="/court-ready-export" element={<CourtReadyExport />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
