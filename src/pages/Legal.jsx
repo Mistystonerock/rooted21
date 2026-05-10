@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // kept for potential links
+import { Link } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { FileText, ScrollText, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { FileText, ScrollText, AlertTriangle, CheckCircle2, PenLine } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import DocumentSigningModal from "@/components/legal/DocumentSigningModal";
 
 const SECTIONS = [
   { id: "terms", label: "Terms of Service", icon: FileText },
@@ -253,9 +255,25 @@ function DocumentSection({ docId, heading, content }) {
   );
 }
 
+// Docs that support signing
+const SIGNABLE_DOCS = ["consent", "disclaimer"];
+
 export default function Legal() {
   const [activeTab, setActiveTab] = useState("terms");
+  const [signingDoc, setSigningDoc] = useState(null);
+  const [user, setUser] = useState(null);
+  const [signedDocs, setSignedDocs] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("rooted21_signed_docs") || "[]"); } catch { return []; }
+  });
   const activeDoc = CONTENT[activeTab];
+
+  useState(() => { base44.auth.me().then(setUser); }, []);
+
+  function handleSigned(docId) {
+    const updated = [...new Set([...signedDocs, docId])];
+    setSignedDocs(updated);
+    localStorage.setItem("rooted21_signed_docs", JSON.stringify(updated));
+  }
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -304,19 +322,26 @@ export default function Legal() {
           {/* Sections */}
           <DocumentSection docId={activeTab} />
 
-          {/* Consent Checkbox (only for consent tab) */}
-          {activeTab === "consent" && (
-            <div className="rounded-xl p-4 mt-6" style={{ background: `${C.midGreen}12`, border: `1px solid ${C.midGreen}30` }}>
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="mt-1 w-4 h-4"
-                  style={{ accentColor: C.darkGreen }}
-                />
-                <span className="text-xs leading-relaxed" style={{ color: C.darkGreen }}>
-                  I acknowledge that I have read and agree to all consent forms, understand the limitations of Rooted 21, and take responsibility for my family's use of this app.
-                </span>
-              </label>
+          {/* Sign button for signable docs */}
+          {SIGNABLE_DOCS.includes(activeTab) && (
+            <div className="mt-6">
+              {signedDocs.includes(activeTab) ? (
+                <div className="rounded-xl p-4 flex items-center gap-3" style={{ background: "#EAF4EA", border: `1.5px solid ${C.midGreen}` }}>
+                  <CheckCircle2 size={18} color={C.midGreen} />
+                  <div>
+                    <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Signed & Saved</p>
+                    <p className="text-[10px]" style={{ color: C.mutedText }}>This document has been signed and saved to your file repository.</p>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setSigningDoc(activeTab)}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+                  style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                >
+                  <PenLine size={16} /> Review & Sign Document
+                </button>
+              )}
             </div>
           )}
 
@@ -340,6 +365,15 @@ export default function Legal() {
 
         <div className="pb-8" />
       </div>
+
+      {signingDoc && (
+        <DocumentSigningModal
+          document={CONTENT[signingDoc]}
+          user={user}
+          onClose={() => setSigningDoc(null)}
+          onSigned={() => handleSigned(signingDoc)}
+        />
+      )}
     </div>
   );
 }
