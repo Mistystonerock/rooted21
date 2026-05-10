@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { FOLLOW_UP_DEFAULTS } from "@/lib/rooted-constants";
+import { buildMilestoneContext } from "@/lib/developmental-milestones";
 import { ChevronLeft, Send, RefreshCw, AlertTriangle, Brain, ChevronDown, ChevronUp } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import ChatMessage from "@/components/rooted/ChatMessage";
@@ -115,7 +116,10 @@ IMPORTANT: If there is any mention of danger, self-harm, abuse, or immediate saf
 After your response, add exactly this JSON block:
 FOLLOWUPS:["[Relevant follow-up question 1 — specific to this family's situation]","[Relevant follow-up question 2]","[Relevant follow-up question 3]"]`;
 
-  return BASE_PROMPT + (context ? `\n\n===== FAMILY CONTEXT =====` + context : "");
+  // Append age-appropriate developmental milestones per child
+  const milestoneContext = buildMilestoneContext(children);
+
+  return BASE_PROMPT + (context ? `\n\n===== FAMILY CONTEXT =====` + context : "") + milestoneContext;
 }
 
 export default function PersonalizedChat() {
