@@ -6,23 +6,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense } from 'react';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
 import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
-import TabStack from '@/components/mobile/TabStack';
-import ConsentGate from '@/components/ConsentGate';
-import SubscriptionGate from '@/components/SubscriptionGate';
-// Add page imports here
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isAuthenticated, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth) {
+  if (isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -30,18 +24,11 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
+  if (!isAuthenticated) {
+    navigateToLogin();
+    return null;
   }
 
-  // Render the main app with lazy loading
   return (
     <AnimatePresence mode="wait">
       <Routes>
@@ -52,23 +39,13 @@ const AuthenticatedApp = () => {
             </motion.div>
           </Suspense>
         } />
-        {/* ── Bottom-tab routes: kept mounted for instant tab switching ── */}
         <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.Dashboard /></Suspense>} />
         <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><routes.Chat /></Suspense>} />
         <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><routes.Lessons /></Suspense>} />
         <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><routes.Goals /></Suspense>} />
         <Route path="/progress" element={<Suspense fallback={<LoadingFallback />}><routes.Progress /></Suspense>} />
-        <Route path="/profile" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Profile />
-          </Suspense>
-        } />
-        <Route path="/help" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <routes.Help />
-          </Suspense>
-        } />
-        {/* Secondary routes */}
+        <Route path="/profile" element={<Suspense fallback={<LoadingFallback />}><routes.Profile /></Suspense>} />
+        <Route path="/help" element={<Suspense fallback={<LoadingFallback />}><routes.Help /></Suspense>} />
         <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><routes.ChildProfile /></Suspense>} />
         <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><routes.ProfessionalPortal /></Suspense>} />
         <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><routes.Resources /></Suspense>} />
@@ -132,18 +109,12 @@ const AuthenticatedApp = () => {
   );
 };
 
-
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <SubscriptionGate>
-            <ConsentGate>
-              <AuthenticatedApp />
-            </ConsentGate>
-          </SubscriptionGate>
+          <AuthenticatedApp />
         </Router>
         <Toaster />
       </QueryClientProvider>
