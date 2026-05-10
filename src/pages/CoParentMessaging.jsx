@@ -2,8 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Send, ShieldCheck, Download, Loader2 } from "lucide-react";
+import { ChevronLeft, Send, ShieldCheck, Download, Loader2, ShieldAlert } from "lucide-react";
 import CoParentMessageConsentModal, { hasCoParentMessageConsent } from "@/components/legal/CoParentMessageConsentModal";
+import ConflictLanguageChecker from "@/components/messaging/ConflictLanguageChecker";
 
 const TOPICS = ["schedule", "health", "education", "behavior", "finances", "general"];
 
@@ -36,6 +37,7 @@ export default function CoParentMessaging() {
   const [sending, setSending] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
+  const [showConflictCheck, setShowConflictCheck] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -59,11 +61,11 @@ export default function CoParentMessaging() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function handleSend() {
-    const txt = input.trim();
+  async function doSend(txt) {
     if (!txt || sending) return;
     setSending(true);
     setInput("");
+    setShowConflictCheck(false);
 
     const sentAt = new Date().toISOString();
     const hash = await hashBody(txt);
@@ -93,6 +95,12 @@ export default function CoParentMessaging() {
 
     setMessages(prev => [...prev, { ...created, _hash: hash }]);
     setSending(false);
+  }
+
+  function handleSend() {
+    const txt = input.trim();
+    if (!txt || sending) return;
+    setShowConflictCheck(true);
   }
 
   async function handleExport() {
@@ -233,6 +241,16 @@ export default function CoParentMessaging() {
         <div ref={bottomRef} />
       </div>
 
+      {/* Conflict checker modal */}
+      {showConflictCheck && (
+        <ConflictLanguageChecker
+          message={input}
+          onSendOriginal={(txt) => doSend(txt)}
+          onSendRevised={(txt) => doSend(txt)}
+          onCancel={() => setShowConflictCheck(false)}
+        />
+      )}
+
       {/* Input */}
       <div className="px-4 py-3 flex gap-2 items-end"
         style={{ background: C.white, borderTop: `1px solid ${C.cream}` }}>
@@ -247,6 +265,10 @@ export default function CoParentMessaging() {
               <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
             ))}
           </select>
+          <div className="flex items-center gap-1.5 px-1 mb-1">
+            <ShieldAlert size={10} color={C.midGreen} />
+            <p className="text-[9px] font-bold" style={{ color: C.midGreen }}>AI tone check before sending</p>
+          </div>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
