@@ -10,6 +10,7 @@ const SECTIONS = [
   { id: "terms", label: "Terms of Service", icon: FileText },
   { id: "privacy", label: "Privacy Policy", icon: ScrollText },
   { id: "consent", label: "Consent Forms", icon: CheckCircle2 },
+  { id: "ohio", label: "Ohio Compliance", icon: AlertTriangle },
   { id: "tbri", label: "Terminology Guide", icon: AlertTriangle },
 ];
 
@@ -202,6 +203,48 @@ const CONTENT = {
     ],
   },
 
+  ohio: {
+    title: "Ohio Compliance & Risk Disclosures",
+    updated: "Last updated: May 10, 2026",
+    sections: [
+      {
+        heading: "Overview — Three High-Risk Areas Under Ohio Law",
+        content:
+          "Rooted 21 operates in a space that intersects Ohio child welfare law, family court procedure, and digital health technology. This page documents the platform's compliance posture for the three highest legal risk areas specifically applicable to Ohio users: (1) ORC §1349.09 child data protection, (2) Co-parenting message consent and court admissibility under ORC §3109.04, and (3) AI-generated parenting advice liability limitations.",
+      },
+      {
+        heading: "1. ORC §1349.09 — Ohio Child Data Protection Act",
+        content:
+          "Ohio Revised Code §1349.09 requires operators of digital platforms to obtain explicit parental authorization before collecting, storing, or processing personal data about children. Rooted 21 complies by: (a) Displaying a mandatory ORC §1349.09 authorization consent modal before any child profile data is entered — this consent is timestamped and logged in the user's local session record; (b) Limiting child data collection to information voluntarily entered by the authorized adult caregiver; (c) Never using child profile data for advertising, AI model training, or commercial purposes; (d) Providing parents with full rights to access, correct, and delete all child data upon request to mstonerock@rooted21parenting.com within 30 days; (e) Encrypting all child profile data at rest (AES-256) and in transit (TLS 1.3); (f) Retaining child data only while the account is active, with deletion within 30 days of account closure.",
+      },
+      {
+        heading: "2. ORC §3109.04 — Co-Parenting Messaging & Court Admissibility",
+        content:
+          "Under Ohio Revised Code §3109.04 (Allocation of parental rights and responsibilities), court-supervised communication records are routinely considered in custody determinations. Rooted 21's Co-Parent Portal is designed for this legal context: (a) MANDATORY CONSENT: Before a user sends their first message, they must complete a dual-checkbox consent modal acknowledging that all messages are court-admissible and that they consent to monitoring. This consent is timestamped. (b) TAMPER-PROOF RECORDS: Every message is cryptographically hashed (SHA-256) at send time and stored in an immutable MessageAuditLog. Any post-send alteration is detectable. (c) PERMANENT RECORD: Messages cannot be deleted by users. Records are preserved for the duration of the active case and archived per applicable court order. (d) COURT ACCESS: Judges, GALs, CASA volunteers, and attorneys of record may access message history at any time through court-authorized credentials. (e) PROHIBITED CONTENT: Threatening, harassing, or abusive messages are prohibited and may be flagged for immediate court review. (f) EXPORT: The full message thread can be exported as a court-formatted PDF at any time by either party.",
+      },
+      {
+        heading: "3. AI-Generated Advice — Liability Limitation & Disclosure",
+        content:
+          "Rooted 21's AI parenting support features present meaningful liability exposure if users rely on AI-generated content as professional advice. The following disclosures and protections are in place: (a) MANDATORY CONSENT GATE: Users must complete an AI disclaimer acknowledgment modal (AIConsentModal) before accessing AI chat features. This modal requires an explicit checkbox acknowledging that the AI is an educational support tool and not a licensed therapist, doctor, or attorney. Consent is timestamped. (b) PERSISTENT IN-CHAT DISCLAIMER: A visible banner in the AI chat interface states 'Educational support only — not medical, legal, or therapeutic advice' with a link to this legal page. (c) SYSTEM PROMPT HARDENING: The AI model is instructed to never diagnose, never recommend specific medications, never provide legal strategy, and to always route clinical, legal, or safety questions to licensed professionals. The model is prompted to include 911/988 crisis routing whenever safety risk is detected. (d) RESPONSE LABELING: AI-generated responses include the prefix context 'Rooted 21 is an educational support tool, not a licensed medical, therapeutic, or legal service.' (e) LIABILITY CAP: As stated in Terms of Service Section 5, Rooted 21's aggregate liability is capped at $100 or 3 months of subscription fees, whichever is greater. (f) NON-CLINICAL SCOPE: Rooted 21 does not market its AI features as therapy, counseling, psychiatric care, or legal services. All AI content is framed as 'parenting education' and 'coaching support.'",
+      },
+      {
+        heading: "4. HIPAA-Aligned Data Handling for Behavioral Health Records",
+        content:
+          "Although Rooted 21 is not a covered entity under HIPAA, behavioral health and trauma-related child data entered by parents is treated as Protected Health Information (PHI) as a best practice. This means: (a) PHI is never shared with third-party commercial entities; (b) Access to PHI is role-restricted and audit-logged; (c) Professionals access PHI only via parent-granted access codes; (d) PHI is not used to train AI models; (e) PHI is encrypted at rest and in transit. In the event of a suspected data breach affecting PHI, Rooted 21 will notify affected users within 60 days.",
+      },
+      {
+        heading: "5. Mandatory Reporter Notice",
+        content:
+          "Rooted 21 is a technology platform and is not itself a mandatory reporter under Ohio law. However, professional users (licensed therapists, caseworkers, counselors) who access family data through Rooted 21 remain subject to their own mandatory reporting obligations under ORC §2151.421 regardless of their use of this platform. The platform does not limit, circumvent, or otherwise affect any mandatory reporting obligation.",
+      },
+      {
+        heading: "6. Contact for Ohio Compliance Questions",
+        content:
+          "For questions about Ohio-specific compliance, data access rights under ORC §1349.09, or court-related data requests, contact: mstonerock@rooted21parenting.com. For law enforcement or court-ordered data requests, include the case number and issuing court in your correspondence. Rooted 21 responds to valid Ohio court orders within the timeframe specified in the order, or within 10 business days if no deadline is specified.",
+      },
+    ],
+  },
+
   tbri: {
     title: "Trauma-Informed Terminology Guide",
     updated: "Last updated: May 10, 2026",
@@ -268,7 +311,7 @@ function DocumentSection({ docId, heading, content }) {
 }
 
 // Docs that support signing (tbri is a reference guide, not a consent form)
-const SIGNABLE_DOCS = ["terms", "privacy", "consent"];
+const SIGNABLE_DOCS = ["terms", "privacy", "consent", "ohio"];
 
 export default function Legal() {
   const [activeTab, setActiveTab] = useState("terms");
@@ -354,6 +397,16 @@ export default function Legal() {
                   <PenLine size={16} /> Review & Sign Document
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Ohio compliance note */}
+          {activeTab === "ohio" && !signedDocs.includes("ohio") && (
+            <div className="rounded-xl p-4 mt-2 flex gap-3" style={{ background: "#FEF9EC", border: "1px solid #E8C96A" }}>
+              <AlertTriangle size={14} color="#B87A0A" className="flex-shrink-0 mt-0.5" />
+              <p className="text-[11px]" style={{ color: "#7A5200" }}>
+                <strong>Ohio residents:</strong> Review and acknowledge this document to confirm your understanding of your data rights under ORC §1349.09 and your co-parenting message rights under ORC §3109.04.
+              </p>
             </div>
           )}
 

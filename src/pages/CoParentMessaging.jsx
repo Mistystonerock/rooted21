@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Send, ShieldCheck, Download, Loader2 } from "lucide-react";
+import CoParentMessageConsentModal, { hasCoParentMessageConsent } from "@/components/legal/CoParentMessageConsentModal";
 
 const TOPICS = ["schedule", "health", "education", "behavior", "finances", "general"];
 
@@ -25,6 +26,7 @@ async function hashBody(text) {
 
 export default function CoParentMessaging() {
   const { partnershipId } = useParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [partnership, setPartnership] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -33,11 +35,15 @@ export default function CoParentMessaging() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showConsentModal, setShowConsentModal] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
       setUser(u);
+      if (!hasCoParentMessageConsent()) {
+        setShowConsentModal(true);
+      }
       const ps = await base44.entities.CoParentingPartnership.list();
       const p = ps.find(x => x.id === partnershipId);
       setPartnership(p);
@@ -115,6 +121,16 @@ export default function CoParentMessaging() {
         <div className="w-6 h-6 border-4 border-t-transparent rounded-full animate-spin"
           style={{ borderColor: `${C.midGreen} transparent ${C.midGreen} ${C.midGreen}` }} />
       </div>
+    );
+  }
+
+  if (showConsentModal) {
+    return (
+      <CoParentMessageConsentModal
+        user={user}
+        onAccept={() => setShowConsentModal(false)}
+        onDecline={() => navigate("/co-parent-portal")}
+      />
     );
   }
 

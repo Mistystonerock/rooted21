@@ -5,16 +5,23 @@ import { Plus } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ChildProfileCard from "@/components/children/ChildProfileCard";
 import ChildProfileForm from "@/components/children/ChildProfileForm";
+import ChildDataConsentModal, { hasChildDataConsent } from "@/components/legal/ChildDataConsentModal";
 
 export default function ChildProfiles() {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null); // child record being edited
+  const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [user, setUser] = useState(null);
+  const [showDataConsent, setShowDataConsent] = useState(false);
 
-  useEffect(() => { loadChildren(); }, []);
+  useEffect(() => {
+    base44.auth.me().then(u => setUser(u));
+    loadChildren();
+    if (!hasChildDataConsent()) setShowDataConsent(true);
+  }, []);
 
   async function loadChildren() {
     const list = await base44.entities.ChildProfile.list("-created_date", 50);
@@ -67,6 +74,12 @@ export default function ChildProfiles() {
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
+      {showDataConsent && (
+        <ChildDataConsentModal
+          user={user}
+          onAccept={() => setShowDataConsent(false)}
+        />
+      )}
       <MobileHeader
         title="Child Profiles"
         subtitle="Personalize AI insights for each child"
