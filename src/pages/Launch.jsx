@@ -179,19 +179,70 @@ export default function Launch() {
         </div>
 
         {/* Founder's note */}
-        <div className="rounded-2xl p-5 mb-8" style={{ background: C.darkGreen }}>
-          <p className="text-[10px] font-extrabold tracking-widest uppercase mb-3" style={{ color: C.gold }}>
-            A Note From Our Founder
-          </p>
-          <p className="text-sm leading-relaxed italic" style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.7 }}>
-            "I started Rooted 21 because I live in a community where these classes simply don't exist. 
-            I'm getting certified so I can bring this work home — to the families right here who need it 
-            and have nowhere else to turn. This app is the tool I wish I'd had. I want every parent who 
-            feels alone in this to know: <strong style={{ color: C.gold }}>you are not alone, and you are not failing.</strong>"
-          </p>
-          <p className="text-[11px] mt-3 font-bold" style={{ color: C.lightGreen }}>
-            — Founder, Rooted 21 Parenting Network
-          </p>
+        <div className="rounded-2xl overflow-hidden mb-8" style={{ border: `1.5px solid ${C.cream}` }}>
+          {/* Header bar */}
+          <div className="px-5 py-4 flex items-center gap-3" style={{ background: C.darkGreen }}>
+            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif font-bold text-base"
+              style={{ background: C.gold, color: C.darkGreen }}>M</div>
+            <div>
+              <p className="text-[10px] font-extrabold tracking-widest uppercase" style={{ color: C.gold }}>
+                A Note From Our Founder
+              </p>
+              <p className="text-[11px] font-bold" style={{ color: C.lightGreen }}>
+                Misty Stonerock · Founder of Rooted 21
+              </p>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="px-5 py-5 space-y-3" style={{ background: "#fff" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              Rooted 21 was not created from a textbook.
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              It was created from lived experience, survival, healing, and years of standing beside families who are doing their best while carrying things most people will never see.
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              I know what it feels like to grow up in systems where your voice gets missed. I know what it feels like to need support, understanding, and someone who sees the child behind the behavior. That is why this work is personal to me.
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              As I grew, healed, and stepped into the work I do today, I began seeing the same thing over and over again: parents are not failing because they do not care. Many are overwhelmed, unsupported, triggered, exhausted, and trying to parent through their own pain while raising children who are also hurting.
+            </p>
+            <div className="rounded-xl px-4 py-3 my-1" style={{ background: C.offWhite, borderLeft: `4px solid ${C.gold}` }}>
+              <p className="text-sm font-serif font-bold leading-relaxed" style={{ color: C.darkGreen }}>
+                Rooted 21 was built to be a reset.
+              </p>
+            </div>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              A place where parents can pause, breathe, learn, and try again. A place where families can find real tools in real moments. A place that reminds parents they are not alone, their story is not over, and change is still possible.
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              This app was created for the parent who wants to do better but does not know where to start. For the child whose behavior is really a cry for connection. For the family that needs support without shame.
+            </p>
+            <div className="rounded-xl px-4 py-3 my-1" style={{ background: C.cream }}>
+              <p className="text-sm font-serif font-bold leading-relaxed" style={{ color: C.darkGreen }}>
+                Rooted 21 is more than an app.
+              </p>
+              <p className="text-sm leading-relaxed mt-1" style={{ color: "#3a3028" }}>
+                It is a movement toward stronger parents, stronger kids, and stronger families.
+              </p>
+            </div>
+          </div>
+
+          {/* Signature */}
+          <div className="px-5 py-4 flex items-center gap-3" style={{ background: C.darkGreen }}>
+            <div>
+              <p className="font-serif italic text-sm font-bold" style={{ color: C.cream }}>
+                With love and purpose,
+              </p>
+              <p className="font-serif font-bold text-base mt-0.5" style={{ color: C.gold }}>
+                Misty Stonerock
+              </p>
+              <p className="text-[10px] mt-0.5" style={{ color: C.lightGreen }}>
+                Founder of Rooted 21
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Pillars */}
