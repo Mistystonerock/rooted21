@@ -7,6 +7,7 @@ import ProfessionalCard from "@/components/directory/ProfessionalCard";
 import ConsultationModal from "@/components/directory/ConsultationModal";
 import BookingCalendarModal from "@/components/directory/BookingCalendarModal";
 import ReviewModal from "@/components/directory/ReviewModal";
+import TherapistMatchPanel from "@/components/directory/TherapistMatchPanel";
 
 const NATIONAL_DIRECTORIES = [
   {
@@ -314,6 +315,9 @@ export default function ProfessionalDirectory() {
             Request a consultation directly from the directory.
           </p>
         </div>
+
+        {/* AI Therapist Match Panel */}
+        <TherapistMatchPanel />
 
         {/* Search */}
         <div className="relative">
