@@ -80,6 +80,7 @@ const routes = {
   RightsCard: lazy(() => import("@/pages/RightsCard")),
   ChildLifeStory: lazy(() => import("@/pages/ChildLifeStory")),
   PeerSupport: lazy(() => import("@/pages/PeerSupport")),
+  ChildSuicideGuide: lazy(() => import("@/pages/ChildSuicideGuide")),
 };
 
 export default routes;

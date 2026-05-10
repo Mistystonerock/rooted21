@@ -59,6 +59,14 @@ const TOPICS = [
     color: C.darkGreen,
     tag: "QUICK REF",
   },
+  {
+    emoji: "🆘",
+    title: "Suicide Prevention Guide",
+    subtitle: "Warning signs, how to talk about it, wraparound services & crisis resources",
+    path: "/suicide-prevention-guide",
+    color: "#C0392B",
+    tag: "CRITICAL",
+  },
 ];
 
 export default function EducationHub() {
