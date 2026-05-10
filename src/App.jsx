@@ -4,10 +4,13 @@ import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Suspense } from 'react';
+import React from 'react';
+import { base44 } from '@/api/base44Client';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
+import FeatureLockGate from '@/components/rooted/FeatureLockGate';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
@@ -27,6 +30,12 @@ import ProfessionalPresentation from '@/pages/ProfessionalPresentation';
 import ComprehensiveCaseReport from '@/pages/ComprehensiveCaseReport';
 
 function App() {
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(u => setUser(u)).catch(() => setUser(null));
+  }, []);
+
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
@@ -34,98 +43,98 @@ function App() {
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Launch />} />
-              <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><routes.Home /></Suspense>} />
-              <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.Dashboard /></Suspense>} />
-              <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><routes.Chat /></Suspense>} />
-              <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><routes.Lessons /></Suspense>} />
-              <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><routes.Goals /></Suspense>} />
-              <Route path="/progress" element={<Suspense fallback={<LoadingFallback />}><routes.Progress /></Suspense>} />
-              <Route path="/profile" element={<Suspense fallback={<LoadingFallback />}><routes.Profile /></Suspense>} />
-              <Route path="/help" element={<Suspense fallback={<LoadingFallback />}><routes.Help /></Suspense>} />
-              <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><routes.ChildProfile /></Suspense>} />
-              <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><routes.ProfessionalPortal /></Suspense>} />
-              <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><routes.Resources /></Suspense>} />
-              <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><routes.MyTeam /></Suspense>} />
-              <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.FamilyDashboard /></Suspense>} />
-              <Route path="/respite-care" element={<Suspense fallback={<LoadingFallback />}><routes.RespiteCare /></Suspense>} />
-              <Route path="/resource-library" element={<Suspense fallback={<LoadingFallback />}><routes.ResourceLibrary /></Suspense>} />
-              <Route path="/analytics" element={<Suspense fallback={<LoadingFallback />}><routes.Analytics /></Suspense>} />
-              <Route path="/schedule" element={<Suspense fallback={<LoadingFallback />}><routes.ScheduleCreator /></Suspense>} />
-              <Route path="/safety-plan" element={<Suspense fallback={<LoadingFallback />}><routes.SafetyPlan /></Suspense>} />
-              <Route path="/journal" element={<Suspense fallback={<LoadingFallback />}><routes.Journal /></Suspense>} />
-              <Route path="/support-guide" element={<Suspense fallback={<LoadingFallback />}><routes.SupportGuide /></Suspense>} />
-              <Route path="/monthly-report" element={<Suspense fallback={<LoadingFallback />}><routes.MonthlyReport /></Suspense>} />
-              <Route path="/legal" element={<Suspense fallback={<LoadingFallback />}><routes.Legal /></Suspense>} />
-              <Route path="/billing" element={<Suspense fallback={<LoadingFallback />}><routes.Billing /></Suspense>} />
-              <Route path="/owner-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.OwnerDashboard /></Suspense>} />
-              <Route path="/behavior-logs" element={<Suspense fallback={<LoadingFallback />}><routes.BehaviorLogs /></Suspense>} />
-              <Route path="/co-parent-portal" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentPortal /></Suspense>} />
-              <Route path="/co-parent-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentMessaging /></Suspense>} />
-              <Route path="/co-parenting-health/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><CoParentingHealthDashboard /></Suspense>} />
-              <Route path="/co-parenting-resources" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentingResources /></Suspense>} />
-              <Route path="/milestones" element={<Suspense fallback={<LoadingFallback />}><routes.Milestones /></Suspense>} />
-              <Route path="/court-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.CourtDashboard /></Suspense>} />
-              <Route path="/court-partnership/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtPartnershipDetail /></Suspense>} />
-              <Route path="/court-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtMessaging /></Suspense>} />
-              <Route path="/court-add-appointment/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CourtAddAppointment /></Suspense>} />
-              <Route path="/household-routine" element={<Suspense fallback={<LoadingFallback />}><routes.HouseholdRoutine /></Suspense>} />
-              <Route path="/daily-checkin" element={<Suspense fallback={<LoadingFallback />}><routes.DailyCheckIn /></Suspense>} />
-              <Route path="/notifications" element={<Suspense fallback={<LoadingFallback />}><routes.Notifications /></Suspense>} />
-              <Route path="/partnership-safety-plan/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.PartnershipSafetyPlan /></Suspense>} />
-              <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><routes.CourtGenerateReport /></Suspense>} />
-              <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><routes.MyReflections /></Suspense>} />
-              <Route path="/local-resources" element={<Suspense fallback={<LoadingFallback />}><routes.LocalResourceFinder /></Suspense>} />
-              <Route path="/weekly-habits" element={<Suspense fallback={<LoadingFallback />}><routes.WeeklyHabits /></Suspense>} />
-              <Route path="/professional-directory" element={<Suspense fallback={<LoadingFallback />}><routes.ProfessionalDirectory /></Suspense>} />
-              <Route path="/app-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AppGuide /></Suspense>} />
-              <Route path="/care-calendar" element={<Suspense fallback={<LoadingFallback />}><routes.CareCalendar /></Suspense>} />
-              <Route path="/sensory-toolbox" element={<Suspense fallback={<LoadingFallback />}><routes.SensoryToolbox /></Suspense>} />
-              <Route path="/child-profiles" element={<Suspense fallback={<LoadingFallback />}><routes.ChildProfiles /></Suspense>} />
-              <Route path="/live-classes" element={<Suspense fallback={<LoadingFallback />}><routes.LiveClasses /></Suspense>} />
-              <Route path="/class-enrollment" element={<Suspense fallback={<LoadingFallback />}><routes.ClassEnrollment /></Suspense>} />
-              <Route path="/class-progress/:enrollmentId" element={<Suspense fallback={<LoadingFallback />}><routes.ClassProgress /></Suspense>} />
-              <Route path="/instructor-feedback" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorFeedbackDashboard /></Suspense>} />
-              <Route path="/instructor-analytics" element={<Suspense fallback={<LoadingFallback />}><routes.InstructorAnalytics /></Suspense>} />
-              <Route path="/case-management" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagement /></Suspense>} />
-              <Route path="/case-management-new" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagementNew /></Suspense>} />
-              <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseDetail /></Suspense>} />
-              <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseStatusReport /></Suspense>} />
-              <Route path="/comprehensive-case-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><ComprehensiveCaseReport /></Suspense>} />
-              <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><ScheduleFamilyMeeting /></Suspense>} />
-              <Route path="/personalized-legal-feed" element={<Suspense fallback={<LoadingFallback />}><PersonalizedLegalFeed /></Suspense>} />
-              <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><routes.LegalKnowledgeBase /></Suspense>} />
-              <Route path="/legal-calendar" element={<Suspense fallback={<LoadingFallback />}><routes.LegalCalendar /></Suspense>} />
-              <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><routes.SystemGuides /></Suspense>} />
-              <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />
-              <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><routes.SecureDocumentRepository /></Suspense>} />
-              <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><PersonalizedChat /></Suspense>} />
-              <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><GrowthInsights /></Suspense>} />
-              <Route path="/behavioral-trends" element={<Suspense fallback={<LoadingFallback />}><routes.BehavioralTrends /></Suspense>} />
-              <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><routes.JobResources /></Suspense>} />
-              <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><EmergencyToolbox /></Suspense>} />
-              <Route path="/court-ready-export" element={<CourtReadyExport />} />
-              <Route path="/expense-split" element={<ExpenseSplit />} />
-              <Route path="/document-scanner" element={<DocumentScanner />} />
-              <Route path="/case-plan-checklist" element={<CasePlanChecklist />} />
-              <Route path="/expense-tracker" element={<ExpenseTracker />} />
-              <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.VisitationTracker /></Suspense>} />
-              <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><routes.MedicationManager /></Suspense>} />
-              <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><routes.IncidentReportBuilder /></Suspense>} />
-              <Route path="/reunification-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.ReunificationTracker /></Suspense>} />
-              <Route path="/team-contacts" element={<Suspense fallback={<LoadingFallback />}><routes.TeamContacts /></Suspense>} />
-              <Route path="/education-hub" element={<Suspense fallback={<LoadingFallback />}><routes.EducationHub /></Suspense>} />
-              <Route path="/fasd-guide" element={<Suspense fallback={<LoadingFallback />}><routes.FASDGuide /></Suspense>} />
-              <Route path="/attachment-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AttachmentGuide /></Suspense>} />
-              <Route path="/grief-and-loss" element={<Suspense fallback={<LoadingFallback />}><routes.GriefAndLoss /></Suspense>} />
-              <Route path="/caregiver-burnout" element={<Suspense fallback={<LoadingFallback />}><routes.CaregiverBurnout /></Suspense>} />
-              <Route path="/race-and-identity" element={<Suspense fallback={<LoadingFallback />}><routes.RaceAndIdentity /></Suspense>} />
-              <Route path="/aging-out-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AgingOutGuide /></Suspense>} />
-              <Route path="/rights-card" element={<Suspense fallback={<LoadingFallback />}><routes.RightsCard /></Suspense>} />
-              <Route path="/life-story" element={<Suspense fallback={<LoadingFallback />}><routes.ChildLifeStory /></Suspense>} />
-              <Route path="/peer-support" element={<Suspense fallback={<LoadingFallback />}><routes.PeerSupport /></Suspense>} />
-              <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ChildSuicideGuide /></Suspense>} />
-              <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ACEsGuide /></Suspense>} />
-              <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><ProfessionalPresentation /></Suspense>} />
+              <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
+              <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Chat /></FeatureLockGate></Suspense>} />
+              <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Lessons /></FeatureLockGate></Suspense>} />
+              <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Goals /></FeatureLockGate></Suspense>} />
+              <Route path="/progress" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Progress /></FeatureLockGate></Suspense>} />
+              <Route path="/profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Profile /></FeatureLockGate></Suspense>} />
+              <Route path="/help" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Help /></FeatureLockGate></Suspense>} />
+              <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfile /></FeatureLockGate></Suspense>} />
+              <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalPortal /></FeatureLockGate></Suspense>} />
+              <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Resources /></FeatureLockGate></Suspense>} />
+              <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
+              <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/respite-care" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.RespiteCare /></FeatureLockGate></Suspense>} />
+              <Route path="/resource-library" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ResourceLibrary /></FeatureLockGate></Suspense>} />
+              <Route path="/analytics" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Analytics /></FeatureLockGate></Suspense>} />
+              <Route path="/schedule" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ScheduleCreator /></FeatureLockGate></Suspense>} />
+              <Route path="/safety-plan" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SafetyPlan /></FeatureLockGate></Suspense>} />
+              <Route path="/journal" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Journal /></FeatureLockGate></Suspense>} />
+              <Route path="/support-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/monthly-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MonthlyReport /></FeatureLockGate></Suspense>} />
+              <Route path="/legal" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Legal /></FeatureLockGate></Suspense>} />
+              <Route path="/billing" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Billing /></FeatureLockGate></Suspense>} />
+              <Route path="/owner-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.OwnerDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/behavior-logs" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorLogs /></FeatureLockGate></Suspense>} />
+              <Route path="/co-parent-portal" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CoParentPortal /></FeatureLockGate></Suspense>} />
+              <Route path="/co-parent-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CoParentMessaging /></FeatureLockGate></Suspense>} />
+              <Route path="/co-parenting-health/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CoParentingHealthDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/co-parenting-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CoParentingResources /></FeatureLockGate></Suspense>} />
+              <Route path="/milestones" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Milestones /></FeatureLockGate></Suspense>} />
+              <Route path="/court-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/court-partnership/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtPartnershipDetail /></FeatureLockGate></Suspense>} />
+              <Route path="/court-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtMessaging /></FeatureLockGate></Suspense>} />
+              <Route path="/court-add-appointment/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtAddAppointment /></FeatureLockGate></Suspense>} />
+              <Route path="/household-routine" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.HouseholdRoutine /></FeatureLockGate></Suspense>} />
+              <Route path="/daily-checkin" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.DailyCheckIn /></FeatureLockGate></Suspense>} />
+              <Route path="/notifications" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Notifications /></FeatureLockGate></Suspense>} />
+              <Route path="/partnership-safety-plan/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.PartnershipSafetyPlan /></FeatureLockGate></Suspense>} />
+              <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtGenerateReport /></FeatureLockGate></Suspense>} />
+              <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyReflections /></FeatureLockGate></Suspense>} />
+              <Route path="/local-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalResourceFinder /></FeatureLockGate></Suspense>} />
+              <Route path="/weekly-habits" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WeeklyHabits /></FeatureLockGate></Suspense>} />
+              <Route path="/professional-directory" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalDirectory /></FeatureLockGate></Suspense>} />
+              <Route path="/app-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AppGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/care-calendar" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CareCalendar /></FeatureLockGate></Suspense>} />
+              <Route path="/sensory-toolbox" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SensoryToolbox /></FeatureLockGate></Suspense>} />
+              <Route path="/child-profiles" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfiles /></FeatureLockGate></Suspense>} />
+              <Route path="/live-classes" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LiveClasses /></FeatureLockGate></Suspense>} />
+              <Route path="/class-enrollment" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ClassEnrollment /></FeatureLockGate></Suspense>} />
+              <Route path="/class-progress/:enrollmentId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ClassProgress /></FeatureLockGate></Suspense>} />
+              <Route path="/instructor-feedback" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.InstructorFeedbackDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/instructor-analytics" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.InstructorAnalytics /></FeatureLockGate></Suspense>} />
+              <Route path="/case-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CaseManagement /></FeatureLockGate></Suspense>} />
+              <Route path="/case-management-new" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CaseManagementNew /></FeatureLockGate></Suspense>} />
+              <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CaseDetail /></FeatureLockGate></Suspense>} />
+              <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CaseStatusReport /></FeatureLockGate></Suspense>} />
+              <Route path="/comprehensive-case-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ComprehensiveCaseReport /></FeatureLockGate></Suspense>} />
+              <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ScheduleFamilyMeeting /></FeatureLockGate></Suspense>} />
+              <Route path="/personalized-legal-feed" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><PersonalizedLegalFeed /></FeatureLockGate></Suspense>} />
+              <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LegalKnowledgeBase /></FeatureLockGate></Suspense>} />
+              <Route path="/legal-calendar" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LegalCalendar /></FeatureLockGate></Suspense>} />
+              <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SystemGuides /></FeatureLockGate></Suspense>} />
+              <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MeetingPrepChatbot /></FeatureLockGate></Suspense>} />
+              <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SecureDocumentRepository /></FeatureLockGate></Suspense>} />
+              <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><PersonalizedChat /></FeatureLockGate></Suspense>} />
+              <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><GrowthInsights /></FeatureLockGate></Suspense>} />
+              <Route path="/behavioral-trends" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehavioralTrends /></FeatureLockGate></Suspense>} />
+              <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.JobResources /></FeatureLockGate></Suspense>} />
+              <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><EmergencyToolbox /></FeatureLockGate></Suspense>} />
+              <Route path="/court-ready-export" element={<FeatureLockGate user={user}><CourtReadyExport /></FeatureLockGate>} />
+              <Route path="/expense-split" element={<FeatureLockGate user={user}><ExpenseSplit /></FeatureLockGate>} />
+              <Route path="/document-scanner" element={<FeatureLockGate user={user}><DocumentScanner /></FeatureLockGate>} />
+              <Route path="/case-plan-checklist" element={<FeatureLockGate user={user}><CasePlanChecklist /></FeatureLockGate>} />
+              <Route path="/expense-tracker" element={<FeatureLockGate user={user}><ExpenseTracker /></FeatureLockGate>} />
+              <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.VisitationTracker /></FeatureLockGate></Suspense>} />
+              <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MedicationManager /></FeatureLockGate></Suspense>} />
+              <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.IncidentReportBuilder /></FeatureLockGate></Suspense>} />
+              <Route path="/reunification-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ReunificationTracker /></FeatureLockGate></Suspense>} />
+              <Route path="/team-contacts" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TeamContacts /></FeatureLockGate></Suspense>} />
+              <Route path="/education-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.EducationHub /></FeatureLockGate></Suspense>} />
+              <Route path="/fasd-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FASDGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/attachment-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AttachmentGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/grief-and-loss" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.GriefAndLoss /></FeatureLockGate></Suspense>} />
+              <Route path="/caregiver-burnout" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CaregiverBurnout /></FeatureLockGate></Suspense>} />
+              <Route path="/race-and-identity" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.RaceAndIdentity /></FeatureLockGate></Suspense>} />
+              <Route path="/aging-out-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AgingOutGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/rights-card" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.RightsCard /></FeatureLockGate></Suspense>} />
+              <Route path="/life-story" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildLifeStory /></FeatureLockGate></Suspense>} />
+              <Route path="/peer-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.PeerSupport /></FeatureLockGate></Suspense>} />
+              <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildSuicideGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ACEsGuide /></FeatureLockGate></Suspense>} />
+              <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
