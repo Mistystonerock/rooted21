@@ -8,6 +8,7 @@ import DocumentManager from "@/components/case/DocumentManager";
 import TaskManager from "@/components/case/TaskManager";
 import CourtCaseTimeline from "@/components/case/CourtCaseTimeline";
 import EmergencyAlertButton from "@/components/emergency/EmergencyAlertButton";
+import VoiceNoteRecorder from "@/components/case/VoiceNoteRecorder";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -17,6 +18,7 @@ export default function CaseDetail() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [showNoteForm, setShowNoteForm] = useState(false);
+  const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
   const [newNote, setNewNote] = useState({ title: "", body: "", note_type: "update" });
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -268,14 +270,32 @@ export default function CaseDetail() {
 
         {activeTab === "notes" && (
           <div className="space-y-3">
-            {!showNoteForm ? (
-              <button
-                onClick={() => setShowNoteForm(true)}
-                className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
-                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
-              >
-                <Plus size={16} /> Add Note
-              </button>
+            {!showNoteForm && !showVoiceRecorder ? (
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setShowNoteForm(true)}
+                  className="py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                  style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                >
+                  <Plus size={16} /> Add Note
+                </button>
+                <button
+                  onClick={() => setShowVoiceRecorder(true)}
+                  className="py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                  style={{ background: "#FDECEC", color: "#C0392B", border: "2px solid #F5BEBE", cursor: "pointer" }}
+                >
+                  🎙️ Voice Note
+                </button>
+              </div>
+            ) : showVoiceRecorder ? (
+              <VoiceNoteRecorder
+                onNoteReady={(ai) => {
+                  setNewNote({ title: ai.title || "", body: ai.body || "", note_type: ai.note_type || "update" });
+                  setShowVoiceRecorder(false);
+                  setShowNoteForm(true);
+                }}
+                onCancel={() => setShowVoiceRecorder(false)}
+              />
             ) : (
               <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.midGreen}` }}>
                 <select
@@ -325,7 +345,7 @@ export default function CaseDetail() {
                 </div>
               </div>
             )}
-            
+
             {notes.map(note => (
               <div key={note.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
                 <div className="flex items-start justify-between gap-2 mb-2">
