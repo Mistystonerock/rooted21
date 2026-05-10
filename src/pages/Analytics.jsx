@@ -3,24 +3,16 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, Star, Lightbulb, Activity, Target, BookOpen, Zap } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Star, Lightbulb, Heart, Smile, Sun, AlertTriangle, Target, BookOpen } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, BarChart, Bar, Cell, RadarChart,
-  PolarGrid, PolarAngleAxis, Radar, Legend
+  ResponsiveContainer, BarChart, Bar, Cell, Legend
 } from "recharts";
 
-// ── helpers ──────────────────────────────────────────────────────────────────
+// ── helpers ───────────────────────────────────────────────────────────────────
 function fmt(d) {
   const dt = new Date(d);
   return `${dt.getMonth() + 1}/${dt.getDate()}`;
-}
-
-function scoreColor(v) {
-  if (!v) return C.mutedText;
-  if (v >= 4) return C.midGreen;
-  if (v >= 3) return C.gold;
-  return "#B84C2A";
 }
 
 function trendDir(data, key) {
@@ -37,57 +29,77 @@ function trendDir(data, key) {
   return "flat";
 }
 
-function TrendBadge({ dir, positiveIsUp = true }) {
-  const isGood = positiveIsUp ? dir === "up" : dir === "down";
-  const color = dir === "flat" ? C.mutedText : isGood ? C.midGreen : "#B84C2A";
-  if (dir === "up") return <TrendingUp size={13} color={color} />;
-  if (dir === "down") return <TrendingDown size={13} color={color} />;
-  return <Minus size={13} color={color} />;
+function scoreLabel(v) {
+  if (!v) return "—";
+  if (v >= 4.5) return "Excellent";
+  if (v >= 3.5) return "Good";
+  if (v >= 2.5) return "Okay";
+  if (v >= 1.5) return "Tough";
+  return "Hard";
+}
+
+function scoreColor(v) {
+  if (!v) return C.mutedText;
+  if (v >= 4) return C.midGreen;
+  if (v >= 3) return C.gold;
+  return "#B84C2A";
 }
 
 const RANGES = [
-  { label: "7d", days: 7 },
-  { label: "14d", days: 14 },
-  { label: "30d", days: 30 },
-  { label: "All", days: null },
+  { label: "1 Week", days: 7 },
+  { label: "2 Weeks", days: 14 },
+  { label: "1 Month", days: 30 },
+  { label: "All Time", days: null },
 ];
 
-// ── sub-components ────────────────────────────────────────────────────────────
-function SectionHeader({ icon: SectionIcon, title, color }) {
+// ── custom tooltip ─────────────────────────────────────────────────────────────
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
   return (
-    <div className="flex items-center gap-2 mb-3">
-      <SectionIcon size={15} color={color || C.midGreen} />
-      <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>{title}</p>
+    <div className="rounded-xl p-3 shadow-lg text-xs" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+      <p className="font-bold mb-1" style={{ color: C.darkGreen }}>{label}</p>
+      {payload.map((p, i) => (
+        <p key={i} style={{ color: p.color }}>
+          {p.name}: {p.value}/5 — {scoreLabel(p.value)}
+        </p>
+      ))}
     </div>
   );
 }
 
-function StatCard({ value, label, sub, color }) {
+// ── score summary card ─────────────────────────────────────────────────────────
+function ScoreCard({ emoji, title, avg, trend, description, color }) {
+  const label = scoreLabel(avg);
+  const trendText = trend === "up" ? "improving 📈" : trend === "down" ? "needs attention 📉" : "holding steady →";
+  const trendColor = trend === "up" ? C.midGreen : trend === "down" ? "#B84C2A" : C.mutedText;
+
   return (
-    <div className="rounded-xl p-3.5 text-center" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-      <p className="text-2xl font-extrabold leading-none mb-1" style={{ color: color || C.darkGreen }}>{value}</p>
-      <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{label}</p>
-      {sub && <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>{sub}</p>}
+    <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{ fontSize: 22 }}>{emoji}</span>
+        <p className="font-bold text-sm" style={{ color: C.darkGreen }}>{title}</p>
+      </div>
+      <div className="flex items-end gap-3 mb-2">
+        <span className="text-4xl font-extrabold leading-none" style={{ color: color || scoreColor(avg) }}>
+          {avg ? avg.toFixed(1) : "—"}
+        </span>
+        <span className="text-sm font-bold mb-0.5" style={{ color: scoreColor(avg) }}>{label}</span>
+      </div>
+      <div className="text-xs mb-2" style={{ color: trendColor }}>
+        Recently: {trendText}
+      </div>
+      <p className="text-[11px] leading-relaxed p-3 rounded-xl" style={{ color: "#3a3028", background: C.offWhite }}>
+        {description}
+      </p>
     </div>
   );
 }
 
-function InsightCard({ icon: InsightIcon, color, text }) {
-  return (
-    <div className="rounded-xl px-3.5 py-2.5 flex items-start gap-2.5"
-      style={{ background: `${color}10`, border: `1px solid ${color}30` }}>
-      <InsightIcon size={13} color={color} className="mt-0.5 flex-shrink-0" />
-      <p className="text-xs leading-relaxed" style={{ color: C.darkGreen }}>{text}</p>
-    </div>
-  );
-}
-
-// ── main page ─────────────────────────────────────────────────────────────────
+// ── main page ──────────────────────────────────────────────────────────────────
 export default function Analytics() {
   const [checkins, setCheckins] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [goals, setGoals] = useState([]);
-  const [crisisSessions, setCrisisSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState(30);
 
@@ -96,17 +108,14 @@ export default function Analytics() {
       base44.entities.CheckIn.list("-created_date", 200),
       base44.entities.LessonProgress.filter({ completed: true }),
       base44.entities.Goal.list(),
-      base44.entities.CrisisSession.list("-created_date", 100),
-    ]).then(([c, l, g, cs]) => {
+    ]).then(([c, l, g]) => {
       setCheckins(c);
       setLessons(l);
       setGoals(g);
-      setCrisisSessions(cs);
       setLoading(false);
     });
   }, []);
 
-  // Filter checkins by range
   const filteredCheckins = useMemo(() => {
     const sorted = [...checkins].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
     if (!range) return sorted;
@@ -115,117 +124,88 @@ export default function Analytics() {
     return sorted.filter(c => new Date(c.created_date) >= cutoff);
   }, [checkins, range]);
 
-  // Chart data
   const chartData = useMemo(() =>
     filteredCheckins.map(c => ({
       date: fmt(c.created_date),
-      reg: c.child_regulation,
-      calm: c.parent_calm,
-      note: c.note,
+      "Your Child's Mood": c.child_regulation,
+      "Your Calm Level": c.parent_calm,
     })), [filteredCheckins]);
 
-  // Averages
   const avgReg = filteredCheckins.length
-    ? (filteredCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / filteredCheckins.length)
+    ? filteredCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / filteredCheckins.length
     : 0;
   const avgCalm = filteredCheckins.length
-    ? (filteredCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / filteredCheckins.length)
+    ? filteredCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / filteredCheckins.length
     : 0;
 
-  const trendReg = trendDir(chartData, "reg");
-  const trendCalm = trendDir(chartData, "calm");
+  const trendReg = trendDir(chartData, "Your Child's Mood");
+  const trendCalm = trendDir(chartData, "Your Calm Level");
 
-  // Day-of-week breakdown (0=Sun)
+  // Day-of-week breakdown — friendly labels
   const dayOfWeekData = useMemo(() => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const buckets = days.map(d => ({ day: d, reg: 0, calm: 0, count: 0 }));
+    const buckets = days.map(d => ({ day: d, child: 0, parent: 0, count: 0 }));
     filteredCheckins.forEach(c => {
       const dow = new Date(c.created_date).getDay();
-      buckets[dow].reg += c.child_regulation || 0;
-      buckets[dow].calm += c.parent_calm || 0;
+      buckets[dow].child += c.child_regulation || 0;
+      buckets[dow].parent += c.parent_calm || 0;
       buckets[dow].count++;
     });
     return buckets.map(b => ({
       day: b.day,
-      "Child Reg": b.count ? parseFloat((b.reg / b.count).toFixed(1)) : null,
-      "Parent Calm": b.count ? parseFloat((b.calm / b.count).toFixed(1)) : null,
+      "Child's Mood": b.count ? parseFloat((b.child / b.count).toFixed(1)) : null,
+      "Your Calm": b.count ? parseFloat((b.parent / b.count).toFixed(1)) : null,
     }));
   }, [filteredCheckins]);
 
-  // Goal status breakdown
-  const goalStats = useMemo(() => {
-    const total = goals.length;
-    const done = goals.filter(g => g.progress === "completed").length;
-    const active = goals.filter(g => g.progress === "in_progress").length;
-    const notStarted = goals.filter(g => g.progress === "not_started").length;
-    return { total, done, active, notStarted };
-  }, [goals]);
+  // Goal stats
+  const goalStats = useMemo(() => ({
+    total: goals.length,
+    done: goals.filter(g => g.progress === "completed").length,
+    active: goals.filter(g => g.progress === "in_progress").length,
+  }), [goals]);
 
-  // Radar: overall wellness profile
-  const radarData = useMemo(() => {
-    const lessonPct = Math.round((lessons.length / 21) * 100);
-    const regAvg = avgReg ? Math.round((avgReg / 5) * 100) : 0;
-    const calmAvg = avgCalm ? Math.round((avgCalm / 5) * 100) : 0;
-    const goalPct = goalStats.total ? Math.round((goalStats.done / goalStats.total) * 100) : 0;
-    const consistencyPct = filteredCheckins.length >= 7
-      ? Math.min(100, Math.round((filteredCheckins.length / 14) * 100))
-      : Math.round((filteredCheckins.length / 7) * 100);
-    return [
-      { subject: "Lessons", value: lessonPct },
-      { subject: "Child Reg.", value: regAvg },
-      { subject: "Parent Calm", value: calmAvg },
-      { subject: "Goals", value: goalPct },
-      { subject: "Consistency", value: consistencyPct },
-    ];
-  }, [lessons, avgReg, avgCalm, goalStats, filteredCheckins]);
-
-  // Crisis session trend by week
-  const crisisByWeek = useMemo(() => {
-    const map = {};
-    crisisSessions.forEach(s => {
-      const d = new Date(s.created_date);
-      const weekStart = new Date(d);
-      weekStart.setDate(d.getDate() - d.getDay());
-      const key = `${weekStart.getMonth() + 1}/${weekStart.getDate()}`;
-      map[key] = (map[key] || 0) + 1;
-    });
-    return Object.entries(map)
-      .slice(-8)
-      .map(([week, count]) => ({ week, count }));
-  }, [crisisSessions]);
-
-  // Auto-generated insights
+  // Plain-language insights
   const insights = useMemo(() => {
     const list = [];
     if (filteredCheckins.length < 3) return list;
 
-    const lowRegDays = filteredCheckins.filter(c => c.child_regulation && c.child_regulation <= 2);
-    if (lowRegDays.length >= 2) {
-      list.push({ icon: AlertTriangle, color: "#B84C2A", text: `${lowRegDays.length} sessions with low child regulation (≤2) — consider reviewing triggers and sensory needs.` });
+    const hardDays = filteredCheckins.filter(c => c.child_regulation && c.child_regulation <= 2);
+    if (hardDays.length >= 2) {
+      list.push({
+        icon: AlertTriangle, color: "#B84C2A",
+        text: `You logged ${hardDays.length} really hard days for your child. That's a lot to carry. It may be worth noting what happened those days — are there patterns like certain times, places, or events?`,
+      });
     }
 
-    const highDays = filteredCheckins.filter(c => c.child_regulation >= 4 && c.parent_calm >= 4);
-    if (highDays.length >= 2) {
-      list.push({ icon: Star, color: C.midGreen, text: `${highDays.length} sessions where both scores hit 4+ — reflect on what made those days work.` });
+    const greatDays = filteredCheckins.filter(c => c.child_regulation >= 4 && c.parent_calm >= 4);
+    if (greatDays.length >= 2) {
+      list.push({
+        icon: Star, color: C.midGreen,
+        text: `You had ${greatDays.length} days where both you AND your child were doing well. Think back — what made those days feel different? Try to repeat what worked!`,
+      });
     }
 
-    const parentLower = filteredCheckins.filter(c => c.parent_calm < c.child_regulation);
-    if (parentLower.length >= 3) {
-      list.push({ icon: Lightbulb, color: C.gold, text: `Your calm was lower than your child's regulation in ${parentLower.length} sessions — this may be a self-care signal.` });
+    const parentStruggleDays = filteredCheckins.filter(c => c.parent_calm < c.child_regulation);
+    if (parentStruggleDays.length >= 3) {
+      list.push({
+        icon: Heart, color: "#E05C8A",
+        text: `On ${parentStruggleDays.length} days, your child was actually doing better than you were. That's completely normal — but it might be a signal that you need a little more support or rest too.`,
+      });
     }
 
     if (trendReg === "up") {
-      list.push({ icon: TrendingUp, color: C.midGreen, text: "Child regulation is trending upward — great progress!" });
+      list.push({ icon: TrendingUp, color: C.midGreen, text: "Your child's mood and behavior has been getting better over time. Whatever you're doing — keep going!" });
     } else if (trendReg === "down") {
-      list.push({ icon: TrendingDown, color: "#B84C2A", text: "Child regulation has been declining recently — a good time to revisit your calming toolkit." });
+      list.push({ icon: TrendingDown, color: "#B84C2A", text: "Your child has had a harder stretch lately. This doesn't mean you're failing — it means now is a good time to reach out to your support team." });
     }
 
-    if (lessons.length >= 10 && goalStats.active === 0) {
-      list.push({ icon: Target, color: C.brown, text: "You've completed several lessons but have no active goals — consider setting a new one to apply what you've learned." });
+    if (trendCalm === "up") {
+      list.push({ icon: Smile, color: C.midGreen, text: "Your own calm level has been improving! Taking care of yourself really does help your child too." });
     }
 
     return list;
-  }, [filteredCheckins, trendReg, lessons, goalStats]);
+  }, [filteredCheckins, trendReg, trendCalm]);
 
   if (loading) {
     return (
@@ -241,231 +221,221 @@ export default function Analytics() {
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader
-        title="Behavior Analytics"
-        subtitle="Trends · Patterns · Insights"
+        title="My Progress Report"
+        subtitle="Plain-language overview of how things are going"
         backTo="/dashboard"
-        rightSlot={
-          <div className="flex gap-1">
+      />
+
+      <div className="max-w-[560px] mx-auto px-4 py-5 space-y-5">
+
+        {/* ── WHAT IS THIS PAGE? ── */}
+        <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
+          <p className="font-serif font-bold text-sm mb-1" style={{ color: C.cream }}>📊 What is this page?</p>
+          <p className="text-xs leading-relaxed" style={{ color: C.lightGreen }}>
+            Every time you do a Daily Check-In, you score two things from 1–5. This page turns all those scores into easy-to-read charts so you can see how things are going over time — for your child <strong style={{ color: C.cream }}>and</strong> for you.
+          </p>
+        </div>
+
+        {/* ── TIME RANGE SELECTOR ── */}
+        <div>
+          <p className="text-[11px] font-extrabold tracking-wider mb-2" style={{ color: C.mutedText }}>SHOW DATA FROM:</p>
+          <div className="flex gap-2 flex-wrap">
             {RANGES.map(r => (
               <button key={r.label} onClick={() => setRange(r.days)}
-                className="text-[10px] font-bold px-2 py-1 rounded-lg"
+                className="px-3 py-2 rounded-xl text-xs font-bold transition-all"
                 style={{
-                  background: range === r.days ? C.gold : "#ffffff18",
-                  color: range === r.days ? C.darkGreen : C.lightGreen,
+                  background: range === r.days ? C.darkGreen : C.cream,
+                  color: range === r.days ? "#fff" : C.darkGreen,
                   border: "none", cursor: "pointer",
                 }}>
                 {r.label}
               </button>
             ))}
           </div>
-        }
-      />
-
-      <div className="max-w-[560px] mx-auto px-4 py-5 space-y-6">
-
-        {/* ── OVERVIEW STATS ── */}
-        <div className="grid grid-cols-4 gap-2">
-          <StatCard value={filteredCheckins.length} label="Check-ins" color={C.midGreen} />
-          <StatCard value={lessons.length} label="Lessons" sub="/21 done" color={C.brown} />
-          <StatCard value={goalStats.done} label="Goals Done" sub={`${goalStats.active} active`} color={C.gold} />
-          <StatCard value={crisisSessions.length} label="AI Sessions" color="#5B8DB8" />
         </div>
 
-        {/* ── REGULATION TREND LINE ── */}
-        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-          <SectionHeader icon={Activity} title="Regulation Over Time" color={C.midGreen} />
-
-          {/* avg scores */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="rounded-xl p-3 text-center" style={{ background: C.offWhite }}>
-              <div className="flex items-center justify-center gap-1.5 mb-0.5">
-                <span className="text-xl font-extrabold" style={{ color: scoreColor(avgReg) }}>
-                  {avgReg ? avgReg.toFixed(1) : "—"}
-                </span>
-                <TrendBadge dir={trendReg} />
-              </div>
-              <p className="text-[10px] font-bold" style={{ color: C.midGreen }}>🧒 Child Regulation</p>
-            </div>
-            <div className="rounded-xl p-3 text-center" style={{ background: C.offWhite }}>
-              <div className="flex items-center justify-center gap-1.5 mb-0.5">
-                <span className="text-xl font-extrabold" style={{ color: scoreColor(avgCalm) }}>
-                  {avgCalm ? avgCalm.toFixed(1) : "—"}
-                </span>
-                <TrendBadge dir={trendCalm} />
-              </div>
-              <p className="text-[10px] font-bold" style={{ color: C.gold }}>🌿 Parent Calm</p>
-            </div>
+        {/* ── QUICK SUMMARY ── */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-2xl p-3 text-center" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+            <p className="text-2xl font-extrabold" style={{ color: C.midGreen }}>{filteredCheckins.length}</p>
+            <p className="text-[11px] font-bold mt-0.5" style={{ color: C.darkGreen }}>Check-ins</p>
+            <p className="text-[10px]" style={{ color: C.mutedText }}>days logged</p>
           </div>
+          <div className="rounded-2xl p-3 text-center" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+            <p className="text-2xl font-extrabold" style={{ color: C.brown }}>{lessons.length}</p>
+            <p className="text-[11px] font-bold mt-0.5" style={{ color: C.darkGreen }}>Lessons</p>
+            <p className="text-[10px]" style={{ color: C.mutedText }}>out of 21 done</p>
+          </div>
+          <div className="rounded-2xl p-3 text-center" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+            <p className="text-2xl font-extrabold" style={{ color: C.gold }}>{goalStats.done}</p>
+            <p className="text-[11px] font-bold mt-0.5" style={{ color: C.darkGreen }}>Goals Met</p>
+            <p className="text-[10px]" style={{ color: C.mutedText }}>{goalStats.active} still going</p>
+          </div>
+        </div>
+
+        {/* ── SCORE EXPLAINER ── */}
+        <div className="rounded-2xl p-4" style={{ background: "#EAF4EA", border: `1.5px solid ${C.midGreen}40` }}>
+          <p className="font-bold text-xs mb-2" style={{ color: C.darkGreen }}>🔢 What do the 1–5 scores mean?</p>
+          <div className="space-y-1">
+            {[
+              { score: "5 — Excellent", desc: "Really great day, things went smoothly" },
+              { score: "4 — Good", desc: "More good moments than hard ones" },
+              { score: "3 — Okay", desc: "Mixed bag — some struggles, some wins" },
+              { score: "2 — Tough", desc: "Hard day with noticeable challenges" },
+              { score: "1 — Really Hard", desc: "Very difficult, may need extra support" },
+            ].map(({ score, desc }) => (
+              <div key={score} className="flex gap-2">
+                <p className="text-[11px] font-bold w-28 flex-shrink-0" style={{ color: C.darkGreen }}>{score}</p>
+                <p className="text-[11px]" style={{ color: C.mutedText }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SCORE CARDS ── */}
+        <ScoreCard
+          emoji="🧒"
+          title="Your Child's Emotional State"
+          avg={avgReg}
+          trend={trendReg}
+          color={scoreColor(avgReg)}
+          description={`This score tracks how calm, cooperative, and emotionally regulated your child has been. A higher score means they were managing their feelings well. A lower score doesn't mean they're bad — it means they were struggling and needed more support.`}
+        />
+
+        <ScoreCard
+          emoji="🌿"
+          title="Your Calm Level"
+          avg={avgCalm}
+          trend={trendCalm}
+          color={scoreColor(avgCalm)}
+          description={`This is YOUR score — how calm and grounded you felt as the parent. Research shows that when parents stay calm, kids actually do better too. It's okay if this score is low sometimes. Noticing it is the first step.`}
+        />
+
+        {/* ── TREND CHART ── */}
+        <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+          <p className="font-serif font-bold text-sm mb-1" style={{ color: C.darkGreen }}>📈 How Things Have Changed Over Time</p>
+          <p className="text-[11px] mb-4 leading-relaxed" style={{ color: C.mutedText }}>
+            Each dot on this chart is one of your daily check-ins. Look for the general direction — are the lines going <strong>up</strong> (improving) or staying <strong>flat</strong> or going <strong>down</strong> (needs attention)?
+          </p>
 
           {chartData.length > 1 ? (
-            <ResponsiveContainer width="100%" height={190}>
+            <ResponsiveContainer width="100%" height={200}>
               <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={C.cream} />
                 <XAxis dataKey="date" tick={{ fontSize: 9, fill: C.mutedText }} />
                 <YAxis domain={[1, 5]} ticks={[1,2,3,4,5]} tick={{ fontSize: 9, fill: C.mutedText }} />
-                <Tooltip
-                  contentStyle={{ background: C.white, border: `1px solid ${C.cream}`, borderRadius: 10, fontSize: 11 }}
-                  formatter={(val, name) => [val + "/5", name]}
-                />
-                <Legend wrapperStyle={{ fontSize: 10 }} />
-                <Line type="monotone" dataKey="reg" name="Child Reg." stroke={C.midGreen} strokeWidth={2.5} dot={{ r: 3 }} />
-                <Line type="monotone" dataKey="calm" name="Parent Calm" stroke={C.gold} strokeWidth={2.5} dot={{ r: 3 }} strokeDasharray="5 3" />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend wrapperStyle={{ fontSize: 11, marginTop: 8 }} />
+                <Line type="monotone" dataKey="Your Child's Mood" stroke={C.midGreen} strokeWidth={2.5} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Your Calm Level" stroke={C.gold} strokeWidth={2.5} dot={{ r: 3 }} strokeDasharray="5 3" />
               </LineChart>
             </ResponsiveContainer>
           ) : (
             <div className="py-8 text-center rounded-xl" style={{ background: C.offWhite }}>
               <p className="text-2xl mb-1">🌱</p>
               <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Not enough check-ins yet</p>
-              <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>Complete a few check-ins to see your trend line.</p>
+              <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>
+                Do a few Daily Check-Ins and you'll start seeing your progress here.
+              </p>
+              <Link to="/daily-checkin" className="inline-block mt-3 px-4 py-2 rounded-xl text-xs font-bold"
+                style={{ background: C.darkGreen, color: "#fff", textDecoration: "none" }}>
+                Do a Check-In Now →
+              </Link>
             </div>
           )}
         </div>
 
-        {/* ── DAY OF WEEK PATTERNS ── */}
+        {/* ── BEST AND HARDEST DAYS ── */}
         {hasCheckins && (
-          <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-            <SectionHeader icon={Activity} title="Regulation by Day of Week" color={C.brown} />
-            <p className="text-[11px] mb-3" style={{ color: C.mutedText }}>
-              Average scores per weekday — helps spot hard days or strong patterns.
+          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+            <p className="font-serif font-bold text-sm mb-1" style={{ color: C.darkGreen }}>📅 Which Days of the Week Are Hardest?</p>
+            <p className="text-[11px] mb-4 leading-relaxed" style={{ color: C.mutedText }}>
+              This shows your average scores by day of the week. Lower bars = harder days. Spotting patterns (like "Mondays are always rough") can help you prepare ahead of time.
             </p>
             <ResponsiveContainer width="100%" height={160}>
               <BarChart data={dayOfWeekData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={C.cream} />
                 <XAxis dataKey="day" tick={{ fontSize: 10, fill: C.mutedText }} />
-                <YAxis domain={[0, 5]} ticks={[0,1,2,3,4,5]} tick={{ fontSize: 10, fill: C.mutedText }} />
-                <Tooltip
-                  contentStyle={{ background: C.white, border: `1px solid ${C.cream}`, borderRadius: 10, fontSize: 11 }}
-                  formatter={(val, name) => [val ? val + "/5" : "No data", name]}
-                />
+                <YAxis domain={[0, 5]} ticks={[1,2,3,4,5]} tick={{ fontSize: 10, fill: C.mutedText }} />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend wrapperStyle={{ fontSize: 10 }} />
-                <Bar dataKey="Child Reg" name="Child Reg." fill={C.midGreen} radius={[4,4,0,0]} />
-                <Bar dataKey="Parent Calm" name="Parent Calm" fill={C.gold} radius={[4,4,0,0]} />
+                <Bar dataKey="Child's Mood" fill={C.midGreen} radius={[4,4,0,0]} />
+                <Bar dataKey="Your Calm" fill={C.gold} radius={[4,4,0,0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
 
-        {/* ── WELLNESS RADAR ── */}
-        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-          <SectionHeader icon={Star} title="Overall Wellness Profile" color={C.gold} />
-          <p className="text-[11px] mb-3" style={{ color: C.mutedText }}>
-            A 360° view across lessons, regulation, goals, and consistency. Each axis = 0–100%.
-          </p>
-          <ResponsiveContainer width="100%" height={220}>
-            <RadarChart data={radarData}>
-              <PolarGrid stroke={C.cream} />
-              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: C.mutedText }} />
-              <Radar name="You" dataKey="value" stroke={C.darkGreen} fill={C.midGreen} fillOpacity={0.3} strokeWidth={2} />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
+        {/* ── GOAL & LESSON PROGRESS ── */}
+        {(goalStats.total > 0 || lessons.length > 0) && (
+          <div className="rounded-2xl p-4 space-y-4" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>🎯 Your Learning & Goals</p>
 
-        {/* ── GOAL PROGRESS ── */}
-        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-          <SectionHeader icon={Target} title="Goal Momentum" color={C.brown} />
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            <StatCard value={goalStats.active} label="Active" color={C.gold} />
-            <StatCard value={goalStats.done} label="Completed" color={C.midGreen} />
-            <StatCard value={goalStats.notStarted} label="Not Started" color={C.mutedText} />
-          </div>
-          {goalStats.total > 0 ? (
-            <>
-              <div className="flex justify-between mb-1">
-                <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Overall Completion</p>
-                <p className="text-xs font-bold" style={{ color: C.midGreen }}>
-                  {Math.round((goalStats.done / goalStats.total) * 100)}%
+            {lessons.length > 0 && (
+              <div>
+                <div className="flex justify-between mb-1">
+                  <p className="text-xs font-bold" style={{ color: C.darkGreen }}>📖 Lessons Completed</p>
+                  <p className="text-xs font-bold" style={{ color: C.midGreen }}>{lessons.length} of 21</p>
+                </div>
+                <div className="h-3 rounded-full overflow-hidden" style={{ background: C.cream }}>
+                  <div className="h-full rounded-full" style={{ width: `${(lessons.length / 21) * 100}%`, background: C.midGreen }} />
+                </div>
+                <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>
+                  Every lesson you finish adds new tools to your parenting toolbox.
                 </p>
               </div>
-              <div className="h-3 rounded-full overflow-hidden" style={{ background: C.cream }}>
-                <div className="h-full rounded-full transition-all"
-                  style={{ width: `${(goalStats.done / goalStats.total) * 100}%`, background: C.midGreen }} />
-              </div>
-            </>
-          ) : (
-            <p className="text-xs text-center py-3" style={{ color: C.mutedText }}>No goals created yet.</p>
-          )}
-        </div>
+            )}
 
-        {/* ── LESSON PROGRESS ── */}
-        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-          <SectionHeader icon={BookOpen} title="Curriculum Progress" color={C.midGreen} />
-          <div className="flex justify-between mb-1.5">
-            <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Lessons Completed</p>
-            <p className="text-xs font-bold" style={{ color: C.midGreen }}>{lessons.length}/21</p>
-          </div>
-          <div className="h-3 rounded-full overflow-hidden mb-3" style={{ background: C.cream }}>
-            <div className="h-full rounded-full transition-all"
-              style={{ width: `${(lessons.length / 21) * 100}%`, background: C.midGreen }} />
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              { label: "Foundation", weeks: [1,2,3], color: "#5B8DB8" },
-              { label: "Connecting", weeks: [4,5,6,7], color: C.midGreen },
-              { label: "Empowering", weeks: [8,9,10], color: C.gold },
-            ].map(pillar => (
-              <div key={pillar.label} className="rounded-xl p-2.5"
-                style={{ background: `${pillar.color}12`, border: `1px solid ${pillar.color}25` }}>
-                <p className="text-[10px] font-bold" style={{ color: pillar.color }}>{pillar.label}</p>
-                <p className="text-base font-extrabold mt-0.5" style={{ color: pillar.color }}>
-                  {lessons.filter(l => {
-                    const lNum = l.lesson_id;
-                    if (pillar.label === "Foundation") return lNum >= 1 && lNum <= 7;
-                    if (pillar.label === "Connecting") return lNum >= 8 && lNum <= 14;
-                    return lNum >= 15 && lNum <= 21;
-                  }).length}
+            {goalStats.total > 0 && (
+              <div>
+                <div className="flex justify-between mb-1">
+                  <p className="text-xs font-bold" style={{ color: C.darkGreen }}>✅ Goals Completed</p>
+                  <p className="text-xs font-bold" style={{ color: C.gold }}>{goalStats.done} of {goalStats.total}</p>
+                </div>
+                <div className="h-3 rounded-full overflow-hidden" style={{ background: C.cream }}>
+                  <div className="h-full rounded-full" style={{ width: `${(goalStats.done / goalStats.total) * 100}%`, background: C.gold }} />
+                </div>
+                <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>
+                  {goalStats.active > 0 ? `You have ${goalStats.active} goal${goalStats.active > 1 ? "s" : ""} in progress right now — keep going!` : "Set a new goal to keep building momentum."}
                 </p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── AI SESSIONS ── */}
-        {crisisByWeek.length > 0 && (
-          <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-            <SectionHeader icon={Zap} title="Crisis Support Sessions by Week" color="#5B8DB8" />
-            <p className="text-[11px] mb-3" style={{ color: C.mutedText }}>
-              How often you reached for AI support — high weeks may indicate elevated stress periods.
-            </p>
-            <ResponsiveContainer width="100%" height={130}>
-              <BarChart data={crisisByWeek} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke={C.cream} />
-                <XAxis dataKey="week" tick={{ fontSize: 9, fill: C.mutedText }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 9, fill: C.mutedText }} />
-                <Tooltip
-                  contentStyle={{ background: C.white, border: `1px solid ${C.cream}`, borderRadius: 10, fontSize: 11 }}
-                  formatter={(val) => [val, "Sessions"]}
-                />
-                <Bar dataKey="count" name="Sessions" radius={[4,4,0,0]}>
-                  {crisisByWeek.map((entry, i) => (
-                    <Cell key={i} fill={entry.count >= 4 ? "#B84C2A" : entry.count >= 2 ? C.gold : "#5B8DB8"} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            )}
           </div>
         )}
 
-        {/* ── INSIGHTS ── */}
+        {/* ── PLAIN-LANGUAGE INSIGHTS ── */}
         {insights.length > 0 && (
           <div>
-            <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: C.mutedText }}>
-              💡 PERSONALIZED INSIGHTS
+            <p className="text-[11px] font-extrabold tracking-wider mb-2" style={{ color: C.mutedText }}>
+              💡 WHAT YOUR DATA IS TELLING YOU
             </p>
-            <div className="space-y-2">
-              {insights.map((ins, i) => (
-                <InsightCard key={i} icon={ins.icon} color={ins.color} text={ins.text} />
-              ))}
+            <div className="space-y-3">
+              {insights.map((ins, i) => {
+                const Icon = ins.icon;
+                return (
+                  <div key={i} className="rounded-2xl p-4 flex items-start gap-3"
+                    style={{ background: `${ins.color}10`, border: `1.5px solid ${ins.color}30` }}>
+                    <Icon size={18} color={ins.color} className="flex-shrink-0 mt-0.5" />
+                    <p className="text-xs leading-relaxed" style={{ color: "#3a3028" }}>{ins.text}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
 
-        {!hasCheckins && lessons.length === 0 && goals.length === 0 && (
-          <div className="rounded-2xl p-8 text-center" style={{ background: C.white, border: `1.5px dashed ${C.cream}` }}>
-            <p className="text-3xl mb-3">📊</p>
-            <p className="font-serif font-bold text-base mb-2" style={{ color: C.darkGreen }}>No data yet</p>
-            <p className="text-xs" style={{ color: C.mutedText }}>
-              Complete a few check-ins, lessons, or goals and your analytics will appear here.
+        {/* ── EMPTY STATE ── */}
+        {!hasCheckins && lessons.length === 0 && (
+          <div className="rounded-2xl p-8 text-center" style={{ background: "#fff", border: `1.5px dashed ${C.cream}` }}>
+            <p className="text-3xl mb-3">🌱</p>
+            <p className="font-serif font-bold text-base mb-2" style={{ color: C.darkGreen }}>Nothing to show yet</p>
+            <p className="text-xs mb-4" style={{ color: C.mutedText }}>
+              Start your first Daily Check-In and this page will begin tracking your family's progress!
             </p>
+            <Link to="/daily-checkin" className="inline-block px-5 py-2.5 rounded-xl text-sm font-bold"
+              style={{ background: C.darkGreen, color: "#fff", textDecoration: "none" }}>
+              Start a Check-In →
+            </Link>
           </div>
         )}
 
