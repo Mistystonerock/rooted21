@@ -24,9 +24,9 @@ const CONTENT = {
           "By accessing Rooted 21, you agree to these terms. This platform serves three user roles: (a) Parents/Caregivers — biological parents, adoptive parents, foster parents, kinship caregivers, and legal guardians; (b) Professionals — licensed therapists, counselors, caseworkers, coaches, and advocates who access family data via professional access codes; (c) Court Staff — judges, attorneys, guardians ad litem, and court-appointed monitors who access designated case data through court-authorized credentials. Each role carries different access rights and responsibilities defined herein.",
       },
       {
-        heading: "2. Intellectual Property & Curriculum License",
+        heading: "2. Platform License & Permitted Use",
         content:
-          "All curriculum content, lesson materials, behavioral frameworks, AI coaching logic, branding, and proprietary parenting methodology on Rooted 21 are owned by Rooted 21, LLC and protected by U.S. and international copyright, trademark, and trade secret laws. You are granted a limited, non-exclusive, non-transferable license to use the platform for personal or professional support purposes only. You may NOT: copy, redistribute, sublicense, or sell any content; reproduce curriculum materials for group use without written authorization; use automated tools to extract platform data; or create competing derivative works. Violations may result in immediate termination and civil/criminal prosecution.",
+          "All curriculum content, lesson materials, behavioral frameworks, AI coaching logic, branding, and proprietary parenting methodology on Rooted 21 are owned by Rooted 21, LLC. You are granted a limited, non-exclusive, non-transferable license to use the platform for personal or professional support purposes only. You may NOT: copy, redistribute, sublicense, or sell any content; reproduce curriculum materials for group use without written authorization; use automated tools to extract platform data; or create competing derivative works. Violations may result in immediate account termination.",
       },
       {
         heading: "3. Co-Parent Portal — Supervised Messaging Terms",
@@ -209,47 +209,42 @@ const CONTENT = {
       {
         heading: "Why This Guide Exists",
         content:
-          "TBRI® (Trust-Based Relational Intervention) is a registered trademark of TCU Institute of Child Development. This guide provides safe, legally sound alternative terminology for use within Rooted 21's curriculum, directory, and coaching features. It clarifies what professionals may self-report, what language to use in the app, and recommended next steps for curriculum compliance.",
+          "Rooted 21 uses trauma-informed and attachment-based parenting language throughout the platform. This guide outlines the approved terminology used in our curriculum, directory, and coaching features so that all content remains consistent, clear, and legally sound.",
       },
       {
-        heading: "Find & Replace: Core Terminology",
+        heading: "Core Terminology We Use",
         content:
-          "Replace 'TBRI®' with: 'trauma-informed parenting' (general contexts), 'attachment-based parenting' (relationship/connection contexts), 'trust-based parenting' (informal/coaching contexts), 'Empowering Principles' → 'Empowerment Strategies', 'Connecting Principles' → 'Connection-First Strategies', 'Correcting Principles' → 'Behavior Guidance Strategies'.",
+          "Rooted 21 uses: 'trauma-informed parenting' (general contexts); 'attachment-based parenting' (relationship and connection contexts); 'trust-based parenting' (informal coaching contexts); 'Empowerment Strategies' for building felt safety and autonomy; 'Connection-First Strategies' for relational attunement; 'Behavior Guidance Strategies' for addressing challenging behaviors.",
       },
       {
-        heading: "Curriculum Language Replacements",
+        heading: "Curriculum Language Standards",
         content:
-          "In lesson content: replace 'TBRI® trained' with 'trauma-informed care trained'; replace 'TBRI® practitioner' with 'trauma-informed parenting coach'; replace 'TBRI® techniques' with 'trust-building and regulation techniques'; replace 'TBRI® principles' with 'trauma-informed parenting principles'; replace 'TBRI® certified' with 'trauma-informed parenting certified'. Keep references to 'Dr. Karyn Purvis' and 'Empowered to Connect' as factual citations with proper attribution.",
+          "In lesson and coaching content, Rooted 21 uses: 'trauma-informed care trained' for professional descriptions; 'trauma-informed parenting coach' for coaching roles; 'trust-building and regulation techniques' for practical strategies; 'trauma-informed parenting principles' for conceptual frameworks. All language is original to Rooted 21 or in general public use.",
       },
       {
         heading: "Professional Directory Tags",
         content:
-          "Professionals may self-report their TBRI® training status in their own profile bios — this is factual self-disclosure, not a platform endorsement. Rooted 21 directory tags should use: 'Trauma-Informed Care' instead of 'TBRI® Trained'; 'Attachment-Based Therapy' instead of 'TBRI® Therapist'; 'Trust-Based Parenting Support' for coaches. Do NOT add TBRI® as a platform-generated tag on professional profiles without verified credential disclosure.",
+          "Rooted 21 directory tags use original, descriptive language: 'Trauma-Informed Care'; 'Attachment-Based Therapy'; 'Trust-Based Parenting Support'; 'Regulation-Focused Coaching'. Professionals may describe their own training background in their personal bios using their own words. Rooted 21 does not verify, endorse, or warrant any professional's stated certifications.",
       },
       {
-        heading: "What Professionals Can Still Self-Report",
+        heading: "What Professionals May Self-Describe",
         content:
-          "Licensed professionals and coaches may accurately state in their own bio: 'I have completed TBRI® training through TCU'; 'I am a TBRI® Practitioner (TCU certified)'; 'My approach is informed by TBRI® principles'. These are factual statements of the professional's credentials, not claims by Rooted 21. Rooted 21 does not verify, endorse, or warrant any professional's stated certifications.",
+          "Licensed professionals and coaches may describe their own training and credentials in their profile bios in their own words. These are the professional's own factual statements and are not claims made by Rooted 21. Rooted 21 does not verify, endorse, or warrant any professional's stated background or certifications.",
       },
       {
         heading: "AI Chat & Coaching Language",
         content:
-          "In AI-generated responses, coaching content, and chat features: use 'trauma-informed parenting approach' or 'trust-building parenting strategies' in place of 'TBRI®'; use 'regulation-first parenting' for the self-regulation emphasis; use 'connection before correction' as a general principle (no trademark); use 'felt safety and nurture' for the attunement components. The phrase 'connection before correction' is in common usage and not trademarked.",
+          "In AI-generated responses and coaching features, Rooted 21 uses: 'trauma-informed parenting approach'; 'trust-building parenting strategies'; 'regulation-first parenting'; 'connection before correction' (general principle in common usage); 'felt safety and nurture' for attunement. All AI language is based on Rooted 21's own framework and publicly available parenting research.",
       },
       {
         heading: "App UI & Navigation Labels",
         content:
-          "Audit and replace the following in UI: 'TBRI® Practice Goal' → 'Trauma-Informed Practice Goal'; 'TBRI® Principle in Focus' → 'Parenting Principle in Focus'; 'TBRI® Habits' → 'Regulation Habits' or 'Trust-Building Habits'; 'TBRI® based' in any tagline → 'trauma-informed parenting'. In the Weekly Habits tracker, replace habit labels referencing TBRI® with their descriptive equivalents (e.g., 'PACE: Got curious' → 'Got curious & playful').",
+          "All UI labels use Rooted 21's own terminology: 'Trauma-Informed Practice Goal'; 'Parenting Principle in Focus'; 'Regulation Habits'; 'Trust-Building Habits'; 'trauma-informed parenting' in all taglines. The Weekly Habits tracker uses descriptive labels (e.g., 'Got curious and playful today') rather than framework-specific names.",
       },
       {
-        heading: "Recommended Next Steps",
+        heading: "Rooted 21 Methodology Statement",
         content:
-          "1. Submit a licensing inquiry to TCU Institute of Child Development if formal TBRI® curriculum use is intended for group programs. 2. Review all 21 lesson files and replace TBRI® references per the table above. 3. Update professional directory filter tags before next public release. 4. Add a factual attribution footnote on the Resources page: 'This program draws from trauma-informed and attachment-based parenting research, including work by Dr. Karyn Purvis and the TCU Institute of Child Development.' 5. Consult an IP attorney if you plan to market to TBRI® practitioners as a primary audience.",
-      },
-      {
-        heading: "Attribution Language (Approved)",
-        content:
-          "Approved attribution: 'Rooted 21's curriculum is informed by trauma-informed parenting research, including attachment science and the work of Dr. Karyn Purvis (Empowered to Connect). TBRI® is a registered trademark of TCU Institute of Child Development and is used here only in reference to that institution's work.' This attribution is factually accurate and does not constitute misappropriation.",
+          "Rooted 21's curriculum is built on Rooted 21's own trauma-informed parenting framework, drawing from publicly available attachment science, developmental research, and best practices in trauma-sensitive care. Our approach is inspired by the broader field of trauma-informed parenting and is original to Rooted 21, LLC.",
       },
     ],
   },
