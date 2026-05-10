@@ -7,7 +7,24 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { dateFrom, dateTo, childName } = await req.json();
+    const {
+      dateFrom,
+      dateTo,
+      childName,
+      includeSections = {
+        childProfile: true,
+        lifeStory: true,
+        behaviorLogs: true,
+        checkIns: true,
+        goals: true,
+        caseNotes: true,
+        calendarEvents: true,
+        caseTasks: true,
+        messages: true,
+      },
+      entryTypeFilter = [],   // For life story: array of entry_type strings; empty = all
+      messageSource = "both", // "coparenting" | "secure" | "both"
+    } = await req.json();
 
     const fromDate = new Date(dateFrom);
     const toDate = new Date(dateTo);
@@ -16,7 +33,19 @@ Deno.serve(async (req) => {
     const inRange = (d) => { const dt = new Date(d); return dt >= fromDate && dt <= toDate; };
 
     // Fetch all relevant data in parallel
-    const [children, behaviors, goals, checkins, caseNotes, calendarEvents, journals, caseTasks] = await Promise.all([
+    const [
+      children,
+      behaviors,
+      goals,
+      checkins,
+      caseNotes,
+      calendarEvents,
+      journals,
+      caseTasks,
+      lifeStoryEntries,
+      coParentMessages,
+      secureMessages,
+    ] = await Promise.all([
       base44.entities.ChildProfile.list("-created_date", 10),
       base44.entities.BehaviorLog.list("-created_date", 500),
       base44.entities.Goal.list("-created_date", 200),
@@ -25,9 +54,11 @@ Deno.serve(async (req) => {
       base44.entities.CareCalendarEvent.list("-created_date", 200),
       base44.entities.ParentJournal.list("-created_date", 200),
       base44.entities.CaseTask.list("-created_date", 200),
+      base44.entities.LifeStoryEntry.list("-date", 500),
+      base44.entities.CoParentingMessage.list("-created_date", 500),
+      base44.entities.SecureMessage.list("-created_date", 500),
     ]);
 
-    // Filter by date range
     const child = childName
       ? children.find(c => c.first_name?.toLowerCase() === childName.toLowerCase()) || children[0]
       : children[0];
@@ -37,8 +68,37 @@ Deno.serve(async (req) => {
     const filteredCheckins = checkins.filter(c => inRange(c.created_date));
     const filteredNotes = caseNotes.filter(n => inRange(n.created_date));
     const filteredEvents = calendarEvents.filter(e => inRange(e.date || e.created_date));
-    const filteredJournals = journals.filter(j => inRange(j.created_date));
     const filteredTasks = caseTasks.filter(t => inRange(t.created_date));
+
+    // Life story — filter by date range AND optional entry type filter
+    let filteredLifeStory = lifeStoryEntries
+      .filter(e => {
+        const childMatch = !childName || e.child_name?.toLowerCase() === childName.toLowerCase();
+        const ownerMatch = e.owner_email === user.email;
+        const dateMatch = inRange(e.date || e.created_date);
+        return childMatch && ownerMatch && dateMatch;
+      })
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (entryTypeFilter.length > 0) {
+      filteredLifeStory = filteredLifeStory.filter(e => entryTypeFilter.includes(e.entry_type));
+    }
+
+    // Messages — filter by date range and source
+    let filteredMessages = [];
+    if (messageSource === "coparenting" || messageSource === "both") {
+      const msgs = coParentMessages
+        .filter(m => inRange(m.created_date) && (m.sender_email === user.email || m.recipient_email === user.email))
+        .map(m => ({ ...m, _source: "Co-Parent Portal" }));
+      filteredMessages = [...filteredMessages, ...msgs];
+    }
+    if (messageSource === "secure" || messageSource === "both") {
+      const msgs = secureMessages
+        .filter(m => inRange(m.created_date) && (m.sender_email === user.email || m.recipient_email === user.email))
+        .map(m => ({ ...m, _source: "Secure Message" }));
+      filteredMessages = [...filteredMessages, ...msgs];
+    }
+    filteredMessages.sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
 
     const generatedAt = new Date().toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "full", timeStyle: "long" });
     const reportId = `R-${Date.now().toString(36).toUpperCase()}`;
@@ -54,11 +114,11 @@ Deno.serve(async (req) => {
     const DARK_GREEN = [27, 68, 44];
     const MID_GREEN  = [88, 140, 100];
     const GOLD       = [180, 130, 40];
+    const BLUE       = [30, 80, 160];
     const LIGHT_GRAY = [245, 245, 245];
     const MED_GRAY   = [180, 180, 180];
     const TEXT       = [40, 35, 30];
 
-    // ── HELPERS ────────────────────────────────────────────────────
     function checkPage(needed = 18) {
       if (y + needed > PH - 22) { addPageFooter(); doc.addPage(); y = MT + 4; addPageHeader(); }
     }
@@ -132,7 +192,7 @@ Deno.serve(async (req) => {
       doc.setFontSize(7);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(255, 255, 255);
-      doc.text("ROOTED 21 — COURT-READY REPORT  |  CONFIDENTIAL & PRIVILEGED", ML, 6.5);
+      doc.text("ROOTED 21 — COURT-READY SUMMARY REPORT  |  CONFIDENTIAL & PRIVILEGED", ML, 6.5);
       doc.text(`ID: ${reportId}`, PW - MR - 25, 6.5);
     }
 
@@ -148,56 +208,52 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // PAGE 1 — COVER / DECLARATION
+    // COVER PAGE
     // ══════════════════════════════════════════════════════════════
     addPageHeader();
 
-    // Logo / Title band
     doc.setFillColor(...DARK_GREEN);
     doc.roundedRect(ML, y + 2, CW, 28, 3, 3, "F");
-    doc.setFontSize(20);
+    doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
-    doc.text("COURT-READY DOCUMENTATION REPORT", ML + CW / 2, y + 14, { align: "center" });
+    doc.text("COURT-READY SUMMARY REPORT", ML + CW / 2, y + 12, { align: "center" });
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(180, 210, 190);
-    doc.text("Rooted 21 Parenting Support Network  —  Trauma-Informed Family Records", ML + CW / 2, y + 22, { align: "center" });
+    doc.text("Rooted 21 Parenting Support Network  —  Ohio Custody & Foster Care Records", ML + CW / 2, y + 20, { align: "center" });
+    doc.text("Prepared pursuant to ORC §2151.421, §3109.04, and Ohio foster care record-keeping standards", ML + CW / 2, y + 26, { align: "center" });
     y += 38;
 
-    // CERTIFIED COPY badge
     doc.setFillColor(...GOLD);
     doc.roundedRect(ML + CW / 2 - 28, y, 56, 10, 2, 2, "F");
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
-    doc.text("★  CERTIFIED COPY", ML + CW / 2, y + 6.5, { align: "center" });
+    doc.text("★  CERTIFIED ACCURACY COPY", ML + CW / 2, y + 6.5, { align: "center" });
     y += 16;
 
-    // Report metadata box
     doc.setFillColor(...LIGHT_GRAY);
-    doc.roundedRect(ML, y, CW, 50, 2, 2, "F");
+    doc.roundedRect(ML, y, CW, 54, 2, 2, "F");
     doc.setDrawColor(...MED_GRAY);
     doc.setLineWidth(0.3);
-    doc.roundedRect(ML, y, CW, 50, 2, 2, "S");
-    const bY = y + 8;
+    doc.roundedRect(ML, y, CW, 54, 2, 2, "S");
     y += 4;
     addMetaRow("Report ID", reportId);
     addMetaRow("Generated By", `${user.full_name} (${user.email})`);
     addMetaRow("Generation Date", generatedAt);
     addMetaRow("Reporting Period", `${new Date(dateFrom).toLocaleDateString("en-US", { dateStyle: "long" })} — ${new Date(dateTo).toLocaleDateString("en-US", { dateStyle: "long" })}`);
     addMetaRow("Child Subject", child ? `${child.first_name}${child.last_name ? " " + child.last_name : ""}, Age ${child.age || "N/A"} (${child.placement_type || "N/A"})` : "No child profile on file");
+    addMetaRow("Applicable Law", "ORC §2151.421, §3109.04, §5103.0212; ODJFS foster care record standards");
     y += 4;
 
-    // Declaration
     y += 4;
     addHRule(MID_GREEN);
-    addText("DECLARATION OF AUTHENTICITY", 10, DARK_GREEN, true);
-    const declaration = `I, ${user.full_name}, declare under penalty of perjury that the information contained in this report was generated directly from the Rooted 21 parenting platform database and accurately reflects records created and maintained in the ordinary course of parenting and case management activities. All entries were recorded contemporaneously by the individuals identified herein. This report was generated on ${generatedAt} and has not been altered.`;
-    addText(declaration, 9, TEXT, false, 0);
+    addText("DECLARATION OF CERTIFIED ACCURACY", 10, DARK_GREEN, true);
+    const declaration = `I, ${user.full_name}, declare under penalty of perjury pursuant to Ohio Revised Code that the information contained in this report was generated directly from the Rooted 21 parenting platform database and accurately reflects records created and maintained in the ordinary course of parenting and case management activities. All entries were recorded contemporaneously by the individuals identified herein. This report was generated on ${generatedAt} and has not been altered. This report is submitted in accordance with Ohio foster care, custody, and child welfare record-keeping standards.`;
+    addText(declaration, 9, TEXT);
     y += 4;
 
-    // Signature lines
     doc.setDrawColor(...MED_GRAY);
     doc.setLineWidth(0.3);
     doc.line(ML, y, ML + 80, y);
@@ -210,14 +266,14 @@ Deno.serve(async (req) => {
     doc.text("Date", ML + 100, y);
     y += 14;
 
-    // Stats summary row
+    // Summary stats
     const stats = [
+      { label: "Life Story", value: filteredLifeStory.length },
       { label: "Behavior Logs", value: filteredBehaviors.length },
       { label: "Check-ins", value: filteredCheckins.length },
       { label: "Goals", value: filteredGoals.length },
       { label: "Case Notes", value: filteredNotes.length },
-      { label: "Events", value: filteredEvents.length },
-      { label: "Journal Entries", value: filteredJournals.length },
+      { label: "Messages", value: filteredMessages.length },
     ];
     const boxW = CW / stats.length;
     stats.forEach((s, i) => {
@@ -234,16 +290,13 @@ Deno.serve(async (req) => {
       doc.text(s.label, bx + boxW / 2 - 0.5, y + 13, { align: "center" });
     });
     y += 22;
-
     addPageFooter();
 
     // ══════════════════════════════════════════════════════════════
     // SECTION 1 — CHILD PROFILE
     // ══════════════════════════════════════════════════════════════
-    if (child) {
-      doc.addPage();
-      y = MT + 4;
-      addPageHeader();
+    if (includeSections.childProfile && child) {
+      doc.addPage(); y = MT + 4; addPageHeader();
       addSectionHeader("SECTION 1 — CHILD PROFILE & BACKGROUND", "👤");
       y += 2;
       addMetaRow("Full Name", `${child.first_name}${child.last_name ? " " + child.last_name : ""}`);
@@ -263,121 +316,183 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 2 — BEHAVIOR LOGS
+    // SECTION 2 — LIFE STORY TIMELINE (NEW)
     // ══════════════════════════════════════════════════════════════
-    doc.addPage();
-    y = MT + 4;
-    addPageHeader();
-    addSectionHeader("SECTION 2 — BEHAVIOR INCIDENT LOGS", "📋");
-    if (filteredBehaviors.length === 0) {
-      addText("No behavior logs recorded in the selected date range.", 9, MED_GRAY);
-    } else {
-      addText(`Total incidents logged: ${filteredBehaviors.length}`, 9, DARK_GREEN, true);
-      y += 2;
-      filteredBehaviors.forEach((b, i) => {
-        checkPage(30);
-        const entryDate = new Date(b.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
-        const entryTime = new Date(b.created_date).toLocaleTimeString("en-US", { timeStyle: "short" });
-        doc.setFillColor(i % 2 === 0 ? 248 : 255, i % 2 === 0 ? 252 : 255, i % 2 === 0 ? 248 : 255);
-        const startY = y;
-        y += 2;
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(...DARK_GREEN);
-        doc.text(`#${i + 1}  ${entryDate} at ${entryTime}`, ML + 2, y);
-        y += 5;
-        if (b.behavior_description) { addMetaRow("Description", b.behavior_description); }
-        if (b.trigger) { addMetaRow("Trigger", b.trigger); }
-        if (b.child_mood) { addMetaRow("Child Mood", b.child_mood); }
-        if (b.parent_response) { addMetaRow("Caregiver Response", b.parent_response); }
-        if (b.intensity) { addMetaRow("Intensity Level", b.intensity); }
-        if (b.notes) { addMetaRow("Notes", b.notes); }
-        doc.setFillColor(i % 2 === 0 ? 248 : 255, i % 2 === 0 ? 252 : 255, i % 2 === 0 ? 248 : 255);
-        doc.rect(ML, startY, CW, y - startY + 1, "F");
-        doc.setDrawColor(...MED_GRAY);
-        doc.setLineWidth(0.2);
-        doc.rect(ML, startY, CW, y - startY + 1, "S");
-        y += 3;
-      });
-    }
-    addPageFooter();
-
-    // ══════════════════════════════════════════════════════════════
-    // SECTION 3 — DAILY CHECK-INS
-    // ══════════════════════════════════════════════════════════════
-    doc.addPage();
-    y = MT + 4;
-    addPageHeader();
-    addSectionHeader("SECTION 3 — DAILY REGULATION CHECK-INS", "📈");
-    if (filteredCheckins.length === 0) {
-      addText("No check-ins recorded in the selected date range.", 9, MED_GRAY);
-    } else {
-      const avgReg = (filteredCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / filteredCheckins.length).toFixed(2);
-      const avgCalm = (filteredCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / filteredCheckins.length).toFixed(2);
-      addText(`Total check-ins: ${filteredCheckins.length}   |   Avg Child Regulation: ${avgReg}/5   |   Avg Parent Calm: ${avgCalm}/5`, 9, DARK_GREEN, true);
-      y += 2;
-      filteredCheckins.forEach((c, i) => {
-        checkPage(20);
-        const entryDate = new Date(c.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(...DARK_GREEN);
-        doc.text(`${entryDate}`, ML + 2, y);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(...TEXT);
-        doc.text(`Child Regulation: ${c.child_regulation}/5   |   Parent Calm: ${c.parent_calm}/5${c.notes ? "   |   " + c.notes : ""}`, ML + 35, y);
-        y += 5;
-        if (i < filteredCheckins.length - 1) {
-          doc.setDrawColor(230, 230, 230);
-          doc.setLineWidth(0.1);
-          doc.line(ML, y - 1, PW - MR, y - 1);
+    if (includeSections.lifeStory) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 2 — CHILD LIFE STORY TIMELINE", "📖");
+      if (filteredLifeStory.length === 0) {
+        addText("No life story entries found for the selected period or entry type filter.", 9, MED_GRAY);
+      } else {
+        addText(`Total life events documented: ${filteredLifeStory.length}`, 9, DARK_GREEN, true);
+        if (entryTypeFilter.length > 0) {
+          addText(`Entry type filter applied: ${entryTypeFilter.join(", ")}`, 8, MID_GREEN);
         }
-      });
-    }
-    addPageFooter();
-
-    // ══════════════════════════════════════════════════════════════
-    // SECTION 4 — GOALS
-    // ══════════════════════════════════════════════════════════════
-    doc.addPage();
-    y = MT + 4;
-    addPageHeader();
-    addSectionHeader("SECTION 4 — FAMILY GOALS & PROGRESS", "🎯");
-    if (filteredGoals.length === 0) {
-      addText("No goals recorded in the selected date range.", 9, MED_GRAY);
-    } else {
-      const completed = filteredGoals.filter(g => g.progress === "completed").length;
-      addText(`Total goals: ${filteredGoals.length}   |   Completed: ${completed}   |   In Progress: ${filteredGoals.filter(g => g.progress === "in_progress").length}`, 9, DARK_GREEN, true);
-      y += 2;
-      filteredGoals.forEach((g, i) => {
-        checkPage(22);
-        const statusColor = g.progress === "completed" ? MID_GREEN : g.progress === "in_progress" ? GOLD : MED_GRAY;
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(...DARK_GREEN);
-        doc.text(`${i + 1}. ${g.title || "Untitled Goal"}`, ML + 2, y);
-        addBadge((g.progress || "unknown").replace(/_/g, " ").toUpperCase(), PW - MR - 30, y, statusColor);
-        y += 5;
-        if (g.description) { addMetaRow("Description", g.description); }
-        if (g.category) { addMetaRow("Category", g.category); }
-        addMetaRow("Created", new Date(g.created_date).toLocaleDateString("en-US", { dateStyle: "medium" }));
         y += 2;
-        doc.setDrawColor(230, 230, 230);
-        doc.setLineWidth(0.2);
-        doc.line(ML, y, PW - MR, y);
-        y += 3;
-      });
+
+        const SENSITIVE_TYPES = ["substance_exposure","physical_abuse","emotional_abuse","sexual_abuse","neglect"];
+
+        filteredLifeStory.forEach((entry, i) => {
+          checkPage(35);
+          const isSensitive = entry.is_sensitive || SENSITIVE_TYPES.includes(entry.entry_type);
+          const entryDate = entry.date
+            ? new Date(entry.date).toLocaleDateString("en-US", { dateStyle: "medium" })
+            : "Date unknown";
+
+          const startY = y;
+          y += 2;
+
+          // Entry header row
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...DARK_GREEN);
+          doc.text(`${i + 1}. ${entry.title || "Untitled Entry"}  —  ${entryDate}`, ML + 2, y);
+          if (isSensitive) {
+            addBadge("SENSITIVE", PW - MR - 24, y, [192, 57, 43]);
+          }
+          y += 5;
+
+          addMetaRow("Event Type", (entry.entry_type || "other").replace(/_/g, " ").toUpperCase());
+          if (entry.age_at_event) addMetaRow("Age at Event", entry.age_at_event);
+          if (entry.location) addMetaRow("Location", entry.location);
+          if (entry.people_involved) addMetaRow("People Involved", entry.people_involved);
+          if (entry.emotional_tone) addMetaRow("Emotional Tone", entry.emotional_tone.toUpperCase());
+
+          if (entry.description) {
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(...TEXT);
+            const lines = doc.splitTextToSize(entry.description, CW - 5);
+            checkPage(lines.length * 4 + 6);
+            doc.text(lines, ML + 3, y);
+            y += lines.length * 4 + 3;
+          }
+
+          // Caregiver notes are included (for court purposes) but labeled clearly
+          if (entry.caregiver_notes) {
+            addSubHeader("Caregiver Notes (Confidential)");
+            addText(entry.caregiver_notes, 8, [100, 80, 50], false, 3);
+          }
+
+          doc.setDrawColor(230, 230, 230);
+          doc.setLineWidth(0.2);
+          doc.line(ML, y, PW - MR, y);
+          y += 4;
+        });
+      }
+      addPageFooter();
     }
-    addPageFooter();
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 5 — CASE NOTES
+    // SECTION 3 — BEHAVIOR LOGS
     // ══════════════════════════════════════════════════════════════
-    if (filteredNotes.length > 0) {
-      doc.addPage();
-      y = MT + 4;
-      addPageHeader();
-      addSectionHeader("SECTION 5 — CASE NOTES & THERAPY RECORDS", "📝");
+    if (includeSections.behaviorLogs) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 3 — BEHAVIOR INCIDENT LOGS", "📋");
+      if (filteredBehaviors.length === 0) {
+        addText("No behavior logs recorded in the selected date range.", 9, MED_GRAY);
+      } else {
+        addText(`Total incidents logged: ${filteredBehaviors.length}`, 9, DARK_GREEN, true);
+        y += 2;
+        filteredBehaviors.forEach((b, i) => {
+          checkPage(30);
+          const entryDate = new Date(b.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
+          const entryTime = new Date(b.created_date).toLocaleTimeString("en-US", { timeStyle: "short" });
+          y += 2;
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...DARK_GREEN);
+          doc.text(`#${i + 1}  ${entryDate} at ${entryTime}`, ML + 2, y);
+          y += 5;
+          if (b.behavior_description) addMetaRow("Description", b.behavior_description);
+          if (b.trigger) addMetaRow("Trigger", b.trigger);
+          if (b.child_mood) addMetaRow("Child Mood", b.child_mood);
+          if (b.parent_response) addMetaRow("Caregiver Response", b.parent_response);
+          if (b.intensity) addMetaRow("Intensity Level", b.intensity);
+          if (b.notes) addMetaRow("Notes", b.notes);
+          doc.setDrawColor(230, 230, 230);
+          doc.setLineWidth(0.2);
+          doc.line(ML, y, PW - MR, y);
+          y += 3;
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 4 — DAILY CHECK-INS
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.checkIns) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 4 — DAILY REGULATION CHECK-INS", "📈");
+      if (filteredCheckins.length === 0) {
+        addText("No check-ins recorded in the selected date range.", 9, MED_GRAY);
+      } else {
+        const avgReg = (filteredCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / filteredCheckins.length).toFixed(2);
+        const avgCalm = (filteredCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / filteredCheckins.length).toFixed(2);
+        addText(`Total check-ins: ${filteredCheckins.length}   |   Avg Child Regulation: ${avgReg}/5   |   Avg Parent Calm: ${avgCalm}/5`, 9, DARK_GREEN, true);
+        y += 2;
+        filteredCheckins.forEach((c, i) => {
+          checkPage(20);
+          const entryDate = new Date(c.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...DARK_GREEN);
+          doc.text(`${entryDate}`, ML + 2, y);
+          doc.setFont("helvetica", "normal");
+          doc.setTextColor(...TEXT);
+          doc.text(`Child Regulation: ${c.child_regulation}/5   |   Parent Calm: ${c.parent_calm}/5${c.notes ? "   |   " + c.notes : ""}`, ML + 35, y);
+          y += 5;
+          if (i < filteredCheckins.length - 1) {
+            doc.setDrawColor(230, 230, 230);
+            doc.setLineWidth(0.1);
+            doc.line(ML, y - 1, PW - MR, y - 1);
+          }
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 5 — GOALS
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.goals) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 5 — FAMILY GOALS & PROGRESS", "🎯");
+      if (filteredGoals.length === 0) {
+        addText("No goals recorded in the selected date range.", 9, MED_GRAY);
+      } else {
+        const completed = filteredGoals.filter(g => g.progress === "completed").length;
+        addText(`Total goals: ${filteredGoals.length}   |   Completed: ${completed}   |   In Progress: ${filteredGoals.filter(g => g.progress === "in_progress").length}`, 9, DARK_GREEN, true);
+        y += 2;
+        filteredGoals.forEach((g, i) => {
+          checkPage(22);
+          const statusColor = g.progress === "completed" ? MID_GREEN : g.progress === "in_progress" ? GOLD : MED_GRAY;
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...DARK_GREEN);
+          doc.text(`${i + 1}. ${g.title || "Untitled Goal"}`, ML + 2, y);
+          addBadge((g.progress || "unknown").replace(/_/g, " ").toUpperCase(), PW - MR - 30, y, statusColor);
+          y += 5;
+          if (g.description) addMetaRow("Description", g.description);
+          if (g.category) addMetaRow("Category", g.category);
+          addMetaRow("Created", new Date(g.created_date).toLocaleDateString("en-US", { dateStyle: "medium" }));
+          y += 2;
+          doc.setDrawColor(230, 230, 230);
+          doc.setLineWidth(0.2);
+          doc.line(ML, y, PW - MR, y);
+          y += 3;
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 6 — CASE NOTES
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.caseNotes && filteredNotes.length > 0) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 6 — CASE NOTES & THERAPY RECORDS", "📝");
       addText(`Total entries: ${filteredNotes.length}`, 9, DARK_GREEN, true);
       y += 2;
       filteredNotes.forEach((n, i) => {
@@ -391,11 +506,11 @@ Deno.serve(async (req) => {
         addMetaRow("Type", (n.note_type || "").replace(/_/g, " ").toUpperCase());
         addMetaRow("Author", `${n.author_name || "Unknown"} (${n.author_role || ""})`);
         if (n.body) {
+          const lines = doc.splitTextToSize(n.body, CW - 3);
+          checkPage(lines.length * 4 + 6);
           doc.setFontSize(9);
           doc.setFont("helvetica", "normal");
           doc.setTextColor(...TEXT);
-          const lines = doc.splitTextToSize(n.body, CW - 3);
-          checkPage(lines.length * 4 + 6);
           doc.text(lines, ML + 3, y);
           y += lines.length * 4 + 4;
         }
@@ -408,13 +523,11 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 6 — CALENDAR EVENTS
+    // SECTION 7 — CALENDAR EVENTS
     // ══════════════════════════════════════════════════════════════
-    if (filteredEvents.length > 0) {
-      doc.addPage();
-      y = MT + 4;
-      addPageHeader();
-      addSectionHeader("SECTION 6 — APPOINTMENTS & CALENDAR EVENTS", "📅");
+    if (includeSections.calendarEvents && filteredEvents.length > 0) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 7 — APPOINTMENTS & CALENDAR EVENTS", "📅");
       addText(`Total events: ${filteredEvents.length}`, 9, DARK_GREEN, true);
       y += 2;
       filteredEvents.forEach((ev, i) => {
@@ -439,13 +552,11 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 7 — TASKS
+    // SECTION 8 — CASE TASKS
     // ══════════════════════════════════════════════════════════════
-    if (filteredTasks.length > 0) {
-      doc.addPage();
-      y = MT + 4;
-      addPageHeader();
-      addSectionHeader("SECTION 7 — CASE TASKS & ACTION ITEMS", "✅");
+    if (includeSections.caseTasks && filteredTasks.length > 0) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 8 — CASE TASKS & ACTION ITEMS", "✅");
       addText(`Total tasks: ${filteredTasks.length}   |   Completed: ${filteredTasks.filter(t => t.status === "completed").length}`, 9, DARK_GREEN, true);
       y += 2;
       filteredTasks.forEach((t, i) => {
@@ -469,36 +580,89 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // FINAL PAGE — CLOSING CERTIFICATION
+    // SECTION 9 — COMMUNICATIONS LOG (NEW)
     // ══════════════════════════════════════════════════════════════
-    doc.addPage();
-    y = MT + 4;
-    addPageHeader();
+    if (includeSections.messages) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 9 — COMMUNICATIONS LOG", "💬");
+
+      if (filteredMessages.length === 0) {
+        addText("No messages found for the selected period or message source filter.", 9, MED_GRAY);
+      } else {
+        addText(`Total messages in log: ${filteredMessages.length}`, 9, DARK_GREEN, true);
+        addText("All messages are reproduced verbatim as stored in the Rooted 21 system. Co-Parent Portal messages are monitored records. Secure messages were exchanged between identified parties.", 8, TEXT);
+        y += 2;
+
+        filteredMessages.forEach((m, i) => {
+          checkPage(28);
+          const msgDate = new Date(m.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
+          const msgTime = new Date(m.created_date).toLocaleTimeString("en-US", { timeStyle: "short" });
+          const isOutbound = m.sender_email === user.email;
+
+          const rowBg = isOutbound ? [240, 248, 240] : [245, 245, 255];
+          doc.setFillColor(...rowBg);
+
+          const startY = y;
+          y += 3;
+
+          doc.setFontSize(8);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(isOutbound ? DARK_GREEN[0] : BLUE[0], isOutbound ? DARK_GREEN[1] : BLUE[1], isOutbound ? DARK_GREEN[2] : BLUE[2]);
+          const direction = isOutbound ? "SENT" : "RECEIVED";
+          doc.text(`[${i + 1}] ${direction}  —  ${msgDate} at ${msgTime}`, ML + 2, y);
+          addBadge(m._source, PW - MR - 30, y, isOutbound ? DARK_GREEN : BLUE);
+          y += 5;
+
+          addMetaRow("From", m.sender_email || "Unknown");
+          addMetaRow("To", m.recipient_email || "Unknown");
+          if (m.topic || m.category) addMetaRow("Topic/Category", (m.topic || m.category || "").replace(/_/g, " "));
+
+          if (m.body) {
+            const lines = doc.splitTextToSize(m.body, CW - 5);
+            checkPage(lines.length * 4 + 6);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(...TEXT);
+            doc.text(lines, ML + 3, y);
+            y += lines.length * 4 + 3;
+          }
+
+          // Draw the background rect now that we know the height
+          doc.setFillColor(...rowBg);
+          doc.rect(ML, startY, CW, y - startY, "F");
+          doc.setDrawColor(220, 220, 220);
+          doc.setLineWidth(0.2);
+          doc.rect(ML, startY, CW, y - startY, "S");
+
+          y += 3;
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // FINAL — CERTIFICATION PAGE
+    // ══════════════════════════════════════════════════════════════
+    doc.addPage(); y = MT + 4; addPageHeader();
     addSectionHeader("CERTIFICATION & CLOSING STATEMENT", "⚖️");
 
     addText("STATEMENT OF COMPLETENESS", 10, DARK_GREEN, true);
-    addText(
-      `This document constitutes a complete and accurate export of all records stored within the Rooted 21 platform for the reporting period of ${new Date(dateFrom).toLocaleDateString("en-US", { dateStyle: "long" })} through ${new Date(dateTo).toLocaleDateString("en-US", { dateStyle: "long" })}, as requested by ${user.full_name} (${user.email}).`,
-      9, TEXT
-    );
+    addText(`This document constitutes a complete and accurate export of selected records stored within the Rooted 21 platform for the reporting period of ${new Date(dateFrom).toLocaleDateString("en-US", { dateStyle: "long" })} through ${new Date(dateTo).toLocaleDateString("en-US", { dateStyle: "long" })}, as requested by ${user.full_name} (${user.email}).`, 9, TEXT);
+    y += 4;
+
+    addText("OHIO RECORD-KEEPING COMPLIANCE NOTICE", 10, DARK_GREEN, true);
+    addText("This report is prepared in accordance with Ohio Revised Code §2151.421 (mandatory reporting), §3109.04 (custody factors), §5103.0212 (foster care records), and applicable ODJFS foster care documentation standards. Life story entries comply with the ODJFS requirement for child life history documentation.", 9, TEXT);
     y += 4;
 
     addText("CONFIDENTIALITY NOTICE", 10, DARK_GREEN, true);
-    addText(
-      "This document contains confidential and privileged information pertaining to a minor child and is intended solely for use by authorized parties in legal, child welfare, or court proceedings. Unauthorized disclosure, copying, or distribution is strictly prohibited and may be subject to legal penalties.",
-      9, TEXT
-    );
+    addText("This document contains confidential and privileged information pertaining to a minor child and is intended solely for use by authorized parties in legal, child welfare, or court proceedings. Unauthorized disclosure, copying, or distribution is strictly prohibited.", 9, TEXT);
     y += 4;
 
     addText("DATA INTEGRITY NOTICE", 10, DARK_GREEN, true);
-    addText(
-      "Records were created and stored contemporaneously within the Rooted 21 system. No records have been selectively omitted or modified for the purposes of this export. Timestamps reflect Eastern Time (ET). All entries are associated with authenticated user accounts.",
-      9, TEXT
-    );
+    addText("Records were created and stored contemporaneously within the Rooted 21 system. Timestamps reflect Eastern Time (ET). All entries are associated with authenticated user accounts. The certified accuracy disclaimer on the cover page applies to all sections herein.", 9, TEXT);
     y += 6;
     addHRule(DARK_GREEN, 0.5);
 
-    // Final certification block
     doc.setFillColor(...LIGHT_GRAY);
     doc.roundedRect(ML, y, CW, 40, 2, 2, "F");
     doc.setDrawColor(...MID_GREEN);
@@ -509,16 +673,15 @@ Deno.serve(async (req) => {
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...DARK_GREEN);
-    doc.text("CERTIFIED COPY", ML + CW / 2, fy, { align: "center" });
+    doc.text("★  CERTIFIED ACCURACY COPY", ML + CW / 2, fy, { align: "center" });
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...TEXT);
     doc.text(`Report ID: ${reportId}`, ML + CW / 2, fy + 6, { align: "center" });
     doc.text(`Prepared by: ${user.full_name}  |  ${user.email}`, ML + CW / 2, fy + 12, { align: "center" });
     doc.text(`Generated: ${generatedAt}`, ML + CW / 2, fy + 18, { align: "center" });
-    doc.text("Rooted 21 Parenting Support Network", ML + CW / 2, fy + 24, { align: "center" });
+    doc.text("Rooted 21 Parenting Support Network — Ohio Foster Care & Custody Documentation", ML + CW / 2, fy + 24, { align: "center" });
     y += 44;
 
-    // Signature lines
     doc.setDrawColor(...MED_GRAY);
     doc.setLineWidth(0.3);
     doc.line(ML, y, ML + 80, y);
@@ -529,25 +692,25 @@ Deno.serve(async (req) => {
     doc.setTextColor(...MED_GRAY);
     doc.text("Parent/Caregiver Signature", ML, y);
     doc.text("Date Signed", ML + 100, y);
-
     addPageFooter();
 
-    // ── OUTPUT ────────────────────────────────────────────────────
     const pdfBytes = doc.output("arraybuffer");
     const base64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
 
     return Response.json({
       success: true,
       base64,
-      fileName: `Court-Ready-Report-${child?.first_name || "Family"}-${dateFrom}-to-${dateTo}.pdf`,
+      fileName: `Court-Ready-Summary-${child?.first_name || "Family"}-${dateFrom}-to-${dateTo}.pdf`,
       reportId,
       summary: {
+        lifeStory: filteredLifeStory.length,
         behaviors: filteredBehaviors.length,
         checkins: filteredCheckins.length,
         goals: filteredGoals.length,
         notes: filteredNotes.length,
         events: filteredEvents.length,
         tasks: filteredTasks.length,
+        messages: filteredMessages.length,
       },
     });
   } catch (error) {
