@@ -319,6 +319,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Know Your Rights</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>IEP, CPS, court at a glance</p>
           </Link>
+          <Link to="/life-story" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
+            <div style={{ fontSize: "22px" }}>📖</div>
+            <p className="font-bold text-sm" style={{ color: C.cream }}>Child Life Story</p>
+            <p className="text-[11px]" style={{ color: C.lightGreen }}>Timeline, photos & memories</p>
+          </Link>
         </div>
 
         {/* Lesson progress bar */}

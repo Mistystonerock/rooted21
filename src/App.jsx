@@ -108,6 +108,7 @@ function App() {
               <Route path="/race-and-identity" element={<Suspense fallback={<LoadingFallback />}><routes.RaceAndIdentity /></Suspense>} />
               <Route path="/aging-out-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AgingOutGuide /></Suspense>} />
               <Route path="/rights-card" element={<Suspense fallback={<LoadingFallback />}><routes.RightsCard /></Suspense>} />
+              <Route path="/life-story" element={<Suspense fallback={<LoadingFallback />}><routes.ChildLifeStory /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

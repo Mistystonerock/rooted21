@@ -1,0 +1,62 @@
+{
+  "name": "CommunityPost",
+  "type": "object",
+  "properties": {
+    "author_email": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "author_family_type": {
+      "type": "string"
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "trauma_parenting",
+        "foster_care",
+        "adoption",
+        "kinship",
+        "court_system",
+        "school_iep",
+        "mental_health",
+        "self_care",
+        "wins",
+        "general"
+      ],
+      "default": "general"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "is_anonymous": {
+      "type": "boolean",
+      "default": false
+    },
+    "likes": {
+      "type": "number",
+      "default": 0
+    },
+    "comment_count": {
+      "type": "number",
+      "default": 0
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "zip_code": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "author_email",
+    "title",
+    "body",
+    "topic"
+  ]
+}
