@@ -45,6 +45,8 @@ Deno.serve(async (req) => {
       lifeStoryEntries,
       coParentMessages,
       secureMessages,
+      checklists,
+      secureDocuments,
     ] = await Promise.all([
       base44.entities.ChildProfile.list("-created_date", 10),
       base44.entities.BehaviorLog.list("-created_date", 500),
@@ -57,6 +59,8 @@ Deno.serve(async (req) => {
       base44.entities.LifeStoryEntry.list("-date", 500),
       base44.entities.CoParentingMessage.list("-created_date", 500),
       base44.entities.SecureMessage.list("-created_date", 500),
+      base44.entities.CasePlanChecklist.list("-created_date", 100),
+      base44.entities.SecureDocument.list("-created_date", 200),
     ]);
 
     const child = childName
@@ -69,6 +73,31 @@ Deno.serve(async (req) => {
     const filteredNotes = caseNotes.filter(n => inRange(n.created_date));
     const filteredEvents = calendarEvents.filter(e => inRange(e.date || e.created_date));
     const filteredTasks = caseTasks.filter(t => inRange(t.created_date));
+
+    // Checklists — filter by child name if provided, include all items
+    const filteredChecklists = checklists.filter(cl => {
+      const childMatch = !childName || cl.child_name?.toLowerCase() === childName.toLowerCase();
+      const ownerMatch = cl.parent_email === user.email;
+      return childMatch && ownerMatch;
+    });
+
+    // Completed checklist items within date range
+    const completedChecklistItems = [];
+    filteredChecklists.forEach(cl => {
+      (cl.items || []).forEach(item => {
+        if (item.completed && item.completed_date && inRange(item.completed_date)) {
+          completedChecklistItems.push({ ...item, checklist_title: cl.title, source: cl.source });
+        }
+      });
+    });
+
+    // Documents uploaded in date range
+    const filteredDocuments = secureDocuments.filter(d => {
+      const ownerMatch = d.owner_email === user.email;
+      const childMatch = !childName || !d.child_name || d.child_name?.toLowerCase() === childName.toLowerCase();
+      const dateMatch = inRange(d.created_date);
+      return ownerMatch && childMatch && dateMatch;
+    });
 
     // Life story — filter by date range AND optional entry type filter
     let filteredLifeStory = lifeStoryEntries
@@ -268,12 +297,12 @@ Deno.serve(async (req) => {
 
     // Summary stats
     const stats = [
-      { label: "Life Story", value: filteredLifeStory.length },
       { label: "Behavior Logs", value: filteredBehaviors.length },
       { label: "Check-ins", value: filteredCheckins.length },
       { label: "Goals", value: filteredGoals.length },
       { label: "Case Notes", value: filteredNotes.length },
-      { label: "Messages", value: filteredMessages.length },
+      { label: "Checklist ✓", value: completedChecklistItems.length },
+      { label: "Documents", value: filteredDocuments.length },
     ];
     const boxW = CW / stats.length;
     stats.forEach((s, i) => {
