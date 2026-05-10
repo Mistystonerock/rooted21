@@ -221,16 +221,18 @@ export default function Launch() {
           </div>
           <div className="p-4 grid grid-cols-2 gap-2" style={{ background: "#fff" }}>
             {[
-              ["📚", "21-Lesson Curriculum"],
-              ["🧠", "Daily Check-In Tools"],
-              ["🤖", "AI Parenting Coach"],
-              ["📈", "Behavior Analytics"],
+              ["🌿", "TBRI®-Based Curriculum"],
+              ["🧠", "Personalized Parenting Coach"],
+              ["📈", "Behavior & Regulation Logs"],
               ["🎓", "Live Parenting Classes"],
-              ["⚖️", "Case Management"],
+              ["⚖️", "Case & Court Management"],
               ["🔒", "Secure Document Vault"],
-              ["🤝", "Professional Support Team"],
-              ["🚨", "Crisis Toolbox"],
-              ["📅", "Family Care Calendar"],
+              ["👨‍👧", "Visitation Tracker"],
+              ["💊", "Medication Manager"],
+              ["🚨", "Crisis & Emergency Toolbox"],
+              ["📞", "Care Team Contact Directory"],
+              ["📋", "Incident Report Builder"],
+              ["📚", "Education Hub (FASD, RAD & more)"],
             ].map(([emoji, label]) => (
               <div key={label} className="flex items-center gap-2 rounded-xl px-3 py-2.5"
                 style={{ background: C.offWhite }}>
