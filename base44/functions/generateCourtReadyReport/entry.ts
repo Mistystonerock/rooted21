@@ -609,11 +609,141 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 9 — COMMUNICATIONS LOG (NEW)
+    // SECTION 9 — CASE PLAN CHECKLIST PROGRESS
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.checklistProgress) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 9 — CASE PLAN CHECKLIST PROGRESS", "✅");
+
+      if (filteredChecklists.length === 0) {
+        addText("No case plan checklists found for this child.", 9, MED_GRAY);
+      } else {
+        // Summary across all checklists
+        const totalItems = filteredChecklists.reduce((s, cl) => s + (cl.items?.length || 0), 0);
+        const totalCompleted = filteredChecklists.reduce((s, cl) => s + (cl.items?.filter(i => i.completed).length || 0), 0);
+        const pct = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
+        addText(`${filteredChecklists.length} checklist(s) on file  |  ${totalCompleted} of ${totalItems} items completed (${pct}%)`, 9, DARK_GREEN, true);
+        addText(`Items completed within reporting period: ${completedChecklistItems.length}`, 9, MID_GREEN);
+        y += 3;
+
+        filteredChecklists.forEach((cl, ci) => {
+          checkPage(20);
+          addSubHeader(`${ci + 1}. ${cl.title}  [${(cl.source || "manual").toUpperCase()}]`);
+          const clItems = cl.items || [];
+          const clCompleted = clItems.filter(i => i.completed).length;
+          addMetaRow("Progress", `${clCompleted} / ${clItems.length} items completed`);
+          addMetaRow("Status", (cl.status || "active").toUpperCase());
+          if (cl.ai_summary) addMetaRow("AI Summary", cl.ai_summary);
+          y += 2;
+
+          clItems.forEach((item, ii) => {
+            checkPage(14);
+            const doneStr = item.completed
+              ? `✓ Completed ${item.completed_date ? new Date(item.completed_date).toLocaleDateString("en-US", { dateStyle: "medium" }) : ""}`
+              : "○ Pending";
+            const statusColor = item.completed ? MID_GREEN : MED_GRAY;
+
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(...statusColor);
+            doc.text(`${ii + 1}.`, ML + 2, y);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(...TEXT);
+            const itemLines = doc.splitTextToSize(item.text || "—", CW - 24);
+            doc.text(itemLines, ML + 8, y);
+
+            doc.setFontSize(8);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(...statusColor);
+            doc.text(doneStr, PW - MR - doc.getTextWidth(doneStr) - 2, y);
+
+            y += itemLines.length * 4.5;
+
+            if (item.due_date) {
+              doc.setFontSize(8);
+              doc.setFont("helvetica", "normal");
+              doc.setTextColor(...MED_GRAY);
+              doc.text(`  Due: ${item.due_date}${item.category ? "  |  " + item.category.replace(/_/g, " ").toUpperCase() : ""}`, ML + 8, y);
+              y += 4;
+            }
+            if (item.notes) {
+              doc.setFontSize(8);
+              doc.setFont("helvetica", "italic");
+              doc.setTextColor(100, 80, 50);
+              doc.text(`  Note: ${item.notes}`, ML + 8, y);
+              y += 4;
+            }
+            if (item.proof_filename) {
+              doc.setFontSize(7.5);
+              doc.setFont("helvetica", "normal");
+              doc.setTextColor(...MID_GREEN);
+              doc.text(`  📎 Proof attached: ${item.proof_filename}`, ML + 8, y);
+              y += 4;
+            }
+            doc.setDrawColor(235, 235, 235);
+            doc.setLineWidth(0.15);
+            doc.line(ML + 6, y - 1, PW - MR, y - 1);
+          });
+          y += 4;
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 10 — UPLOADED DOCUMENTS INVENTORY
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.documentInventory) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 10 — UPLOADED DOCUMENT INVENTORY", "📁");
+
+      if (filteredDocuments.length === 0) {
+        addText("No documents uploaded in the selected date range.", 9, MED_GRAY);
+      } else {
+        addText(`Total documents uploaded in period: ${filteredDocuments.length}`, 9, DARK_GREEN, true);
+        y += 3;
+
+        const categoryGroups = {};
+        filteredDocuments.forEach(d => {
+          const cat = d.category || "other";
+          if (!categoryGroups[cat]) categoryGroups[cat] = [];
+          categoryGroups[cat].push(d);
+        });
+
+        Object.entries(categoryGroups).forEach(([cat, docs]) => {
+          checkPage(16);
+          addSubHeader(cat.replace(/_/g, " ").toUpperCase() + ` (${docs.length})`);
+
+          docs.forEach((d, di) => {
+            checkPage(18);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(...DARK_GREEN);
+            doc.text(`${di + 1}. ${d.title}`, ML + 2, y);
+            y += 5;
+            addMetaRow("File", d.file_name || "—");
+            addMetaRow("Uploaded", new Date(d.created_date).toLocaleDateString("en-US", { dateStyle: "medium" }));
+            if (d.child_name) addMetaRow("Child", d.child_name);
+            if (d.description) addMetaRow("Description", d.description);
+            if (d.expiry_date) addMetaRow("Review / Expiry Date", d.expiry_date);
+            if (d.tags && d.tags.length > 0) addMetaRow("Tags", d.tags.join(", "));
+            addMetaRow("Access", d.is_private ? "Private — owner only" : `Shared with ${(d.shared_with || []).length} contacts`);
+            doc.setDrawColor(230, 230, 230);
+            doc.setLineWidth(0.2);
+            doc.line(ML, y, PW - MR, y);
+            y += 3;
+          });
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 11 — COMMUNICATIONS LOG
     // ══════════════════════════════════════════════════════════════
     if (includeSections.messages) {
       doc.addPage(); y = MT + 4; addPageHeader();
-      addSectionHeader("SECTION 9 — COMMUNICATIONS LOG", "💬");
+      addSectionHeader("SECTION 11 — COMMUNICATIONS LOG", "💬");
 
       if (filteredMessages.length === 0) {
         addText("No messages found for the selected period or message source filter.", 9, MED_GRAY);
@@ -739,8 +869,10 @@ Deno.serve(async (req) => {
         notes: filteredNotes.length,
         events: filteredEvents.length,
         tasks: filteredTasks.length,
+        checklistItems: completedChecklistItems.length,
+        documents: filteredDocuments.length,
         messages: filteredMessages.length,
-      },
+        },
     });
   } catch (error) {
     console.error("Error generating court-ready report:", error);

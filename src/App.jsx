@@ -21,6 +21,7 @@ import CasePlanChecklist from '@/pages/CasePlanChecklist';
 import ExpenseSplit from '@/pages/ExpenseSplit';
 import ExpenseTracker from '@/pages/ExpenseTracker';
 import DocumentScanner from '@/pages/DocumentScanner';
+import LegalCalendar from '@/pages/LegalCalendar';
 
 function App() {
   return (
@@ -88,6 +89,7 @@ function App() {
               <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><ScheduleFamilyMeeting /></Suspense>} />
               <Route path="/personalized-legal-feed" element={<Suspense fallback={<LoadingFallback />}><PersonalizedLegalFeed /></Suspense>} />
               <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><routes.LegalKnowledgeBase /></Suspense>} />
+              <Route path="/legal-calendar" element={<Suspense fallback={<LoadingFallback />}><routes.LegalCalendar /></Suspense>} />
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><routes.SystemGuides /></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><routes.SecureDocumentRepository /></Suspense>} />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Download, Loader2, Shield, FileText, AlertTriangle, CheckCircle2, Calendar, Settings2, MessageSquare, BookOpen } from "lucide-react";
+import { Download, Loader2, Shield, FileText, AlertTriangle, CheckCircle2, Calendar, Settings2, MessageSquare, BookOpen, Users, Stethoscope, Scale, UserCheck } from "lucide-react";
 
 const LIFE_STORY_ENTRY_TYPES = [
   { value: "placement", label: "Placement" },
@@ -35,9 +35,55 @@ const ALL_SECTIONS = [
   { key: "goals",           icon: "🎯", label: "Family Goals & Progress" },
   { key: "caseNotes",       icon: "📝", label: "Case Notes & Therapy Records" },
   { key: "calendarEvents",  icon: "📅", label: "Appointments & Calendar Events" },
-  { key: "caseTasks",       icon: "✅", label: "Case Tasks & Action Items" },
-  { key: "messages",        icon: "💬", label: "Communications Log" },
-  { key: "certification",   icon: "⚖️", label: "Certification & Declaration", fixed: true },
+  { key: "caseTasks",          icon: "✅", label: "Case Tasks & Action Items" },
+  { key: "checklistProgress",  icon: "🗂️", label: "Case Plan Checklist Progress" },
+  { key: "documentInventory",  icon: "📁", label: "Uploaded Document Inventory" },
+  { key: "messages",           icon: "💬", label: "Communications Log" },
+  { key: "certification",      icon: "⚖️", label: "Certification & Declaration", fixed: true },
+];
+
+// Recipient presets — sections optimized per audience
+const RECIPIENT_PRESETS = [
+  {
+    id: "social_worker",
+    icon: <UserCheck size={16} />,
+    label: "Social Worker",
+    color: "#2E7D60",
+    bg: "#EAF4EA",
+    border: "#A8D5BC",
+    sections: { childProfile: true, behaviorLogs: true, checkIns: true, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: false },
+    description: "Child profile, behavior logs, checklist progress & document inventory",
+  },
+  {
+    id: "therapist",
+    icon: <Stethoscope size={16} />,
+    label: "Therapist",
+    color: "#4A6FA5",
+    bg: "#EEF4FF",
+    border: "#B0C8F0",
+    sections: { childProfile: true, behaviorLogs: true, checkIns: true, goals: true, caseNotes: true, calendarEvents: false, caseTasks: false, checklistProgress: false, documentInventory: false, lifeStory: true, messages: false },
+    description: "Child profile, regulation data, behavior logs, goals & life story",
+  },
+  {
+    id: "legal",
+    icon: <Scale size={16} />,
+    label: "Legal Counsel",
+    color: "#7A4F2A",
+    bg: "#FFF4EC",
+    border: "#E8C9A0",
+    sections: { childProfile: true, behaviorLogs: true, checkIns: false, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: true },
+    description: "Full documentation package: case notes, checklists, docs & communications",
+  },
+  {
+    id: "all",
+    icon: <Users size={16} />,
+    label: "Full Report",
+    color: "#3a3028",
+    bg: "#F5F0EA",
+    border: "#D8CCBC",
+    sections: null, // use defaultSections
+    description: "All sections included — comprehensive record",
+  },
 ];
 
 function defaultSections() {
@@ -62,11 +108,13 @@ export default function CourtReadyExport() {
   const [includeSections, setIncludeSections] = useState(defaultSections());
   const [entryTypeFilter, setEntryTypeFilter] = useState([]);
   const [messageSource, setMessageSource] = useState("both");
+  const [activePreset, setActivePreset] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [declared, setDeclared] = useState(false);
+  const [liveCounts, setLiveCounts] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -86,7 +134,13 @@ export default function CourtReadyExport() {
     }
   }
 
+  function applyPreset(preset) {
+    setActivePreset(preset.id);
+    setIncludeSections(preset.sections ? { ...defaultSections(), ...preset.sections } : defaultSections());
+  }
+
   function toggleSection(key) {
+    setActivePreset(null); // custom = clear preset highlight
     setIncludeSections(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
@@ -149,7 +203,7 @@ export default function CourtReadyExport() {
             </div>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: C.lightGreen }}>
-            Generates a certified, multi-section PDF including Life Story timeline, messaging logs, behavior records, and a signed accuracy declaration — formatted for Ohio custody and foster care proceedings.
+            Automatically compiles activity logs, completed checklist items, document uploads, behavior records, and communications into a certified PDF — optimized for social workers, therapists, or legal counsel.
           </p>
         </div>
 
@@ -215,10 +269,43 @@ export default function CourtReadyExport() {
           </div>
         </div>
 
+        {/* Recipient presets */}
+        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <div className="flex items-center gap-2 mb-3">
+            <Users size={14} color={C.midGreen} />
+            <p className="text-[10px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>
+              OPTIMIZE FOR RECIPIENT
+            </p>
+          </div>
+          <p className="text-[10px] mb-3 leading-relaxed" style={{ color: C.mutedText }}>
+            Choose who will receive this report to automatically pre-select the most relevant sections.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {RECIPIENT_PRESETS.map(p => (
+              <button
+                key={p.id}
+                onClick={() => applyPreset(p)}
+                className="flex flex-col items-start gap-1.5 p-3 rounded-xl text-left transition-all"
+                style={{
+                  background: activePreset === p.id ? p.bg : C.offWhite,
+                  border: `1.5px solid ${activePreset === p.id ? p.border : C.cream}`,
+                  cursor: "pointer",
+                }}
+              >
+                <div className="flex items-center gap-1.5" style={{ color: p.color }}>
+                  {p.icon}
+                  <span className="font-bold text-xs">{p.label}</span>
+                </div>
+                <p className="text-[9px] leading-relaxed" style={{ color: C.mutedText }}>{p.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Section toggles */}
         <div className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
           <p className="text-[10px] font-extrabold tracking-wider mb-3" style={{ color: C.mutedText }}>
-            REPORT SECTIONS
+            REPORT SECTIONS {activePreset && <span style={{ color: C.midGreen }}>— preset applied, customize below</span>}
           </p>
           <div className="space-y-2">
             {ALL_SECTIONS.map(s => (
@@ -393,7 +480,7 @@ export default function CourtReadyExport() {
           }}
         >
           {generating ? (
-            <><Loader2 size={17} className="animate-spin" /> Building Court-Ready PDF…</>
+            <><Loader2 size={17} className="animate-spin" /> Compiling All Records…</>
           ) : (
             <><FileText size={17} /> Generate & Download Report</>
           )}
