@@ -1,80 +1,79 @@
-import { createClientFromRequest } from "npm:@base44/sdk@0.8.25";
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    const { file_url, document_hint } = await req.json();
-    if (!file_url) return Response.json({ error: "file_url is required" }, { status: 400 });
+    const { file_base64, file_type } = await req.json();
+    
+    if (!file_base64) {
+      return Response.json({ error: 'Missing file_base64' }, { status: 400 });
+    }
 
-    // Use vision AI to perform OCR + structured analysis
-    const analysisPrompt = `You are a document analysis assistant for a foster/adoptive family parenting platform called Rooted 21.
+    // Use AI to analyze the document
+    const response = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are a document analyzer for family law and child welfare documents. Analyze this document image and extract structured information.
 
-A parent has uploaded a photo or scan of a document. Your job is to:
-1. Read and transcribe all visible text (OCR)
-2. Identify the document type
-3. Extract all key structured data
-4. Write a clear 2-4 sentence summary note a parent could use in their case records
-5. Suggest relevant case tags
-6. Suggest the most appropriate category
+Return a JSON object with these fields:
+- title: Brief, descriptive title (e.g., "Court Order - Custody Agreement")
+- description: Summary of document contents and key details
+- category: One of: court_order, iep, medical, legal, school, therapy, financial, other
+- tags: Array of 3-5 relevant tags (e.g., ["custody", "visitation", "modifications"])
+- child_name: Name of child mentioned, if applicable
+- key_dates: Array of important dates found (in YYYY-MM-DD format)
+- deadlines: Array of action items with due dates
+- important_contacts: Any professional contacts or parties mentioned
+- summary: 2-3 sentence plain language summary
 
-Document hint from user: "${document_hint || "not provided"}"
-
-Analyze the image and return a JSON object with EXACTLY this structure:
-{
-  "document_type": "string — e.g. IEP, Court Order, Medication Label, School Report Card, Medical Referral, Lab Results, Therapy Note, Legal Notice, Other",
-  "suggested_category": "one of: court_order | iep | medical | legal | school | therapy | financial | other",
-  "suggested_title": "string — a concise document title (max 60 chars)",
-  "extracted_text": "string — full OCR transcription of visible text, preserving structure",
-  "key_data": {
-    "dates": ["array of dates found"],
-    "names": ["array of names/people mentioned"],
-    "organizations": ["schools, hospitals, courts, agencies mentioned"],
-    "action_items": ["any deadlines, required actions, or next steps"],
-    "medications": ["if medication label: name, dosage, instructions"],
-    "amounts": ["dollar amounts, scores, test results, grades if present"]
-  },
-  "summary_note": "string — 2-4 sentence professional summary a parent can save as a case note. Start with the document type and date if found.",
-  "suggested_tags": ["array of 3-6 short tags relevant for case management, e.g. 'iep', 'school-meeting', 'medication', 'court-date', 'deadline'"],
-  "confidence": "high | medium | low",
-  "flags": ["any urgent items, deadlines within 30 days, or safety concerns found in the document"]
-}`;
-
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: analysisPrompt,
-      file_urls: [file_url],
-      model: "claude_sonnet_4_6",
+If you cannot determine a field, leave it as null.`,
+      file_urls: [`data:${file_type};base64,${file_base64}`],
       response_json_schema: {
         type: "object",
         properties: {
-          document_type: { type: "string" },
-          suggested_category: { type: "string" },
-          suggested_title: { type: "string" },
-          extracted_text: { type: "string" },
-          key_data: {
-            type: "object",
-            properties: {
-              dates: { type: "array", items: { type: "string" } },
-              names: { type: "array", items: { type: "string" } },
-              organizations: { type: "array", items: { type: "string" } },
-              action_items: { type: "array", items: { type: "string" } },
-              medications: { type: "array", items: { type: "string" } },
-              amounts: { type: "array", items: { type: "string" } },
+          title: { type: "string" },
+          description: { type: "string" },
+          category: { type: "string" },
+          tags: { type: "array", items: { type: "string" } },
+          child_name: { type: "string" },
+          key_dates: { type: "array", items: { type: "string" } },
+          deadlines: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                task: { type: "string" },
+                due_date: { type: "string" },
+              },
             },
           },
-          summary_note: { type: "string" },
-          suggested_tags: { type: "array", items: { type: "string" } },
-          confidence: { type: "string" },
-          flags: { type: "array", items: { type: "string" } },
+          important_contacts: { type: "array", items: { type: "string" } },
+          summary: { type: "string" },
         },
       },
     });
 
-    return Response.json({ success: true, analysis: result });
+    const parsed = response.data || {};
+
+    return Response.json({
+      success: true,
+      parsed: {
+        title: parsed.title || null,
+        description: parsed.description || null,
+        category: parsed.category || "other",
+        tags: parsed.tags || [],
+        child_name: parsed.child_name || null,
+        key_dates: parsed.key_dates || [],
+        deadlines: parsed.deadlines || [],
+        important_contacts: parsed.important_contacts || [],
+        summary: parsed.summary || null,
+      },
+    });
   } catch (error) {
-    console.error("analyzeDocumentScan error:", error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

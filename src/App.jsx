@@ -13,6 +13,7 @@ import routes from '@/hooks/useLazyLoadRoutes';
 import FeatureLockGate from '@/components/rooted/FeatureLockGate';
 import FounderDashboard from '@/pages/FounderDashboard';
 import AppSurvey from '@/pages/AppSurvey';
+import SecureDocumentRepository from '@/pages/SecureDocumentRepository';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
@@ -108,7 +109,7 @@ function App() {
               <Route path="/legal-calendar" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LegalCalendar /></FeatureLockGate></Suspense>} />
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SystemGuides /></FeatureLockGate></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MeetingPrepChatbot /></FeatureLockGate></Suspense>} />
-              <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SecureDocumentRepository /></FeatureLockGate></Suspense>} />
+              <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><SecureDocumentRepository /></FeatureLockGate></Suspense>} />
               <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><PersonalizedChat /></FeatureLockGate></Suspense>} />
               <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><GrowthInsights /></FeatureLockGate></Suspense>} />
               <Route path="/behavioral-trends" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehavioralTrends /></FeatureLockGate></Suspense>} />

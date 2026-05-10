@@ -1,209 +1,114 @@
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Eye, Download, Share2, Trash2, Lock, Users, Calendar, KeyRound, Sparkles } from "lucide-react";
-import SendAccessCodeModal from "./SendAccessCodeModal";
-import DocumentChecklistExtractor from "./DocumentChecklistExtractor";
+import { FileText, Eye, Share2, Trash2, Lock } from "lucide-react";
+import { format } from "date-fns";
 
-const CATEGORY_META = {
-  court_order: { emoji: "⚖️", label: "Court Order", color: "#B84C2A" },
-  iep: { emoji: "🏫", label: "IEP", color: C.midGreen },
-  medical: { emoji: "🏥", label: "Medical", color: "#4A90D9" },
-  legal: { emoji: "📜", label: "Legal", color: C.brown },
-  school: { emoji: "📚", label: "School", color: C.midGreen },
-  therapy: { emoji: "💙", label: "Therapy", color: "#6B8FBF" },
-  financial: { emoji: "💰", label: "Financial", color: C.gold },
-  other: { emoji: "📄", label: "Other", color: C.mutedText },
-};
-
-export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShareUpdated }) {
-  const [showShareEdit, setShowShareEdit] = useState(false);
-  const [showSendCode, setShowSendCode] = useState(false);
-  const [showExtractor, setShowExtractor] = useState(false);
-  const [children, setChildren] = useState([]);
-
-  const isExtractable = ["court_order", "iep", "legal", "school"].includes(doc.category);
-  const [shareInput, setShareInput] = useState(doc.shared_with?.join(", ") || "");
-  const [saving, setSaving] = useState(false);
-
-  const meta = CATEGORY_META[doc.category] || CATEGORY_META.other;
-  const isOwner = doc.owner_email === currentUserEmail;
-
-  const handleOpenExtractor = async () => {
-    const list = await base44.entities.ChildProfile.list("-created_date", 20);
-    setChildren(list);
-    setShowExtractor(true);
-  };
-  const isExpiringSoon = doc.expiry_date && Math.ceil((new Date(doc.expiry_date) - new Date()) / (1000 * 60 * 60 * 24)) <= 30;
-  const isExpired = doc.expiry_date && new Date(doc.expiry_date) < new Date();
-
-  const handleView = () => window.open(doc.file_url, "_blank");
-  const handleDownload = () => {
-    const a = document.createElement("a");
-    a.href = doc.file_url;
-    a.download = doc.file_name || doc.title;
-    a.click();
+export default function DocumentCard({ doc, onShare, onDelete }) {
+  // Get icon by category
+  const getCategoryIcon = (cat) => {
+    const icons = {
+      court_order: "⚖️",
+      iep: "🎓",
+      medical: "🏥",
+      legal: "📋",
+      school: "🏫",
+      therapy: "🧠",
+      financial: "💰",
+      other: "📄",
+    };
+    return icons[cat] || "📄";
   };
 
-  const handleDelete = async () => {
-    if (!confirm(`Delete "${doc.title}"? This cannot be undone.`)) return;
-    await base44.entities.SecureDocument.delete(doc.id);
-    onDeleted(doc.id);
-  };
-
-  const handleSaveShare = async () => {
-    setSaving(true);
-    const emails = shareInput.split(",").map(e => e.trim()).filter(Boolean);
-    await base44.entities.SecureDocument.update(doc.id, {
-      shared_with: emails,
-      is_private: emails.length === 0,
-    });
-    setSaving(false);
-    setShowShareEdit(false);
-    onShareUpdated(doc.id, emails);
+  const getCategoryLabel = (cat) => {
+    const labels = {
+      court_order: "Court Order",
+      iep: "IEP",
+      medical: "Medical",
+      legal: "Legal",
+      school: "School",
+      therapy: "Therapy",
+      financial: "Financial",
+      other: "Other",
+    };
+    return labels[cat] || "Document";
   };
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.cream}`, background: "#fff" }}>
-      {/* Top bar */}
-      <div className="px-4 py-3 flex items-center gap-3" style={{ background: isExpired ? "#FEF2F2" : isExpiringSoon ? "#FFFBEB" : C.darkGreen }}>
-        <span style={{ fontSize: 20 }}>{meta.emoji}</span>
+    <div className="rounded-xl p-3.5 border" style={{ background: "#fff", borderColor: C.cream }}>
+      <div className="flex items-start gap-3 mb-2">
+        {/* Icon */}
+        <div className="text-2xl flex-shrink-0">{getCategoryIcon(doc.category)}</div>
+        
+        {/* Content */}
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-xs truncate" style={{ color: isExpired || isExpiringSoon ? C.darkGreen : C.cream }}>
-            {doc.title}
-          </p>
-          <p className="text-[10px]" style={{ color: isExpired || isExpiringSoon ? C.mutedText : C.lightGreen }}>
-            {meta.label}{doc.child_name ? ` · ${doc.child_name}` : ""}
-          </p>
-        </div>
-        <div className="flex items-center gap-1">
-          {doc.is_private ? (
-            <Lock size={12} color={isExpired || isExpiringSoon ? C.mutedText : C.lightGreen} />
-          ) : (
-            <Users size={12} color={isExpired || isExpiringSoon ? C.midGreen : C.lightGreen} />
-          )}
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="px-4 py-3 space-y-2.5">
-        {doc.description && (
-          <p className="text-[11px] leading-relaxed" style={{ color: C.mutedText }}>{doc.description}</p>
-        )}
-
-        {/* Tags */}
-        {doc.tags && doc.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {doc.tags.map(tag => (
-              <span key={tag} className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: C.offWhite, color: C.darkGreen }}>
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Expiry */}
-        {doc.expiry_date && (
-          <div className="flex items-center gap-1.5 text-[10px]" style={{ color: isExpired ? "#DC2626" : isExpiringSoon ? "#D97706" : C.mutedText }}>
-            <Calendar size={11} />
-            {isExpired ? `⚠️ Expired ${doc.expiry_date}` : `Review by ${doc.expiry_date}`}
-          </div>
-        )}
-
-        {/* Shared with */}
-        {!doc.is_private && doc.shared_with?.length > 0 && !showShareEdit && (
-          <div className="text-[10px]" style={{ color: C.mutedText }}>
-            Shared with: {doc.shared_with.slice(0, 2).join(", ")}{doc.shared_with.length > 2 ? ` +${doc.shared_with.length - 2} more` : ""}
-          </div>
-        )}
-
-        {/* Share edit form */}
-        {showShareEdit && (
-          <div className="space-y-2">
-            <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>Share with (emails, comma-separated)</p>
-            <input
-              type="text"
-              value={shareInput}
-              onChange={e => setShareInput(e.target.value)}
-              placeholder="email1@example.com, email2@example.com"
-              className="w-full px-3 py-2 rounded-lg border outline-none text-xs"
-              style={{ borderColor: C.cream, background: C.offWhite }}
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={handleSaveShare}
-                disabled={saving}
-                className="flex-1 py-2 rounded-lg font-bold text-xs"
-                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer", opacity: saving ? 0.7 : 1 }}
-              >
-                {saving ? "Saving…" : "Save"}
-              </button>
-              <button
-                onClick={() => setShowShareEdit(false)}
-                className="py-2 px-4 rounded-lg font-bold text-xs"
-                style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}
-              >
-                Cancel
-              </button>
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <div>
+              <p className="text-xs font-bold leading-tight" style={{ color: C.darkGreen }}>
+                {doc.title}
+              </p>
+              <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>
+                {getCategoryLabel(doc.category)} • {format(new Date(doc.created_date), "MMM d, yyyy")}
+              </p>
             </div>
+            {doc.is_private && (
+              <Lock size={12} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
+            )}
           </div>
-        )}
 
-        {/* AI Extract banner for eligible docs */}
-        {isExtractable && isOwner && (
-          <button
-            onClick={handleOpenExtractor}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-opacity hover:opacity-90"
-            style={{ background: "#FEF9EC", color: "#7A5200", border: "1.5px solid #E8C96A", cursor: "pointer" }}
-          >
-            <Sparkles size={13} color="#B87A0A" /> Extract Requirements → Case Plan Checklist
-          </button>
-        )}
-
-        {/* Actions */}
-        <div className="flex gap-2 pt-1">
-          <button onClick={handleView} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
-            style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
-            <Eye size={12} /> View
-          </button>
-          <button onClick={handleDownload} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
-            style={{ background: C.midGreen, color: "#fff", border: "none", cursor: "pointer" }}>
-            <Download size={12} /> Download
-          </button>
-          {isOwner && (
-            <>
-              <button onClick={() => setShowSendCode(true)} className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
-                style={{ background: C.gold, color: "#fff", border: "none", cursor: "pointer" }} title="Send Access Code">
-                <KeyRound size={12} />
-              </button>
-              <button onClick={() => setShowShareEdit(!showShareEdit)} className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
-                style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}>
-                <Share2 size={12} />
-              </button>
-              <button onClick={handleDelete} className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
-                style={{ background: "#FEE2E2", color: "#DC2626", border: "none", cursor: "pointer" }}>
-                <Trash2 size={12} />
-              </button>
-            </>
+          {/* Description */}
+          {doc.description && (
+            <p className="text-[10px] leading-relaxed mt-1 line-clamp-2" style={{ color: "#3a3028" }}>
+              {doc.description}
+            </p>
           )}
+
+          {/* Tags */}
+          {doc.tags && doc.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {doc.tags.map(tag => (
+                <span
+                  key={tag}
+                  className="px-1.5 py-0.5 rounded-full text-[9px] font-bold"
+                  style={{ background: C.cream, color: C.darkGreen }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* File info */}
+          <p className="text-[9px] mt-2" style={{ color: C.mutedText }}>
+            {(doc.file_size / 1024).toFixed(0)} KB
+          </p>
         </div>
       </div>
 
-      {showSendCode && (
-        <SendAccessCodeModal
-          doc={doc}
-          onClose={() => setShowSendCode(false)}
-        />
-      )}
-
-      {showExtractor && (
-        <DocumentChecklistExtractor
-          doc={doc}
-          children={children}
-          onDone={() => setShowExtractor(false)}
-          onCancel={() => setShowExtractor(false)}
-        />
-      )}
+      {/* Actions */}
+      <div className="flex gap-1.5 mt-2 pt-2" style={{ borderTop: `1px solid ${C.cream}` }}>
+        <a
+          href={doc.file_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+          style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer", textDecoration: "none" }}
+        >
+          <Eye size={12} /> View
+        </a>
+        <button
+          onClick={onShare}
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+          style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}
+        >
+          <Share2 size={12} /> Share
+        </button>
+        <button
+          onClick={onDelete}
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+          style={{ background: "#FEF3EE", color: "#B84C2A", border: "none", cursor: "pointer" }}
+        >
+          <Trash2 size={12} /> Delete
+        </button>
+      </div>
     </div>
   );
 }
