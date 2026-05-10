@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import TreeLogo from "@/components/rooted/TreeLogo";
-import { Heart, Users, BookOpen, Shield, CheckCircle2, ChevronDown } from "lucide-react";
+import AdminAccessCodeModal from "@/components/admin/AdminAccessCodeModal";
+import { Heart, Users, BookOpen, Shield, CheckCircle2, ChevronDown, Lock } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00"); // June 10, 9am ET
 
@@ -67,8 +68,11 @@ export default function Launch() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [count, setCount] = useState(null);
+  const [user, setUser] = useState(null);
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
   useEffect(() => {
+    base44.auth.me().then(u => setUser(u)).catch(() => setUser(null));
     base44.entities.WaitlistSignup.list("-created_date", 1000).then(list => setCount(list.length)).catch(() => {});
   }, []);
 
@@ -148,6 +152,20 @@ export default function Launch() {
           <p className="mt-6 text-xs font-bold" style={{ color: "rgba(255,255,255,0.55)" }}>
             🌱 {count} familie{count !== 1 ? "s" : ""} already on the waitlist
           </p>
+        )}
+
+        {/* Founder link */}
+        {user?.role === "admin" && (
+          <div className="mt-8 flex gap-2">
+            <a href="/founder-dashboard" className="px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-1"
+              style={{ background: C.gold, color: C.darkGreen, textDecoration: "none" }}>
+              📊 Dashboard
+            </a>
+            <button onClick={() => setShowAdminModal(true)} className="px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-1"
+              style={{ background: "rgba(255,255,255,0.2)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)", cursor: "pointer" }}>
+              <Lock size={12} /> Invite Admin
+            </button>
+          </div>
         )}
 
         {/* Scroll cue */}
@@ -451,6 +469,11 @@ export default function Launch() {
           </a>
         </div>
       </div>
+
+      {/* Admin code modal */}
+      {showAdminModal && (
+        <AdminAccessCodeModal onClose={() => setShowAdminModal(false)} />
+      )}
     </div>
   );
 }
