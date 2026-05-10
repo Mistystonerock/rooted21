@@ -39,6 +39,15 @@ export default function LifeStoryEntryCard({ entry, isLast, onEdit, onDelete }) 
         )}
 
         <div className="p-3">
+          {/* Sensitive banner */}
+          {(entry.is_sensitive || ENTRY_TYPES[entry.entry_type]?.sensitive) && (
+            <div className="flex items-center gap-1.5 mb-2 px-2 py-1.5 rounded-lg"
+              style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
+              <span className="text-xs">🔒</span>
+              <p className="text-[10px] font-bold" style={{ color: "#B84C2A" }}>Sensitive — caregiver record only</p>
+            </div>
+          )}
+
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">

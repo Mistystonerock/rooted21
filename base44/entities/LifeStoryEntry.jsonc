@@ -16,6 +16,12 @@
         "milestone",
         "medical",
         "family",
+        "substance_exposure",
+        "physical_abuse",
+        "emotional_abuse",
+        "sexual_abuse",
+        "neglect",
+        "loss",
         "other"
       ],
       "default": "milestone"
@@ -66,6 +72,15 @@
     "is_private": {
       "type": "boolean",
       "default": false
+    },
+    "is_sensitive": {
+      "type": "boolean",
+      "default": false,
+      "description": "For trauma/abuse entries \u2014 blurred by default in child-facing views"
+    },
+    "caregiver_notes": {
+      "type": "string",
+      "description": "Private caregiver notes not shown to child"
     }
   },
   "required": [

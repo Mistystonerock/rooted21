@@ -13,6 +13,12 @@ const ENTRY_TYPES = {
   milestone: { label: "Milestone", emoji: "🌟", color: C.gold },
   medical: { label: "Medical", emoji: "🏥", color: "#E07A5F" },
   family: { label: "Family Moment", emoji: "❤️", color: C.midGreen },
+  loss: { label: "Loss / Grief", emoji: "🕯️", color: C.brown },
+  substance_exposure: { label: "Substance Exposure", emoji: "⚠️", color: "#C0392B", sensitive: true },
+  physical_abuse: { label: "Physical Abuse", emoji: "🛑", color: "#C0392B", sensitive: true },
+  emotional_abuse: { label: "Emotional Abuse", emoji: "💔", color: "#B84C2A", sensitive: true },
+  sexual_abuse: { label: "Sexual Abuse", emoji: "🔒", color: "#8B0000", sensitive: true },
+  neglect: { label: "Neglect", emoji: "🚫", color: "#B84C2A", sensitive: true },
   other: { label: "Other", emoji: "📌", color: C.mutedText },
 };
 

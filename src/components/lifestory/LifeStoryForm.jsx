@@ -11,6 +11,7 @@ const BLANK = {
   age_at_event: "", location: "", people_involved: "",
   description: "", emotional_tone: "neutral",
   photo_url: "", document_url: "", is_private: false,
+  is_sensitive: false, caregiver_notes: "",
 };
 
 export default function LifeStoryForm({ initial, onSave, onCancel }) {
@@ -150,10 +151,35 @@ export default function LifeStoryForm({ initial, onSave, onCancel }) {
         )}
       </div>
 
-      <label className="flex items-center gap-2 text-xs" style={{ color: C.darkGreen }}>
-        <input type="checkbox" checked={form.is_private} onChange={e => f("is_private", e.target.checked)} />
-        Mark as private (only you can see this)
-      </label>
+      {/* Sensitive event warning */}
+      {ENTRY_TYPES[form.entry_type]?.sensitive && (
+        <div className="rounded-xl p-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
+          <p className="text-xs font-bold mb-1" style={{ color: "#B84C2A" }}>🔒 Sensitive Event</p>
+          <p className="text-[11px] leading-relaxed" style={{ color: "#B84C2A" }}>
+            This entry type is marked sensitive. It will be flagged in the timeline and kept private by default. Use this space to document the child's history accurately — this record can support therapy, court proceedings, and future care planning.
+          </p>
+        </div>
+      )}
+
+      {/* Caregiver notes (private) */}
+      <div>
+        <p className="text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>PRIVATE CAREGIVER NOTES (not shown to child)</p>
+        <textarea placeholder="Add private notes for your records, therapist, or caseworker..." value={form.caregiver_notes}
+          onChange={e => f("caregiver_notes", e.target.value)} rows={2}
+          className="w-full px-3 py-2 rounded-lg text-sm border outline-none resize-none"
+          style={{ borderColor: C.cream, background: C.offWhite }} />
+      </div>
+
+      <div className="flex gap-3">
+        <label className="flex items-center gap-2 text-xs" style={{ color: C.darkGreen }}>
+          <input type="checkbox" checked={form.is_private} onChange={e => f("is_private", e.target.checked)} />
+          Private (caregiver only)
+        </label>
+        <label className="flex items-center gap-2 text-xs" style={{ color: "#B84C2A" }}>
+          <input type="checkbox" checked={form.is_sensitive} onChange={e => f("is_sensitive", e.target.checked)} />
+          Mark as sensitive
+        </label>
+      </div>
 
       <div className="flex gap-2">
         <button onClick={handleSubmit} disabled={saving || !form.title || !form.date}
