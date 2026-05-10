@@ -41,18 +41,18 @@ Deno.serve(async (req) => {
     }
 
     // Create access code with no expiration (owner code)
-    const accessCode = await base44.entities.AccessCode.create({
+    const accessCode = await base44.entities.AdminAccessCode.create({
       code,
-      professional_email,
-      professional_name,
-      professional_role: professional_role || 'Other',
-      expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 year
+      created_by: user.email,
+      created_for: professional_name,
+      used: false,
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
     });
 
     return Response.json({
+      success: true,
       code,
-      professional_email,
-      message: 'Owner access code created successfully'
+      message: 'Admin access code created successfully'
     });
   } catch (error) {
     console.error('Error creating owner code:', error);
