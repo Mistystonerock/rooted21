@@ -12,13 +12,19 @@ export default function FounderDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
-    Promise.all([
-      base44.auth.me(),
-      base44.entities.WaitlistSignup.list("-created_date", 10000),
-      base44.entities.User.list("-created_date", 10000),
-      base44.entities.Survey.list("-created_date", 10000),
-    ]).then(([u, waitlist, users, surveyList]) => {
-      setUser(u);
+    base44.auth.isAuthenticated().then(authed => {
+      if (!authed) {
+        base44.auth.redirectToLogin(`/founder-dashboard`);
+        return;
+      }
+
+      Promise.all([
+        base44.auth.me(),
+        base44.entities.WaitlistSignup.list("-created_date", 10000),
+        base44.entities.User.list("-created_date", 10000),
+        base44.entities.Survey.list("-created_date", 10000),
+      ]).then(([u, waitlist, users, surveyList]) => {
+        setUser(u);
       
       // Calculate stats
       const uniqueWaitlist = new Set(waitlist.map(w => w.email)).size;
@@ -40,6 +46,7 @@ export default function FounderDashboard() {
       
       setSurveys(surveyList);
       setLoading(false);
+      });
     });
   }, []);
 
