@@ -433,6 +433,19 @@ export default function Launch() {
           </p>
         </div>
 
+        {/* Already have an account */}
+        <div className="text-center mb-6 pb-4 border-t" style={{ borderColor: C.cream }}>
+          <p className="text-xs mt-4" style={{ color: C.mutedText }}>
+            Already have an account?
+          </p>
+          <button
+            onClick={() => base44.auth.redirectToLogin()}
+            className="mt-2 px-6 py-2.5 rounded-xl font-bold text-sm"
+            style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
+            Sign In
+          </button>
+        </div>
+
         {/* Footer */}
         <div className="text-center pb-8">
           <TreeLogo size={36} />
