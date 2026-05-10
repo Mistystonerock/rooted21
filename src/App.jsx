@@ -24,6 +24,7 @@ import DocumentScanner from '@/pages/DocumentScanner';
 import LegalCalendar from '@/pages/LegalCalendar';
 import CoParentingHealthDashboard from '@/pages/CoParentingHealthDashboard';
 import ProfessionalPresentation from '@/pages/ProfessionalPresentation';
+import ComprehensiveCaseReport from '@/pages/ComprehensiveCaseReport';
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
               <Route path="/case-management-new" element={<Suspense fallback={<LoadingFallback />}><routes.CaseManagementNew /></Suspense>} />
               <Route path="/case-detail/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseDetail /></Suspense>} />
               <Route path="/case-status-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><CaseStatusReport /></Suspense>} />
+              <Route path="/comprehensive-case-report/:caseId" element={<Suspense fallback={<LoadingFallback />}><ComprehensiveCaseReport /></Suspense>} />
               <Route path="/schedule-family-meeting/:caseId" element={<Suspense fallback={<LoadingFallback />}><ScheduleFamilyMeeting /></Suspense>} />
               <Route path="/personalized-legal-feed" element={<Suspense fallback={<LoadingFallback />}><PersonalizedLegalFeed /></Suspense>} />
               <Route path="/legal-knowledge-base" element={<Suspense fallback={<LoadingFallback />}><routes.LegalKnowledgeBase /></Suspense>} />
