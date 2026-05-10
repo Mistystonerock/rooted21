@@ -5,10 +5,7 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-
-    if (!user) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
     const {
       caseId,
@@ -18,209 +15,284 @@ Deno.serve(async (req) => {
       selectedNoteIds,
       selectedEventIds,
       selectedDocIds,
+      includeTimeline,
+      timelineEntries,
     } = await req.json();
 
-    // Fetch selected notes
-    const allNotes = await base44.entities.CaseNote.filter({ case_id: caseId }, "-created_date", 100);
-    const selectedNotes = allNotes.filter(n => selectedNoteIds.includes(n.id));
-
-    // Fetch selected events
-    const allEvents = await base44.entities.CareCalendarEvent.list("-created_date", 100);
-    const selectedEvents = allEvents.filter(e => selectedEventIds.includes(e.id));
-
-    // Create PDF
-    const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
+    const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 15;
+    const margin = 18;
     const contentWidth = pageWidth - 2 * margin;
-    let yPos = margin;
+    let y = margin;
 
-    // Helper to add content and handle page breaks
-    const addText = (text, fontSize = 10, bold = false, spacing = 5) => {
-      if (yPos > pageHeight - margin) {
-        doc.addPage();
-        yPos = margin;
-      }
-      doc.setFontSize(fontSize);
-      doc.setFont(undefined, bold ? "bold" : "normal");
-      const splitText = doc.splitTextToSize(text, contentWidth);
-      doc.text(splitText, margin, yPos);
-      yPos += (splitText.length * fontSize * 0.5) + spacing;
-      return yPos;
+    const checkPage = (needed = 20) => {
+      if (y + needed > pageHeight - 15) { doc.addPage(); y = margin; }
     };
 
-    // Title
+    const drawLine = (color = [220, 215, 205]) => {
+      doc.setDrawColor(...color);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 4;
+    };
+
+    // ── COVER HEADER ────────────────────────────────────────────────
+    // Dark green header bar
+    doc.setFillColor(47, 75, 58); // C.darkGreen
+    doc.rect(0, 0, pageWidth, 38, "F");
+
     doc.setFontSize(18);
     doc.setFont(undefined, "bold");
-    doc.text("CASE STATUS REPORT", margin, yPos);
-    yPos += 15;
+    doc.setTextColor(255, 255, 255);
+    doc.text("CASE STATUS REPORT", margin, 16);
 
-    // Header info
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.setFont(undefined, "normal");
-    doc.text(`Child: ${childName}`, margin, yPos);
-    yPos += 7;
-    doc.text(`Case Type: ${caseType.charAt(0).toUpperCase() + caseType.slice(1)}`, margin, yPos);
-    yPos += 7;
+    doc.setTextColor(180, 210, 190);
+    doc.text("Rooted 21 Parenting Network — Court Documentation", margin, 24);
+    doc.text(`Generated: ${new Date().toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}`, margin, 30);
+
+    y = 46;
+
+    // ── CASE INFO BOX ────────────────────────────────────────────────
+    doc.setFillColor(248, 245, 240);
+    doc.roundedRect(margin, y, contentWidth, caseNumber ? 26 : 20, 3, 3, "F");
+    doc.setDrawColor(200, 195, 185);
+    doc.roundedRect(margin, y, contentWidth, caseNumber ? 26 : 20, 3, 3, "S");
+
+    doc.setFontSize(11);
+    doc.setFont(undefined, "bold");
+    doc.setTextColor(40, 60, 45);
+    doc.text(`Child: ${childName}`, margin + 5, y + 8);
+
+    doc.setFontSize(9);
+    doc.setFont(undefined, "normal");
+    doc.setTextColor(90, 90, 80);
+    doc.text(`Case Type: ${caseType ? caseType.charAt(0).toUpperCase() + caseType.slice(1) : "General"}`, margin + 5, y + 15);
     if (caseNumber) {
-      doc.text(`Case Number: ${caseNumber}`, margin, yPos);
-      yPos += 7;
+      doc.text(`Case Number: ${caseNumber}`, margin + 80, y + 15);
+      doc.text(`Report ID: RPT-${Date.now().toString(36).toUpperCase()}`, margin + 5, y + 21);
     }
-    doc.text(`Report Generated: ${new Date().toLocaleDateString()}`, margin, yPos);
-    yPos += 12;
 
-    // Divider
-    doc.setDrawColor(60, 80, 90);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 8;
+    y += caseNumber ? 34 : 28;
 
-    // Notes section
-    if (selectedNotes.length > 0) {
-      doc.setFontSize(14);
+    // ── TIMELINE SECTION ─────────────────────────────────────────────
+    if (includeTimeline && timelineEntries && timelineEntries.length > 0) {
+      checkPage(20);
+      doc.setFontSize(13);
       doc.setFont(undefined, "bold");
-      doc.text("CASE NOTES", margin, yPos);
-      yPos += 10;
+      doc.setTextColor(47, 75, 58);
+      doc.text("CHRONOLOGICAL CASE TIMELINE", margin, y);
+      y += 3;
+      drawLine([47, 75, 58]);
+      y += 3;
 
-      selectedNotes.forEach((note, idx) => {
-        if (yPos > pageHeight - 30) {
-          doc.addPage();
-          yPos = margin;
+      const typeLabels = { note: "CASE NOTE", document: "DOCUMENT", message: "CO-PARENT MSG" };
+      const typeColors = {
+        note:     { fill: [234, 244, 234], text: [46, 125, 96]  },
+        document: { fill: [254, 243, 238], text: [184, 76, 42]  },
+        message:  { fill: [243, 237, 255], text: [92, 61, 158]  },
+      };
+
+      timelineEntries.forEach((entry, idx) => {
+        const entryHeight = entry.body ? Math.ceil(entry.body.length / 80) * 5 + 22 : 20;
+        checkPage(entryHeight + 4);
+
+        const cfg = typeColors[entry.type] || typeColors.note;
+
+        // Type badge
+        const label = typeLabels[entry.type] || "NOTE";
+        doc.setFillColor(...cfg.fill);
+        doc.roundedRect(margin, y, 28, 5, 1, 1, "F");
+        doc.setFontSize(6.5);
+        doc.setFont(undefined, "bold");
+        doc.setTextColor(...cfg.text);
+        doc.text(label, margin + 2, y + 3.5);
+
+        // Date/time right-aligned
+        const dateStr = new Date(entry.date).toLocaleString("en-US", {
+          month: "short", day: "numeric", year: "numeric",
+          hour: "2-digit", minute: "2-digit",
+        });
+        doc.setFontSize(7.5);
+        doc.setFont(undefined, "normal");
+        doc.setTextColor(130, 125, 115);
+        doc.text(dateStr, pageWidth - margin - doc.getTextWidth(dateStr), y + 3.5);
+
+        y += 7;
+
+        // Title
+        if (entry.title) {
+          checkPage(8);
+          doc.setFontSize(9.5);
+          doc.setFont(undefined, "bold");
+          doc.setTextColor(40, 60, 45);
+          doc.text(entry.title, margin, y);
+          y += 5;
         }
 
-        // Note header
-        doc.setFontSize(11);
-        doc.setFont(undefined, "bold");
-        doc.setTextColor(60, 80, 90);
-        doc.text(`${idx + 1}. ${note.title}`, margin, yPos);
-        yPos += 7;
+        // Body
+        if (entry.body) {
+          checkPage(6);
+          doc.setFontSize(8.5);
+          doc.setFont(undefined, "normal");
+          doc.setTextColor(60, 55, 48);
+          const lines = doc.splitTextToSize(entry.body, contentWidth);
+          lines.forEach(line => {
+            checkPage(5);
+            doc.text(line, margin, y);
+            y += 4.5;
+          });
+        }
 
-        // Note metadata
-        doc.setFontSize(9);
-        doc.setFont(undefined, "normal");
-        doc.setTextColor(120, 120, 120);
-        const noteDate = new Date(note.created_date).toLocaleDateString();
-        doc.text(`Type: ${note.note_type.toUpperCase()} | Author: ${note.author_name} | Date: ${noteDate}`, margin, yPos);
-        yPos += 6;
+        // Author
+        if (entry.author) {
+          doc.setFontSize(7.5);
+          doc.setFont(undefined, "italic");
+          doc.setTextColor(140, 135, 125);
+          doc.text(`— ${entry.author}`, margin, y);
+          y += 4;
+        }
 
-        // Note body
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        doc.setFont(undefined, "normal");
-        const splitBody = doc.splitTextToSize(note.body, contentWidth);
-        doc.text(splitBody, margin, yPos);
-        yPos += (splitBody.length * 4.5) + 8;
+        // Divider between entries (not last)
+        if (idx < timelineEntries.length - 1) {
+          y += 1;
+          doc.setDrawColor(235, 230, 220);
+          doc.setLineDashPattern([1, 2], 0);
+          doc.line(margin + 5, y, pageWidth - margin - 5, y);
+          doc.setLineDashPattern([], 0);
+          y += 4;
+        }
       });
 
-      yPos += 5;
-      doc.setDrawColor(200, 200, 200);
-      doc.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 8;
+      y += 8;
     }
 
-    // Events section
-    if (selectedEvents.length > 0) {
-      doc.setFontSize(14);
-      doc.setFont(undefined, "bold");
-      doc.setTextColor(60, 80, 90);
-      doc.text("IMPORTANT EVENTS & APPOINTMENTS", margin, yPos);
-      yPos += 10;
+    // ── SELECTED NOTES (legacy support) ──────────────────────────────
+    if (!includeTimeline && selectedNoteIds && selectedNoteIds.length > 0) {
+      const allNotes = await base44.asServiceRole.entities.CaseNote.filter({ case_id: caseId }, "-created_date", 100);
+      const notes = allNotes.filter(n => selectedNoteIds.includes(n.id));
 
-      selectedEvents.forEach((event, idx) => {
-        if (yPos > pageHeight - 25) {
-          doc.addPage();
-          yPos = margin;
-        }
-
-        // Event header
-        doc.setFontSize(11);
+      if (notes.length > 0) {
+        checkPage(20);
+        doc.setFontSize(13);
         doc.setFont(undefined, "bold");
-        doc.setTextColor(60, 80, 90);
-        doc.text(`${idx + 1}. ${event.title}`, margin, yPos);
-        yPos += 7;
+        doc.setTextColor(47, 75, 58);
+        doc.text("CASE NOTES", margin, y);
+        y += 3;
+        drawLine();
+        y += 3;
 
-        // Event details
-        doc.setFontSize(9);
-        doc.setFont(undefined, "normal");
-        doc.setTextColor(120, 120, 120);
-        const eventDate = new Date(event.date).toLocaleDateString();
-        doc.text(`Date: ${eventDate} | Type: ${event.event_type} | Location: ${event.location || "Virtual"}`, margin, yPos);
-        yPos += 6;
+        notes.forEach((note, idx) => {
+          const bodyLines = doc.splitTextToSize(note.body || "", contentWidth);
+          checkPage(bodyLines.length * 4.5 + 20);
 
-        // Event notes
-        if (event.notes) {
           doc.setFontSize(10);
-          doc.setTextColor(0, 0, 0);
-          const splitNotes = doc.splitTextToSize(event.notes, contentWidth);
-          doc.text(splitNotes, margin, yPos);
-          yPos += (splitNotes.length * 4.5);
-        }
-        yPos += 6;
-      });
+          doc.setFont(undefined, "bold");
+          doc.setTextColor(47, 75, 58);
+          doc.text(`${idx + 1}. ${note.title}`, margin, y);
+          y += 6;
 
-      yPos += 5;
-      doc.setDrawColor(200, 200, 200);
-      doc.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 8;
+          doc.setFontSize(8);
+          doc.setFont(undefined, "normal");
+          doc.setTextColor(120, 120, 110);
+          doc.text(`${note.note_type?.toUpperCase()} · ${note.author_name} · ${new Date(note.created_date).toLocaleDateString()}`, margin, y);
+          y += 5;
+
+          doc.setFontSize(9);
+          doc.setTextColor(60, 55, 48);
+          doc.text(bodyLines, margin, y);
+          y += bodyLines.length * 4.5 + 6;
+        });
+        y += 4;
+      }
     }
 
-    // Documents section
-    if (selectedDocIds.length > 0) {
-      doc.setFontSize(14);
+    // ── SUMMARY STATS ─────────────────────────────────────────────────
+    if (timelineEntries && timelineEntries.length > 0) {
+      checkPage(30);
+      y += 4;
+      doc.setFontSize(13);
       doc.setFont(undefined, "bold");
-      doc.setTextColor(60, 80, 90);
-      doc.text("REFERENCED DOCUMENTS", margin, yPos);
-      yPos += 10;
+      doc.setTextColor(47, 75, 58);
+      doc.text("REPORT SUMMARY", margin, y);
+      y += 3;
+      drawLine([47, 75, 58]);
+      y += 3;
 
-      selectedDocIds.forEach((docId, idx) => {
-        if (yPos > pageHeight - 20) {
-          doc.addPage();
-          yPos = margin;
-        }
+      const counts = { note: 0, document: 0, message: 0 };
+      timelineEntries.forEach(e => { if (counts[e.type] !== undefined) counts[e.type]++; });
 
-        doc.setFontSize(10);
+      const dateRange = timelineEntries.length > 1
+        ? `${new Date(timelineEntries[0].date).toLocaleDateString()} — ${new Date(timelineEntries[timelineEntries.length - 1].date).toLocaleDateString()}`
+        : new Date(timelineEntries[0]?.date).toLocaleDateString();
+
+      const stats = [
+        ["Total Timeline Events", timelineEntries.length],
+        ["Case Notes", counts.note],
+        ["Documents", counts.document],
+        ["Co-Parent Messages", counts.message],
+        ["Date Range", dateRange],
+      ];
+
+      doc.setFontSize(9);
+      doc.setFont(undefined, "normal");
+      doc.setTextColor(60, 55, 48);
+      stats.forEach(([label, val]) => {
+        checkPage(6);
         doc.setFont(undefined, "bold");
-        doc.setTextColor(60, 80, 90);
-        doc.text(`${idx + 1}. Document Included`, margin, yPos);
-        yPos += 6;
-
-        doc.setFontSize(9);
+        doc.text(`${label}:`, margin, y);
         doc.setFont(undefined, "normal");
-        doc.setTextColor(120, 120, 120);
-        doc.text(`ID: ${docId}`, margin, yPos);
-        yPos += 5;
+        doc.text(String(val), margin + 55, y);
+        y += 5.5;
       });
+      y += 6;
     }
 
-    // Footer
-    if (yPos > pageHeight - 20) {
-      doc.addPage();
-    }
+    // ── CERTIFICATION ─────────────────────────────────────────────────
+    checkPage(40);
+    doc.setFillColor(248, 245, 240);
+    doc.roundedRect(margin, y, contentWidth, 38, 3, 3, "F");
+    doc.setDrawColor(47, 75, 58);
+    doc.roundedRect(margin, y, contentWidth, 38, 3, 3, "S");
+
+    doc.setFontSize(9);
+    doc.setFont(undefined, "bold");
+    doc.setTextColor(47, 75, 58);
+    doc.text("CERTIFICATION & DECLARATION", margin + 5, y + 7);
+
     doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text("This report was generated by Rooted 21 Case Management System", margin, pageHeight - 10);
-    doc.text(`Page ${doc.internal.pages.length - 1}`, pageWidth - margin - 20, pageHeight - 10);
+    doc.setFont(undefined, "normal");
+    doc.setTextColor(60, 55, 48);
+    const cert = `I, ${user.full_name}, declare under penalty of perjury that the information contained in this report is true and accurate to the best of my knowledge. This report was generated by the Rooted 21 Case Management System on ${new Date().toLocaleDateString("en-US", { dateStyle: "full" })}.`;
+    const certLines = doc.splitTextToSize(cert, contentWidth - 10);
+    certLines.forEach((line, i) => { doc.text(line, margin + 5, y + 14 + i * 4.5); });
 
-    // Save PDF
+    doc.setFont(undefined, "bold");
+    doc.text(`Signature: ${user.full_name}`, margin + 5, y + 30);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, margin + 110, y + 30);
+    y += 46;
+
+    // ── FOOTER on every page ──────────────────────────────────────────
+    const totalPages = doc.internal.pages.length - 1;
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFillColor(47, 75, 58);
+      doc.rect(0, pageHeight - 10, pageWidth, 10, "F");
+      doc.setFontSize(7);
+      doc.setFont(undefined, "normal");
+      doc.setTextColor(180, 210, 190);
+      doc.text("Rooted 21 Parenting Network — Confidential Case Documentation", margin, pageHeight - 4);
+      doc.text(`Page ${p} of ${totalPages}`, pageWidth - margin - 18, pageHeight - 4);
+    }
+
     const pdfBytes = doc.output("arraybuffer");
-    const fileName = `${childName.replace(/\s+/g, "-")}-Case-Status-Report.pdf`;
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
+    const fileName = `${childName.replace(/\s+/g, "-")}-Case-Report-${new Date().toISOString().split("T")[0]}.pdf`;
 
-    // Upload to Base44 private storage if needed, or return as blob
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-
-    return Response.json({
-      success: true,
-      url,
-      fileName,
-    });
+    return Response.json({ success: true, base64, fileName });
   } catch (error) {
-    console.error("Error generating case status report:", error);
+    console.error("generateCaseStatusReport error:", error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

@@ -6,6 +6,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X, Download } from "lucide-react";
 import DocumentManager from "@/components/case/DocumentManager";
 import TaskManager from "@/components/case/TaskManager";
+import CourtCaseTimeline from "@/components/case/CourtCaseTimeline";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -171,7 +172,7 @@ export default function CaseDetail() {
 
         {/* Tabs */}
         <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>
-          {["overview", "team", "documents", "tasks", "notes"].map(tab => (
+          {["overview", "timeline", "team", "documents", "tasks", "notes"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -189,6 +190,10 @@ export default function CaseDetail() {
         </div>
 
         {/* Tab content */}
+        {activeTab === "timeline" && (
+          <CourtCaseTimeline caseId={caseId} caseFile={caseFile} user={user} />
+        )}
+
         {activeTab === "overview" && (
           <div className="space-y-4">
             {caseFile.status && (
