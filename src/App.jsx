@@ -14,7 +14,6 @@ import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
 import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
 import PersonalizedChat from '@/pages/PersonalizedChat';
 import GrowthInsights from '@/pages/GrowthInsights';
-import JobResources from '@/pages/JobResources';
 
 function App() {
   return (
@@ -86,7 +85,8 @@ function App() {
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><routes.SecureDocumentRepository /></Suspense>} />
               <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><PersonalizedChat /></Suspense>} />
               <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><GrowthInsights /></Suspense>} />
-              <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><JobResources /></Suspense>} />
+              <Route path="/behavioral-trends" element={<Suspense fallback={<LoadingFallback />}><routes.BehavioralTrends /></Suspense>} />
+              <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><routes.JobResources /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

@@ -63,6 +63,8 @@ const routes = {
   SystemGuides: lazy(() => import("@/pages/SystemGuides")),
   MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
+  BehavioralTrends: lazy(() => import("@/pages/BehavioralTrends")),
+  JobResources: lazy(() => import("@/pages/JobResources")),
 };
 
 export default routes;
