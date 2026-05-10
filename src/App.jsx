@@ -24,9 +24,19 @@ const AuthenticatedApp = () => {
     );
   }
 
-  if (!isAuthenticated) {
-    navigateToLogin();
-    return null;
+if (!isAuthenticated) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-bold text-green-800 mb-2">🌱 Rooted 21</h1>
+          <p className="text-gray-600 mb-6">Sign in to continue</p>
+          <a href="/dashboard" className="bg-green-800 text-white px-6 py-3 rounded-full">
+            Enter App
+          </a>
+        </div>
+      </div>
+    );
+  }
   }
 
   return (
