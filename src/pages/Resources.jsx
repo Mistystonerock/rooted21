@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, ExternalLink, Phone } from "lucide-react";
+import { ChevronLeft, ExternalLink, Phone, ChevronRight } from "lucide-react";
 
 const RESOURCES = [
   {
@@ -26,6 +26,12 @@ const RESOURCES = [
       { title: "National Parent Helpline", desc: "1-855-427-2736 — Support for stressed parents", url: "tel:18554272736", type: "crisis" },
       { title: "Childhelp National Child Abuse Hotline", desc: "1-800-422-4453 — 24/7 crisis support", url: "tel:18004224453", type: "crisis" },
       { title: "Crisis Text Line", desc: "Text HOME to 741741 — Free 24/7 crisis counseling", url: "sms:741741", type: "crisis" },
+    ]
+  },
+  {
+    section: "💼 Job & Career Resources",
+    items: [
+      { title: "Job & Career Hub", desc: "Job boards, free training, benefits assistance, resume tools & foster family resources", url: "/job-resources", type: "tool" },
     ]
   },
   {
@@ -68,21 +74,37 @@ export default function Resources() {
             </p>
             <div className="space-y-2">
               {section.items.map(item => (
-                <a
-                  key={item.title}
-                  href={item.url}
-                  target={item.url.startsWith("http") ? "_blank" : undefined}
-                  rel="noreferrer"
-                  className="flex items-start gap-3 rounded-xl p-3.5 transition-all hover:shadow-md"
-                  style={{ background: C.white, border: `1px solid ${C.cream}`, textDecoration: "none" }}
-                >
-                  <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: TYPE_COLORS[item.type] }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{item.title}</p>
-                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{item.desc}</p>
-                  </div>
-                  <ExternalLink size={13} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
-                </a>
+                item.url.startsWith("/") ? (
+                  <Link
+                    key={item.title}
+                    to={item.url}
+                    className="flex items-start gap-3 rounded-xl p-3.5 transition-all hover:shadow-md"
+                    style={{ background: C.white, border: `1px solid ${C.cream}`, textDecoration: "none" }}
+                  >
+                    <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: TYPE_COLORS[item.type] }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{item.title}</p>
+                      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{item.desc}</p>
+                    </div>
+                    <ChevronRight size={13} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
+                  </Link>
+                ) : (
+                  <a
+                    key={item.title}
+                    href={item.url}
+                    target={item.url.startsWith("http") ? "_blank" : undefined}
+                    rel="noreferrer"
+                    className="flex items-start gap-3 rounded-xl p-3.5 transition-all hover:shadow-md"
+                    style={{ background: C.white, border: `1px solid ${C.cream}`, textDecoration: "none" }}
+                  >
+                    <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: TYPE_COLORS[item.type] }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{item.title}</p>
+                      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: C.mutedText }}>{item.desc}</p>
+                    </div>
+                    <ExternalLink size={13} color={C.mutedText} className="flex-shrink-0 mt-0.5" />
+                  </a>
+                )
               ))}
             </div>
           </div>
