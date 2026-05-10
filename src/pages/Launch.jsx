@@ -444,6 +444,15 @@ export default function Launch() {
             style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
             Sign In
           </button>
+          
+          <p className="text-[10px] mt-6" style={{ color: C.mutedText }}>
+            Founder? 
+          </p>
+          <a href="/founder-access"
+            className="inline-block mt-2 px-4 py-2 rounded-xl font-bold text-xs"
+            style={{ background: C.gold, color: C.darkGreen, textDecoration: "none" }}>
+            🔐 Access Portal
+          </a>
         </div>
 
         {/* Footer */}
