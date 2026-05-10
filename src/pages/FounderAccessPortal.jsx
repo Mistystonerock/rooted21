@@ -34,18 +34,27 @@ export default function FounderAccessPortal() {
   }, []);
 
   async function generateCode() {
-    if (!newCodeFor.trim()) return;
-    setGenerating(true);
-    
-    const response = await base44.functions.invoke("createOwnerAccessCode", {
-      createdFor: newCodeFor.trim(),
-    });
+   if (!newCodeFor.trim()) return;
+   setGenerating(true);
 
-    if (response.data?.success && response.data?.code) {
-      setCodes(prev => [response.data, ...prev]);
-      setNewCodeFor("");
-    }
-    setGenerating(false);
+   const response = await base44.functions.invoke("createOwnerAccessCode", {
+     professional_name: newCodeFor.trim(),
+     professional_email: `admin-${Date.now()}@rooted21.internal`,
+   });
+
+   if (response.data?.code) {
+     // Create local code record to display
+     const newCode = {
+       id: `temp-${Date.now()}`,
+       code: response.data.code,
+       created_for: newCodeFor.trim(),
+       created_date: new Date().toISOString(),
+       used: false,
+     };
+     setCodes(prev => [newCode, ...prev]);
+     setNewCodeFor("");
+   }
+   setGenerating(false);
   }
 
   async function deleteCode(codeId) {
