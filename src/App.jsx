@@ -13,6 +13,7 @@ import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
 import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
 import PersonalizedChat from '@/pages/PersonalizedChat';
+import GrowthInsights from '@/pages/GrowthInsights';
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><routes.SecureDocumentRepository /></Suspense>} />
               <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><PersonalizedChat /></Suspense>} />
+              <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><GrowthInsights /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

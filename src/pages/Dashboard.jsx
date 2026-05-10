@@ -244,6 +244,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Child Profiles</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Personalize AI insights</p>
           </Link>
+          <Link to="/growth-insights" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
+            <div style={{ fontSize: "22px" }}>🌱</div>
+            <p className="font-bold text-sm" style={{ color: C.cream }}>Growth Insights</p>
+            <p className="text-[11px]" style={{ color: C.lightGreen }}>AI weekly behavior reports</p>
+          </Link>
           <Link to="/live-classes" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
             <div style={{ fontSize: "22px" }}>🎓</div>
             <p className="font-bold text-sm" style={{ color: C.cream }}>Live Classes</p>

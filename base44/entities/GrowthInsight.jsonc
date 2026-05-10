@@ -1,0 +1,76 @@
+{
+  "name": "GrowthInsight",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the parent this insight belongs to"
+    },
+    "week_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date of the analyzed week"
+    },
+    "week_end": {
+      "type": "string",
+      "format": "date",
+      "description": "End date of the analyzed week"
+    },
+    "insight_text": {
+      "type": "string",
+      "description": "Full AI-generated insight markdown text"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child this insight relates to"
+    },
+    "stats": {
+      "type": "object",
+      "description": "Summary stats used to generate this insight",
+      "properties": {
+        "avg_child_regulation": {
+          "type": "number"
+        },
+        "avg_parent_calm": {
+          "type": "number"
+        },
+        "total_checkins": {
+          "type": "number"
+        },
+        "behavior_log_count": {
+          "type": "number"
+        },
+        "top_triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mood_trend": {
+          "type": "string"
+        },
+        "journal_entries": {
+          "type": "number"
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Extracted action recommendations",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_bookmarked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user has bookmarked this insight"
+    }
+  },
+  "required": [
+    "user_email",
+    "week_start",
+    "week_end",
+    "insight_text"
+  ]
+}
