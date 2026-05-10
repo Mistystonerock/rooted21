@@ -1,0 +1,58 @@
+{
+  "name": "MessageAuditLog",
+  "type": "object",
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "description": "ID of the SecureMessage or CoParentingMessage"
+    },
+    "thread_type": {
+      "type": "string",
+      "enum": [
+        "secure_message",
+        "coparenting"
+      ],
+      "description": "Which message system this belongs to"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the sender"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Full name of the sender"
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email of the recipient"
+    },
+    "body_preview": {
+      "type": "string",
+      "description": "First 120 characters of the message body for audit reference"
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "SHA-256 hex hash of the full message body for tamper detection"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Exact UTC timestamp when message was recorded"
+    },
+    "partnership_id": {
+      "type": "string",
+      "description": "For co-parenting messages: partnership ID"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Topic tag if applicable"
+    }
+  },
+  "required": [
+    "message_id",
+    "thread_type",
+    "sender_email",
+    "sent_at",
+    "content_hash"
+  ]
+}
