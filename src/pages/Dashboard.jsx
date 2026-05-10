@@ -239,6 +239,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Sensory Toolbox</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>3-min regulation activities</p>
           </Link>
+          <Link to="/emergency-toolbox" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FDECEC", border: `1.5px solid #F5BEBE` }}>
+            <div style={{ fontSize: "22px" }}>🚨</div>
+            <p className="font-bold text-sm" style={{ color: "#C0392B" }}>Emergency Toolbox</p>
+            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Real-time crisis strategies</p>
+          </Link>
           <Link to="/child-profiles" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <div style={{ fontSize: "22px" }}>🧒</div>
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Child Profiles</p>
