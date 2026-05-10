@@ -5,12 +5,13 @@
     "role": {
       "type": "string",
       "enum": [
+        "founder",
         "admin",
-        "user",
-        "professional"
+        "professional",
+        "user"
       ],
       "default": "user",
-      "description": "User role: user = parent/caregiver, professional = agency staff (counselor, CPS, court, etc.), admin = platform admin"
+      "description": "User role: founder = system owner (misty.stonerock88@gmail.com), admin = platform admin with assigned permissions, professional = agency staff, user = parent/caregiver"
     },
     "phone": {
       "type": "string",
@@ -20,6 +21,24 @@
       "type": "boolean",
       "default": true,
       "description": "Whether the user wants SMS reminders for upcoming calendar events"
+    },
+    "has_viewed_app": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user has accessed the app"
+    },
+    "last_login": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time user logged in"
+    },
+    "permissions": {
+      "type": "array",
+      "description": "List of feature/data access permissions assigned by founder",
+      "items": {
+        "type": "string"
+      },
+      "default": []
     }
   },
   "required": []

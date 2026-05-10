@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Users, Eye, CheckCircle2, MessageSquare, TrendingUp, Download } from "lucide-react";
+import AdminManagement from "@/components/rooted/AdminManagement";
 
 export default function FounderDashboard() {
   const [user, setUser] = useState(null);
@@ -50,12 +51,12 @@ export default function FounderDashboard() {
     });
   }, []);
 
-  if (!user?.role || user.role !== "admin") {
+  if (!user?.role || user.role !== "founder") {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: C.offWhite }}>
         <div className="text-center px-4">
           <p className="text-lg font-bold" style={{ color: C.darkGreen }}>Access Denied</p>
-          <p className="text-sm mt-2" style={{ color: C.mutedText }}>This dashboard is for founders only.</p>
+          <p className="text-sm mt-2" style={{ color: C.mutedText }}>This dashboard is for the founder only.</p>
         </div>
       </div>
     );
@@ -117,7 +118,7 @@ export default function FounderDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>
-          {["overview", "surveys"].map(tab => (
+          {["overview", "surveys", "admins"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -184,6 +185,10 @@ export default function FounderDashboard() {
         )}
 
         {/* Surveys tab */}
+        {activeTab === "admins" && (
+          <AdminManagement />
+        )}
+
         {activeTab === "surveys" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between px-1 mb-2">

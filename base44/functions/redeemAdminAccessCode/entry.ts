@@ -45,6 +45,16 @@ Deno.serve(async (req) => {
     // Update user role to admin
     await base44.auth.updateMe({ role: 'admin' });
 
+    // Create admin permissions record with default permissions
+    await base44.asServiceRole.entities.AdminPermissions.create({
+     admin_email: user.email,
+     admin_name: user.full_name,
+     permissions: ["view_all_data", "view_signups", "view_activity", "view_dashboard"],
+     created_by: accessCode.created_by,
+     notes: "Admin created via access code",
+     is_active: true
+    });
+
     return Response.json({ success: true, message: 'You are now an admin!' });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

@@ -1,0 +1,49 @@
+{
+  "name": "AdminPermissions",
+  "type": "object",
+  "properties": {
+    "admin_email": {
+      "type": "string",
+      "description": "Email of the admin user"
+    },
+    "admin_name": {
+      "type": "string",
+      "description": "Name of the admin user"
+    },
+    "permissions": {
+      "type": "array",
+      "description": "List of permissions granted to this admin",
+      "items": {
+        "type": "string",
+        "enum": [
+          "view_all_data",
+          "view_signups",
+          "view_activity",
+          "view_users",
+          "manage_admins",
+          "manage_codes",
+          "view_dashboard"
+        ]
+      },
+      "default": []
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Email of founder who created this admin"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about this admin's access level"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this admin account is active"
+    }
+  },
+  "required": [
+    "admin_email",
+    "admin_name",
+    "created_by"
+  ]
+}

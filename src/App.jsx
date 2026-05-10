@@ -37,7 +37,17 @@ function App() {
   const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
-    base44.auth.me().then(u => setUser(u)).catch(() => setUser(null));
+    base44.auth.me().then(async u => {
+      setUser(u);
+      // Initialize founder role if this is the founder account
+      if (u?.email) {
+        try {
+          await base44.functions.invoke("initializeFounder", {});
+        } catch (e) {
+          // Silently fail if function doesn't exist yet
+        }
+      }
+    }).catch(() => setUser(null));
   }, []);
 
   return (
