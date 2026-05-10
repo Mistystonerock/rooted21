@@ -1,0 +1,111 @@
+{
+  "name": "CasePlanChecklist",
+  "type": "object",
+  "properties": {
+    "parent_email": {
+      "type": "string",
+      "description": "Email of the parent/caregiver who owns this checklist"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this checklist relates to"
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Associated CaseFile ID (optional)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Name of this case plan (e.g. 'CPS Safety Plan - May 2026')"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "cps",
+        "court",
+        "professional",
+        "manual"
+      ],
+      "default": "manual",
+      "description": "Where this checklist came from"
+    },
+    "source_document_url": {
+      "type": "string",
+      "description": "URL of the uploaded document that was parsed"
+    },
+    "source_document_name": {
+      "type": "string",
+      "description": "Original filename of the uploaded document"
+    },
+    "items": {
+      "type": "array",
+      "description": "Checklist items extracted from the case plan",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string",
+            "description": "The task or requirement"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "service",
+              "appointment",
+              "document",
+              "court_order",
+              "behavioral",
+              "housing",
+              "employment",
+              "other"
+            ],
+            "default": "other"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "completed": {
+            "type": "boolean",
+            "default": false
+          },
+          "completed_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "proof_url": {
+            "type": "string",
+            "description": "URL of uploaded proof document"
+          },
+          "proof_filename": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated plain-language summary of the case plan"
+    }
+  },
+  "required": [
+    "parent_email",
+    "child_name",
+    "title"
+  ]
+}

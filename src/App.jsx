@@ -17,6 +17,7 @@ import GrowthInsights from '@/pages/GrowthInsights';
 import EmergencyToolbox from '@/pages/EmergencyToolbox';
 import Launch from '@/pages/Launch';
 import CourtReadyExport from '@/pages/CourtReadyExport';
+import CasePlanChecklist from '@/pages/CasePlanChecklist';
 import ExpenseSplit from '@/pages/ExpenseSplit';
 import DocumentScanner from '@/pages/DocumentScanner';
 
@@ -97,6 +98,7 @@ function App() {
               <Route path="/court-ready-export" element={<CourtReadyExport />} />
               <Route path="/expense-split" element={<ExpenseSplit />} />
               <Route path="/document-scanner" element={<DocumentScanner />} />
+              <Route path="/case-plan-checklist" element={<CasePlanChecklist />} />
               <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.VisitationTracker /></Suspense>} />
               <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><routes.MedicationManager /></Suspense>} />
               <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><routes.IncidentReportBuilder /></Suspense>} />
