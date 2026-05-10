@@ -5,6 +5,7 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Send, ShieldCheck, Download, Loader2, ShieldAlert } from "lucide-react";
 import CoParentMessageConsentModal, { hasCoParentMessageConsent } from "@/components/legal/CoParentMessageConsentModal";
 import ConflictLanguageChecker from "@/components/messaging/ConflictLanguageChecker";
+import TensionAlert from "@/components/messaging/TensionAlert";
 
 const TOPICS = ["schedule", "health", "education", "behavior", "finances", "general"];
 
@@ -38,6 +39,8 @@ export default function CoParentMessaging() {
   const [exporting, setExporting] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [showConflictCheck, setShowConflictCheck] = useState(false);
+  const [tensionAnalysis, setTensionAnalysis] = useState(null);
+  const [analyzingTension, setAnalyzingTension] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -59,6 +62,13 @@ export default function CoParentMessaging() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Analyze tension when messages change
+  useEffect(() => {
+    if (messages.length >= 3) {
+      analyzeTension();
+    }
   }, [messages]);
 
   async function doSend(txt) {
@@ -101,6 +111,19 @@ export default function CoParentMessaging() {
     const txt = input.trim();
     if (!txt || sending) return;
     setShowConflictCheck(true);
+  }
+
+  async function analyzeTension() {
+    setAnalyzingTension(true);
+    const response = await base44.functions.invoke("analyzeThreadTension", {
+      partnershipId,
+      threadType: "coparenting",
+      lastN: Math.min(messages.length, 15),
+    });
+    if (response.data?.success) {
+      setTensionAnalysis(response.data);
+    }
+    setAnalyzingTension(false);
   }
 
   async function handleExport() {
@@ -178,6 +201,18 @@ export default function CoParentMessaging() {
           All messages are timestamped, audit-logged, and tamper-evident
         </p>
       </div>
+
+      {/* Tension alert */}
+      {tensionAnalysis && (
+        <div className="px-4 py-3" style={{ background: "#fff", borderBottom: `1px solid ${C.cream}` }}>
+          <TensionAlert
+            alert={tensionAnalysis.alert}
+            tensionLevel={tensionAnalysis.tensionLevel}
+            suggestions={tensionAnalysis.suggestions}
+            onDismiss={() => setTensionAnalysis(null)}
+          />
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
