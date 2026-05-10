@@ -256,7 +256,7 @@ function DocumentSection({ docId, heading, content }) {
 }
 
 // Docs that support signing
-const SIGNABLE_DOCS = ["consent", "disclaimer"];
+const SIGNABLE_DOCS = ["terms", "privacy", "disclaimer", "consent"];
 
 export default function Legal() {
   const [activeTab, setActiveTab] = useState("terms");
