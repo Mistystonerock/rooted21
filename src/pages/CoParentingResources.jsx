@@ -175,6 +175,51 @@ export default function CoParentingResources() {
           </div>
         </div>
 
+        {/* Benefits of Co-Parenting Apps */}
+        <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.cream}` }}>
+          <div className="px-4 py-3 flex items-center gap-2" style={{ background: C.darkGreen }}>
+            <BookOpen size={16} color={C.gold} />
+            <div>
+              <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Benefits of Co-Parenting Apps</p>
+              <p className="text-[10px]" style={{ color: C.lightGreen }}>How technology supports healthy co-parenting</p>
+            </div>
+          </div>
+          <div className="p-4 space-y-4" style={{ background: C.white }}>
+            {[
+              {
+                icon: "💬",
+                title: "Streamlined Communication",
+                body: "Co-parenting apps provide organized, easy-to-navigate messaging that keeps all communication in one place. This reduces miscommunication and ensures important information is never lost or overlooked, leading to more efficient interactions between parents."
+              },
+              {
+                icon: "⚖️",
+                title: "Court-Approved Documentation",
+                body: "Many co-parenting apps are recognized by family courts for documenting interactions between parents. In high-conflict situations or active litigation, these apps provide a neutral, third-party record of communication that can be used in therapeutic settings or legal proceedings."
+              },
+              {
+                icon: "📅",
+                title: "Shared Scheduling & Calendars",
+                body: "Managing custody arrangements, appointments, and important events is easier when both parents share a single calendar. Keeping co-parenting information consolidated minimizes conflicts and maximizes the chance that both parents stay on the same page about scheduling changes."
+              },
+              {
+                icon: "💰",
+                title: "Expense Tracking & Reimbursement",
+                body: "Many apps include features to track child-related expenses such as medical or educational costs, split costs fairly, and handle reimbursement transparently. This financial clarity reduces stress and helps avoid disputes over money — a common source of tension in co-parenting relationships."
+              }
+            ].map((benefit, i) => (
+              <div key={i} className="flex gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-base" style={{ background: C.offWhite }}>
+                  {benefit.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-xs mb-1" style={{ color: C.darkGreen }}>{benefit.title}</p>
+                  <p className="text-[11px] leading-relaxed" style={{ color: C.mutedText }}>{benefit.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <p className="text-[10px] font-bold px-1" style={{ color: C.mutedText }}>TIPS & STRATEGIES</p>
         {RESOURCES.map((resource, idx) => (
 
