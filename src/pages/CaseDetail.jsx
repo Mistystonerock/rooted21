@@ -7,6 +7,7 @@ import { FileText, Users, MessageSquare, Calendar, AlertCircle, Plus, Trash2, X,
 import DocumentManager from "@/components/case/DocumentManager";
 import TaskManager from "@/components/case/TaskManager";
 import CourtCaseTimeline from "@/components/case/CourtCaseTimeline";
+import EmergencyAlertButton from "@/components/emergency/EmergencyAlertButton";
 
 export default function CaseDetail() {
   const { caseId } = useParams();
@@ -169,6 +170,14 @@ export default function CaseDetail() {
             <Users size={14} /> Meeting
           </Link>
         </div>
+
+        {/* Emergency alert — full width */}
+        <EmergencyAlertButton
+          variant="compact"
+          caseId={caseId}
+          caseName={caseFile.child_name}
+          childName={caseFile.child_name}
+        />
 
         {/* Tabs */}
         <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>

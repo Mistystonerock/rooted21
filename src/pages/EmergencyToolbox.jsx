@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Timer, RotateCcw, CheckCircle2, ChevronLeft, Wind, Zap } from "lucide-react";
+import EmergencyAlertButton from "@/components/emergency/EmergencyAlertButton";
 
 // ── EMERGENCY SITUATIONS ──────────────────────────────────────────────────────
 const SITUATIONS = [
@@ -613,6 +614,9 @@ export default function EmergencyToolbox() {
                 </p>
               </div>
             </div>
+
+            {/* Emergency Alert */}
+            <EmergencyAlertButton variant="full" />
 
             {/* Crisis line */}
             <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: C.cream }}>
