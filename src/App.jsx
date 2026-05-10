@@ -111,6 +111,7 @@ function App() {
               <Route path="/life-story" element={<Suspense fallback={<LoadingFallback />}><routes.ChildLifeStory /></Suspense>} />
               <Route path="/peer-support" element={<Suspense fallback={<LoadingFallback />}><routes.PeerSupport /></Suspense>} />
               <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ChildSuicideGuide /></Suspense>} />
+              <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ACEsGuide /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

@@ -67,6 +67,14 @@ const TOPICS = [
     color: "#C0392B",
     tag: "CRITICAL",
   },
+  {
+    emoji: "🧬",
+    title: "ACEs Awareness Guide",
+    subtitle: "The science of early trauma, how it shapes behavior, and how to talk to your child's care team",
+    path: "/aces-guide",
+    color: C.darkGreen,
+    tag: "SCIENCE",
+  },
 ];
 
 export default function EducationHub() {
