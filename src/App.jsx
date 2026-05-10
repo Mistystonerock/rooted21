@@ -12,6 +12,7 @@ import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
 import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
+import PersonalizedChat from '@/pages/PersonalizedChat';
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><routes.SystemGuides /></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><routes.MeetingPrepChatbot /></Suspense>} />
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><routes.SecureDocumentRepository /></Suspense>} />
+              <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><PersonalizedChat /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
