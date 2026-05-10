@@ -9,230 +9,247 @@ import DocumentSigningModal from "@/components/legal/DocumentSigningModal";
 const SECTIONS = [
   { id: "terms", label: "Terms of Service", icon: FileText },
   { id: "privacy", label: "Privacy Policy", icon: ScrollText },
-  { id: "disclaimer", label: "Health & Safety Disclaimer", icon: AlertTriangle },
   { id: "consent", label: "Consent Forms", icon: CheckCircle2 },
+  { id: "tbri", label: "Terminology Guide", icon: AlertTriangle },
 ];
 
 const CONTENT = {
   terms: {
     title: "Terms of Service",
-    updated: "Last updated: May 4, 2026",
+    updated: "Last updated: May 10, 2026",
     sections: [
       {
-        heading: "1. Acceptance of Terms",
+        heading: "1. Acceptance of Terms & User Roles",
         content:
-          "By accessing and using Rooted 21, you accept and agree to be bound by the terms of this agreement. If you do not agree to these terms, please do not use this service. These terms constitute a binding legal agreement between you and Rooted 21.",
+          "By accessing Rooted 21, you agree to these terms. This platform serves three user roles: (a) Parents/Caregivers — biological parents, adoptive parents, foster parents, kinship caregivers, and legal guardians; (b) Professionals — licensed therapists, counselors, caseworkers, coaches, and advocates who access family data via professional access codes; (c) Court Staff — judges, attorneys, guardians ad litem, and court-appointed monitors who access designated case data through court-authorized credentials. Each role carries different access rights and responsibilities defined herein.",
       },
       {
-        heading: "2. Use License & Intellectual Property",
+        heading: "2. Intellectual Property & Curriculum License",
         content:
-          "Permission is granted to temporarily download one copy of the materials (information or software) on Rooted 21 for personal, non-commercial use only. This is a license, not a transfer of ownership. You may NOT: copy, modify, reverse engineer, or decompile the software or curriculum; use scrapers, bots, or automated tools to extract content; remove copyright, trademark, or proprietary notices; republish or sell the content; or create derivative works. All content, including lessons, assessments, therapeutic protocols, and branding are owned by Rooted 21, LLC and protected by copyright law. Unauthorized copying or redistribution is illegal and may result in civil and criminal penalties.",
+          "All curriculum content, lesson materials, behavioral frameworks, AI coaching logic, branding, and proprietary parenting methodology on Rooted 21 are owned by Rooted 21, LLC and protected by U.S. and international copyright, trademark, and trade secret laws. You are granted a limited, non-exclusive, non-transferable license to use the platform for personal or professional support purposes only. You may NOT: copy, redistribute, sublicense, or sell any content; reproduce curriculum materials for group use without written authorization; use automated tools to extract platform data; or create competing derivative works. Violations may result in immediate termination and civil/criminal prosecution.",
       },
       {
-        heading: "3. User Conduct & Prohibited Activities",
+        heading: "3. Co-Parent Portal — Supervised Messaging Terms",
         content:
-          "You agree not to: use Rooted 21 for unlawful purposes or in violation of any applicable laws; attempt to gain unauthorized access to the platform; interfere with platform operations; harass, abuse, or threaten other users; upload malicious code or content; or violate intellectual property rights. Any unauthorized use of content will be pursued to the fullest extent of the law, including DMCA takedown notices and civil litigation.",
+          "The Co-Parent Portal facilitates court-supervised communication between co-parents. By using this feature: (a) You acknowledge that ALL messages sent through the Co-Parent Portal are logged, stored, and may be reviewed by court-authorized monitors and legal representatives; (b) You agree not to send threatening, harassing, or abusive messages; (c) You understand that message logs may be subpoenaed or submitted as evidence in family court proceedings; (d) Messages cannot be deleted by users once sent; (e) Court staff assigned to your case may access message history at any time without prior notice; (f) Use of this portal constitutes consent to monitoring. Do not use this feature if you do not consent to court oversight.",
       },
       {
-        heading: "4. Limitation of Liability & Indemnification",
+        heading: "4. Professional Directory — Liability Disclaimer",
         content:
-          "IN NO EVENT SHALL ROOTED 21 OR ITS OPERATORS BE LIABLE FOR: indirect, incidental, special, or consequential damages; loss of data, profits, or business opportunity; or damages from unauthorized access or data breaches beyond our reasonable control. Your sole remedy is refund of subscription fees. By using Rooted 21, you indemnify and hold harmless the platform from any claims arising from your use, breach of these terms, or violation of law.",
+          "Rooted 21 provides a Professional Directory as an informational resource only. Rooted 21 does NOT: verify, endorse, license, or credential any professional listed; guarantee the accuracy of professional credentials, certifications, or specializations; assume liability for outcomes of consultations or services rendered by listed professionals; or create any employment or agency relationship with listed professionals. All professionals are independent practitioners. Parents are solely responsible for verifying credentials, licensure, and fit before engaging any professional. Rooted 21 expressly disclaims all liability for professional misconduct, negligence, or harm arising from connections made through the directory.",
       },
       {
-        heading: "5. Warranty Disclaimer & Service 'AS-IS'",
+        heading: "5. Limitation of Liability & Liability Cap",
         content:
-          "THE PLATFORM IS PROVIDED 'AS-IS' WITHOUT WARRANTY OF ANY KIND. ROOTED 21 DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not warrant that: the platform will be uninterrupted or error-free; all content is accurate or complete; or your use will meet your expectations.",
+          "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROOTED 21'S TOTAL AGGREGATE LIABILITY FOR ANY CLAIM ARISING FROM USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF: (a) $100.00 USD; or (b) the total subscription fees paid by the claimant in the 3 months preceding the claim. Rooted 21 is NOT liable for: indirect, incidental, punitive, or consequential damages; loss of data, income, or business opportunity; emotional distress or therapeutic harm; outcomes of professional relationships facilitated by the platform; or unauthorized access to your account. This limitation applies even if Rooted 21 has been advised of the possibility of such damages.",
       },
       {
-        heading: "6. External Links & Third-Party Content",
+        heading: "6. Court Staff Access & Data Obligations",
         content:
-          "Rooted 21 is not responsible for external links, third-party services (Twilio, Stripe), or linked content. We do not endorse external sites. Your use of third-party services is governed by their own terms and privacy policies.",
+          "Court staff authorized to access Rooted 21 data agree to: use data solely for official court proceedings; maintain strict confidentiality of all family data; comply with applicable court rules, state law, and federal privacy regulations; not share access credentials; and report any unauthorized access immediately to mstonerock@rooted21parenting.com. Rooted 21 reserves the right to audit court staff access logs and revoke access for misuse.",
       },
       {
-        heading: "7. Modification & Termination of Service",
+        heading: "7. Professional Access Code Terms",
         content:
-          "Rooted 21 may revise these terms, modify features, or terminate the service at any time with 30 days' notice. Continued use after modification indicates acceptance. We may suspend or terminate accounts that violate these terms or engage in illegal activity.",
+          "Professionals who receive access codes from families agree to: use data only for direct service to that family; maintain HIPAA-compliant records management; not share family data with third parties without explicit consent; comply with their professional licensing standards; and immediately notify Rooted 21 if their access is no longer appropriate. Access codes may be revoked by the parent at any time. Professionals may not use platform data for research, training AI models, or any purpose beyond direct client care.",
       },
       {
-        heading: "8. Dispute Resolution & Arbitration",
+        heading: "8. Indemnification",
         content:
-          "Any dispute arising from these terms shall be resolved through binding arbitration under JAMS rules. You waive the right to a jury trial or class action. Arbitration shall be conducted in English and governed by Ohio law. Each party bears its own legal costs unless arbitration rules provide otherwise.",
+          "You agree to indemnify, defend, and hold harmless Rooted 21, LLC, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorneys' fees) arising from: your use of the platform; your violation of these terms; your violation of any law or third-party rights; content you submit; or your relationship with any professional, co-parent, or court party facilitated through the platform.",
       },
       {
-        heading: "9. Severability",
+        heading: "9. Dispute Resolution & Governing Law",
         content:
-          "If any provision of these terms is found invalid, that provision shall be severed and the remainder shall remain in effect.",
+          "All disputes shall be resolved through binding arbitration under JAMS rules, conducted in English, governed by Ohio law, in the jurisdiction of Franklin County, Ohio. You waive rights to jury trial and class action participation. Each party bears its own legal costs unless arbitration rules provide otherwise. Claims must be brought within 1 year of the event giving rise to the claim.",
       },
       {
-        heading: "10. Contact & Notices",
+        heading: "10. Modifications, Termination & Contact",
         content:
-          "Legal notices should be sent to: mstonerock@rooted21parenting.com. By using this platform, you consent to electronic service of documents.",
+          "Rooted 21 may update these terms with 30 days' notice via email or in-app notification. Continued use constitutes acceptance. We may suspend or terminate accounts for violations. Legal notices: mstonerock@rooted21parenting.com.",
       },
     ],
   },
 
   privacy: {
-    title: "Privacy Policy",
-    updated: "Last updated: May 4, 2026",
+    title: "Privacy Policy (HIPAA + COPPA Aligned)",
+    updated: "Last updated: May 10, 2026",
     sections: [
       {
-        heading: "1. Information We Collect",
+        heading: "Overview & Regulatory Framework",
         content:
-          "We collect: (a) Information you provide: name, email, phone, child profile, behavioral observations, goals, journal entries, health notes; (b) Usage data: login activity, check-in logs, feature usage, session duration; (c) Device info: IP address, browser type, device ID; (d) Payment info: processed securely through Stripe (we do not store credit card numbers). All personally identifiable information is encrypted.",
+          "This Privacy Policy governs the collection, use, and protection of personal information by Rooted 21, LLC. We are committed to compliance with: HIPAA (Health Insurance Portability and Accountability Act) — for health-related behavioral data; COPPA (Children's Online Privacy Protection Act) — for data involving children under 13; FERPA (Family Educational Rights and Privacy Act) — for educational records; and CCPA (California Consumer Privacy Act) — for California residents. This platform is designed for adults (18+) acting as parents or caregivers. Children do not directly create accounts or submit data.",
       },
       {
-        heading: "2. How We Use Your Information",
+        heading: "1. Data We Collect & HIPAA-Aligned Handling",
         content:
-          "Your information is used to: provide, maintain, and improve Rooted 21; send notifications and reminders; create personalized insights and behavioral reports; connect you with assigned professionals; comply with legal and regulatory obligations; prevent fraud or misuse; and analyze platform usage to enhance features.",
+          "We collect: (a) Parent/Caregiver Data: name, email, phone, location (optional), payment info via Stripe; (b) Child Profile Data (entered by parent): name, age, placement type, behavioral observations, triggers, trauma history notes, medical/therapy notes, school accommodations — this data is treated as Protected Health Information (PHI) under HIPAA-aligned practices; (c) Usage Data: login activity, feature access logs, session duration; (d) Communication Data: Co-Parent Portal messages, team messages, check-in notes. PHI is encrypted at rest (AES-256) and in transit (TLS 1.3). We do not store payment card numbers — all payments are processed by Stripe.",
       },
       {
-        heading: "3. Sensitive Data: Children's Information",
+        heading: "2. COPPA Compliance — Children's Data",
         content:
-          "Rooted 21 processes sensitive information about children (names, ages, behavioral health, traumatic history). Parents/guardians are responsible for ensuring this information is accurate and necessary. We do NOT sell, share, or use child data for marketing. Child data is shared with professionals ONLY via explicit access code consent, which you can revoke anytime.",
+          "Rooted 21 does not permit children under 13 to create accounts or directly submit data. Child profile information is entered ONLY by the parent or legal guardian (the verified adult account holder). We comply with COPPA by: requiring adult account verification; not collecting data directly from children; not using child profile data for advertising or marketing; not sharing child data without explicit verifiable parental consent; and providing parents with full rights to access, correct, and delete their child's data at any time. Parents may request complete deletion of child profile data by emailing mstonerock@rooted21parenting.com.",
       },
       {
-        heading: "4. Professional Data Sharing",
+        heading: "3. How We Use Your Data",
         content:
-          "When you provide a professional with an access code, you explicitly consent to share your complete family profile, behavioral data, notes, and assessments with that specific person. You control access and can revoke it immediately. Professionals must maintain confidentiality and comply with HIPAA and applicable laws.",
+          "Child and family data is used ONLY to: deliver platform features (AI coaching, behavior reports, care calendar); generate personalized insights for the parent's own use; share with professionals ONLY when the parent grants explicit access via access code; and comply with valid legal obligations (court orders, subpoenas). We do NOT use child behavioral data to train AI models, advertise, sell to third parties, or conduct research without explicit opt-in consent.",
       },
       {
-        heading: "5. Data Security & Encryption",
+        heading: "4. Professional & Court Staff Data Access",
         content:
-          "We use industry-standard protections: AES-256 encryption at rest, TLS 1.2+ encryption in transit, secure API authentication, access controls, and regular security audits. However, no online system is 100% secure. We are not liable for breaches from unauthorized access, server compromise, or third-party vulnerability beyond our reasonable control.",
+          "Professionals (therapists, caseworkers, coaches) may access family data only when a parent provides an access code. This access is logged, auditable, and revocable at any time. Court staff may access designated case data through court-authorized credentials only. All authorized data access is recorded in an audit log. Professionals must comply with their professional licensing standards and HIPAA. Court access is governed by applicable court orders and state law.",
       },
       {
-        heading: "6. Data Retention & Deletion",
+        heading: "5. Data Security Standards",
         content:
-          "Active account data is retained indefinitely while your account is active. Upon account deletion, personal and child data is removed within 30 days. Backup copies may take up to 90 days to fully purge. Aggregated, anonymized analytics are retained indefinitely and cannot identify you.",
+          "Security measures include: AES-256 encryption at rest; TLS 1.3 encryption in transit; role-based access controls; access code authentication for professional data sharing; audit logs for all data access events; and regular security reviews. No system is 100% secure. In the event of a data breach affecting your PHI, we will notify you within 60 days as required by applicable law.",
+      },
+      {
+        heading: "6. Data Retention & Deletion Rights",
+        content:
+          "Active account data is retained while your account is active. Upon account deletion request: personal and child data is removed within 30 days; backup systems purge within 90 days; court-ordered data holds may delay deletion. You have the right to: request a copy of your data; correct inaccurate information; delete your account and data; and restrict certain processing. Submit requests to mstonerock@rooted21parenting.com — fulfilled within 45 days.",
       },
       {
         heading: "7. Third-Party Service Providers",
         content:
-          "We use: Twilio (SMS delivery), Stripe (payments), Base44 (hosting/database). These providers have access to limited data necessary for their service. We do NOT sell personal data to advertisers or data brokers. Your information is never shared for marketing purposes.",
+          "We share limited data with: Stripe (payment processing — no card numbers stored by us); Twilio (SMS delivery — phone numbers only); Base44 (hosting and database infrastructure). These providers are contractually bound to protect your data and may not use it for their own purposes. We do NOT sell, rent, or trade personal or child data to any third party for commercial purposes.",
       },
       {
-        heading: "8. Your Privacy Rights",
+        heading: "8. California Residents — CCPA Rights",
         content:
-          "You have the right to: access your data; correct inaccurate information; delete your account and data (subject to legal holds); opt out of non-critical notifications. To exercise these rights, email mstonerock@rooted21parenting.com.",
+          "California residents have the right to: know what personal information we collect and how it is used; request deletion of personal information; opt out of the sale of personal information (we do not sell personal information); non-discrimination for exercising privacy rights; and request disclosure of data shared with third parties in the past 12 months. To exercise CCPA rights, email mstonerock@rooted21parenting.com with subject line 'CCPA Request.' We will respond within 45 days.",
       },
       {
-        heading: "9. Policy Changes & Legal Compliance",
+        heading: "9. Co-Parent Portal Privacy",
         content:
-          "We may update this policy. Significant changes will trigger email notification. Continued use indicates acceptance. Rooted 21 complies with FERPA (educational records), state behavioral health laws, and applicable data protection regulations.",
+          "Messages sent through the Co-Parent Portal are stored and accessible to court-authorized monitors. Do not send messages through the Co-Parent Portal that you would not want seen in a court proceeding. Message logs may be subpoenaed. This is by design — the portal exists to provide a transparent, court-supervised communication channel for the protection of all parties, especially children.",
       },
       {
-        heading: "10. Contact & Data Requests",
+        heading: "10. Policy Updates & Contact",
         content:
-          'Email mstonerock@rooted21parenting.com or contact through the app. For legal requests (subpoenas, warrants), we will notify you unless legally prohibited. Data requests are fulfilled within 45 days.',
-      },
-    ],
-  },
-
-  disclaimer: {
-    title: "Health & Safety Disclaimer",
-    updated: "Last updated: May 4, 2026",
-    sections: [
-      {
-        heading: "⚠️ IMPORTANT: NOT A MEDICAL SERVICE",
-        content:
-          "Rooted 21 is an educational and behavioral support tool designed to complement professional mental health care. It is NOT a substitute for professional medical, psychological, or psychiatric treatment. The information and features provided are not intended to diagnose, treat, cure, or prevent any disease or mental health condition.",
-      },
-      {
-        heading: "1. Professional Guidance Required",
-        content:
-          "This platform is designed to support families working with therapists, counselors, caseworkers, or other qualified professionals. Do not use Rooted 21 as your only source of parenting guidance. Always consult with qualified professionals about your child's behavioral or mental health concerns.",
-      },
-      {
-        heading: "2. Crisis Resources",
-        content:
-          "If you or your child are experiencing a mental health crisis: Call or text 988 (Suicide & Crisis Lifeline) for immediate support available 24/7. If there is imminent danger, call 911 immediately. These resources are available at any time from anywhere in the app.",
-      },
-      {
-        heading: "3. No Emergency Service",
-        content:
-          "Rooted 21 does not provide emergency mental health services. In case of suicidal thoughts, self-harm, or any emergency, immediately call 911 or go to the nearest emergency room.",
-      },
-      {
-        heading: "4. AI-Powered Coaching Limitations",
-        content:
-          "The AI-powered crisis guidance and support suggestions are based on best practices in trauma-informed parenting and TBRI®, but are not personalized medical advice. The AI may not account for unique medical, psychological, or situational factors. Always verify suggestions with your professional care team.",
-      },
-      {
-        heading: "5. Data and Monitoring",
-        content:
-          "Rooted 21 tracks behavioral data and patterns for your personal awareness and to share with your care team. This tracking is not medical monitoring and should not replace regular check-ins with your professionals.",
-      },
-      {
-        heading: "6. No Liability for Outcomes",
-        content:
-          "ROOTED 21 IS NOT LIABLE for any outcomes, behavioral changes (positive or negative), emotional impacts, or consequences resulting from use of this app. We provide educational support only. Any negative outcomes, therapeutic harm, or dependency on platform guidance are not the responsibility of Rooted 21. You assume all risk related to use.",
-      },
-      {
-        heading: "7. No Doctor-Patient or Therapist-Client Relationship",
-        content:
-          "Use of Rooted 21 does NOT create a medical, therapeutic, counseling, or fiduciary relationship. You do not have a duty of care or confidentiality from Rooted 21. Professionals integrated into the platform (therapists, caseworkers) create their own separate professional relationships with you outside of this app.",
-      },
-      {
-        heading: "8. Parental Responsibility & Guardianship",
-        content:
-          "You represent that you are the biological parent, adoptive parent, legal guardian, or authorized caregiver of the child whose information is entered. You assume FULL LEGAL RESPONSIBILITY for your child's care, safety, medical decisions, and wellbeing. Rooted 21 is a tool only—not a substitute for professional judgment, parental oversight, or legal guardianship responsibilities.",
-      },
-      {
-        heading: "9. Assumption of Risk",
-        content:
-          "By using Rooted 21, you acknowledge: (a) the risks of AI-generated advice; (b) the limitations of digital mental health support; (c) that you understand when to seek immediate professional help; and (d) that you accept all consequences of relying on this app's features. YOU ASSUME ALL RISK.",
-      },
-      {
-        heading: "10. No Replacement for Emergency Services",
-        content:
-          "Rooted 21 does NOT replace emergency mental health services, crisis intervention, or medical treatment. If you or your child experience suicidal thoughts, self-harm, abuse, or medical emergency, YOU MUST immediately call 911, text 988, or go to an emergency room. Failure to seek emergency care is YOUR responsibility, not Rooted 21's.",
-      },
-      {
-        heading: "11. Acknowledgment & Binding Agreement",
-        content:
-          "By using Rooted 21, you certify that you: (a) have read all health disclaimers; (b) understand Rooted 21 is not medical care; (c) accept all liability and risk; (d) will seek professional care when needed; and (e) release Rooted 21 from liability for outcomes. This is a binding legal waiver.",
+          "Material changes to this policy will be communicated by email and in-app notification with 30 days' notice. Continued use constitutes acceptance. For privacy questions, data requests, or to report a concern: mstonerock@rooted21parenting.com.",
       },
     ],
   },
 
   consent: {
-    title: "Consent Forms",
-    updated: "Last updated: May 4, 2026",
+    title: "Consent Forms (3-in-1)",
+    updated: "Last updated: May 10, 2026",
     sections: [
       {
-        heading: "CONSENT TO USE ROOTED 21",
-        content:
-          "I understand that Rooted 21 is an educational and behavioral support platform, not a medical or mental health treatment service. I acknowledge that I have read the Health & Safety Disclaimer above and understand the limitations and risks of using this app.",
+        heading: "— CONSENT FORM 1 OF 3 —",
+        content: "CO-PARENT PORTAL MONITORING CONSENT",
       },
       {
-        heading: "CONSENT TO DATA COLLECTION & STORAGE",
+        heading: "What You Are Consenting To",
         content:
-          "I consent to Rooted 21 collecting and securely storing information about my family, including: check-in data, behavioral observations, goals, lesson progress, journal entries, and contact information. I understand this data may be used to generate personalized insights, trends, and reports for sharing with my care team.",
+          "By using the Co-Parent Portal, I understand and consent to the following: ALL messages I send and receive through the Co-Parent Portal are recorded and stored permanently in the Rooted 21 system. These messages may be reviewed at any time by court-authorized monitors, guardians ad litem, assigned caseworkers, attorneys of record, and any other court-designated personnel with access to my case.",
       },
       {
-        heading: "CONSENT TO SHARE DATA WITH PROFESSIONALS",
+        heading: "Court Evidence Acknowledgment",
         content:
-          "I understand that I control who can access my family's data through the access code system. When I provide a professional with an access code, I am explicitly consenting to share my family's data with that person. I can revoke this access at any time by removing the professional's connection in the app.",
+          "I understand that Co-Parent Portal message logs may be subpoenaed or submitted as exhibits in family court proceedings without additional consent. I acknowledge that my messages in this portal constitute an official record and that I should communicate accordingly. I agree not to use this portal to send threatening, harassing, manipulative, or abusive messages.",
       },
       {
-        heading: "CONSENT TO USE AI-POWERED FEATURES",
+        heading: "No Deletion Rights",
         content:
-          "I understand that Rooted 21 uses AI technology to provide crisis guidance, behavioral insights, and personalized suggestions. I acknowledge that AI-generated advice is not personalized medical advice and should be verified with my professional care team.",
+          "I understand that I cannot delete messages once sent through the Co-Parent Portal. Message history is retained for the duration of the active case and may be archived thereafter per court order. I accept this as a condition of using supervised co-parenting communication through this platform.",
       },
       {
-        heading: "CONSENT TO NOTIFICATIONS",
-        content:
-          "I consent to receive SMS and email notifications from Rooted 21, including reminders, check-in prompts, and important app updates. I can opt out of non-critical notifications in my settings at any time.",
+        heading: "— CONSENT FORM 2 OF 3 —",
+        content: "COURT STAFF MONITORING AUTHORIZATION",
       },
       {
-        heading: "PARENTAL ACKNOWLEDGMENT",
+        heading: "What Court Staff May Access",
         content:
-          "I confirm that I am the parent or legal guardian of the child whose information is being entered into Rooted 21. I assume full responsibility for my family's use of this app and understand that Rooted 21 is a support tool, not a replacement for professional care.",
+          "I, as the parent or legal guardian on this account, authorize court staff who have been granted credentials by a court of competent jurisdiction to access the following data related to my case: Co-Parent Portal message history; case file summaries and notes shared with my care team; case task and milestone records; meeting request and scheduling records; and any documents I have designated as shared with court staff.",
       },
       {
-        heading: "CRISIS RESOURCES ACKNOWLEDGMENT",
+        heading: "What Court Staff Cannot Access",
         content:
-          "I acknowledge that I am aware of crisis resources including the 988 Suicide & Crisis Lifeline and that I understand how to access emergency services. I take responsibility for using these resources if needed.",
+          "Court staff are NOT authorized to access: my private journal entries (marked private); my personal billing information; my AI chat history from the general support chat; or any documents I have marked as private/personal only. I understand that court staff access is limited to case-relevant shared data and does not include my private personal records.",
+      },
+      {
+        heading: "Audit Trail",
+        content:
+          "I understand that all court staff access to my data is logged with a timestamp and user identifier in the system's audit trail. I may request an access log at any time by emailing mstonerock@rooted21parenting.com.",
+      },
+      {
+        heading: "— CONSENT FORM 3 OF 3 —",
+        content: "CHILD PROFILE DATA USE AUTHORIZATION",
+      },
+      {
+        heading: "Parental Authorization for Child Data Processing",
+        content:
+          "I confirm that I am the biological parent, adoptive parent, legal guardian, or court-authorized caregiver of the child(ren) whose information I am entering into Rooted 21. I have legal authority to authorize the collection and processing of this child's personal and behavioral data.",
+      },
+      {
+        heading: "What Child Data Is Collected & How It Is Used",
+        content:
+          "I authorize Rooted 21 to collect and process the following child data I enter: name, age, placement type, behavioral observations, emotional regulation patterns, known triggers, trauma history notes, coping tools, school/IEP information, and care goals. This data is used ONLY to: generate AI-assisted parenting insights for my personal use; create behavioral trend reports I can share with my care team; and support professionals I explicitly authorize via access code.",
+      },
+      {
+        heading: "COPPA Acknowledgment & Parental Control",
+        content:
+          "I understand that my child does not have an account and does not directly submit any data. All child information is entered by me as the authorized adult. I have the right to access, correct, and permanently delete my child's data at any time by submitting a request to mstonerock@rooted21parenting.com. I understand that child data is never sold, used for advertising, or shared with third parties without my explicit consent.",
+      },
+      {
+        heading: "Professional Sharing of Child Data",
+        content:
+          "I understand that child profile data will ONLY be shared with professionals I explicitly authorize by providing them with a Rooted 21 access code. I can revoke professional access at any time in the app. I acknowledge that any professional I authorize is responsible for maintaining the confidentiality of my child's data under their own professional licensing and HIPAA obligations.",
+      },
+    ],
+  },
+
+  tbri: {
+    title: "Trauma-Informed Terminology Guide",
+    updated: "Last updated: May 10, 2026",
+    sections: [
+      {
+        heading: "Why This Guide Exists",
+        content:
+          "TBRI® (Trust-Based Relational Intervention) is a registered trademark of TCU Institute of Child Development. This guide provides safe, legally sound alternative terminology for use within Rooted 21's curriculum, directory, and coaching features. It clarifies what professionals may self-report, what language to use in the app, and recommended next steps for curriculum compliance.",
+      },
+      {
+        heading: "Find & Replace: Core Terminology",
+        content:
+          "Replace 'TBRI®' with: 'trauma-informed parenting' (general contexts), 'attachment-based parenting' (relationship/connection contexts), 'trust-based parenting' (informal/coaching contexts), 'Empowering Principles' → 'Empowerment Strategies', 'Connecting Principles' → 'Connection-First Strategies', 'Correcting Principles' → 'Behavior Guidance Strategies'.",
+      },
+      {
+        heading: "Curriculum Language Replacements",
+        content:
+          "In lesson content: replace 'TBRI® trained' with 'trauma-informed care trained'; replace 'TBRI® practitioner' with 'trauma-informed parenting coach'; replace 'TBRI® techniques' with 'trust-building and regulation techniques'; replace 'TBRI® principles' with 'trauma-informed parenting principles'; replace 'TBRI® certified' with 'trauma-informed parenting certified'. Keep references to 'Dr. Karyn Purvis' and 'Empowered to Connect' as factual citations with proper attribution.",
+      },
+      {
+        heading: "Professional Directory Tags",
+        content:
+          "Professionals may self-report their TBRI® training status in their own profile bios — this is factual self-disclosure, not a platform endorsement. Rooted 21 directory tags should use: 'Trauma-Informed Care' instead of 'TBRI® Trained'; 'Attachment-Based Therapy' instead of 'TBRI® Therapist'; 'Trust-Based Parenting Support' for coaches. Do NOT add TBRI® as a platform-generated tag on professional profiles without verified credential disclosure.",
+      },
+      {
+        heading: "What Professionals Can Still Self-Report",
+        content:
+          "Licensed professionals and coaches may accurately state in their own bio: 'I have completed TBRI® training through TCU'; 'I am a TBRI® Practitioner (TCU certified)'; 'My approach is informed by TBRI® principles'. These are factual statements of the professional's credentials, not claims by Rooted 21. Rooted 21 does not verify, endorse, or warrant any professional's stated certifications.",
+      },
+      {
+        heading: "AI Chat & Coaching Language",
+        content:
+          "In AI-generated responses, coaching content, and chat features: use 'trauma-informed parenting approach' or 'trust-building parenting strategies' in place of 'TBRI®'; use 'regulation-first parenting' for the self-regulation emphasis; use 'connection before correction' as a general principle (no trademark); use 'felt safety and nurture' for the attunement components. The phrase 'connection before correction' is in common usage and not trademarked.",
+      },
+      {
+        heading: "App UI & Navigation Labels",
+        content:
+          "Audit and replace the following in UI: 'TBRI® Practice Goal' → 'Trauma-Informed Practice Goal'; 'TBRI® Principle in Focus' → 'Parenting Principle in Focus'; 'TBRI® Habits' → 'Regulation Habits' or 'Trust-Building Habits'; 'TBRI® based' in any tagline → 'trauma-informed parenting'. In the Weekly Habits tracker, replace habit labels referencing TBRI® with their descriptive equivalents (e.g., 'PACE: Got curious' → 'Got curious & playful').",
+      },
+      {
+        heading: "Recommended Next Steps",
+        content:
+          "1. Submit a licensing inquiry to TCU Institute of Child Development if formal TBRI® curriculum use is intended for group programs. 2. Review all 21 lesson files and replace TBRI® references per the table above. 3. Update professional directory filter tags before next public release. 4. Add a factual attribution footnote on the Resources page: 'This program draws from trauma-informed and attachment-based parenting research, including work by Dr. Karyn Purvis and the TCU Institute of Child Development.' 5. Consult an IP attorney if you plan to market to TBRI® practitioners as a primary audience.",
+      },
+      {
+        heading: "Attribution Language (Approved)",
+        content:
+          "Approved attribution: 'Rooted 21's curriculum is informed by trauma-informed parenting research, including attachment science and the work of Dr. Karyn Purvis (Empowered to Connect). TBRI® is a registered trademark of TCU Institute of Child Development and is used here only in reference to that institution's work.' This attribution is factually accurate and does not constitute misappropriation.",
       },
     ],
   },
@@ -255,8 +272,8 @@ function DocumentSection({ docId, heading, content }) {
   );
 }
 
-// Docs that support signing
-const SIGNABLE_DOCS = ["terms", "privacy", "disclaimer", "consent"];
+// Docs that support signing (tbri is a reference guide, not a consent form)
+const SIGNABLE_DOCS = ["terms", "privacy", "consent"];
 
 export default function Legal() {
   const [activeTab, setActiveTab] = useState("terms");
@@ -279,7 +296,7 @@ export default function Legal() {
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader
         title="Legal Documents"
-        subtitle="Terms, Privacy, Disclaimers & Consent"
+        subtitle="Terms, Privacy, Consent & Terminology"
         backTo="/dashboard"
       />
 
@@ -345,12 +362,12 @@ export default function Legal() {
             </div>
           )}
 
-          {/* Info Banner */}
-          {activeTab === "disclaimer" && (
-            <div className="rounded-xl p-4 mt-6 flex gap-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
-              <AlertTriangle size={14} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
-              <p className="text-[11px]" style={{ color: "#B84C2A" }}>
-                <strong>CRITICAL:</strong> In crisis? Call or text <strong>988</strong> anytime. In immediate danger, call <strong>911</strong>.
+          {/* Terminology guide note */}
+          {activeTab === "tbri" && (
+            <div className="rounded-xl p-4 mt-6 flex gap-3" style={{ background: "#FEF9EC", border: "1px solid #E8C96A" }}>
+              <AlertTriangle size={14} color="#B87A0A" className="flex-shrink-0 mt-0.5" />
+              <p className="text-[11px]" style={{ color: "#7A5200" }}>
+                <strong>Note:</strong> This is an internal reference guide, not a legal consent form. No signature is required for this document.
               </p>
             </div>
           )}
