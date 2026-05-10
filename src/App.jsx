@@ -11,6 +11,8 @@ import { AuthProvider } from '@/lib/AuthContext';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import FeatureLockGate from '@/components/rooted/FeatureLockGate';
+import FounderDashboard from '@/pages/FounderDashboard';
+import AppSurvey from '@/pages/AppSurvey';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
@@ -135,6 +137,8 @@ function App() {
               <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildSuicideGuide /></FeatureLockGate></Suspense>} />
               <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ACEsGuide /></FeatureLockGate></Suspense>} />
               <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
+              <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><FounderDashboard /></Suspense>} />
+              <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

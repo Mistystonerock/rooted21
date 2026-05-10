@@ -445,6 +445,10 @@ export default function Launch() {
           <p className="text-[10px] mt-3" style={{ color: C.mutedText }}>
             © {new Date().getFullYear()} Rooted 21 Parenting Network. All rights reserved.
           </p>
+          <a href="/survey" className="inline-block text-[10px] mt-3 px-3 py-1.5 rounded-lg font-bold"
+            style={{ background: C.cream, color: C.mutedText, textDecoration: "none" }}>
+            📝 Give Feedback
+          </a>
         </div>
       </div>
     </div>

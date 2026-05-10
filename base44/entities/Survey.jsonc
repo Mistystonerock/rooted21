@@ -1,0 +1,69 @@
+{
+  "name": "Survey",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Email of the person who filled out the survey"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Name of the surveyor"
+    },
+    "family_type": {
+      "type": "string",
+      "enum": [
+        "foster",
+        "adoptive",
+        "kinship",
+        "biological",
+        "professional",
+        "other"
+      ],
+      "description": "Type of family or role"
+    },
+    "app_overall": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Overall app rating (1-5 stars)"
+    },
+    "ease_of_use": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Ease of use rating (1-5)"
+    },
+    "features_helpful": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "How helpful are the features (1-5)"
+    },
+    "most_helpful": {
+      "type": "string",
+      "description": "What feature was most helpful?"
+    },
+    "needs_improvement": {
+      "type": "string",
+      "description": "What needs improvement?"
+    },
+    "would_recommend": {
+      "type": "boolean",
+      "description": "Would recommend to others?"
+    },
+    "additional_feedback": {
+      "type": "string",
+      "description": "Any other feedback or comments"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the survey was submitted"
+    }
+  },
+  "required": [
+    "email",
+    "app_overall"
+  ]
+}
