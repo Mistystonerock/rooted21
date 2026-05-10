@@ -432,6 +432,9 @@ export default function Launch() {
           <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>
             Stronger Parents. Stronger Kids. Stronger Families.
           </p>
+          <p className="text-[10px] mt-3" style={{ color: C.mutedText }}>
+            © {new Date().getFullYear()} Rooted 21 Parenting Network. All rights reserved.
+          </p>
         </div>
       </div>
     </div>
