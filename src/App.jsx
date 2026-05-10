@@ -22,6 +22,7 @@ import ExpenseSplit from '@/pages/ExpenseSplit';
 import ExpenseTracker from '@/pages/ExpenseTracker';
 import DocumentScanner from '@/pages/DocumentScanner';
 import LegalCalendar from '@/pages/LegalCalendar';
+import CoParentingHealthDashboard from '@/pages/CoParentingHealthDashboard';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="/behavior-logs" element={<Suspense fallback={<LoadingFallback />}><routes.BehaviorLogs /></Suspense>} />
               <Route path="/co-parent-portal" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentPortal /></Suspense>} />
               <Route path="/co-parent-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentMessaging /></Suspense>} />
+              <Route path="/co-parenting-health/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><CoParentingHealthDashboard /></Suspense>} />
               <Route path="/co-parenting-resources" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentingResources /></Suspense>} />
               <Route path="/milestones" element={<Suspense fallback={<LoadingFallback />}><routes.Milestones /></Suspense>} />
               <Route path="/court-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.CourtDashboard /></Suspense>} />
