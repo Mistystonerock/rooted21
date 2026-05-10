@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Eye, Download, Share2, Trash2, Lock, Users, Calendar, KeyRound } from "lucide-react";
+import { Eye, Download, Share2, Trash2, Lock, Users, Calendar, KeyRound, Sparkles } from "lucide-react";
 import SendAccessCodeModal from "./SendAccessCodeModal";
+import DocumentChecklistExtractor from "./DocumentChecklistExtractor";
 
 const CATEGORY_META = {
   court_order: { emoji: "⚖️", label: "Court Order", color: "#B84C2A" },
@@ -18,11 +19,21 @@ const CATEGORY_META = {
 export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShareUpdated }) {
   const [showShareEdit, setShowShareEdit] = useState(false);
   const [showSendCode, setShowSendCode] = useState(false);
+  const [showExtractor, setShowExtractor] = useState(false);
+  const [children, setChildren] = useState([]);
+
+  const isExtractable = ["court_order", "iep", "legal", "school"].includes(doc.category);
   const [shareInput, setShareInput] = useState(doc.shared_with?.join(", ") || "");
   const [saving, setSaving] = useState(false);
 
   const meta = CATEGORY_META[doc.category] || CATEGORY_META.other;
   const isOwner = doc.owner_email === currentUserEmail;
+
+  const handleOpenExtractor = async () => {
+    const list = await base44.entities.ChildProfile.list("-created_date", 20);
+    setChildren(list);
+    setShowExtractor(true);
+  };
   const isExpiringSoon = doc.expiry_date && Math.ceil((new Date(doc.expiry_date) - new Date()) / (1000 * 60 * 60 * 24)) <= 30;
   const isExpired = doc.expiry_date && new Date(doc.expiry_date) < new Date();
 
@@ -138,6 +149,17 @@ export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShare
           </div>
         )}
 
+        {/* AI Extract banner for eligible docs */}
+        {isExtractable && isOwner && (
+          <button
+            onClick={handleOpenExtractor}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-opacity hover:opacity-90"
+            style={{ background: "#FEF9EC", color: "#7A5200", border: "1.5px solid #E8C96A", cursor: "pointer" }}
+          >
+            <Sparkles size={13} color="#B87A0A" /> Extract Requirements → Case Plan Checklist
+          </button>
+        )}
+
         {/* Actions */}
         <div className="flex gap-2 pt-1">
           <button onClick={handleView} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-bold transition-opacity hover:opacity-80"
@@ -171,6 +193,15 @@ export default function DocumentCard({ doc, currentUserEmail, onDeleted, onShare
         <SendAccessCodeModal
           doc={doc}
           onClose={() => setShowSendCode(false)}
+        />
+      )}
+
+      {showExtractor && (
+        <DocumentChecklistExtractor
+          doc={doc}
+          children={children}
+          onDone={() => setShowExtractor(false)}
+          onCancel={() => setShowExtractor(false)}
         />
       )}
     </div>
