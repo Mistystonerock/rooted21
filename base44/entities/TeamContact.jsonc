@@ -1,0 +1,59 @@
+{
+  "name": "TeamContact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "caseworker",
+        "casa",
+        "gal",
+        "therapist",
+        "attorney",
+        "school_counselor",
+        "teacher",
+        "doctor",
+        "judge",
+        "court_clerk",
+        "supervisor",
+        "other"
+      ],
+      "description": "Professional role"
+    },
+    "agency": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "fax": {
+      "type": "string"
+    },
+    "best_time_to_call": {
+      "type": "string",
+      "description": "e.g. Tuesdays 9-11am"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Personal notes like preferred contact method"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Which child this contact is for"
+    },
+    "parent_email": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "role",
+    "parent_email"
+  ]
+}

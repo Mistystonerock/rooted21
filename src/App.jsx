@@ -95,6 +95,19 @@ function App() {
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><EmergencyToolbox /></Suspense>} />
               <Route path="/court-ready-export" element={<CourtReadyExport />} />
               <Route path="/expense-split" element={<ExpenseSplit />} />
+              <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.VisitationTracker /></Suspense>} />
+              <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><routes.MedicationManager /></Suspense>} />
+              <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><routes.IncidentReportBuilder /></Suspense>} />
+              <Route path="/reunification-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.ReunificationTracker /></Suspense>} />
+              <Route path="/team-contacts" element={<Suspense fallback={<LoadingFallback />}><routes.TeamContacts /></Suspense>} />
+              <Route path="/education-hub" element={<Suspense fallback={<LoadingFallback />}><routes.EducationHub /></Suspense>} />
+              <Route path="/fasd-guide" element={<Suspense fallback={<LoadingFallback />}><routes.FASDGuide /></Suspense>} />
+              <Route path="/attachment-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AttachmentGuide /></Suspense>} />
+              <Route path="/grief-and-loss" element={<Suspense fallback={<LoadingFallback />}><routes.GriefAndLoss /></Suspense>} />
+              <Route path="/caregiver-burnout" element={<Suspense fallback={<LoadingFallback />}><routes.CaregiverBurnout /></Suspense>} />
+              <Route path="/race-and-identity" element={<Suspense fallback={<LoadingFallback />}><routes.RaceAndIdentity /></Suspense>} />
+              <Route path="/aging-out-guide" element={<Suspense fallback={<LoadingFallback />}><routes.AgingOutGuide /></Suspense>} />
+              <Route path="/rights-card" element={<Suspense fallback={<LoadingFallback />}><routes.RightsCard /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

@@ -284,6 +284,41 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Export</p>
             <p className="text-[11px]" style={{ color: "#B84C2A" }}>Certified PDF for court & CPS</p>
           </Link>
+          <Link to="/visitation-tracker" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>👨‍👧</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Visitation Tracker</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Log visits for court records</p>
+          </Link>
+          <Link to="/medication-manager" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>💊</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Medications</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Track prescriptions & refills</p>
+          </Link>
+          <Link to="/incident-reports" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
+            <div style={{ fontSize: "22px" }}>📋</div>
+            <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Incident Reports</p>
+            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Document critical events</p>
+          </Link>
+          <Link to="/reunification-tracker" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>🏠</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Reunification Plan</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Track court-ordered services</p>
+          </Link>
+          <Link to="/team-contacts" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>📞</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Team Contacts</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Caseworker, CASA, GAL & more</p>
+          </Link>
+          <Link to="/education-hub" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
+            <div style={{ fontSize: "22px" }}>📚</div>
+            <p className="font-bold text-sm" style={{ color: C.cream }}>Education Hub</p>
+            <p className="text-[11px]" style={{ color: C.lightGreen }}>FASD, RAD, grief, rights & more</p>
+          </Link>
+          <Link to="/rights-card" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div style={{ fontSize: "22px" }}>🪪</div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Know Your Rights</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>IEP, CPS, court at a glance</p>
+          </Link>
         </div>
 
         {/* Lesson progress bar */}

@@ -1,0 +1,89 @@
+{
+  "name": "VisitationLog",
+  "type": "object",
+  "properties": {
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child"
+    },
+    "visit_type": {
+      "type": "string",
+      "enum": [
+        "parent",
+        "sibling",
+        "relative",
+        "other"
+      ],
+      "description": "Who the visit was with"
+    },
+    "visitor_name": {
+      "type": "string",
+      "description": "Name of visitor(s)"
+    },
+    "visit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "visit_time": {
+      "type": "string"
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "location": {
+      "type": "string"
+    },
+    "supervised": {
+      "type": "boolean",
+      "default": true
+    },
+    "supervisor_name": {
+      "type": "string"
+    },
+    "attended": {
+      "type": "boolean",
+      "default": true
+    },
+    "no_show_reason": {
+      "type": "string"
+    },
+    "child_behavior_before": {
+      "type": "string",
+      "enum": [
+        "calm",
+        "anxious",
+        "excited",
+        "upset",
+        "withdrawn"
+      ],
+      "description": "Child's emotional state before visit"
+    },
+    "child_behavior_after": {
+      "type": "string",
+      "enum": [
+        "calm",
+        "anxious",
+        "excited",
+        "upset",
+        "withdrawn"
+      ],
+      "description": "Child's emotional state after visit"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "concerns": {
+      "type": "string",
+      "description": "Any safety or behavioral concerns"
+    },
+    "parent_email": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "child_name",
+    "visit_date",
+    "visitor_name",
+    "parent_email"
+  ]
+}

@@ -65,6 +65,19 @@ const routes = {
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
   BehavioralTrends: lazy(() => import("@/pages/BehavioralTrends")),
   JobResources: lazy(() => import("@/pages/JobResources")),
+  VisitationTracker: lazy(() => import("@/pages/VisitationTracker")),
+  MedicationManager: lazy(() => import("@/pages/MedicationManager")),
+  IncidentReportBuilder: lazy(() => import("@/pages/IncidentReportBuilder")),
+  ReunificationTracker: lazy(() => import("@/pages/ReunificationTracker")),
+  TeamContacts: lazy(() => import("@/pages/TeamContacts")),
+  EducationHub: lazy(() => import("@/pages/EducationHub")),
+  FASDGuide: lazy(() => import("@/pages/FASDGuide")),
+  AttachmentGuide: lazy(() => import("@/pages/AttachmentGuide")),
+  GriefAndLoss: lazy(() => import("@/pages/GriefAndLoss")),
+  CaregiverBurnout: lazy(() => import("@/pages/CaregiverBurnout")),
+  RaceAndIdentity: lazy(() => import("@/pages/RaceAndIdentity")),
+  AgingOutGuide: lazy(() => import("@/pages/AgingOutGuide")),
+  RightsCard: lazy(() => import("@/pages/RightsCard")),
 };
 
 export default routes;

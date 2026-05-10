@@ -1,0 +1,72 @@
+{
+  "name": "ReunificationPlan",
+  "type": "object",
+  "properties": {
+    "child_name": {
+      "type": "string"
+    },
+    "case_number": {
+      "type": "string"
+    },
+    "caseworker_name": {
+      "type": "string"
+    },
+    "caseworker_email": {
+      "type": "string"
+    },
+    "court_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "target_reunification_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "services": {
+      "type": "array",
+      "description": "Court-ordered services to complete",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "completion_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "proof_url": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "parent_email": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "child_name",
+    "parent_email"
+  ]
+}
