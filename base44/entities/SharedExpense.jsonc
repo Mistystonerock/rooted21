@@ -1,0 +1,101 @@
+{
+  "name": "SharedExpense",
+  "type": "object",
+  "properties": {
+    "partnership_id": {
+      "type": "string",
+      "description": "ID of the CoParentingPartnership this expense belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Description of the expense"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "medical",
+        "education",
+        "childcare",
+        "clothing",
+        "activities",
+        "food",
+        "transportation",
+        "other"
+      ],
+      "description": "Category of the expense"
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Total expense amount in dollars"
+    },
+    "paid_by_email": {
+      "type": "string",
+      "description": "Email of the parent who paid"
+    },
+    "paid_by_name": {
+      "type": "string",
+      "description": "Name of the parent who paid"
+    },
+    "split_type": {
+      "type": "string",
+      "enum": [
+        "50_50",
+        "custom"
+      ],
+      "default": "50_50",
+      "description": "How the expense is split"
+    },
+    "payer_percent": {
+      "type": "number",
+      "default": 50,
+      "description": "Percentage the payer covers (0-100)"
+    },
+    "other_percent": {
+      "type": "number",
+      "default": 50,
+      "description": "Percentage the other parent covers (0-100)"
+    },
+    "other_parent_email": {
+      "type": "string",
+      "description": "Email of the other parent who owes"
+    },
+    "other_parent_name": {
+      "type": "string",
+      "description": "Name of the other parent"
+    },
+    "amount_owed": {
+      "type": "number",
+      "description": "Dollar amount the other parent owes"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "disputed"
+      ],
+      "default": "pending",
+      "description": "Whether the owed amount has been paid"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the expense occurred"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about the expense"
+    },
+    "receipt_url": {
+      "type": "string",
+      "description": "Optional uploaded receipt"
+    }
+  },
+  "required": [
+    "partnership_id",
+    "title",
+    "category",
+    "total_amount",
+    "paid_by_email"
+  ]
+}

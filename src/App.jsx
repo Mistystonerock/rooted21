@@ -17,6 +17,7 @@ import GrowthInsights from '@/pages/GrowthInsights';
 import EmergencyToolbox from '@/pages/EmergencyToolbox';
 import Launch from '@/pages/Launch';
 import CourtReadyExport from '@/pages/CourtReadyExport';
+import ExpenseSplit from '@/pages/ExpenseSplit';
 
 function App() {
   return (
@@ -93,6 +94,7 @@ function App() {
               <Route path="/job-resources" element={<Suspense fallback={<LoadingFallback />}><routes.JobResources /></Suspense>} />
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><EmergencyToolbox /></Suspense>} />
               <Route path="/court-ready-export" element={<CourtReadyExport />} />
+              <Route path="/expense-split" element={<ExpenseSplit />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>

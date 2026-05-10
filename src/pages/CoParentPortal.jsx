@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Users, BookOpen, MessageCircle, ChevronRight, Shield } from "lucide-react";
+import { Users, BookOpen, MessageCircle, ChevronRight, Shield, DollarSign } from "lucide-react";
 
 export default function CoParentPortal() {
   const [user, setUser] = useState(null);
@@ -99,6 +99,16 @@ export default function CoParentPortal() {
                     >
                       <Shield size={14} />
                       Safety Plan
+                      <ChevronRight size={14} className="ml-auto" />
+                    </Link>
+
+                    <Link
+                      to={`/expense-split?partnershipId=${p.id}`}
+                      className="flex items-center gap-2 text-sm font-bold p-3 rounded-lg transition-all hover:shadow-md"
+                      style={{ background: C.offWhite, border: `1px solid ${C.cream}`, color: C.darkGreen, textDecoration: "none" }}
+                    >
+                      <DollarSign size={14} />
+                      Expense Split
                       <ChevronRight size={14} className="ml-auto" />
                     </Link>
                   </div>
