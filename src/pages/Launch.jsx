@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import TreeLogo from "@/components/rooted/TreeLogo";
+import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
 import { Heart, Users, BookOpen, Shield, CheckCircle2, ChevronDown } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00"); // June 10, 9am ET
@@ -67,6 +68,7 @@ export default function Launch() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [count, setCount] = useState(null);
+  const [showCodeModal, setShowCodeModal] = useState(false);
 
   useEffect(() => {
     base44.entities.WaitlistSignup.list("-created_date", 1000).then(list => setCount(list.length)).catch(() => {});
@@ -444,15 +446,20 @@ export default function Launch() {
             style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
             Sign In
           </button>
-          
-          <p className="text-[10px] mt-6" style={{ color: C.mutedText }}>
-            Founder? 
-          </p>
-          <a href="/founder-access"
-            className="inline-block mt-2 px-4 py-2 rounded-xl font-bold text-xs"
-            style={{ background: C.gold, color: C.darkGreen, textDecoration: "none" }}>
-            🔐 Access Portal
-          </a>
+
+          <div className="flex gap-2 mt-4 justify-center">
+            <button
+              onClick={() => setShowCodeModal(true)}
+              className="px-3 py-1.5 rounded-lg font-bold text-[11px]"
+              style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}>
+              🔐 Redeem Code
+            </button>
+            <a href="/founder-access"
+              className="px-3 py-1.5 rounded-lg font-bold text-[11px]"
+              style={{ background: C.gold, color: C.darkGreen, textDecoration: "none" }}>
+              📋 Create Codes
+            </a>
+          </div>
         </div>
 
         {/* Footer */}
@@ -474,6 +481,12 @@ export default function Launch() {
         </div>
       </div>
 
+      {showCodeModal && (
+        <AdminCodeRedemption
+          onClose={() => setShowCodeModal(false)}
+          onSuccess={() => setShowCodeModal(false)}
+        />
+      )}
     </div>
   );
 }
