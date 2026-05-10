@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { FOLLOW_UP_DEFAULTS } from "@/lib/rooted-constants";
-import { buildMilestoneContext } from "@/lib/developmental-milestones";
+import { buildMilestoneContext, getMilestonesForAge } from "@/lib/developmental-milestones";
 import { ChevronLeft, Send, RefreshCw, AlertTriangle, Brain, ChevronDown, ChevronUp } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import ChatMessage from "@/components/rooted/ChatMessage";
@@ -277,11 +277,21 @@ export default function PersonalizedChat() {
           {children.length > 0 && (
             <div>
               <p className="text-[10px] font-bold mb-1" style={{ color: C.lightGreen }}>Children:</p>
-              {children.map(c => (
-                <p key={c.id} className="text-[10px]" style={{ color: C.cream }}>
-                  🧒 {c.first_name}{c.age ? `, age ${c.age}` : ""}{c.triggers ? ` — triggers: ${c.triggers.substring(0, 60)}` : ""}
-                </p>
-              ))}
+              {children.map(c => {
+                const ms = c.age ? getMilestonesForAge(c.age) : null;
+                return (
+                  <div key={c.id} className="mb-1.5">
+                    <p className="text-[10px]" style={{ color: C.cream }}>
+                      🧒 {c.first_name}{c.age ? `, age ${c.age}` : ""}{c.triggers ? ` — triggers: ${c.triggers.substring(0, 50)}` : ""}
+                    </p>
+                    {ms && (
+                      <p className="text-[9px] ml-3 mt-0.5" style={{ color: `${C.lightGreen}cc` }}>
+                        📈 Dev. range: {ms.label} — {ms.behavioral[0]}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
           {activeCases.length > 0 && (
