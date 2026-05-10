@@ -237,6 +237,74 @@ export default function CoParentingResources() {
           </div>
         ))}
 
+        {/* 7-7-7 Rule */}
+        <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.cream}` }}>
+          <div className="px-4 py-3" style={{ background: C.darkGreen }}>
+            <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>⏱️ The 7-7-7 Rule</p>
+            <p className="text-[10px]" style={{ color: C.lightGreen }}>21 minutes of daily connection — for busy parents</p>
+          </div>
+          <div className="p-4 space-y-4" style={{ background: C.white }}>
+            <p className="text-xs leading-relaxed" style={{ color: C.mutedText }}>
+              The 7-7-7 Rule replaces hours of distracted time with 21 minutes of focused, meaningful daily connection with your child. It's a simple, sustainable routine any parent can build into their day.
+            </p>
+
+            {[
+              {
+                time: "7 min",
+                label: "Morning",
+                emoji: "🌅",
+                color: "#F4A500",
+                description: "A positive, unhurried start to the day. Sit with them at breakfast, help them pack, or do a calm check-in before the rush begins.",
+              },
+              {
+                time: "7 min",
+                label: "After School / Work",
+                emoji: "🎒",
+                color: C.midGreen,
+                description: "A dedicated reconnection moment after being apart. Ask about their day, share a snack, and reconnect without phone distractions.",
+              },
+              {
+                time: "7 min",
+                label: "Bedtime",
+                emoji: "🌙",
+                color: C.darkGreen,
+                description: "A calm, emotionally connecting wind-down — reading together, chatting, or cuddling — that helps ease the transition to sleep.",
+              },
+            ].map((block, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center"
+                  style={{ background: block.color + "18", border: `1.5px solid ${block.color}33` }}>
+                  <span className="text-base leading-none">{block.emoji}</span>
+                  <span className="text-[9px] font-bold mt-0.5" style={{ color: block.color }}>{block.time}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-xs mb-0.5" style={{ color: C.darkGreen }}>{block.label}</p>
+                  <p className="text-[11px] leading-relaxed" style={{ color: C.mutedText }}>{block.description}</p>
+                </div>
+              </div>
+            ))}
+
+            <div className="rounded-xl p-3 mt-2" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+              <p className="text-[10px] font-bold mb-2" style={{ color: C.darkGreen }}>Why It Matters</p>
+              <div className="space-y-1.5">
+                {[
+                  ["💛", "Increased Connection", "Builds a stronger, more trusting bond with your child."],
+                  ["🎯", "Presence Over Perfection", "21 minutes of deep focus beats hours of distracted time."],
+                  ["🛡️", "Emotional Security", "Supports emotional growth and provides stability — especially for teens."],
+                  ["✅", "Simplicity", "A manageable routine any busy parent can sustain consistently."],
+                ].map(([icon, title, desc], i) => (
+                  <div key={i} className="flex gap-2 items-start">
+                    <span className="text-sm flex-shrink-0">{icon}</span>
+                    <p className="text-[11px]" style={{ color: C.darkGreen }}>
+                      <strong>{title}</strong> — {desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Key principles */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-serif font-bold text-sm mb-2" style={{ color: C.cream }}>Remember</p>
