@@ -1,0 +1,42 @@
+{
+  "name": "WaitlistSignup",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Full name of the person signing up"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City/town they are from"
+    },
+    "family_type": {
+      "type": "string",
+      "enum": [
+        "foster",
+        "adoptive",
+        "kinship",
+        "biological",
+        "other"
+      ],
+      "description": "Type of family"
+    },
+    "message": {
+      "type": "string",
+      "description": "Optional message or why they want to join"
+    },
+    "notified_at_launch": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether they were emailed at launch"
+    }
+  },
+  "required": [
+    "full_name",
+    "email"
+  ]
+}

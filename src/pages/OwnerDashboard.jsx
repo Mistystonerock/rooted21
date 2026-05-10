@@ -13,6 +13,100 @@ const USER_ROLES = ["user", "admin", "court_staff", "professional"];
 const SUB_STATUSES = ["trial", "active", "past_due", "canceled"];
 const ACCOUNT_TYPES = ["private", "professional", "agency"];
 
+// ── WAITLIST TAB ──────────────────────────────────────────────────────────────
+function WaitlistTab() {
+  const [signups, setSignups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    base44.entities.WaitlistSignup.list('-created_date', 500).then(s => { setSignups(s); setLoading(false); });
+  }, []);
+
+  const filtered = signups.filter(s =>
+    s.full_name?.toLowerCase().includes(search.toLowerCase()) ||
+    s.email?.toLowerCase().includes(search.toLowerCase()) ||
+    s.city?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const byType = signups.reduce((acc, s) => {
+    acc[s.family_type] = (acc[s.family_type] || 0) + 1;
+    return acc;
+  }, {});
+
+  return (
+    <div className="space-y-4">
+      {/* Summary */}
+      <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
+        <p className="font-serif font-bold text-sm mb-3" style={{ color: C.cream }}>🌱 Launch Waitlist</p>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.12)' }}>
+            <p className="text-2xl font-extrabold" style={{ color: '#fff' }}>{signups.length}</p>
+            <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.6)' }}>Total Signups</p>
+          </div>
+          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.12)' }}>
+            <p className="text-2xl font-extrabold" style={{ color: '#fff' }}>{[...new Set(signups.map(s => s.city).filter(Boolean))].length}</p>
+            <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.6)' }}>Cities</p>
+          </div>
+          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.12)' }}>
+            <p className="text-2xl font-extrabold" style={{ color: '#fff' }}>{signups.filter(s => s.notified_at_launch).length}</p>
+            <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.6)' }}>Notified</p>
+          </div>
+        </div>
+        {Object.keys(byType).length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {Object.entries(byType).map(([type, count]) => (
+              <span key={type} className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)' }}>
+                {type}: {count}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Search */}
+      <div className="flex items-center gap-2 rounded-xl px-3" style={{ background: '#fff', border: `1.5px solid ${C.cream}` }}>
+        <Search size={15} color={C.mutedText} />
+        <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Search by name, email, or city…"
+          className="flex-1 py-3 text-sm bg-transparent outline-none" style={{ color: C.darkGreen }} />
+      </div>
+
+      {loading ? (
+        <div className="text-center py-8"><Loader2 size={20} className="mx-auto animate-spin" color={C.midGreen} /></div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-2xl p-6 text-center" style={{ background: '#fff', border: `1px dashed ${C.cream}` }}>
+          <p className="text-sm font-bold" style={{ color: C.darkGreen }}>No signups yet</p>
+          <p className="text-xs mt-1" style={{ color: C.mutedText }}>Share the launch page to start collecting waitlist signups.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-xs font-bold" style={{ color: C.mutedText }}>{filtered.length} SIGNUPS</p>
+          {filtered.map(s => (
+            <div key={s.id} className="rounded-xl p-3.5" style={{ background: '#fff', border: `1px solid ${C.cream}` }}>
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm" style={{ color: C.darkGreen }}>{s.full_name}</p>
+                  <p className="text-[11px]" style={{ color: C.mutedText }}>{s.email}</p>
+                  <div className="flex gap-2 flex-wrap mt-1">
+                    {s.city && <span className="text-[10px]" style={{ color: C.mutedText }}>📍 {s.city}</span>}
+                    {s.family_type && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: C.cream, color: C.darkGreen }}>{s.family_type}</span>}
+                  </div>
+                  {s.message && <p className="text-[11px] mt-1.5 italic leading-snug" style={{ color: '#3a3028' }}>"{s.message}"</p>}
+                </div>
+                <p className="text-[10px] flex-shrink-0" style={{ color: C.mutedText }}>
+                  {new Date(s.created_date).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── ACCESS CODES TAB ─────────────────────────────────────────────────────────
 function AccessCodesTab() {
   const [codes, setCodes] = useState([]);
@@ -360,7 +454,7 @@ function SubscriptionTab() {
 // ── MAIN OWNER DASHBOARD ──────────────────────────────────────────────────────
 export default function OwnerDashboard() {
   const [user, setUser] = useState(null);
-  const [tab, setTab] = useState('codes');
+  const [tab, setTab] = useState('waitlist');
 
   useEffect(() => {
     base44.auth.me().then(setUser);
@@ -380,6 +474,7 @@ export default function OwnerDashboard() {
   }
 
   const TABS = [
+    { id: 'waitlist', label: 'Waitlist', icon: <span style={{ fontSize: 14 }}>🌱</span> },
     { id: 'codes', label: 'Access Codes', icon: <Key size={14} /> },
     { id: 'users', label: 'Users', icon: <Users size={14} /> },
     { id: 'subs', label: 'Subscriptions', icon: <CreditCard size={14} /> },
@@ -417,6 +512,7 @@ export default function OwnerDashboard() {
       </div>
 
       <div className="max-w-[520px] mx-auto px-4 py-4">
+        {tab === 'waitlist' && <WaitlistTab />}
         {tab === 'codes' && <AccessCodesTab />}
         {tab === 'users' && <UserManagementTab />}
         {tab === 'subs' && <SubscriptionTab />}

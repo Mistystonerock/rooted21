@@ -15,6 +15,7 @@ import PersonalizedLegalFeed from '@/pages/PersonalizedLegalFeed';
 import PersonalizedChat from '@/pages/PersonalizedChat';
 import GrowthInsights from '@/pages/GrowthInsights';
 import EmergencyToolbox from '@/pages/EmergencyToolbox';
+import Launch from '@/pages/Launch';
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Router>
           <AnimatePresence mode="wait">
             <Routes>
-              <Route path="/" element={<Suspense fallback={<LoadingFallback />}><routes.Home /></Suspense>} />
+              <Route path="/" element={<Launch />} />
+              <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><routes.Home /></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.Dashboard /></Suspense>} />
               <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><routes.Chat /></Suspense>} />
               <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><routes.Lessons /></Suspense>} />
