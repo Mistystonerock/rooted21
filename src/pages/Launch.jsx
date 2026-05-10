@@ -221,7 +221,7 @@ export default function Launch() {
           </div>
           <div className="p-4 grid grid-cols-2 gap-2" style={{ background: "#fff" }}>
             {[
-              ["🌿", "TBRI®-Based Curriculum"],
+              ["📚", "21-Lesson Curriculum"],
               ["🧠", "Personalized Parenting Coach"],
               ["📈", "Behavior & Regulation Logs"],
               ["🎓", "Live Parenting Classes"],
