@@ -117,11 +117,27 @@ export default function CourtReadyExport() {
   const [liveCounts, setLiveCounts] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    base44.auth.me().then(async u => {
       setUser(u);
-      base44.entities.ChildProfile.list("-created_date", 10).then(c => {
-        setChildren(c);
-        if (c.length > 0) setSelectedChild(c[0].first_name);
+      const [c, behaviors, checkins, notes, checklists, docs, caseNotes] = await Promise.all([
+        base44.entities.ChildProfile.list("-created_date", 10),
+        base44.entities.BehaviorLog.list("-created_date", 100),
+        base44.entities.CheckIn.list("-created_date", 100),
+        base44.entities.Goal.list("-created_date", 100),
+        base44.entities.CasePlanChecklist.list("-created_date", 50),
+        base44.entities.SecureDocument.list("-created_date", 100),
+        base44.entities.CaseNote.list("-created_date", 100),
+      ]);
+      setChildren(c);
+      if (c.length > 0) setSelectedChild(c[0].first_name);
+      const completedItems = checklists.reduce((s, cl) => s + (cl.items?.filter(i => i.completed).length || 0), 0);
+      setLiveCounts({
+        behaviors: behaviors.length,
+        checkins: checkins.length,
+        goals: notes.length,
+        caseNotes: caseNotes.length,
+        checklistItems: completedItems,
+        documents: docs.length,
       });
     });
   }, []);
@@ -206,6 +222,29 @@ export default function CourtReadyExport() {
             Automatically compiles activity logs, completed checklist items, document uploads, behavior records, and communications into a certified PDF — optimized for social workers, therapists, or legal counsel.
           </p>
         </div>
+
+        {/* Live record counts */}
+        {liveCounts && (
+          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+            <p className="text-[10px] font-extrabold tracking-wider mb-3" style={{ color: C.mutedText }}>YOUR RECORDS ON FILE</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: "Behavior Logs", val: liveCounts.behaviors, icon: "📋" },
+                { label: "Check-ins", val: liveCounts.checkins, icon: "📈" },
+                { label: "Goals", val: liveCounts.goals, icon: "🎯" },
+                { label: "Case Notes", val: liveCounts.caseNotes, icon: "📝" },
+                { label: "Checklist ✓ Items", val: liveCounts.checklistItems, icon: "✅" },
+                { label: "Documents", val: liveCounts.documents, icon: "📁" },
+              ].map(item => (
+                <div key={item.label} className="rounded-xl p-3 text-center" style={{ background: C.offWhite }}>
+                  <p className="text-base mb-0.5">{item.icon}</p>
+                  <p className="text-lg font-extrabold" style={{ color: C.darkGreen }}>{item.val}</p>
+                  <p className="text-[9px] leading-tight" style={{ color: C.mutedText }}>{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Legal warning */}
         <div className="rounded-xl p-3.5 flex gap-3" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8" }}>
