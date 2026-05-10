@@ -18,6 +18,7 @@ import EmergencyToolbox from '@/pages/EmergencyToolbox';
 import Launch from '@/pages/Launch';
 import CourtReadyExport from '@/pages/CourtReadyExport';
 import ExpenseSplit from '@/pages/ExpenseSplit';
+import DocumentScanner from '@/pages/DocumentScanner';
 
 function App() {
   return (
@@ -95,6 +96,7 @@ function App() {
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><EmergencyToolbox /></Suspense>} />
               <Route path="/court-ready-export" element={<CourtReadyExport />} />
               <Route path="/expense-split" element={<ExpenseSplit />} />
+              <Route path="/document-scanner" element={<DocumentScanner />} />
               <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><routes.VisitationTracker /></Suspense>} />
               <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><routes.MedicationManager /></Suspense>} />
               <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><routes.IncidentReportBuilder /></Suspense>} />

@@ -279,6 +279,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Secure Documents</p>
             <p className="text-[11px]" style={{ color: C.mutedText }}>Store & share sensitive files</p>
           </Link>
+          <Link to="/document-scanner" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
+            <div style={{ fontSize: "22px" }}>📷</div>
+            <p className="font-bold text-sm" style={{ color: C.cream }}>Document Scanner</p>
+            <p className="text-[11px]" style={{ color: C.lightGreen }}>AI OCR & data extraction</p>
+          </Link>
           <Link to="/court-ready-export" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
             <div style={{ fontSize: "22px" }}>⚖️</div>
             <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Export</p>
