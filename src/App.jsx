@@ -23,6 +23,7 @@ import ExpenseTracker from '@/pages/ExpenseTracker';
 import DocumentScanner from '@/pages/DocumentScanner';
 import LegalCalendar from '@/pages/LegalCalendar';
 import CoParentingHealthDashboard from '@/pages/CoParentingHealthDashboard';
+import ProfessionalPresentation from '@/pages/ProfessionalPresentation';
 
 function App() {
   return (
@@ -60,7 +61,6 @@ function App() {
               <Route path="/co-parent-portal" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentPortal /></Suspense>} />
               <Route path="/co-parent-messaging/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentMessaging /></Suspense>} />
               <Route path="/co-parenting-health/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><CoParentingHealthDashboard /></Suspense>} />
-              <Route path="/professional-overview" element={<Suspense fallback={<LoadingFallback />}><routes.ProfessionalPresentation /></Suspense>} />
               <Route path="/co-parenting-resources" element={<Suspense fallback={<LoadingFallback />}><routes.CoParentingResources /></Suspense>} />
               <Route path="/milestones" element={<Suspense fallback={<LoadingFallback />}><routes.Milestones /></Suspense>} />
               <Route path="/court-dashboard" element={<Suspense fallback={<LoadingFallback />}><routes.CourtDashboard /></Suspense>} />
@@ -123,6 +123,7 @@ function App() {
               <Route path="/peer-support" element={<Suspense fallback={<LoadingFallback />}><routes.PeerSupport /></Suspense>} />
               <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ChildSuicideGuide /></Suspense>} />
               <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><routes.ACEsGuide /></Suspense>} />
+              <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><ProfessionalPresentation /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
