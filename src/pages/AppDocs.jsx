@@ -139,7 +139,7 @@ The "21" represents the 21 days said to form new habits. The core mission: help 
       },
       {
         title: "Core Feature Modules",
-        body: `1. PARENTING COACH (AI Chat) — Personalized, TBRI®-grounded AI coach. Pulls in child profiles, behavior logs, and check-in data to give context-aware guidance. Hard boundaries: no diagnosing, no legal advice, always refer to 988 in crisis.
+        body: `1. PARENTING COACH (AI Chat) — Personalized, trauma-informed AI coach. Pulls in child profiles, behavior logs, and check-in data to give context-aware guidance. Hard boundaries: no diagnosing, no legal advice, always refer to 988 in crisis.
 
 2. DAILY CHECK-IN — Parents log child regulation (1-5) and their own calm (1-5) daily. This data feeds AI insights, therapist matching, and growth reports.
 
@@ -183,7 +183,7 @@ FeatureLockGate blocks all routes for non-founders until June 10, 2026 launch da
 - Entity RLS (row-level security) is enforced — users only see their own data unless they are admin/professional.
 - No passwords stored in app — all auth handled by Base44 platform.
 - PDF generation done server-side in backend functions using jsPDF.
-- AI calls routed through Base44's Core.InvokeLLM integration (not direct OpenAI) for cost control.
+- AI calls routed through Base44's Core.InvokeLLM integration for cost control.
 - Twilio used for SMS — emergency alerts and reminders.
 - Stripe integrated for future premium subscriptions (currently waitlisted).`
       },
