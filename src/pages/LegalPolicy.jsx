@@ -5,7 +5,7 @@ import TreeLogo from "@/components/rooted/TreeLogo";
 const LAST_UPDATED = "May 11, 2026";
 const COMPANY = "Rooted 21 Parenting Network";
 const STATE = "Ohio";
-const CONTACT_EMAIL = "misty.stonerock88@gmail.com";
+const CONTACT_EMAIL = "admin@rooted21parenting.com";
 
 export default function LegalPolicy() {
   return (
