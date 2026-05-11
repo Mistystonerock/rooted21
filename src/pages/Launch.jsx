@@ -202,11 +202,9 @@ export default function Launch() {
           {/* Avatar placeholder */}
           <div style={{
             width: 80, height: 80, borderRadius: 12, flexShrink: 0, overflow: "hidden",
-            background: "linear-gradient(135deg, #1a4a2e, #2d6a45)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 28, border: "1px solid rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.15)",
           }}>
-            M
+            <img src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/6dea8f834_generated_image.png" alt="Misty" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: GOLD, marginBottom: 4 }}>
