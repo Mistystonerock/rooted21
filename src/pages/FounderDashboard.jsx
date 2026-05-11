@@ -14,8 +14,8 @@ export default function FounderDashboard() {
 
   useEffect(() => {
     base44.auth.isAuthenticated().then(authed => {
-      if (!authed) {
-        base44.auth.redirectToLogin(`/founder-dashboard`);
+    if (!authed) {
+      base44.auth.redirectToLogin("/founder-dashboard");
         return;
       }
 

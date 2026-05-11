@@ -14,8 +14,8 @@ export default function FounderAccessPortal() {
 
   useEffect(() => {
     base44.auth.isAuthenticated().then(authed => {
-      if (!authed) {
-        base44.auth.redirectToLogin(`/founder-access`);
+    if (!authed) {
+      base44.auth.redirectToLogin("/founder-access");
         return;
       }
 
