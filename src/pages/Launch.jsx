@@ -63,7 +63,7 @@ const FAMILY_TYPES = [
 
 export default function Launch() {
   const time = useCountdown();
-  const [form, setForm] = useState({ full_name: "", email: "", city: "", family_type: "foster", message: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", zip_code: "", family_type: "foster", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -85,7 +85,7 @@ export default function Launch() {
     await base44.entities.WaitlistSignup.create({
       full_name: form.full_name.trim(),
       email: form.email.trim().toLowerCase(),
-      city: form.city.trim(),
+      city: form.zip_code.trim(),
       family_type: form.family_type,
       message: form.message.trim(),
     });
@@ -364,13 +364,15 @@ export default function Launch() {
               </div>
               <div>
                 <label className="text-[10px] font-extrabold tracking-wide" style={{ color: C.mutedText }}>
-                  YOUR CITY / TOWN
+                  YOUR ZIP CODE
                 </label>
                 <input
                   type="text"
-                  value={form.city}
-                  onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
-                  placeholder="Where are you located?"
+                  inputMode="numeric"
+                  maxLength={5}
+                  value={form.zip_code}
+                  onChange={e => setForm(f => ({ ...f, zip_code: e.target.value.replace(/\D/g, "") }))}
+                  placeholder="e.g., 44107"
                   className="w-full mt-1 px-3 py-2.5 rounded-xl text-sm border outline-none"
                   style={{ borderColor: C.cream, background: C.offWhite }}
                 />
