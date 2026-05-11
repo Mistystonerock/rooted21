@@ -80,6 +80,16 @@ export default function FounderDashboard() {
       <MobileHeader title="📊 Founder Dashboard" subtitle="Platform analytics & insights" />
 
       <div className="max-w-[680px] mx-auto px-4 py-5 space-y-4">
+        {/* Docs link */}
+        <a href="/app-docs" className="flex items-center justify-between rounded-2xl p-4"
+          style={{ background: C.darkGreen, textDecoration: "none" }}>
+          <div>
+            <p className="font-bold text-sm" style={{ color: C.cream }}>📋 App Documentation</p>
+            <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>Frontend guide · Backend reference · LLM narrative</p>
+          </div>
+          <span className="text-lg" style={{ color: C.gold }}>→</span>
+        </a>
+
         {/* Key metrics */}
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>

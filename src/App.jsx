@@ -12,6 +12,7 @@ import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import FeatureLockGate from '@/components/rooted/FeatureLockGate';
 import FounderDashboard from '@/pages/FounderDashboard';
+import AppDocs from '@/pages/AppDocs';
 import FounderAccessPortal from '@/pages/FounderAccessPortal';
 import AppSurvey from '@/pages/AppSurvey';
 import LegalPolicy from '@/pages/LegalPolicy';
@@ -151,6 +152,7 @@ function App() {
               <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ACEsGuide /></FeatureLockGate></Suspense>} />
               <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
               <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><FounderDashboard /></Suspense>} />
+              <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
               <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />
               <Route path="/legal-policy" element={<Suspense fallback={<LoadingFallback />}><LegalPolicy /></Suspense>} />
