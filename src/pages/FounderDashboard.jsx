@@ -51,7 +51,7 @@ export default function FounderDashboard() {
     });
   }, []);
 
-  if (!user?.role || user.role !== "founder") {
+  if (!user?.role || (user.role !== "founder" && user.role !== "admin")) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: C.offWhite }}>
         <div className="text-center px-4">

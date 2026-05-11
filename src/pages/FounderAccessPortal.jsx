@@ -21,7 +21,7 @@ export default function FounderAccessPortal() {
 
       base44.auth.me().then(u => {
         setUser(u);
-        if (u?.role !== "admin") {
+        if (u?.role !== "admin" && u?.role !== "founder") {
           setLoading(false);
           return;
         }
@@ -80,7 +80,7 @@ export default function FounderAccessPortal() {
     );
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== "admin" && user.role !== "founder") {
     return (
       <div className="min-h-screen" style={{ background: C.offWhite }}>
         <MobileHeader title="Founder Access" backTo="/" />
