@@ -98,6 +98,17 @@ export default function FounderAccessPortal() {
       <MobileHeader title="🔐 Founder Access" subtitle="Generate admin codes" backTo="/" />
 
       <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
+        {/* Quick link to full dashboard */}
+        <a href="/founder-dashboard"
+          className="flex items-center justify-between rounded-2xl p-4"
+          style={{ background: C.gold, textDecoration: "none" }}>
+          <div>
+            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>📊 View Founder Dashboard</p>
+            <p className="text-[11px] mt-0.5" style={{ color: C.darkGreen, opacity: 0.8 }}>Users, waitlist, surveys & analytics</p>
+          </div>
+          <span className="text-lg">→</span>
+        </a>
+
         {/* Hero */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-bold text-sm" style={{ color: C.cream }}>Create Admin Access Codes</p>
