@@ -69,6 +69,21 @@ export default function Profile() {
           </div>
         </div>
 
+        {/* Founder Dashboard link — only for founder/admin */}
+        {(user?.role === "founder" || user?.role === "admin") && (
+          <Link
+            to="/founder-dashboard"
+            className="flex items-center justify-between rounded-2xl p-4"
+            style={{ background: C.darkGreen, textDecoration: "none" }}
+          >
+            <div>
+              <p className="font-bold text-sm" style={{ color: C.cream }}>📊 Founder Dashboard</p>
+              <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>Users · Waitlist · Surveys · Analytics</p>
+            </div>
+            <span className="text-lg" style={{ color: C.gold }}>→</span>
+          </Link>
+        )}
+
         {/* SMS Reminders */}
         <div className="rounded-2xl p-4 space-y-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
           <div className="flex items-center gap-2 mb-1">
