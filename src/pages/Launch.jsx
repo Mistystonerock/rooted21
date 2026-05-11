@@ -441,7 +441,7 @@ export default function Launch() {
             Already have an account?
           </p>
           <button
-            onClick={() => base44.auth.redirectToLogin()}
+            onClick={() => base44.auth.redirectToLogin("/home")}
             className="mt-2 px-6 py-2.5 rounded-xl font-bold text-sm"
             style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
             Sign In
