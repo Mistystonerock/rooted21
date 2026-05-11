@@ -9,8 +9,11 @@ export default function FounderDashboard() {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [surveys, setSurveys] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [waitlist, setWaitlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [userSearch, setUserSearch] = useState("");
 
   useEffect(() => {
     base44.auth.isAuthenticated().then(authed => {
@@ -24,15 +27,17 @@ export default function FounderDashboard() {
         base44.entities.WaitlistSignup.list("-created_date", 10000),
         base44.entities.User.list("-created_date", 10000),
         base44.entities.Survey.list("-created_date", 10000),
-      ]).then(([u, waitlist, users, surveyList]) => {
+      ]).then(([u, wl, users, surveyList]) => {
         setUser(u);
+        setAllUsers(users);
+        setWaitlist(wl);
       
       // Calculate stats
-      const uniqueWaitlist = new Set(waitlist.map(w => w.email)).size;
+      const uniqueWaitlist = new Set(wl.map(w => w.email)).size;
       const uniqueUsers = new Set(users.map(usr => usr.email)).size;
       
       setStats({
-        waitlistSignups: waitlist.length,
+        waitlistSignups: wl.length,
         uniqueWaitlist,
         registeredUsers: users.length,
         uniqueUsers,
@@ -118,7 +123,7 @@ export default function FounderDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>
-          {["overview", "surveys", "admins"].map(tab => (
+          {["overview", "users", "waitlist", "surveys", "admins"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -184,7 +189,104 @@ export default function FounderDashboard() {
           </div>
         )}
 
-        {/* Surveys tab */}
+        {/* Users tab */}
+        {activeTab === "users" && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between px-1 mb-2">
+              <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>{allUsers.length} REGISTERED USERS</p>
+              <button
+                onClick={() => {
+                  const csv = [
+                    ["Name", "Email", "Role", "Joined"],
+                    ...allUsers.map(u => [u.full_name || "", u.email, u.role || "user", new Date(u.created_date).toLocaleDateString()])
+                  ].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+                  const blob = new Blob([csv], { type: "text/csv" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a"); a.href = url;
+                  a.download = `users-${new Date().toISOString().split("T")[0]}.csv`; a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
+                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+              >
+                <Download size={12} /> Export
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="Search by name or email..."
+              value={userSearch}
+              onChange={e => setUserSearch(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl text-sm border outline-none"
+              style={{ borderColor: C.cream, background: C.offWhite }}
+            />
+            {allUsers
+              .filter(u => !userSearch || u.email?.toLowerCase().includes(userSearch.toLowerCase()) || u.full_name?.toLowerCase().includes(userSearch.toLowerCase()))
+              .map(u => (
+              <div key={u.id} className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
+                  style={{ background: C.cream, color: C.darkGreen }}>
+                  {u.full_name?.[0] || u.email?.[0]?.toUpperCase() || "?"}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold truncate" style={{ color: C.darkGreen }}>{u.full_name || "—"}</p>
+                  <p className="text-[10px] truncate" style={{ color: C.mutedText }}>{u.email}</p>
+                  <p className="text-[9px] mt-0.5" style={{ color: C.mutedText }}>
+                    Joined {new Date(u.created_date).toLocaleDateString()}
+                  </p>
+                </div>
+                <span className="text-[9px] px-2 py-0.5 rounded-full font-bold flex-shrink-0"
+                  style={{ background: u.role === "founder" ? C.gold : u.role === "admin" ? C.darkGreen : C.cream, color: u.role === "founder" || u.role === "admin" ? "#fff" : C.mutedText }}>
+                  {u.role || "user"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Waitlist tab */}
+        {activeTab === "waitlist" && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between px-1 mb-2">
+              <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>{waitlist.length} WAITLIST SIGNUPS</p>
+              <button
+                onClick={() => {
+                  const csv = [
+                    ["Name", "Email", "Zip Code", "Family Type", "Message", "Signed Up"],
+                    ...waitlist.map(w => [w.full_name || "", w.email, w.city || "", w.family_type || "", w.message || "", new Date(w.created_date).toLocaleDateString()])
+                  ].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+                  const blob = new Blob([csv], { type: "text/csv" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a"); a.href = url;
+                  a.download = `waitlist-${new Date().toISOString().split("T")[0]}.csv`; a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
+                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+              >
+                <Download size={12} /> Export
+              </button>
+            </div>
+            {waitlist.map(w => (
+              <div key={w.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{w.full_name || "—"}</p>
+                    <p className="text-[10px]" style={{ color: C.mutedText }}>{w.email}</p>
+                    <div className="flex gap-2 mt-1">
+                      {w.city && <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: C.cream, color: C.mutedText }}>📍 {w.city}</span>}
+                      {w.family_type && <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: C.cream, color: C.mutedText }}>{w.family_type}</span>}
+                    </div>
+                  </div>
+                  <p className="text-[9px] flex-shrink-0" style={{ color: C.mutedText }}>{new Date(w.created_date).toLocaleDateString()}</p>
+                </div>
+                {w.message && <p className="text-[10px] mt-2 italic" style={{ color: "#3a3028" }}>"{w.message}"</p>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Admins tab */}
         {activeTab === "admins" && (
           <AdminManagement />
         )}
