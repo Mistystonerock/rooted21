@@ -212,7 +212,7 @@ export default function Dashboard() {
           <Link to="/weekly-habits" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <CheckSquare size={22} color={C.midGreen} />
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Weekly Habits</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Daily TBRI® streak tracker</p>
+            <p className="text-[11px]" style={{ color: C.mutedText }}>Daily parenting streak tracker</p>
           </Link>
           <Link to="/local-resources" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <MapPin size={22} color="#B84C2A" />

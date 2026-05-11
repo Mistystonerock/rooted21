@@ -81,7 +81,7 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
             What's happening right now?
           </h2>
           <p className="m-0 mb-3 text-[13px]" style={{ color: C.mutedText }}>
-            Describe the situation and get TBRI®-based guidance immediately.
+            Describe the situation and get trauma-informed guidance immediately.
           </p>
 
           <textarea
