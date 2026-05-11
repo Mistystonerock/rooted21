@@ -157,7 +157,7 @@ export default function LiveClasses() {
   const [showForm, setShowForm] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === "admin" || user?.role === "founder";
 
   useEffect(() => {
     Promise.all([
@@ -213,15 +213,40 @@ export default function LiveClasses() {
           </p>
         </div>
 
-        {/* Admin: Add class button */}
+        {/* Admin: Add class buttons */}
         {isAdmin && !showForm && !editingClass && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
-            style={{ background: C.midGreen, color: "#fff", border: "none", cursor: "pointer" }}
-          >
-            <Plus size={15} /> Add New Class
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                setEditingClass(null);
+                setShowForm(true);
+              }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+              style={{ background: C.midGreen, color: "#fff", border: "none", cursor: "pointer" }}
+            >
+              <Plus size={15} /> Schedule a Class
+            </button>
+            <button
+              onClick={async () => {
+                const joinUrl = prompt("Paste your live Teams/Zoom link:");
+                if (!joinUrl) return;
+                const now = new Date();
+                const created = await base44.entities.LiveClass.create({
+                  title: "Live Session — Starting Now",
+                  date: now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+                  time: now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) + " ET",
+                  join_url: joinUrl,
+                  is_published: true,
+                  description: "Spontaneous live session — join now!",
+                });
+                setClasses(prev => [created, ...prev]);
+              }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+              style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+            >
+              <Video size={15} /> Go Live Now
+            </button>
+          </div>
         )}
 
         {/* Add/Edit form */}
