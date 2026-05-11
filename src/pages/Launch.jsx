@@ -218,42 +218,39 @@ export default function Launch() {
         <div style={{
           background: "rgba(255,255,255,0.95)",
           borderRadius: 20,
-          padding: "20px 18px",
+          padding: "24px 22px",
           border: `2px solid ${GOLD}`,
           boxShadow: `0 8px 32px rgba(201,151,58,0.25)`,
           position: "relative",
         }}>
-          {/* Gold corner stars */}
-          <span style={{ position: "absolute", top: 10, right: 14, fontSize: 16, color: GOLD }}>✦</span>
-          <span style={{ position: "absolute", top: 10, left: 14, fontSize: 16, color: GOLD }}>✦</span>
+          <span style={{ position: "absolute", top: 12, right: 16, fontSize: 16, color: GOLD }}>✦</span>
+          <span style={{ position: "absolute", top: 12, left: 16, fontSize: 16, color: GOLD }}>✦</span>
 
-          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-            <div style={{
-              width: 90, height: 90, borderRadius: 16, flexShrink: 0, overflow: "hidden",
-              border: `3px solid ${GOLD}`,
-              boxShadow: `0 4px 16px rgba(201,151,58,0.3)`,
-            }}>
-              <img
-                src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/8a296e40d_generated_image.png"
-                alt="Misty"
-                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
-              />
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#1a4a2e", marginBottom: 6 }}>
-                Founder's Note
-              </p>
-              <p style={{ fontSize: 12, lineHeight: 1.65, color: "#2a2a2a" }}>
-                Dear Misty,<br /><br />
-                I am sharing expert stories that have been built on news around faithful community. We raise personal support and services as well as with trauma-informed community stories happening.<br /><br />
-                We acknowledge and appreciate the note of our app to show themselves as a community and consistent members as a community.
-              </p>
-              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 17, color: "#1a4a2e", marginTop: 12 }}>
-                Sincerely,<br />
-                <span style={{ fontSize: 22, fontStyle: "italic" }}>Misty</span>
-              </p>
-            </div>
-          </div>
+          <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#1a4a2e", marginBottom: 14, textAlign: "center" }}>
+            Founder's Note
+          </p>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: "#2a2a2a" }}>
+            Dear Friend,
+          </p>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: "#2a2a2a", marginTop: 10 }}>
+            I built Rooted 21 because I know what it feels like to parent from a place of fear, confusion, and exhaustion — and to desperately need support that actually understood my family's journey.
+          </p>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: "#2a2a2a", marginTop: 10 }}>
+            Whether you are a foster parent, adoptive family, kinship caregiver, or biological parent navigating the system — you deserve real tools, not judgment. You deserve a community that gets it. You deserve to be <em>rooted</em>.
+          </p>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: "#2a2a2a", marginTop: 10 }}>
+            This platform was built from lived experience, grounded in trauma-informed science, and designed to meet you exactly where you are — for free, because every family matters.
+          </p>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: "#2a2a2a", marginTop: 10 }}>
+            We are almost ready. I cannot wait to walk this journey with you.
+          </p>
+          <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 16, color: "#1a4a2e", marginTop: 18 }}>
+            With hope & purpose,
+          </p>
+          <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 26, fontStyle: "italic", color: "#1a4a2e", marginTop: 4 }}>
+            Misty Stonerock
+          </p>
+          <p style={{ fontSize: 11, color: "#5a7a5a", marginTop: 2 }}>Founder, Rooted 21 Parenting Network</p>
         </div>
       </div>
 
