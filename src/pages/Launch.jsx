@@ -478,6 +478,11 @@ export default function Launch() {
             style={{ background: C.cream, color: C.mutedText, textDecoration: "none" }}>
             📝 Give Feedback
           </a>
+          <br />
+          <a href="/legal-policy" className="inline-block text-[10px] mt-2 px-3 py-1.5 rounded-lg font-bold"
+            style={{ background: C.cream, color: C.mutedText, textDecoration: "none" }}>
+            📋 Terms & Privacy Policy (Ohio)
+          </a>
         </div>
       </div>
 
