@@ -174,7 +174,7 @@ FeatureLockGate blocks all routes for non-founders until June 10, 2026 launch da
       },
       {
         title: "Tone & Voice Guidelines",
-        body: `The platform voice is: warm, trauma-informed, non-judgmental, empowering, accessible. Never clinical or cold. Never shaming. Always assume the parent is doing their best. Language should be plain, direct, and compassionate. Avoid jargon unless explaining it. The AI coach (Personalized Chat) specifically operates on TBRI® (Trust-Based Relational Intervention) principles — empowering principles, connecting principles, correcting principles.`
+        body: `The platform voice is: warm, trauma-informed, non-judgmental, empowering, accessible. Never clinical or cold. Never shaming. Always assume the parent is doing their best. Language should be plain, direct, and compassionate. Avoid jargon unless explaining it.`
       },
       {
         title: "Key Architectural Decisions",

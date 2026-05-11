@@ -151,6 +151,7 @@ function App() {
               <Route path="/suicide-prevention-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildSuicideGuide /></FeatureLockGate></Suspense>} />
               <Route path="/aces-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ACEsGuide /></FeatureLockGate></Suspense>} />
               <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
+              <Route path="/support-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportChat /></FeatureLockGate></Suspense>} />
               <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><FounderDashboard /></Suspense>} />
               <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />

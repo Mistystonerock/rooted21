@@ -82,6 +82,7 @@ const routes = {
   PeerSupport: lazy(() => import("@/pages/PeerSupport")),
   ChildSuicideGuide: lazy(() => import("@/pages/ChildSuicideGuide")),
   ACEsGuide: lazy(() => import("@/pages/ACEsGuide")),
+  SupportChat: lazy(() => import("@/pages/SupportChat")),
 };
 
 export default routes;
