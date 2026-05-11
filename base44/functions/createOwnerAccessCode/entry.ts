@@ -11,6 +11,7 @@ function generateCode() {
 
 Deno.serve(async (req) => {
   try {
+    const body = await req.json().catch(() => ({}));
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
     
@@ -23,10 +24,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Founder access required' }, { status: 403 });
     }
 
-    const { professional_email, professional_name, professional_role } = await req.json();
+    const { professional_email, professional_name, professional_role } = body;
 
-    if (!professional_email || !professional_name) {
-      return Response.json({ error: 'Professional email and name required' }, { status: 400 });
+    if (!professional_name) {
+      return Response.json({ error: 'Name is required' }, { status: 400 });
     }
 
     // Generate unique code
