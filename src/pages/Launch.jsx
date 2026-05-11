@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
-import TreeLogo from "@/components/rooted/TreeLogo";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
 
@@ -27,26 +26,25 @@ function useCountdown() {
 
 function CountdownBlock({ value, label }) {
   return (
-    <div className="flex flex-col items-center">
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 56 }}>
       <div style={{
-        background: "rgba(255,255,255,0.08)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        backdropFilter: "blur(12px)",
-        borderRadius: 12,
-        width: 64,
-        height: 64,
+        background: "rgba(0,0,0,0.35)",
+        border: "2px solid rgba(201,151,58,0.6)",
+        borderRadius: 10,
+        width: 60,
+        height: 60,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: 26,
-        fontWeight: 800,
-        color: "#fff",
-        fontFamily: "var(--font-sans)",
+        fontSize: 28,
+        fontWeight: 900,
+        color: "#f5e6c8",
         letterSpacing: "-1px",
+        boxShadow: "0 0 12px rgba(201,151,58,0.3)",
       }}>
         {String(value).padStart(2, "0")}
       </div>
-      <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", marginTop: 6, textTransform: "uppercase" }}>
+      <p style={{ color: "rgba(245,230,200,0.7)", fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", marginTop: 5, textTransform: "uppercase" }}>
         {label}
       </p>
     </div>
@@ -54,10 +52,10 @@ function CountdownBlock({ value, label }) {
 }
 
 const PILLARS = [
-  { emoji: "🧠", title: "Trauma-Informed", desc: "Trauma-informed tools grounded in attachment science and real-world parenting." },
+  { emoji: "🧠", title: "Trauma-Informed", desc: "Tools grounded in attachment science and connection-based parenting for real families." },
   { emoji: "💙", title: "Foster/Adoptive", desc: "Built for foster, adoptive, kinship, and biological families navigating hard days." },
-  { emoji: "🤝", title: "Community", desc: "Community connection and safe space for caregivers without judgment." },
-  { emoji: "💰", title: "Affordable", desc: "Affordable resources and support accessible to every family." },
+  { emoji: "🤝", title: "Community", desc: "A safe space for caregivers to connect, share, and grow together without judgment." },
+  { emoji: "💰", title: "Affordable", desc: "Powerful resources accessible to every family regardless of income." },
 ];
 
 const APP_FEATURES = [
@@ -83,15 +81,15 @@ const FAMILY_TYPES = [
   { value: "other", label: "Other / Professional" },
 ];
 
-const BG = "#0a0a0a";
-const CARD_BG = "rgba(255,255,255,0.05)";
-const CARD_BORDER = "rgba(255,255,255,0.1)";
-const GREEN = "#1a4a2e";
-const GREEN_BRIGHT = "#2d6a45";
-const GREEN_GLOW = "rgba(45,106,69,0.35)";
+const BG = "#0a3d20";
+const BG2 = "#0d4f2a";
 const GOLD = "#c9973a";
-const TEXT = "#f0ece4";
-const MUTED = "rgba(240,236,228,0.5)";
+const GOLD_LIGHT = "#f0c86a";
+const TEXT = "#f5e6c8";
+const MUTED = "rgba(245,230,200,0.65)";
+const CARD_BG = "rgba(0,0,0,0.3)";
+const CARD_BORDER = "rgba(201,151,58,0.35)";
+const GREEN_MID = "#1a6b3a";
 
 export default function Launch() {
   const time = useCountdown();
@@ -128,23 +126,34 @@ export default function Launch() {
 
   const inputStyle = {
     width: "100%",
-    background: "rgba(255,255,255,0.07)",
-    border: "1px solid rgba(255,255,255,0.15)",
-    borderRadius: 10,
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(201,151,58,0.3)",
+    borderRadius: 8,
     padding: "10px 14px",
     color: "#fff",
     fontSize: 13,
     outline: "none",
+    boxSizing: "border-box",
   };
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", fontFamily: "var(--font-sans)", color: TEXT }}>
+    <div style={{
+      background: `linear-gradient(160deg, #0a3d20 0%, #0d5c2a 40%, #0a3d20 100%)`,
+      minHeight: "100vh",
+      fontFamily: "var(--font-sans)",
+      color: TEXT,
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Decorative glow orbs */}
+      <div style={{ position: "fixed", top: "10%", right: "-10%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,151,58,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "fixed", bottom: "20%", left: "-10%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,107,58,0.3) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* ── TOP NAV ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <TreeLogo size={28} />
-          <span style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 18, color: TEXT }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 22 }}>🌿</span>
+          <span style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 20, color: TEXT }}>
             Rooted <span style={{ color: GOLD }}>21</span>
           </span>
         </div>
@@ -156,112 +165,131 @@ export default function Launch() {
       </div>
 
       {/* ── HERO ── */}
-      <div style={{ padding: "40px 20px 32px", textAlign: "center", position: "relative" }}>
-        {/* Glow blob */}
-        <div style={{
-          position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)",
-          width: 300, height: 300, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(26,74,46,0.4) 0%, transparent 70%)",
-          pointerEvents: "none", zIndex: 0,
-        }} />
+      <div style={{ padding: "20px 20px 28px", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: GOLD, marginBottom: 16 }}>
+          Countdown Timer
+        </p>
 
-        {count !== null && (
-          <p style={{ color: MUTED, fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 20, position: "relative", zIndex: 1 }}>
-            {count} Families on Waitlist
-          </p>
-        )}
-
-        {/* Countdown */}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "flex-start", marginBottom: 36, position: "relative", zIndex: 1 }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "flex-start", marginBottom: 20 }}>
           <CountdownBlock value={time.days} label="Days" />
-          <span style={{ color: MUTED, fontSize: 24, fontWeight: 300, marginTop: 16 }}>:</span>
-          <CountdownBlock value={time.hours} label="Hours" />
-          <span style={{ color: MUTED, fontSize: 24, fontWeight: 300, marginTop: 16 }}>:</span>
-          <CountdownBlock value={time.minutes} label="Min" />
-          <span style={{ color: MUTED, fontSize: 24, fontWeight: 300, marginTop: 16 }}>:</span>
-          <CountdownBlock value={time.seconds} label="Sec" />
+          <span style={{ color: GOLD, fontSize: 28, fontWeight: 300, marginTop: 14 }}>:</span>
+          <CountdownBlock value={time.hours} label="Hrs" />
+          <span style={{ color: GOLD, fontSize: 28, fontWeight: 300, marginTop: 14 }}>:</span>
+          <CountdownBlock value={time.minutes} label="Mins" />
+          <span style={{ color: GOLD, fontSize: 28, fontWeight: 300, marginTop: 14 }}>:</span>
+          <CountdownBlock value={time.seconds} label="Ros" />
         </div>
 
-        {/* Big headline */}
+        {count !== null && (
+          <div style={{
+            display: "inline-block",
+            background: "rgba(201,151,58,0.15)",
+            border: `1.5px solid ${GOLD}`,
+            borderRadius: 50,
+            padding: "6px 18px",
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: GOLD_LIGHT,
+            marginBottom: 24,
+          }}>
+            {count} Families on Waitlist
+          </div>
+        )}
+
         <h1 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(2.4rem, 9vw, 3.5rem)",
-          lineHeight: 1.05, color: "#fff", textTransform: "uppercase", letterSpacing: "-1px",
-          marginBottom: 8, position: "relative", zIndex: 1,
+          fontFamily: "var(--font-serif)",
+          fontWeight: 900,
+          fontSize: "clamp(2rem, 8vw, 3rem)",
+          lineHeight: 1.05,
+          color: TEXT,
+          textTransform: "uppercase",
+          letterSpacing: "-0.5px",
+          marginBottom: 0,
         }}>
           The Future of<br />
-          <span style={{ color: "#fff" }}>Support</span>
+          <span style={{ color: GOLD }}>Support</span> is Coming
         </h1>
-        <p style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.1rem, 4vw, 1.4rem)", color: MUTED, fontStyle: "italic", position: "relative", zIndex: 1 }}>
-          is coming
-        </p>
       </div>
 
       {/* ── FOUNDER'S NOTE ── */}
-      <div style={{ margin: "0 16px 28px", borderRadius: 16, overflow: "hidden", border: `1px solid ${CARD_BORDER}`, background: CARD_BG, backdropFilter: "blur(12px)" }}>
-        <div style={{ display: "flex", gap: 14, padding: "18px 18px 14px" }}>
-          {/* Avatar placeholder */}
-          <div style={{
-            width: 80, height: 80, borderRadius: 12, flexShrink: 0, overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.15)",
-          }}>
-            <img src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/6dea8f834_generated_image.png" alt="Misty" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: GOLD, marginBottom: 4 }}>
-              Founder's Note
-            </p>
-            <p style={{ fontSize: 12, lineHeight: 1.6, color: "rgba(240,236,228,0.75)" }}>
-              Dear community,<br /><br />
-              Our journey begins to enter community and explore every one bold trauma-informed path of healing and support to help one another. We coordinate our community and create with teams and connections that compassion matters wherever they are.<br /><br />
-              We are the bonds that hold communities and connections and our world together and help parents preserve healthy futures.
-            </p>
-            <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 15, color: TEXT, marginTop: 10 }}>
-              Sincerely,<br />Misty
-            </p>
+      <div style={{ margin: "0 16px 28px", position: "relative", zIndex: 1 }}>
+        <div style={{
+          background: "rgba(255,255,255,0.95)",
+          borderRadius: 20,
+          padding: "20px 18px",
+          border: `2px solid ${GOLD}`,
+          boxShadow: `0 8px 32px rgba(201,151,58,0.25)`,
+          position: "relative",
+        }}>
+          {/* Gold corner stars */}
+          <span style={{ position: "absolute", top: 10, right: 14, fontSize: 16, color: GOLD }}>✦</span>
+          <span style={{ position: "absolute", top: 10, left: 14, fontSize: 16, color: GOLD }}>✦</span>
+
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div style={{
+              width: 90, height: 90, borderRadius: 16, flexShrink: 0, overflow: "hidden",
+              border: `3px solid ${GOLD}`,
+              boxShadow: `0 4px 16px rgba(201,151,58,0.3)`,
+            }}>
+              <img
+                src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/8a296e40d_generated_image.png"
+                alt="Misty"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#1a4a2e", marginBottom: 6 }}>
+                Founder's Note
+              </p>
+              <p style={{ fontSize: 12, lineHeight: 1.65, color: "#2a2a2a" }}>
+                Dear Misty,<br /><br />
+                I am sharing expert stories that have been built on news around faithful community. We raise personal support and services as well as with trauma-informed community stories happening.<br /><br />
+                We acknowledge and appreciate the note of our app to show themselves as a community and consistent members as a community.
+              </p>
+              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 17, color: "#1a4a2e", marginTop: 12 }}>
+                Sincerely,<br />
+                <span style={{ fontSize: 22, fontStyle: "italic" }}>Misty</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── MISSION STATEMENT ── */}
-      <div style={{
-        margin: "0 16px 28px", borderRadius: 16, padding: "28px 22px",
-        background: `radial-gradient(ellipse at center, rgba(26,74,46,0.5) 0%, rgba(10,10,10,0.8) 70%)`,
-        border: `1px solid rgba(45,106,69,0.3)`,
-        textAlign: "center",
-      }}>
-        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: GREEN_BRIGHT, marginBottom: 14 }}>
+      {/* ── MISSION ── */}
+      <div style={{ padding: "0 20px 28px", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: GOLD, marginBottom: 12 }}>
           Mission
         </p>
         <h2 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.5rem, 6vw, 2.2rem)",
-          textTransform: "uppercase", lineHeight: 1.1, color: "#fff", letterSpacing: "-0.5px",
+          fontFamily: "var(--font-serif)",
+          fontWeight: 900,
+          fontSize: "clamp(1.7rem, 7vw, 2.4rem)",
+          textTransform: "uppercase",
+          lineHeight: 1.08,
+          color: TEXT,
+          letterSpacing: "-0.5px",
         }}>
-          Every Family<br />Deserves Support —<br />Wherever They Are.
+          Every Family<br />Deserves Support —<br />Wherever They Are
         </h2>
       </div>
 
       {/* ── FOUR PILLARS ── */}
-      <div style={{ padding: "0 16px 28px" }}>
-        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: MUTED, marginBottom: 8, textAlign: "center" }}>
-          Four Pillars
-        </p>
-        <h2 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.6rem, 7vw, 2rem)",
-          textTransform: "uppercase", color: "#fff", textAlign: "center", marginBottom: 18,
-        }}>
-          Our Foundation
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {PILLARS.map(p => (
+      <div style={{ padding: "0 16px 28px", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          {PILLARS.map((p, i) => (
             <div key={p.title} style={{
-              background: CARD_BG,
-              border: `1px solid ${CARD_BORDER}`,
-              borderRadius: 14,
-              padding: "16px 14px",
+              background: i % 2 === 0
+                ? "linear-gradient(135deg, rgba(26,74,46,0.8), rgba(10,61,32,0.9))"
+                : "linear-gradient(135deg, rgba(201,151,58,0.25), rgba(26,74,46,0.8))",
+              border: `1.5px solid ${i % 2 === 0 ? "rgba(255,255,255,0.15)" : CARD_BORDER}`,
+              borderRadius: 16,
+              padding: "18px 14px",
               backdropFilter: "blur(8px)",
             }}>
-              <div style={{ fontSize: 22, marginBottom: 8 }}>{p.emoji}</div>
-              <p style={{ fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", color: TEXT, marginBottom: 6 }}>{p.title}</p>
+              <div style={{ fontSize: 24, marginBottom: 8 }}>{p.emoji}</div>
+              <p style={{ fontWeight: 800, fontSize: 13, textTransform: "uppercase", letterSpacing: "0.04em", color: i % 2 === 1 ? GOLD_LIGHT : TEXT, marginBottom: 6 }}>{p.title}</p>
               <p style={{ fontSize: 11, lineHeight: 1.5, color: MUTED }}>{p.desc}</p>
             </div>
           ))}
@@ -269,145 +297,169 @@ export default function Launch() {
       </div>
 
       {/* ── WHAT'S INSIDE ── */}
-      <div style={{ padding: "0 16px 28px" }}>
+      <div style={{ padding: "0 16px 28px", position: "relative", zIndex: 1 }}>
         <h2 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)",
-          textTransform: "uppercase", color: "#fff", marginBottom: 16,
+          fontFamily: "var(--font-serif)",
+          fontWeight: 800,
+          fontSize: "clamp(1.3rem, 5vw, 1.8rem)",
+          color: TEXT,
+          marginBottom: 18,
+          textAlign: "center",
         }}>
           What's Inside the App
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
           {APP_FEATURES.map(f => (
             <div key={f.label} style={{
               background: CARD_BG,
               border: `1px solid ${CARD_BORDER}`,
-              borderRadius: 12,
-              padding: "14px 12px",
+              borderRadius: 14,
+              padding: "14px 10px",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              gap: 10,
+              textAlign: "center",
+              gap: 6,
               backdropFilter: "blur(8px)",
             }}>
-              <span style={{ fontSize: 18 }}>{f.emoji}</span>
-              <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.03em", color: TEXT, lineHeight: 1.3 }}>{f.label}</p>
+              <span style={{ fontSize: 22 }}>{f.emoji}</span>
+              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.03em", color: TEXT, lineHeight: 1.3 }}>{f.label}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── WAITLIST FORM ── */}
-      <div style={{ padding: "0 16px 28px" }}>
-        <h2 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.6rem, 7vw, 2.2rem)",
-          textTransform: "uppercase", color: "#fff", marginBottom: 20,
+      {/* ── JOIN THE MOVEMENT ── */}
+      <div style={{ margin: "0 16px 28px", position: "relative", zIndex: 1 }}>
+        <div style={{
+          background: "rgba(0,0,0,0.4)",
+          border: `1.5px solid ${CARD_BORDER}`,
+          borderRadius: 20,
+          padding: "24px 18px",
+          backdropFilter: "blur(12px)",
         }}>
-          Join the Movement
-        </h2>
-
-        {submitted ? (
-          <div style={{
-            background: `rgba(26,74,46,0.3)`, border: `1px solid rgba(45,106,69,0.5)`,
-            borderRadius: 16, padding: "32px 20px", textAlign: "center",
+          <h2 style={{
+            fontFamily: "var(--font-serif)",
+            fontWeight: 900,
+            fontSize: "clamp(1.8rem, 7vw, 2.4rem)",
+            color: TEXT,
+            marginBottom: 20,
+            lineHeight: 1.05,
           }}>
-            <p style={{ fontSize: 28, marginBottom: 12 }}>🌱</p>
-            <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 18, color: "#fff", marginBottom: 8 }}>You're on the list!</p>
-            <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.6 }}>We'll email you the moment Rooted 21 opens on June 10. Thank you for believing in this mission.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} style={{
-            background: CARD_BG, border: `1px solid ${CARD_BORDER}`,
-            borderRadius: 16, padding: "20px 16px", backdropFilter: "blur(12px)",
-          }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-              <div>
-                <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: 6 }}>Name</label>
-                <input
-                  type="text" value={form.full_name}
-                  onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))}
-                  placeholder="Full name" style={inputStyle}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: 6 }}>Email</label>
-                <input
-                  type="email" value={form.email}
-                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                  placeholder="you@email.com" style={inputStyle}
-                />
-              </div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-              <div>
-                <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: 6 }}>Zip Code</label>
-                <input
-                  type="text" inputMode="numeric" maxLength={5} value={form.zip_code}
-                  onChange={e => setForm(f => ({ ...f, zip_code: e.target.value.replace(/\D/g, "") }))}
-                  placeholder="e.g. 44107" style={inputStyle}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: 6 }}>Family Type</label>
-                <select value={form.family_type} onChange={e => setForm(f => ({ ...f, family_type: e.target.value }))} style={{ ...inputStyle, appearance: "none" }}>
-                  {FAMILY_TYPES.map(t => <option key={t.value} value={t.value} style={{ background: "#1a1a1a" }}>{t.label}</option>)}
-                </select>
-              </div>
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: 6 }}>Message</label>
-              <textarea
-                value={form.message}
-                onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                placeholder="Tell us about your family..."
-                rows={3}
-                style={{ ...inputStyle, resize: "none" }}
-              />
-            </div>
+            Join the<br />Movement
+          </h2>
 
-            {error && (
-              <p style={{ background: "rgba(192,57,43,0.2)", border: "1px solid rgba(192,57,43,0.4)", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#ff7b7b", marginBottom: 12 }}>
-                {error}
-              </p>
-            )}
+          {submitted ? (
+            <div style={{
+              background: "rgba(26,74,46,0.5)",
+              border: `1px solid rgba(45,106,69,0.6)`,
+              borderRadius: 14,
+              padding: "28px 20px",
+              textAlign: "center",
+            }}>
+              <p style={{ fontSize: 28, marginBottom: 10 }}>🌱</p>
+              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 18, color: TEXT, marginBottom: 8 }}>You're on the list!</p>
+              <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.6 }}>We'll email you the moment Rooted 21 opens on June 10. Thank you for believing in this mission.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                <div>
+                  <label style={{ fontSize: 10, fontWeight: 600, color: MUTED, display: "block", marginBottom: 4 }}>Name</label>
+                  <input type="text" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Full name" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 10, fontWeight: 600, color: MUTED, display: "block", marginBottom: 4 }}>Email</label>
+                  <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@email.com" style={inputStyle} />
+                </div>
+              </div>
+              <div style={{ marginBottom: 10 }}>
+                <label style={{ fontSize: 10, fontWeight: 600, color: MUTED, display: "block", marginBottom: 4 }}>Your Message</label>
+                <textarea
+                  value={form.message}
+                  onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Tell us about your family..."
+                  rows={3}
+                  style={{ ...inputStyle, resize: "none" }}
+                />
+              </div>
 
-            <button
-              type="submit" disabled={loading}
-              style={{
-                width: "100%", padding: "14px",
-                background: loading ? "rgba(45,106,69,0.5)" : `linear-gradient(135deg, ${GREEN_BRIGHT}, #1a4a2e)`,
-                border: `1px solid rgba(45,106,69,0.6)`,
-                borderRadius: 10, color: "#fff", fontWeight: 700, fontSize: 13,
-                letterSpacing: "0.1em", textTransform: "uppercase",
-                cursor: loading ? "default" : "pointer",
-                boxShadow: loading ? "none" : `0 0 20px ${GREEN_GLOW}`,
-              }}
-            >
-              {loading ? "Saving your spot..." : "Submit"}
-            </button>
-          </form>
-        )}
+              {error && (
+                <p style={{ background: "rgba(192,57,43,0.2)", border: "1px solid rgba(192,57,43,0.4)", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#ff9090", marginBottom: 10 }}>
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  background: loading ? "rgba(201,151,58,0.4)" : `linear-gradient(135deg, ${GOLD}, #a07020)`,
+                  border: "none",
+                  borderRadius: 10,
+                  color: "#1a1a1a",
+                  fontWeight: 800,
+                  fontSize: 13,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  cursor: loading ? "default" : "pointer",
+                  boxShadow: loading ? "none" : `0 4px 20px rgba(201,151,58,0.4)`,
+                }}
+              >
+                {loading ? "Saving your spot..." : "Join the Movement"}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
 
-      {/* ── FOOTER ACTIONS ── */}
-      <div style={{ padding: "0 16px 16px", display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+      {/* ── FOOTER BUTTONS ── */}
+      <div style={{
+        display: "flex",
+        gap: 0,
+        borderTop: `1px solid rgba(201,151,58,0.3)`,
+        position: "relative",
+        zIndex: 1,
+      }}>
         {[
           { label: "Sign In", action: () => base44.auth.redirectToLogin("/home") },
           { label: "Redeem Code", action: () => setShowCodeModal(true) },
           { label: "Create Codes", href: "/founder-access" },
-        ].map(btn => (
+        ].map((btn, i) => (
           btn.href ? (
             <a key={btn.label} href={btn.href} style={{
-              padding: "10px 20px", borderRadius: 50, fontSize: 12, fontWeight: 700,
-              border: "1px solid rgba(255,255,255,0.2)", color: TEXT, textDecoration: "none",
-              background: "rgba(255,255,255,0.06)", letterSpacing: "0.05em",
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              flex: 1,
+              padding: "18px 8px",
+              background: "rgba(0,0,0,0.35)",
+              borderRight: i < 2 ? `1px solid rgba(201,151,58,0.3)` : "none",
+              color: TEXT,
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: 13,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
             }}>
               {btn.label}
             </a>
           ) : (
             <button key={btn.label} onClick={btn.action} style={{
-              padding: "10px 20px", borderRadius: 50, fontSize: 12, fontWeight: 700,
-              border: "1px solid rgba(255,255,255,0.2)", color: TEXT, cursor: "pointer",
-              background: "rgba(255,255,255,0.06)", letterSpacing: "0.05em",
+              flex: 1,
+              padding: "18px 8px",
+              background: "rgba(0,0,0,0.35)",
+              borderRight: i < 2 ? `1px solid rgba(201,151,58,0.3)` : "none",
+              border: "none",
+              color: TEXT,
+              fontWeight: 700,
+              fontSize: 13,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              cursor: "pointer",
             }}>
               {btn.label}
             </button>
@@ -416,15 +468,13 @@ export default function Launch() {
       </div>
 
       {/* ── FOOTER ── */}
-      <div style={{ padding: "24px 20px 40px", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ padding: "20px 20px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
         <span style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 16, color: TEXT }}>
           Rooted <span style={{ color: GOLD }}>21</span>
         </span>
-        <p style={{ fontSize: 10, color: MUTED }}>© {new Date().getFullYear()} Rooted 21. All rights reserved.</p>
+        <p style={{ fontSize: 10, color: MUTED }}>© {new Date().getFullYear()} Rooted 21</p>
       </div>
-
-      {/* Links */}
-      <div style={{ padding: "0 20px 32px", display: "flex", gap: 12, justifyContent: "center" }}>
+      <div style={{ padding: "0 20px 32px", display: "flex", gap: 16, justifyContent: "center", position: "relative", zIndex: 1 }}>
         <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Give Feedback</a>
         <a href="/legal-policy" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Terms & Privacy</a>
       </div>
