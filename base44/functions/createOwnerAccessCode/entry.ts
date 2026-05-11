@@ -18,9 +18,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Only admin or founder users can create codes
-    if (user.role !== 'admin' && user.role !== 'founder') {
-      return Response.json({ error: 'Admin access required' }, { status: 403 });
+    // Only founder can create admin codes
+    if (user.role !== 'founder') {
+      return Response.json({ error: 'Founder access required' }, { status: 403 });
     }
 
     const { professional_email, professional_name, professional_role } = await req.json();

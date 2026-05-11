@@ -70,7 +70,7 @@ export default function Profile() {
         </div>
 
         {/* Founder Dashboard link — only for founder/admin */}
-        {(user?.role === "founder" || user?.role === "admin") && (
+        {user?.role === "founder" && (
           <Link
             to="/founder-dashboard"
             className="flex items-center justify-between rounded-2xl p-4"
