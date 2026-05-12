@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2 } from "lucide-react";
+import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2, Type } from "lucide-react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [phone, setPhone] = useState("");
   const [smsReminders, setSmsReminders] = useState(true);
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem("app-font-size") || "16");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -19,7 +20,16 @@ export default function Profile() {
       setPhone(u?.phone || "");
       setSmsReminders(u?.sms_reminders !== false);
     });
+    // Apply font size on load
+    const saved = localStorage.getItem("app-font-size") || "16";
+    document.documentElement.style.fontSize = saved + "px";
   }, []);
+
+  function handleFontSizeChange(newSize) {
+    setFontSize(newSize);
+    localStorage.setItem("app-font-size", newSize);
+    document.documentElement.style.fontSize = newSize + "px";
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -135,6 +145,48 @@ export default function Profile() {
               />
             </button>
           </div>
+        </div>
+
+        {/* Font Size Control */}
+        <div className="rounded-2xl p-4 space-y-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+         <div className="flex items-center gap-2 mb-1">
+           <Type size={16} color={C.midGreen} />
+           <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>Text Size</p>
+         </div>
+         <p className="text-xs" style={{ color: C.mutedText }}>Adjust the app's text size for better readability.</p>
+         <div className="flex gap-2 items-center justify-center">
+           <button
+             onClick={() => handleFontSizeChange("14")}
+             aria-label="Decrease font size"
+             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${fontSize === "14" ? "ring-2" : ""}`}
+             style={{
+               background: fontSize === "14" ? C.midGreen : C.offWhite,
+               color: fontSize === "14" ? C.white : C.darkGreen,
+               border: `1px solid ${C.cream}`,
+               cursor: "pointer",
+               ringColor: C.midGreen
+             }}
+           >
+             A−
+           </button>
+           <span style={{ fontSize: "12px", color: C.mutedText, minWidth: "60px", textAlign: "center" }}>
+             {fontSize}px
+           </span>
+           <button
+             onClick={() => handleFontSizeChange("18")}
+             aria-label="Increase font size"
+             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${fontSize === "18" ? "ring-2" : ""}`}
+             style={{
+               background: fontSize === "18" ? C.midGreen : C.offWhite,
+               color: fontSize === "18" ? C.white : C.darkGreen,
+               border: `1px solid ${C.cream}`,
+               cursor: "pointer",
+               ringColor: C.midGreen
+             }}
+           >
+             A+
+           </button>
+         </div>
         </div>
 
         {/* Save button */}

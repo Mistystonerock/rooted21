@@ -44,6 +44,8 @@ import CommunityResourceMap from '@/pages/CommunityResourceMap';
 import LegalAndDisclaimers from '@/pages/LegalAndDisclaimers';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
+import AccessibilityStatement from '@/pages/AccessibilityStatement';
+import SkipToContentLink from '@/components/accessibility/SkipToContentLink';
 import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
@@ -71,6 +73,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <ProfessionalGate user={user}>
+        <SkipToContentLink />
         <Router>
           <AnimatePresence mode="wait">
             <Routes>
@@ -185,6 +188,7 @@ function App() {
               <Route path="/ai-disclaimer" element={<Suspense fallback={<LoadingFallback />}><AIDisclaimer /></Suspense>} />
               <Route path="/data-use-policy" element={<Suspense fallback={<LoadingFallback />}><DataUsePolicy /></Suspense>} />
               <Route path="/resource-matcher" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ResourceMatcher /></FeatureLockGate></Suspense>} />
+              <Route path="/accessibility" element={<Suspense fallback={<LoadingFallback />}><AccessibilityStatement /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
