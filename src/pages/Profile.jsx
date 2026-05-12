@@ -55,14 +55,14 @@ export default function Profile() {
 
       <div className="max-w-[480px] mx-auto px-4 py-5 space-y-4">
         {/* User info */}
-        <div className="rounded-2xl p-4 flex items-center gap-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+        <div className="rounded-2xl p-4 flex items-center gap-4" style={{ background: C.card, border: `1px solid ${C.cream}` }}>
           <div className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0"
             style={{ background: C.darkGreen, color: C.cream }}>
             {user?.full_name?.[0] || "?"}
           </div>
           <div>
-            <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>{user?.full_name || "—"}</p>
-            <p className="text-xs" style={{ color: C.mutedText }}>{user?.email}</p>
+            <p className="font-serif font-bold text-base" style={{ color: C.cream }}>{user?.full_name || "—"}</p>
+            <p className="text-xs" style={{ color: C.cream }}>{user?.email}</p>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 inline-block capitalize"
               style={{ background: `${C.midGreen}20`, color: C.midGreen }}>
               {user?.role || "user"}
@@ -100,14 +100,14 @@ export default function Profile() {
         )}
 
         {/* SMS Reminders */}
-        <div className="rounded-2xl p-4 space-y-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+        <div className="rounded-2xl p-4 space-y-4" style={{ background: C.card, border: `1px solid ${C.cream}` }}>
           <div className="flex items-center gap-2 mb-1">
             <Phone size={16} color={C.midGreen} />
-            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>SMS Reminders</p>
+            <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>SMS Reminders</p>
           </div>
 
           <div>
-            <label className="text-xs font-bold block mb-1.5" style={{ color: C.mutedText }}>
+            <label className="text-xs font-bold block mb-1.5" style={{ color: C.cream }}>
               MOBILE PHONE NUMBER
             </label>
             <input
@@ -116,23 +116,23 @@ export default function Profile() {
               onChange={e => setPhone(e.target.value)}
               placeholder="+15551234567"
               className="w-full rounded-xl px-3 py-2.5 text-sm font-sans"
-              style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite, color: C.darkText }}
+              style={{ border: `1.5px solid ${C.cream}`, background: '#1a1a1a', color: '#ffffff' }}
             />
-            <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>
+            <p className="text-[10px] mt-1" style={{ color: C.cream }}>
               Enter in E.164 format, e.g. +15551234567 (include country code)
             </p>
           </div>
 
           {/* Toggle */}
           <div className="flex items-center justify-between rounded-xl px-3.5 py-3"
-            style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+            style={{ background: '#1a1a1a', border: `1px solid ${C.cream}` }}>
             <div className="flex items-center gap-2.5">
               {smsReminders
                 ? <Bell size={15} color={C.midGreen} />
-                : <BellOff size={15} color={C.mutedText} />}
+                : <BellOff size={15} color={C.cream} />}
               <div>
-                <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Event reminders</p>
-                <p className="text-[10px]" style={{ color: C.mutedText }}>
+                <p className="text-sm font-bold" style={{ color: C.cream }}>Event reminders</p>
+                <p className="text-[10px]" style={{ color: C.cream }}>
                   Text reminder the day before calendar events
                 </p>
               </div>
@@ -171,14 +171,14 @@ export default function Profile() {
         {/* Font Size Control */}
         <FontSizeControl />
 
-        <p className="text-[11px] text-center" style={{ color: C.mutedText }}>
+        <p className="text-[11px] text-center" style={{ color: C.cream }}>
           Reminders are sent at 9am the day before each calendar event.
         </p>
         {/* LEGAL LINK */}
         <Link
           to="/legal"
           className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
-          style={{ background: C.white, border: `1px solid ${C.cream}`, textDecoration: "none", color: C.darkGreen }}
+          style={{ background: C.card, border: `1px solid ${C.cream}`, textDecoration: "none", color: C.cream }}
         >
           📋 Legal Documents & Consent Forms
         </Link>

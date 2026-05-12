@@ -100,11 +100,15 @@
 
 @layer base {
   input, textarea, select {
-    color: #000000 !important;
+    color: #ffffff !important;
   }
   input::placeholder, textarea::placeholder {
-    color: #888070 !important;
+    color: #e2e8f0 !important;
     opacity: 1;
+  }
+  option {
+    color: #ffffff !important;
+    background: #1a1a1a !important;
   }
 
   html, body {
@@ -186,7 +190,16 @@
 }
 
 /* ── Semantic Design System ── */
-/* No global text color overrides. Components must specify text colors explicitly. */
+/* Global text visibility on dark backgrounds */
+body, p, span, div, label, h1, h2, h3, h4, h5, h6, a, button, li {
+  color: #f0f0f0 !important;
+}
+label, .text-xs, .text-sm, small {
+  color: #e2e8f0 !important;
+}
+input, textarea, select, button {
+  color: #ffffff !important;
+}
 * {
   text-shadow: none !important;
 }
