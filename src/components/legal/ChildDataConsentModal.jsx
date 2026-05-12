@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Shield, CheckCircle2, AlertTriangle } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import { Link } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 
 const CONSENT_KEY = "rooted21_child_data_consent_v1";
 
@@ -18,6 +19,18 @@ export function recordChildDataConsent(userEmail) {
     email: userEmail,
     timestamp: new Date().toISOString(),
   }));
+}
+
+async function saveConsentToDatabase(userEmail, accepted) {
+  try {
+    await base44.functions.invoke("saveConsent", {
+      consent_type: "child_data",
+      accepted,
+      consent_version: "1.0",
+    });
+  } catch (error) {
+    console.error("Failed to save child data consent to database:", error);
+  }
 }
 
 const DISCLOSURES = [
@@ -51,9 +64,10 @@ const DISCLOSURES = [
 export default function ChildDataConsentModal({ user, onAccept }) {
   const [checked, setChecked] = useState(false);
 
-  function handleAccept() {
+  async function handleAccept() {
     if (!checked) return;
     recordChildDataConsent(user?.email || "");
+    await saveConsentToDatabase(user?.email || "", true);
     onAccept();
   }
 

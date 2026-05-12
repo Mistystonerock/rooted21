@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 import { Shield, CheckCircle2, AlertTriangle, X } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 const CONSENT_KEY = "rooted21_ai_consent_v1";
 
@@ -20,6 +21,18 @@ export function recordAIConsent(userEmail) {
     email: userEmail,
     timestamp: new Date().toISOString(),
   }));
+}
+
+async function saveConsentToDatabase(userEmail, accepted) {
+  try {
+    await base44.functions.invoke("saveConsent", {
+      consent_type: "ai",
+      accepted,
+      consent_version: "1.0",
+    });
+  } catch (error) {
+    console.error("Failed to save AI consent to database:", error);
+  }
 }
 
 const DISCLOSURES = [
@@ -53,9 +66,10 @@ const DISCLOSURES = [
 export default function AIConsentModal({ user, onAccept }) {
   const [checked, setChecked] = useState(false);
 
-  function handleAccept() {
+  async function handleAccept() {
     if (!checked) return;
     recordAIConsent(user?.email || "");
+    await saveConsentToDatabase(user?.email || "", true);
     onAccept();
   }
 

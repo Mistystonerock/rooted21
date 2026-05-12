@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ShieldCheck, CheckCircle2, AlertTriangle } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import { Link } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 
 const CONSENT_KEY = "rooted21_coparent_msg_consent_v1";
 
@@ -18,6 +19,18 @@ export function recordCoParentMessageConsent(userEmail) {
     email: userEmail,
     timestamp: new Date().toISOString(),
   }));
+}
+
+async function saveConsentToDatabase(userEmail, accepted) {
+  try {
+    await base44.functions.invoke("saveConsent", {
+      consent_type: "coparenting_messages",
+      accepted,
+      consent_version: "1.0",
+    });
+  } catch (error) {
+    console.error("Failed to save co-parenting message consent to database:", error);
+  }
 }
 
 const TERMS = [
@@ -58,9 +71,10 @@ export default function CoParentMessageConsentModal({ user, onAccept, onDecline 
   const [checked2, setChecked2] = useState(false);
   const allChecked = checked1 && checked2;
 
-  function handleAccept() {
+  async function handleAccept() {
     if (!allChecked) return;
     recordCoParentMessageConsent(user?.email || "");
+    await saveConsentToDatabase(user?.email || "", true);
     onAccept();
   }
 
