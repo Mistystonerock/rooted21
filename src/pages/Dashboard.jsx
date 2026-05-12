@@ -60,6 +60,7 @@ const TILES = [
   { to: "/job-resources", emoji: "💼", icon: null, label: "Job Resources", sub: "Career, training & aid", accent: "#2a1f0a", border: `${GOLD}20` },
   { to: "/live-classes", emoji: "🎓", icon: null, label: "Live Classes", sub: "Join a parenting group", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/case-management", emoji: "⚖️", icon: null, label: "Case Management", sub: "Track legal matters", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/form-helper", emoji: "📝", icon: null, label: "Form & Paperwork Help", sub: "Guided help — what to file & how", accent: "#12203a", border: "#7aaaee40", text: "#7aaaee" },
   { to: "/case-plan-checklist", emoji: "✅", icon: null, label: "Case Plan Checklist", sub: "AI-powered task tracker", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/documents", emoji: "🔒", icon: null, label: "Secure Documents", sub: "Store & share files", accent: "#12203a", border: "#7aaaee20" },
   { to: "/document-scanner", emoji: "📷", icon: null, label: "Document Scanner", sub: "AI OCR & extraction", accent: "#1a1535", border: "#a09ef030" },
