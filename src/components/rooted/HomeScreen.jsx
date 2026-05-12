@@ -72,15 +72,15 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
         <div
           className="rounded-2xl p-5 mb-5"
           style={{
-            background: C.white,
+            background: "#ffffff",
             boxShadow: "0 4px 20px rgba(47,75,58,.12)",
-            border: `1px solid ${C.cream}`,
+            border: "1px solid #e8dcc8",
           }}
         >
-          <h2 className="m-0 mb-1 font-serif text-lg font-bold" style={{ color: C.darkGreen }}>
+          <h2 className="m-0 mb-1 font-serif text-lg font-bold" style={{ color: "#1a4a2e" }}>
             What's happening right now?
           </h2>
-          <p className="m-0 mb-3 text-[13px]" style={{ color: C.mutedText }}>
+          <p className="m-0 mb-3 text-[13px]" style={{ color: "#5a5040" }}>
             Describe the situation and get trauma-informed guidance immediately.
           </p>
 
@@ -91,9 +91,9 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
             rows={4}
             className="w-full rounded-xl p-3 resize-none text-sm font-sans"
             style={{
-              border: `1.5px solid ${C.cream}`,
-              background: C.offWhite,
-              color: "#000000",
+              border: "1.5px solid #d4c5a0",
+              background: "#faf7f2",
+              color: "#1a1a1a",
             }}
           />
 
