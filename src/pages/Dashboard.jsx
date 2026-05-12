@@ -48,6 +48,7 @@ const TILES = [
   { to: "/co-parent-portal", emoji: null, icon: <Users size={20} color={GREEN} />, label: "Co-Parent Portal", sub: "Court-supervised messaging", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/billing", emoji: null, icon: <CreditCard size={20} color="#7aaaee" />, label: "Billing", sub: "Subscription & pricing", accent: "#12203a", border: "#7aaaee30" },
   { to: "/weekly-habits", emoji: null, icon: <CheckSquare size={20} color={GREEN} />, label: "Weekly Habits", sub: "Daily parenting streak", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/community-resources", emoji: "🗺️", icon: null, label: "Community Resource Map", sub: "Therapists, pantries & support groups", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/local-resources", emoji: null, icon: <MapPin size={20} color="#e07070" />, label: "Local Resources", sub: "Crisis lines near you", accent: "#2a1010", border: "#e0707030" },
   { to: "/professional-directory", emoji: null, icon: <UserSearch size={20} color={GREEN} />, label: "Find a Professional", sub: "Therapists & coaches", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/app-guide", emoji: null, icon: <Info size={20} color={GOLD} />, label: "App Guide", sub: "Everything this app can do", accent: "#2a1f0a", border: `${GOLD}30` },

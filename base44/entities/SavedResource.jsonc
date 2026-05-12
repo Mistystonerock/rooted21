@@ -1,0 +1,91 @@
+{
+  "name": "SavedResource",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "resource_name": {
+      "type": "string"
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "therapist",
+        "support_group",
+        "food_pantry",
+        "mental_health",
+        "crisis",
+        "legal_aid",
+        "other"
+      ]
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "location_label": {
+      "type": "string"
+    },
+    "is_favorite": {
+      "type": "boolean",
+      "default": true
+    },
+    "contact_log": {
+      "type": "array",
+      "description": "History of contacts made with this resource",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "called",
+              "visited",
+              "emailed",
+              "left_voicemail",
+              "other"
+            ]
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "follow_up_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_email",
+    "resource_name",
+    "resource_type"
+  ]
+}

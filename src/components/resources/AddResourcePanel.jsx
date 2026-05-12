@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Plus, X, Check } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
-import { TYPE_META } from "./ResourceCard";
+const TYPE_META = {
+  article: { label: "Article" },
+  video: { label: "Video" },
+  book: { label: "Book" },
+  worksheet: { label: "Worksheet" },
+  podcast: { label: "Podcast" },
+  tool: { label: "Tool" },
+};
 
 const CATEGORIES = [
   { id: "trauma", label: "Trauma Basics" },
