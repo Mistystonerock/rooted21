@@ -123,6 +123,30 @@ export const SHADOWS = {
  * Component-specific surface utilities
  * Use these to ensure consistency across the app
  */
+// Quick action card colors
+export const CARD_COLORS = {
+  sos: {
+    border: '#e74c3c',
+    icon: '#e74c3c',
+    label: '#ffffff',
+  },
+  checkin: {
+    border: '#48d17a',
+    icon: '#48d17a',
+    label: '#ffffff',
+  },
+  behavior: {
+    border: '#9b59b6',
+    icon: '#9b59b6',
+    label: '#ffffff',
+  },
+  safety: {
+    border: '#3498db',
+    icon: '#3498db',
+    label: '#ffffff',
+  },
+};
+
 export const getComponentStyle = (component, variant = 'default') => {
   const styles = {
     card: {
@@ -144,6 +168,30 @@ export const getComponentStyle = (component, variant = 'default') => {
         border: `1px solid ${SURFACES.lightCardBorder}`,
         borderRadius: '12px',
         color: TEXT.onLight,
+      },
+      sos: {
+        background: SURFACES.darkCard,
+        border: `2px solid ${CARD_COLORS.sos.border}`,
+        borderRadius: '12px',
+        color: TEXT.onDark,
+      },
+      checkin: {
+        background: SURFACES.darkCard,
+        border: `2px solid ${CARD_COLORS.checkin.border}`,
+        borderRadius: '12px',
+        color: TEXT.onDark,
+      },
+      behavior: {
+        background: SURFACES.darkCard,
+        border: `2px solid ${CARD_COLORS.behavior.border}`,
+        borderRadius: '12px',
+        color: TEXT.onDark,
+      },
+      safety: {
+        background: SURFACES.darkCard,
+        border: `2px solid ${CARD_COLORS.safety.border}`,
+        borderRadius: '12px',
+        color: TEXT.onDark,
       },
     },
     button: {
