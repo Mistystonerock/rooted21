@@ -151,9 +151,9 @@ export default function Launch() {
         {/* ── FOUNDER PHOTO ── */}
         <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.5)", marginBottom: 28 }}>
           <img
-            src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/8f5c76ea9_IMG_6975.jpg"
+            src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/2630bd419_IMG_6976.png"
             alt="Misty Stonerock"
-            style={{ width: "100%", display: "block", objectFit: "cover" }}
+            style={{ width: "100%", height: "auto", display: "block" }}
           />
         </div>
 
