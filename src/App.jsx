@@ -17,6 +17,7 @@ import AppDocs from '@/pages/AppDocs';
 import FounderAccessPortal from '@/pages/FounderAccessPortal';
 import AppSurvey from '@/pages/AppSurvey';
 import LegalPolicy from '@/pages/LegalPolicy';
+import ProfessionalGate from '@/components/rooted/ProfessionalGate';
 import SecureDocumentRepository from '@/pages/SecureDocumentRepository';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
@@ -69,6 +70,7 @@ function App() {
     <ThemeProvider>
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
+        <ProfessionalGate user={user}>
         <Router>
           <AnimatePresence mode="wait">
             <Routes>
@@ -187,6 +189,7 @@ function App() {
             </Routes>
           </AnimatePresence>
         </Router>
+        </ProfessionalGate>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
