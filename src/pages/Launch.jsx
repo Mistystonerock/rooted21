@@ -148,18 +148,27 @@ export default function Launch() {
         </div>
 
         {/* ── FOUNDER'S NOTE ── */}
-        <div style={{ background: "#fff", borderRadius: 20, padding: "24px 20px", borderLeft: `5px solid ${GREEN}`, boxShadow: "0 4px 24px rgba(0,0,0,0.3)", marginBottom: 28 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3a7a5a", marginBottom: 14 }}>A note from the founder</p>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: "#1a2a1a" }}>
-            I built this because I know what it feels like to parent from fear — and to need something that actually understood my family's journey.
+        <div style={{ background: "#fff", borderRadius: 20, padding: "28px 22px", borderLeft: `5px solid ${GREEN}`, boxShadow: "0 4px 24px rgba(0,0,0,0.3)", marginBottom: 28 }}>
+          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3a7a5a", marginBottom: 16 }}>A note from the founder</p>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a" }}>
+            I built this because I know what it feels like to parent from fear — to lie awake wondering if you did enough, said the right thing, or if tomorrow the system will decide your love isn't enough.
           </p>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: "#1a2a1a", marginTop: 10 }}>
-            Whether you're a foster parent, adoptive family, kinship caregiver, or biological parent — you deserve real tools, not judgment. You deserve to feel <em>rooted</em>.
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
+            I've sat in those court waiting rooms. I've flipped through case plans that felt like a mountain with no trail. I've had caseworker visits that left me shaking — not because I had anything to hide, but because I didn't know my rights or what I was supposed to say. Nobody handed me a guide. Nobody told me it was okay to ask for help.
           </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 18 }}>
-            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#0d2818", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🌿</div>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
+            That's exactly why Rooted 21 exists. Not to replace your caseworker, your attorney, or your therapist — but to be the calm, knowledgeable voice that shows up at 2am when none of them can. To help you document what matters, understand what's happening, and walk into every meeting a little more prepared and a little less alone.
+          </p>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
+            Whether you're a foster parent, adoptive family, kinship caregiver, or biological parent fighting for your children — you deserve real tools, not judgment. You deserve support that sees the full picture of your family, not just the paperwork. You deserve to feel <em>rooted</em>.
+          </p>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
+            Thank you for trusting us with the hardest parts of your journey. We built every feature in this app with you in mind — and we're just getting started.
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 22 }}>
+            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#0d2818", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🌿</div>
             <div>
-              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 17, fontStyle: "italic", color: "#0d2818", margin: 0 }}>Misty Stonerock</p>
+              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 18, fontStyle: "italic", color: "#0d2818", margin: 0 }}>Misty Stonerock</p>
               <p style={{ fontSize: 11, color: "#5a7a5a", marginTop: 2 }}>Founder, Rooted 21 Parenting Network</p>
             </div>
           </div>
