@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Send, RefreshCw, BookOpen, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { Send, RefreshCw, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 const CARD = "#12271a";

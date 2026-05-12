@@ -136,31 +136,53 @@ const SLIDES = [
     accent: "rgba(224,112,112,0.12)",
     features: ["Burnout guide", "Sensory toolbox", "Crisis support 988"],
   },
+  {
+    emoji: "📝",
+    title: "Form & Paperwork Helper",
+    subtitle: "Know exactly what to file — in plain English",
+    description: "Enter your zip code, tell us your situation, and we walk you through every form you need, every step, every deadline — with real examples and plain-language explanations of confusing court terms.",
+    color: "#7aaaee",
+    accent: "rgba(122,170,238,0.12)",
+    features: ["County-specific forms", "Step-by-step guidance", "Plain-language court terms"],
+  },
+  {
+    emoji: "🗺️",
+    title: "Community Resource Map",
+    subtitle: "Find help near you — by zip code",
+    description: "Search for trauma-informed therapists, foster parent support groups, food pantries, free legal aid, and crisis lines in your area. Save favorites, log every contact, and track follow-up dates.",
+    color: GREEN,
+    accent: "rgba(61,184,112,0.12)",
+    features: ["ZIP-based search", "Save & favorite", "Contact history log"],
+  },
 ];
 
 export default function FeatureShowcase() {
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
-  const intervalRef = useRef(null);
+  const playingRef = useRef(true);
   const progressRef = useRef(null);
-  const SLIDE_DURATION = 5000; // ms per slide
+  const SLIDE_DURATION = 5000;
   const TICK = 50;
+  const INCREMENT = (TICK / SLIDE_DURATION) * 100;
 
   useEffect(() => {
-    if (playing) {
-      progressRef.current = setInterval(() => {
-        setProgress(p => {
-          if (p >= 100) {
-            setCurrent(c => (c + 1) % SLIDES.length);
-            return 0;
-          }
-          return p + (TICK / SLIDE_DURATION) * 100;
-        });
-      }, TICK);
-    }
+    playingRef.current = playing;
+  }, [playing]);
+
+  useEffect(() => {
+    progressRef.current = setInterval(() => {
+      if (!playingRef.current) return;
+      setProgress(p => {
+        if (p + INCREMENT >= 100) {
+          setCurrent(c => (c + 1) % SLIDES.length);
+          return 0;
+        }
+        return p + INCREMENT;
+      });
+    }, TICK);
     return () => clearInterval(progressRef.current);
-  }, [playing, current]);
+  }, []); // single stable interval — never restarts
 
   function goTo(i) {
     setCurrent(i);

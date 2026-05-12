@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Search, Loader2, Heart, RefreshCw, SlidersHorizontal } from "lucide-react";
+import { MapPin, Search, Loader2, RefreshCw } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import BottomNav from "@/components/rooted/BottomNav";
-import ResourceCard from "@/components/resources/ResourceCard";
+import ResourceCard from "@/components/resources/CommunityResourceCard";
 
 const BG = "#0b1f12";
 const CARD = "#12271a";
