@@ -8,6 +8,7 @@ import ConflictLanguageChecker from "@/components/messaging/ConflictLanguageChec
 import TensionAlert from "@/components/messaging/TensionAlert";
 import VoiceCallButton from "@/components/coparenting/VoiceCallButton";
 import CoParentingCallHistory from "@/components/coparenting/CoParentingCallHistory";
+import CourtReportGenerator from "@/components/coparenting/CourtReportGenerator";
 
 const TOPICS = ["schedule", "health", "education", "behavior", "finances", "general"];
 
@@ -296,6 +297,18 @@ export default function CoParentMessaging() {
             tensionLevel={tensionAnalysis.tensionLevel}
             suggestions={tensionAnalysis.suggestions}
             onDismiss={() => setTensionAnalysis(null)}
+          />
+        </div>
+      )}
+
+      {/* Court Report Generator */}
+      {activeTab === "calls" && (
+        <div className="px-4 py-3 sticky top-[56px] z-10" style={{ background: C.white, borderBottom: `1px solid ${C.cream}` }}>
+          <CourtReportGenerator 
+            partnershipId={partnershipId}
+            childName={partnership?.child_name}
+            messagesCount={messages.length}
+            callsCount={calls.length}
           />
         </div>
       )}
