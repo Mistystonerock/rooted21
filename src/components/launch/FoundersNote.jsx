@@ -136,7 +136,7 @@ export default function FoundersNote() {
           }}>"</span>
           <p style={{
             fontSize: "clamp(13px, 3.8vw, 16px)",
-            lineHeight: 1.7, color: "#1a2a1a", fontStyle: "italic", fontWeight: 500,
+            lineHeight: 1.7, color: "#000000", fontStyle: "italic", fontWeight: 500,
           }}>
             Healing our past.<br />
             Strengthening our present.<br />
