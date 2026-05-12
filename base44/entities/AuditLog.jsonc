@@ -1,0 +1,58 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "description": "Type of action performed (case_data_accessed, case_assigned, document_uploaded, etc.)"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who performed the action"
+    },
+    "user_role": {
+      "type": "string",
+      "description": "Role of the user at time of action"
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Case ID involved (if applicable)"
+    },
+    "resource_type": {
+      "type": "string",
+      "description": "Type of resource accessed (case, document, note, etc.)"
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "ID of the specific resource accessed"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the action occurred"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address of the requester"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "denied",
+        "error"
+      ],
+      "default": "success",
+      "description": "Whether the action was successful"
+    },
+    "details": {
+      "type": "string",
+      "description": "Additional details about the action"
+    }
+  },
+  "required": [
+    "action",
+    "user_email",
+    "timestamp"
+  ]
+}

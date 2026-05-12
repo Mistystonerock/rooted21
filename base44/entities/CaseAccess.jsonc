@@ -1,0 +1,87 @@
+{
+  "name": "CaseAccess",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the CaseFile this access record is for"
+    },
+    "assigned_email": {
+      "type": "string",
+      "description": "Email of the person who has been assigned to this case (parent, therapist, caseworker, etc.)"
+    },
+    "assigned_name": {
+      "type": "string",
+      "description": "Full name of the assigned person"
+    },
+    "assigned_role": {
+      "type": "string",
+      "enum": [
+        "parent",
+        "therapist",
+        "caseworker",
+        "casa",
+        "gal",
+        "attorney",
+        "school_counselor",
+        "judge",
+        "admin",
+        "professional"
+      ],
+      "description": "Role of the person assigned to this case"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child this case is for (for quick reference)"
+    },
+    "case_number": {
+      "type": "string",
+      "description": "Reference number of the case"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "view_case",
+          "edit_case",
+          "add_notes",
+          "add_clinical_notes",
+          "add_professional_notes",
+          "manage_documents",
+          "view_child_data",
+          "manage_team"
+        ]
+      },
+      "description": "Specific permissions granted for this case assignment"
+    },
+    "assigned_by": {
+      "type": "string",
+      "description": "Email of the admin/founder who created this access record"
+    },
+    "assigned_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this person was assigned to the case"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this access assignment is currently active"
+    },
+    "removed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When access was revoked (if applicable)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Admin notes about this access assignment"
+    }
+  },
+  "required": [
+    "case_id",
+    "assigned_email",
+    "assigned_role"
+  ]
+}
