@@ -1,15 +1,15 @@
 export const C = {
-  darkGreen: "#0a3d20",
-  midGreen: "#1a6b3a",
-  lightGreen: "#4a9e6a",
-  brown: "#8B5E34",
-  cream: "#f5e6c8",
-  offWhite: "#0d5c2a",
-  darkText: "#f5e6c8",
-  warmText: "#f0c86a",
-  mutedText: "rgba(245,230,200,0.65)",
-  white: "#0d4f2a",
-  gold: "#c9973a",
+  darkGreen: "#060d08",
+  midGreen: "#0c1610",
+  lightGreen: "#4ade80",
+  brown: "#f59e0b",
+  cream: "#e5e5e5",
+  offWhite: "#0c1610",
+  darkText: "#e5e5e5",
+  warmText: "#f59e0b",
+  mutedText: "#808080",
+  white: "#1a1a1a",
+  gold: "#f59e0b",
 };
 
 export const BEHAVIORS = [
