@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import { Share2, Copy, Check, Download } from "lucide-react";
 
 const RIGHTS = [
   {
@@ -87,8 +88,29 @@ const RIGHTS = [
 
 export default function RightsCard() {
   const [active, setActive] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   const card = RIGHTS[active];
+
+  const shareText = `📋 Know Your Rights — ${card.situation}\n\n${card.rights.map((r, i) => `${i + 1}. ${r}`).join("\n")}\n\n💬 What to say: "${card.tip}"\n\n— Shared from Rooted 21 Parenting Network`;
+
+  function handleCopy() {
+    navigator.clipboard.writeText(shareText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  }
+
+  function handleShare() {
+    if (navigator.share) {
+      navigator.share({
+        title: `Your Rights: ${card.situation} — Rooted 21`,
+        text: shareText,
+      });
+    } else {
+      handleCopy();
+    }
+  }
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -142,6 +164,26 @@ export default function RightsCard() {
             <div className="rounded-xl p-3 mt-2" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
               <p className="text-[10px] font-bold mb-1" style={{ color: card.color }}>💬 SAY THIS:</p>
               <p className="text-xs italic leading-relaxed" style={{ color: C.darkGreen }}>{card.tip}</p>
+            </div>
+
+            {/* Share / Copy bar */}
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={handleShare}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs"
+                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+              >
+                <Share2 size={14} />
+                Share This with a Parent
+              </button>
+              <button
+                onClick={handleCopy}
+                className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl font-bold text-xs"
+                style={{ background: copied ? "#4A9E6A" : C.cream, color: copied ? "#fff" : C.darkGreen, border: "none", cursor: "pointer", transition: "all 0.2s" }}
+              >
+                {copied ? <Check size={14} /> : <Copy size={14} />}
+                {copied ? "Copied!" : "Copy"}
+              </button>
             </div>
           </div>
         </div>

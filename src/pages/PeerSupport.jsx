@@ -5,7 +5,22 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import PostCard from "@/components/community/PostCard";
 import NewPostForm from "@/components/community/NewPostForm";
 import PeerMatchPanel from "@/components/community/PeerMatchPanel";
-import { Plus, Users, Sparkles } from "lucide-react";
+import { Plus, Users, Sparkles, Flame, MessageCircle } from "lucide-react";
+
+const DAILY_PROMPTS = [
+  "What's one thing your child did this week that surprised you in a good way? 💚",
+  "What regulation strategy are you leaning on most right now? Share it — someone else needs it.",
+  "What's something you wish your caseworker understood about your child?",
+  "Drop one win from this week, no matter how small. We're celebrating all of them. 🎉",
+  "What did you try this week that didn't work? (Sharing what fails helps others too.)",
+  "If you could tell a brand-new foster parent one thing, what would it be?",
+  "What's a resource, book, or technique that actually helped your family?",
+];
+
+function getDailyPrompt() {
+  const day = new Date().getDay();
+  return DAILY_PROMPTS[day % DAILY_PROMPTS.length];
+}
 
 export const TOPICS = {
   trauma_parenting: { label: "Trauma Parenting", emoji: "🧠", color: C.midGreen },
@@ -27,11 +42,32 @@ export default function PeerSupport() {
   const [activeTab, setActiveTab] = useState("feed"); // feed | match
   const [showNewPost, setShowNewPost] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [promptDismissed, setPromptDismissed] = useState(false);
+  const [streak, setStreak] = useState(0);
+
+  const dailyPrompt = getDailyPrompt();
 
   useEffect(() => {
     base44.auth.me().then(u => {
       setUser(u);
       loadPosts();
+      // Calculate streak from localStorage
+      const lastVisit = localStorage.getItem("peer_last_visit");
+      const streakCount = parseInt(localStorage.getItem("peer_streak") || "0");
+      const today = new Date().toDateString();
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      if (lastVisit === today) {
+        setStreak(streakCount);
+      } else if (lastVisit === yesterday) {
+        const newStreak = streakCount + 1;
+        localStorage.setItem("peer_streak", newStreak);
+        localStorage.setItem("peer_last_visit", today);
+        setStreak(newStreak);
+      } else {
+        localStorage.setItem("peer_streak", 1);
+        localStorage.setItem("peer_last_visit", today);
+        setStreak(1);
+      }
     });
   }, []);
 
@@ -89,6 +125,41 @@ export default function PeerSupport() {
 
         {activeTab === "feed" && (
           <div className="px-4 py-4 space-y-4">
+
+            {/* Streak badge */}
+            {streak > 0 && (
+              <div className="flex items-center justify-between rounded-xl px-4 py-2.5" style={{ background: "rgba(201,151,58,0.12)", border: "1px solid rgba(201,151,58,0.3)" }}>
+                <div className="flex items-center gap-2">
+                  <Flame size={16} color={C.gold} />
+                  <p className="text-xs font-bold" style={{ color: C.gold }}>{streak}-day community streak</p>
+                </div>
+                <p className="text-[10px]" style={{ color: C.mutedText }}>Keep showing up 💚</p>
+              </div>
+            )}
+
+            {/* Daily Prompt */}
+            {!promptDismissed && (
+              <div className="rounded-xl p-4" style={{ background: C.darkGreen, border: `1px solid ${C.gold}30` }}>
+                <p className="text-[10px] font-bold mb-1.5" style={{ color: C.gold }}>💬 TODAY'S COMMUNITY PROMPT</p>
+                <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{dailyPrompt}</p>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => { setPromptDismissed(true); setShowNewPost(true); }}
+                    className="flex-1 py-2.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5"
+                    style={{ background: C.gold, color: C.darkGreen, border: "none", cursor: "pointer" }}
+                  >
+                    <MessageCircle size={13} /> Respond
+                  </button>
+                  <button
+                    onClick={() => setPromptDismissed(true)}
+                    className="px-3 py-2.5 rounded-lg text-xs"
+                    style={{ background: "rgba(255,255,255,0.1)", color: C.lightGreen, border: "none", cursor: "pointer" }}
+                  >
+                    Skip
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* New post button */}
             {!showNewPost && (
