@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
+import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import { Sparkles, ChevronRight } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
@@ -217,6 +218,15 @@ export default function Launch() {
               <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.07em", color: "#5a7a5a", textTransform: "uppercase" }}>Rooted 21 Parenting Network</p>
             </div>
           </div>
+        </div>
+
+        {/* ── APP TOUR ── */}
+        <div style={{ marginBottom: 28 }}>
+          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>See it in action</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.25 }}>
+            Everything inside Rooted 21
+          </h2>
+          <FeatureShowcase />
         </div>
 
         {/* ── WHAT WE HELP WITH ── */}
