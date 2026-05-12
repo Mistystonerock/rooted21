@@ -15,6 +15,7 @@ import FeatureLockGate from '@/components/rooted/FeatureLockGate';
 import FounderDashboard from '@/pages/FounderDashboard';
 import AppDocs from '@/pages/AppDocs';
 import FounderAccessPortal from '@/pages/FounderAccessPortal';
+import FounderAdminManagement from '@/pages/FounderAdminManagement';
 import AppSurvey from '@/pages/AppSurvey';
 import LegalPolicy from '@/pages/LegalPolicy';
 import ProfessionalGate from '@/components/rooted/ProfessionalGate';
@@ -180,6 +181,7 @@ function App() {
               <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><FounderDashboard /></Suspense>} />
               <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
+              <Route path="/founder-admin-management" element={<Suspense fallback={<LoadingFallback />}><FounderAdminManagement /></Suspense>} />
               <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />
               <Route path="/legal-policy" element={<Suspense fallback={<LoadingFallback />}><LegalPolicy /></Suspense>} />
               <Route path="/privacy-policy" element={<Suspense fallback={<LoadingFallback />}><PrivacyPolicy /></Suspense>} />
