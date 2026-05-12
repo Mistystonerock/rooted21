@@ -55,6 +55,7 @@ const TILES = [
   { to: "/care-calendar", emoji: null, icon: <CalendarDays size={20} color={GREEN} />, label: "Care Calendar", sub: "Shared family events", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/sensory-toolbox", emoji: "🧠", icon: null, label: "Sensory Toolbox", sub: "3-min regulation activities", accent: "#1a1535", border: "#a09ef030" },
   { to: "/emergency-toolbox", emoji: "🚨", icon: null, label: "Emergency Toolbox", sub: "Real-time crisis strategies", accent: "#2a0a0a", border: "#c0392b40", text: "#ff8070" },
+  { to: "/anger-management", emoji: "😤", icon: null, label: "Anger Management", sub: "Calm, tools & groups", accent: "#2a1005", border: "#e0702030", text: "#ff9060" },
   { to: "/child-profiles", emoji: "🧒", icon: null, label: "Child Profiles", sub: "Personalize AI insights", accent: "#0e2a1a", border: `${GREEN}20` },
   { to: "/growth-insights", emoji: "🌱", icon: null, label: "Growth Insights", sub: "AI weekly behavior reports", accent: "#0e2a1a", border: `${GREEN}40` },
   { to: "/behavioral-trends", emoji: "📈", icon: null, label: "Behavioral Trends", sub: "Visual progress charts", accent: "#1a1535", border: "#a09ef030" },
