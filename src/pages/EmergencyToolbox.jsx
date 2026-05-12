@@ -615,16 +615,64 @@ export default function EmergencyToolbox() {
               </div>
             </div>
 
-            {/* Emergency Alert */}
-            <EmergencyAlertButton variant="full" />
+            {/* CRITICAL ESCALATION BANNER */}
+             <div className="rounded-2xl p-4 flex gap-3" style={{ background: "#C0392B", border: "2px solid #A93223" }}>
+               <span className="text-2xl flex-shrink-0">🚨</span>
+               <div>
+                 <p className="font-bold text-xs mb-1" style={{ color: "#fff" }}>IF A CHILD IS IN IMMEDIATE DANGER</p>
+                 <p className="text-[11px] leading-relaxed mb-2" style={{ color: "#FFE0DE" }}>
+                   Call emergency services immediately. This app is support, not emergency response.
+                 </p>
+                 <div className="flex gap-2">
+                   <a href="tel:911" className="flex-1 py-2.5 rounded-xl font-bold text-xs text-center"
+                     style={{ background: "#fff", color: "#C0392B", textDecoration: "none", cursor: "pointer" }}>
+                     📞 Call 911
+                   </a>
+                 </div>
+               </div>
+             </div>
 
-            {/* Crisis line */}
-            <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: C.cream }}>
-              <Zap size={14} color={C.brown} className="flex-shrink-0" />
-              <p className="text-[11px]" style={{ color: C.darkGreen }}>
-                In immediate danger? Call <strong>911</strong>. Mental health crisis? Call or text <strong>988</strong>.
-              </p>
-            </div>
+             {/* Emergency Alert */}
+             <EmergencyAlertButton variant="full" />
+
+             {/* Crisis hotlines with direct call buttons */}
+             <div className="space-y-2">
+               <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8" }}>
+                 <Zap size={14} color="#C0392B" className="flex-shrink-0" />
+                 <div className="flex-1 min-w-0">
+                   <p className="text-[11px] font-bold" style={{ color: "#B84C2A" }}>Mental Health Crisis</p>
+                   <p className="text-[10px] mt-0.5" style={{ color: "#3a3028" }}>Call or text for immediate support</p>
+                 </div>
+                 <a href="tel:988" className="px-3 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap"
+                   style={{ background: "#B84C2A", color: "#fff", textDecoration: "none", cursor: "pointer" }}>
+                   988
+                 </a>
+               </div>
+
+               <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#EEF4FB", border: "1.5px solid #BDD0E8" }}>
+                 <Zap size={14} color="#5B8DB8" className="flex-shrink-0" />
+                 <div className="flex-1 min-w-0">
+                   <p className="text-[11px] font-bold" style={{ color: "#5B8DB8" }}>Suicide Prevention</p>
+                   <p className="text-[10px] mt-0.5" style={{ color: "#3a3028" }}>988 Lifeline: anytime, free, confidential</p>
+                 </div>
+                 <a href="tel:988" className="px-3 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap"
+                   style={{ background: "#5B8DB8", color: "#fff", textDecoration: "none", cursor: "pointer" }}>
+                   Call
+                 </a>
+               </div>
+
+               <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#F5EFE6", border: "1.5px solid #DDC9B0" }}>
+                 <Zap size={14} color="#8E6B3E" className="flex-shrink-0" />
+                 <div className="flex-1 min-w-0">
+                   <p className="text-[11px] font-bold" style={{ color: "#8E6B3E" }}>Abuse or Neglect</p>
+                   <p className="text-[10px] mt-0.5" style={{ color: "#3a3028" }}>Report to Ohio child services: 1-855-OH-CHILD</p>
+                 </div>
+                 <a href="tel:1-855-642-4453" className="px-3 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap"
+                   style={{ background: "#8E6B3E", color: "#fff", textDecoration: "none", cursor: "pointer" }}>
+                   Call
+                 </a>
+               </div>
+             </div>
           </>
         ) : (
           <>
