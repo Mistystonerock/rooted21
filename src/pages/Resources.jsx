@@ -29,6 +29,18 @@ const RESOURCES = [
     ]
   },
   {
+    section: "🏠 Basic Needs & Emergency Assistance",
+    items: [
+      { title: "Food Assistance (SNAP / Food Banks)", desc: "Find your local food bank or apply for SNAP benefits at benefits.gov", url: "https://www.benefits.gov/benefit/361", type: "basic" },
+      { title: "Housing & Rental Assistance", desc: "HUD housing resources — emergency rental aid, shelter locator, and housing programs", url: "https://www.hud.gov/topics/rental_assistance", type: "basic" },
+      { title: "National Domestic Violence Hotline", desc: "Call 1-800-799-7233 or text START to 88788 — 24/7 safe, confidential support", url: "tel:18007997233", type: "crisis" },
+      { title: "Substance Abuse Helpline (SAMHSA)", desc: "Call 1-800-662-4357 — Free, confidential treatment referrals 24/7", url: "tel:18006624357", type: "crisis" },
+      { title: "Legal Aid Near You", desc: "Free civil legal help for low-income families — find your local office", url: "https://www.lawhelp.org", type: "basic" },
+      { title: "Transportation Assistance", desc: "Find Medicaid transportation, community rides, and transit aid programs in your area", url: "https://www.needhelppayingbills.com/html/transportation_assistance.html", type: "basic" },
+      { title: "Utility Bill Assistance (LIHEAP)", desc: "Low Income Home Energy Assistance Program — help paying heating and cooling bills", url: "https://www.acf.hhs.gov/ocs/programs/liheap", type: "basic" },
+    ]
+  },
+  {
     section: "💼 Job & Career Resources",
     items: [
       { title: "Job & Career Hub", desc: "Job boards, free training, benefits assistance, resume tools & foster family resources", url: "/job-resources", type: "tool" },
@@ -48,6 +60,7 @@ const TYPE_COLORS = {
   tool: C.brown,
   crisis: "#B84C2A",
   agency: C.darkGreen,
+  basic: "#1A5FAD",
 };
 
 export default function Resources() {
