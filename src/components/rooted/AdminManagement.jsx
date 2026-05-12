@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Shield, Trash2, Edit2, Plus, CheckCircle2, AlertCircle } from "lucide-react";
+import { Shield, Trash2, Edit2, Plus, CheckCircle2, AlertCircle, Copy, XCircle } from "lucide-react";
 
 const PERMISSION_OPTIONS = [
   { value: "view_all_data", label: "View All Data" },
@@ -15,13 +15,22 @@ const PERMISSION_OPTIONS = [
 
 export default function AdminManagement() {
   const [admins, setAdmins] = useState([]);
+  const [accessCodes, setAccessCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [error, setError] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [newCodeName, setNewCodeName] = useState("");
+  const [showCodeForm, setShowCodeForm] = useState(false);
+  const [activeTab, setActiveTab] = useState("codes");
 
   useEffect(() => {
-    base44.entities.AdminPermissions.list("-created_date", 100).then(list => {
-      setAdmins(list);
+    Promise.all([
+      base44.entities.AdminPermissions.list("-created_date", 100),
+      base44.entities.AdminAccessCode.list("-created_date", 100),
+    ]).then(([adminList, codeList]) => {
+      setAdmins(adminList);
+      setAccessCodes(codeList);
       setLoading(false);
     });
   }, []);
@@ -41,34 +50,208 @@ export default function AdminManagement() {
     setAdmins(prev => prev.filter(a => a.id !== adminId));
   }
 
+  async function handleGenerateCode() {
+    setGenerating(true);
+    setError(null);
+    try {
+      const response = await base44.functions.invoke('generateAdminAccessCode', {
+        created_for: newCodeName.trim() || null,
+      });
+      setAccessCodes(prev => [response, ...prev]);
+      setNewCodeName("");
+      setShowCodeForm(false);
+    } catch (err) {
+      setError("Failed to generate code. Try again.");
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  async function handleRevokeCode(codeId) {
+    if (!confirm("Revoke this access code? It will no longer work.")) return;
+    try {
+      await base44.functions.invoke('revokeAdminAccessCode', { codeId });
+      setAccessCodes(prev => prev.map(c => c.id === codeId ? { ...c, used: true, used_by: 'revoked' } : c));
+    } catch (err) {
+      setError("Failed to revoke code.");
+    }
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+  }
+
   if (loading) {
     return <div style={{ textAlign: "center", padding: "20px" }}>Loading admins...</div>;
   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl p-4" style={{ background: C.cream }}>
-        <div className="flex items-center gap-2 mb-2">
-          <Shield size={16} color={C.midGreen} />
-          <p className="font-bold" style={{ color: C.darkGreen }}>Admin Permissions</p>
-        </div>
-        <p className="text-[10px] leading-relaxed" style={{ color: C.mutedText }}>
-          Control what each admin can access. Admins can only view and manage features you explicitly grant.
-        </p>
+      {/* Tabs */}
+      <div className="flex gap-1 border-b" style={{ borderColor: C.cream }}>
+        {["codes", "admins"].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className="flex-1 py-2 text-xs font-bold capitalize border-b-2 transition-colors"
+            style={{
+              borderColor: activeTab === tab ? C.darkGreen : "transparent",
+              color: activeTab === tab ? C.darkGreen : C.mutedText,
+              background: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            {tab === "codes" ? "🔑 Access Codes" : "👥 Admin Permissions"}
+          </button>
+        ))}
       </div>
 
-      {error && (
-        <div className="flex gap-2 p-3 rounded-lg" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
-          <AlertCircle size={14} color="#B84C2A" />
-          <p className="text-xs" style={{ color: "#B84C2A" }}>{error}</p>
+      {activeTab === "codes" && (
+        <div className="space-y-4">
+          <div className="rounded-2xl p-4" style={{ background: C.cream }}>
+            <div className="flex items-center gap-2 mb-2">
+              <Shield size={16} color={C.midGreen} />
+              <p className="font-bold" style={{ color: C.darkGreen }}>6-Digit Admin Access Codes</p>
+            </div>
+            <p className="text-[10px] leading-relaxed" style={{ color: C.mutedText }}>
+              Generate unique codes for professionals to redeem and gain admin access. Codes expire after 30 days.
+            </p>
+          </div>
+
+          {!showCodeForm ? (
+            <button
+              onClick={() => setShowCodeForm(true)}
+              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed"
+              style={{ borderColor: C.midGreen, background: "transparent", cursor: "pointer" }}
+            >
+              <Plus size={16} color={C.midGreen} />
+              <span style={{ color: C.midGreen, fontWeight: 700, fontSize: 13 }}>Generate New Code</span>
+            </button>
+          ) : (
+            <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+              <p className="text-[10px] font-bold mb-2" style={{ color: C.mutedText }}>Created for (optional)</p>
+              <input
+                type="text"
+                value={newCodeName}
+                onChange={e => setNewCodeName(e.target.value)}
+                placeholder="e.g., Sarah Johnson, Family Therapist"
+                className="w-full px-3 py-2 rounded-lg text-sm mb-3 border outline-none"
+                style={{ borderColor: C.cream, background: C.offWhite }}
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={handleGenerateCode}
+                  disabled={generating}
+                  className="flex-1 py-2 px-3 rounded-lg font-bold text-sm"
+                  style={{ background: C.midGreen, color: "#fff", border: "none", cursor: "pointer", opacity: generating ? 0.6 : 1 }}
+                >
+                  {generating ? "Generating..." : "Generate Code"}
+                </button>
+                <button
+                  onClick={() => { setShowCodeForm(false); setNewCodeName(""); }}
+                  className="flex-1 py-2 px-3 rounded-lg font-bold text-sm"
+                  style={{ background: C.offWhite, color: C.mutedText, border: "none", cursor: "pointer" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {accessCodes.length === 0 ? (
+            <p className="text-xs text-center" style={{ color: C.mutedText }}>No codes generated yet</p>
+          ) : (
+            <div className="space-y-2">
+              {accessCodes.map(code => {
+                const isExpired = new Date(code.expires_at) < new Date();
+                const isRevoked = code.used && code.used_by === 'revoked';
+                return (
+                  <div key={code.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-2xl font-black tracking-wider" style={{ color: C.darkGreen, fontFamily: "monospace" }}>
+                            {code.code}
+                          </p>
+                          <button
+                            onClick={() => copyToClipboard(code.code)}
+                            className="p-1.5 rounded-lg"
+                            style={{ background: C.offWhite, border: "none", cursor: "pointer" }}
+                            title="Copy code"
+                          >
+                            <Copy size={12} color={C.midGreen} />
+                          </button>
+                        </div>
+                        {code.created_for && (
+                          <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>For: {code.created_for}</p>
+                        )}
+                        <p className="text-[9px] mt-1" style={{ color: C.mutedText }}>
+                          Created {new Date(code.created_date).toLocaleDateString()} • 
+                          Expires {new Date(code.expires_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        {isRevoked ? (
+                          <span className="text-[9px] px-2 py-1 rounded-full font-bold" style={{ background: "#F4C9B8", color: "#B84C2A" }}>
+                            REVOKED
+                          </span>
+                        ) : code.used ? (
+                          <span className="text-[9px] px-2 py-1 rounded-full font-bold" style={{ background: C.offWhite, color: C.midGreen }}>
+                            ✓ USED
+                          </span>
+                        ) : isExpired ? (
+                          <span className="text-[9px] px-2 py-1 rounded-full font-bold" style={{ background: "#F4C9B8", color: "#B84C2A" }}>
+                            EXPIRED
+                          </span>
+                        ) : (
+                          <span className="text-[9px] px-2 py-1 rounded-full font-bold" style={{ background: "#E8F5E9", color: C.midGreen }}>
+                            ACTIVE
+                          </span>
+                        )}
+                        {!isRevoked && !code.used && !isExpired && (
+                          <button
+                            onClick={() => handleRevokeCode(code.id)}
+                            className="p-1.5 rounded-lg"
+                            style={{ background: "#FEF3EE", border: "none", cursor: "pointer" }}
+                            title="Revoke code"
+                          >
+                            <XCircle size={12} color="#B84C2A" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
-      {admins.length === 0 ? (
-        <p className="text-xs text-center" style={{ color: C.mutedText }}>No admins created yet</p>
-      ) : (
-        <div className="space-y-2">
-          {admins.map(admin => (
+      {activeTab === "admins" && (
+        <div className="space-y-4">
+          <div className="rounded-2xl p-4" style={{ background: C.cream }}>
+            <div className="flex items-center gap-2 mb-2">
+              <Shield size={16} color={C.midGreen} />
+              <p className="font-bold" style={{ color: C.darkGreen }}>Admin Permissions</p>
+            </div>
+            <p className="text-[10px] leading-relaxed" style={{ color: C.mutedText }}>
+              Control what each admin can access. Admins can only view and manage features you explicitly grant.
+            </p>
+          </div>
+
+          {error && (
+            <div className="flex gap-2 p-3 rounded-lg" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
+              <AlertCircle size={14} color="#B84C2A" />
+              <p className="text-xs" style={{ color: "#B84C2A" }}>{error}</p>
+            </div>
+          )}
+
+          {admins.length === 0 ? (
+            <p className="text-xs text-center" style={{ color: C.mutedText }}>No admins created yet</p>
+          ) : (
+            <div className="space-y-2">
+              {admins.map(admin => (
             <div key={admin.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div>
@@ -131,8 +314,10 @@ export default function AdminManagement() {
               )}
             </div>
           ))}
-        </div>
-      )}
-    </div>
-  );
-}
+            </div>
+          )}
+          </div>
+          )}
+          </div>
+          );
+          }
