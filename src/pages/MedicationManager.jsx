@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Plus, Pill, Trash2, Phone, AlertCircle } from "lucide-react";
+import { Plus, Pill, Trash2, Phone, AlertCircle, ClipboardList, BarChart2 } from "lucide-react";
+import DoseLogger from "@/components/medication/DoseLogger";
+import MedBehaviorDashboard from "@/components/medication/MedBehaviorDashboard";
 
 const BLANK = {
   child_name: "", medication_name: "", dosage: "",
@@ -26,6 +28,7 @@ export default function MedicationManager() {
   const [form, setForm] = useState(BLANK);
   const [saving, setSaving] = useState(false);
   const [activeOnly, setActiveOnly] = useState(true);
+  const [tab, setTab] = useState("meds"); // meds | doses | insights
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -75,8 +78,36 @@ export default function MedicationManager() {
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader title="Medication Manager" subtitle="Track prescriptions & refills" backTo="/dashboard" />
 
+      {/* Tab Bar */}
+      <div className="flex border-b sticky top-[64px] z-10" style={{ background: C.darkGreen }}>
+        {[
+          { key: "meds", label: "Medications", icon: <Pill size={14} /> },
+          { key: "doses", label: "Dose Log", icon: <ClipboardList size={14} /> },
+          { key: "insights", label: "Insights", icon: <BarChart2 size={14} /> },
+        ].map(t => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className="flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-bold transition-all"
+            style={{
+              background: "transparent",
+              border: "none",
+              borderBottom: tab === t.key ? `2.5px solid ${C.gold}` : "2.5px solid transparent",
+              color: tab === t.key ? C.gold : C.mutedText,
+              cursor: "pointer",
+            }}
+          >
+            {t.icon} {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="max-w-[540px] mx-auto px-4 py-4 space-y-4">
 
+        {tab === "doses" && <DoseLogger user={user} meds={meds} />}
+        {tab === "insights" && <MedBehaviorDashboard user={user} meds={meds} />}
+
+        {tab === "meds" && <>
         {/* Refill alert */}
         {soonRefills.length > 0 && (
           <div className="rounded-xl p-3 flex gap-3 items-start" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8" }}>
@@ -263,6 +294,7 @@ export default function MedicationManager() {
           ))}
         </div>
         <div className="pb-8" />
+        </>}
       </div>
     </div>
   );
