@@ -1,15 +1,26 @@
+import { SURFACES, TEXT } from './design-system.js';
+
 export const C = {
+  // Surface colors (for backgrounds)
   darkGreen: "#060d08",
   midGreen: "#0c1610",
-  lightGreen: "#4ade80",
+  lightGreen: "#48d17a",
+  darkGreenElevated: "#132d1f",
+  cream: "#f5e6c8",
+  offWhite: "#f5e6c8",
+  white: "#ffffff",
+  gold: "#c9973a",
   brown: "#f59e0b",
-  cream: "#e5e5e5",
-  offWhite: "#0c1610",
-  darkText: "#e5e5e5",
-  warmText: "#f59e0b",
-  mutedText: "#808080",
-  white: "#1a1a1a",
-  gold: "#f59e0b",
+  
+  // Text colors - DEPRECATED, use TEXT from design-system instead
+  // Kept for backwards compatibility during migration
+  darkText: TEXT.onDark,
+  mutedText: TEXT.onDarkSecondary,
+  warmText: TEXT.accentSecondary,
+  
+  // Direct design system access
+  surfaces: SURFACES,
+  text: TEXT,
 };
 
 export const BEHAVIORS = [

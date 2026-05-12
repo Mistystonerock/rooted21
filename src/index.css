@@ -185,69 +185,13 @@
   50% { box-shadow: 0 0 0 12px rgba(201,151,58,0); }
 }
 
-/* ── Global Readability Overrides ── */
+/* ── Semantic Design System ── */
+/* No global text color overrides. Components must specify text colors explicitly. */
 * {
   text-shadow: none !important;
 }
 
-body, p, span, div, label, button, a {
-  color: #e5e5e5;
-}
-
-h1, h2, h3, h4, h5, h6,
-.card-title,
-.resource-title,
-.feature-title,
-.section-title {
-  color: #f5f5f5 !important;
-  font-weight: 700 !important;
-  font-family: Georgia, serif;
-}
-
-.subtitle,
-.description,
-.muted,
-.resource-description,
-.card-description {
-  color: #a0a0a0 !important;
-}
-
-.card,
-.resource-card,
-.feature-card {
-  background: #0c1610 !important;
-  border: 1.5px solid rgba(74, 222, 128, 0.25) !important;
-}
-
-.chip,
-.category-chip,
-.filter-chip {
-  color: #060d08 !important;
-  background: #4ade80 !important;
-}
-
-.chip.active,
-.category-chip.active,
-.filter-chip.active {
-  color: #f5f5f5 !important;
-  background: #16a34a !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #666666 !important;
-  opacity: 1;
-}
-
-/* Ensure dark text only on explicitly light backgrounds */
-.bg-white, .bg-cream, [class*="bg-amber"], [class*="bg-yellow"] {
-  color: #060d08 !important;
-}
-.bg-white *, .bg-cream *, [class*="bg-amber"] *, [class*="bg-yellow"] * {
-  color: #060d08 !important;
-}
-
-/* Premium glow effect on cards */
-.card, .resource-card, .feature-card {
-  box-shadow: 0 0 20px rgba(74, 222, 128, 0.08), 0 0 1px rgba(74, 222, 128, 0.2) !important;
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
