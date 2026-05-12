@@ -45,6 +45,7 @@ import TermsOfService from '@/pages/TermsOfService';
 import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
+import ResourceMatcher from '@/components/resources/ResourceMatcher';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -179,6 +180,7 @@ function App() {
               <Route path="/crisis-disclaimer" element={<Suspense fallback={<LoadingFallback />}><CrisisDisclaimer /></Suspense>} />
               <Route path="/ai-disclaimer" element={<Suspense fallback={<LoadingFallback />}><AIDisclaimer /></Suspense>} />
               <Route path="/data-use-policy" element={<Suspense fallback={<LoadingFallback />}><DataUsePolicy /></Suspense>} />
+              <Route path="/resource-matcher" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ResourceMatcher /></FeatureLockGate></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
