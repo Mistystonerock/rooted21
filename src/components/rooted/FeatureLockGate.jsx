@@ -6,9 +6,10 @@ const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
 export default function FeatureLockGate({ children, user }) {
   const isLaunched = new Date() >= LAUNCH_DATE;
   const isFounder = user?.role === "founder";
+  const isAdmin = user?.role === "admin";
+  const isAllowedBeta = user?.email === "fish_hunter15@hotmail.com";
 
-  // Founders bypass the lock, or if already launched
-  if (isFounder || isLaunched) {
+  if (isFounder || isAdmin || isAllowedBeta || isLaunched) {
     return children;
   }
 
