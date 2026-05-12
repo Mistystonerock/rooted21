@@ -5,12 +5,14 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Plus, Calendar } from "lucide-react";
 import BehaviorLogForm from "@/components/behavior/BehaviorLogForm";
 import BehaviorLogCard from "@/components/behavior/BehaviorLogCard";
+import BehaviorResourceRecommendations from "@/components/behavior/BehaviorResourceRecommendations";
 
 export default function BehaviorLogs() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedChild, setSelectedChild] = useState(null);
 
   useEffect(() => {
     loadLogs();
@@ -20,6 +22,11 @@ export default function BehaviorLogs() {
     setLoading(true);
     const allLogs = await base44.entities.BehaviorLog.list("-created_date", 100);
     setLogs(allLogs);
+    // Auto-select first child if available
+    if (allLogs.length > 0 && !selectedChild) {
+      const firstChild = allLogs[0].child_name;
+      setSelectedChild(firstChild);
+    }
     setLoading(false);
   }
 
@@ -98,6 +105,14 @@ export default function BehaviorLogs() {
               + Create First Entry
             </button>
           </div>
+        )}
+
+        {/* Resource recommendations based on current logs */}
+        {logs.length > 0 && selectedChild && (
+          <BehaviorResourceRecommendations 
+            childName={selectedChild} 
+            logs={logs}
+          />
         )}
 
         {/* Logs list */}
