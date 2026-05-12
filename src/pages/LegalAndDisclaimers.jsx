@@ -232,9 +232,17 @@ export default function LegalAndDisclaimers() {
 
       <div style={{ maxWidth: 520, margin: "0 auto", padding: "16px" }}>
         <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 16, marginBottom: 20 }}>
-          <p style={{ fontSize: 13, lineHeight: 1.65, color: MUTED }}>
+          <p style={{ fontSize: 13, lineHeight: 1.65, color: MUTED, marginBottom: 12 }}>
             Rooted 21 is committed to transparency. These policies outline how we protect your data, what we can and cannot do, and your rights as a user.
           </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <a href="/privacy-policy-page" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
+              📄 Read Full Privacy Policy
+            </a>
+            <a href="/terms-of-service-page" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
+              ⚖️ Read Full Terms of Service
+            </a>
+          </div>
         </div>
 
         <div style={{ space: 2 }}>
