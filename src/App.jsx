@@ -40,6 +40,11 @@ import MedicationManager from '@/pages/MedicationManager';
 import FormHelper from '@/pages/FormHelper';
 import CommunityResourceMap from '@/pages/CommunityResourceMap';
 import LegalAndDisclaimers from '@/pages/LegalAndDisclaimers';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
+import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
+import AIDisclaimer from '@/pages/AIDisclaimer';
+import DataUsePolicy from '@/pages/DataUsePolicy';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -169,6 +174,11 @@ function App() {
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
               <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />
               <Route path="/legal-policy" element={<Suspense fallback={<LoadingFallback />}><LegalPolicy /></Suspense>} />
+              <Route path="/privacy-policy" element={<Suspense fallback={<LoadingFallback />}><PrivacyPolicy /></Suspense>} />
+              <Route path="/terms-of-service" element={<Suspense fallback={<LoadingFallback />}><TermsOfService /></Suspense>} />
+              <Route path="/crisis-disclaimer" element={<Suspense fallback={<LoadingFallback />}><CrisisDisclaimer /></Suspense>} />
+              <Route path="/ai-disclaimer" element={<Suspense fallback={<LoadingFallback />}><AIDisclaimer /></Suspense>} />
+              <Route path="/data-use-policy" element={<Suspense fallback={<LoadingFallback />}><DataUsePolicy /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
