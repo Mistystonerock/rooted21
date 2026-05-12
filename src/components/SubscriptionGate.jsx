@@ -128,7 +128,7 @@ export default function SubscriptionGate({ children }) {
         <div className="rounded-2xl p-5 space-y-3" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
           <p className="font-bold text-xs tracking-wider" style={{ color: C.mutedText }}>EVERYTHING INCLUDED</p>
           {[
-            ["📚", "Full 21-Lesson TBRI® Curriculum"],
+            ["📚", "Full 21-Lesson Trauma-Informed Parenting Curriculum"],
             ["💬", "AI Parenting Support Chat (unlimited)"],
             ["📊", "Behavior Logs & Analytics"],
             ["👥", "Professional Team Messaging"],
