@@ -8,6 +8,7 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
+import { ThemeProvider } from '@/lib/ThemeContext';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import FeatureLockGate from '@/components/rooted/FeatureLockGate';
@@ -53,6 +54,7 @@ function App() {
   }, []);
 
   return (
+    <ThemeProvider>
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
@@ -165,6 +167,7 @@ function App() {
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
+    </ThemeProvider>
   )
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
@@ -13,6 +14,8 @@ import OnboardingTour from "@/components/onboarding/OnboardingTour";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import MobileRefresh from "@/components/mobile/MobileRefresh";
 import MobileText from "@/components/mobile/MobileText";
+import DarkModeToggle from "@/components/rooted/DarkModeToggle";
+import ProgressRing from "@/components/rooted/ProgressRing";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -75,27 +78,12 @@ export default function Dashboard() {
             </MobileText>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
-            <button
-              onClick={() => navigate("/help")}
-              aria-label="Help"
-              className="rounded-xl flex items-center justify-center"
-              style={{ width: 44, height: 44, background: "#ffffff18", border: "none", cursor: "pointer", flexShrink: 0 }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 18 }}>❓</span>
-            </button>
+            <DarkModeToggle />
             <NotificationBell />
-            <button
-              onClick={() => base44.auth.logout("/")}
-              aria-label="Sign out"
-              className="rounded-xl flex items-center justify-center"
-              style={{ width: 44, height: 44, background: "#ffffff18", border: "none", cursor: "pointer", flexShrink: 0 }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 16 }}>🚪</span>
-            </button>
             <button
               onClick={() => navigate("/profile")}
               aria-label="My profile"
-              className="rounded-full flex items-center justify-center font-bold text-sm"
+              className="rounded-full flex items-center justify-center font-bold text-base"
               style={{ width: 44, height: 44, background: C.midGreen, color: C.white, border: "none", cursor: "pointer", flexShrink: 0 }}
             >
               {user?.full_name?.[0] || "?"}
@@ -107,16 +95,71 @@ export default function Dashboard() {
       <MobileRefresh onRefresh={handleRefresh}>
         <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
         {/* Welcome */}
-        <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
-          <p className="font-serif font-bold text-lg" style={{ color: C.cream }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl p-5"
+          style={{ background: C.darkGreen }}
+        >
+          <p className="font-serif font-bold text-2xl" style={{ color: C.cream }}>
             Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌳
           </p>
-          <p className="text-xs mt-0.5" style={{ color: C.lightGreen }}>
+          <p className="text-base mt-1" style={{ color: C.lightGreen }}>
             You are not alone in this journey.
           </p>
+        </motion.div>
+
+        {/* 3-TAP QUICK ACTIONS — most common tasks */}
+        <div>
+          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>QUICK ACTIONS</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { to: "/daily-checkin", emoji: "✅", label: "Check-In", color: C.darkGreen, light: false },
+              { to: "/behavior-logs", emoji: "📊", label: "Log Behavior", color: "#1a5c34", light: false },
+              { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", color: "#4a2c0a", light: false },
+            ].map((a, i) => (
+              <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
+                <Link to={a.to} className="block rounded-2xl p-4 text-center transition-all active:scale-95" style={{ background: a.color, border: `1.5px solid rgba(255,255,255,0.1)` }}>
+                  <div className="text-3xl mb-2">{a.emoji}</div>
+                  <p className="font-bold text-sm leading-tight" style={{ color: "#f5e6c8" }}>{a.label}</p>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Quick actions */}
+        {/* Lesson progress ring + last check-in glance */}
+        <div className="grid grid-cols-2 gap-3">
+          <Link to="/lessons" className="rounded-2xl p-5 flex flex-col items-center gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <ProgressRing pct={progressPct} size={72} color={C.midGreen} />
+            <p className="font-bold text-sm text-center" style={{ color: C.darkGreen }}>Lessons</p>
+            <p className="text-xs text-center" style={{ color: C.mutedText }}>{completedLessons}/{totalLessons} done</p>
+          </Link>
+          {latestCheckin ? (
+            <Link to="/progress" className="rounded-2xl p-5 flex flex-col justify-center gap-3 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+              <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>Last Check-In</p>
+              <div className="flex gap-4 items-center">
+                <div className="text-center">
+                  <p className="text-3xl font-black" style={{ color: C.midGreen }}>{latestCheckin.child_regulation}</p>
+                  <p className="text-xs" style={{ color: C.mutedText }}>Child</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-black" style={{ color: C.gold }}>{latestCheckin.parent_calm}</p>
+                  <p className="text-xs" style={{ color: C.mutedText }}>You</p>
+                </div>
+              </div>
+              <p className="text-xs font-bold" style={{ color: C.midGreen }}>View trends →</p>
+            </Link>
+          ) : (
+            <Link to="/daily-checkin" className="rounded-2xl p-5 flex flex-col items-center justify-center gap-2 text-center transition-all" style={{ background: C.cream, border: `1.5px dashed ${C.midGreen}` }}>
+              <p className="text-2xl">📊</p>
+              <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Start your first check-in</p>
+            </Link>
+          )}
+        </div>
+
+        {/* All features grid */}
+        <p className="text-sm font-bold px-1 pt-2" style={{ color: C.mutedText }}>ALL FEATURES</p>
         <div className="grid grid-cols-2 gap-3">
 
           <Link to="/personalized-chat" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
@@ -341,23 +384,6 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* Lesson progress bar */}
-        <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-          <div className="flex justify-between items-center mb-2">
-            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>Program Progress</p>
-            <p className="text-xs font-bold" style={{ color: C.midGreen }}>{progressPct}%</p>
-          </div>
-          <div className="h-3 rounded-full overflow-hidden" style={{ background: C.cream }}>
-            <div
-              className="h-full rounded-full transition-all duration-700"
-              style={{ width: `${progressPct}%`, background: C.midGreen }}
-            />
-          </div>
-          <p className="text-[11px] mt-1.5" style={{ color: C.mutedText }}>
-            {completedLessons} of {totalLessons} lessons complete
-          </p>
-        </div>
-
         {/* Child profile card */}
         {child ? (
           <Link to="/child-profile" className="block rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
@@ -378,25 +404,7 @@ export default function Dashboard() {
           </Link>
         )}
 
-        {/* Latest check-in summary */}
-        {latestCheckin && (
-          <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-            <p className="font-serif font-bold text-sm mb-2" style={{ color: C.darkGreen }}>Last Check-In</p>
-            <div className="flex gap-4">
-              <div className="text-center">
-                <p className="text-2xl font-extrabold" style={{ color: C.midGreen }}>{latestCheckin.child_regulation}</p>
-                <p className="text-[10px]" style={{ color: C.mutedText }}>Child reg.</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-extrabold" style={{ color: C.gold }}>{latestCheckin.parent_calm}</p>
-                <p className="text-[10px]" style={{ color: C.mutedText }}>Your calm</p>
-              </div>
-              <div className="ml-auto text-right">
-                <Link to="/progress" className="text-xs font-bold" style={{ color: C.midGreen }}>View trends →</Link>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* Access code entry */}
         {showCodeEntry ? (

@@ -118,8 +118,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Global minimum font size for readability (WCAG) */
-    font-size: max(14px, 1rem);
+    /* Global minimum font size for readability (WCAG) — bumped for accessibility */
+    font-size: max(16px, 1rem);
   }
   button, a {
     @apply select-none;
@@ -136,9 +136,13 @@
     min-width: unset;
     display: inline;
   }
-  /* Captions / helper text floor */
+  /* Captions / helper text floor — readable even in low light */
   small, .text-xs {
-    font-size: max(12px, 0.75rem);
+    font-size: max(13px, 0.8rem);
+  }
+  /* Dark mode: slightly softer backgrounds for eye comfort */
+  .dark body {
+    background-color: hsl(150, 62%, 8%);
   }
   /* Remove iOS tap highlight */
   * {
@@ -169,4 +173,14 @@
 @keyframes slideOut {
   from { transform: translateX(0); opacity: 1; }
   to { transform: translateX(100%); opacity: 0; }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  80% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,151,58,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(201,151,58,0); }
 }
