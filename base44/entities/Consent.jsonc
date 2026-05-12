@@ -1,0 +1,50 @@
+{
+  "name": "Consent",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who gave consent"
+    },
+    "consent_type": {
+      "type": "string",
+      "enum": [
+        "ai",
+        "child_data",
+        "coparenting_messages"
+      ],
+      "description": "Type of consent given"
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "Whether consent was accepted or declined"
+    },
+    "consent_version": {
+      "type": "string",
+      "description": "Version of the consent agreement (e.g., '1.0', '2.0')"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When consent was given"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address from which consent was given"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "Browser/device information"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about the consent action"
+    }
+  },
+  "required": [
+    "user_email",
+    "consent_type",
+    "accepted",
+    "timestamp"
+  ]
+}

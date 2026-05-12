@@ -8,6 +8,7 @@ import ResourceCard, { TYPE_META } from "@/components/resources/ResourceCard";
 import AddResourcePanel from "@/components/resources/AddResourcePanel";
 import LocalResources from "@/components/resources/LocalResources";
 import FillableWorksheets from "@/components/resources/FillableWorksheets";
+import CommunityResourcesSection from "@/components/resources/CommunityResourcesSection";
 import { useEffect } from "react";
 
 const CATEGORIES = [
@@ -243,6 +244,10 @@ function LibraryContent() {
 
         {tab === "browse" && (
           <>
+            <div className="pt-4 border-t" style={{ borderColor: C.cream }}>
+              <p className="text-[10px] font-extrabold tracking-wider mb-3" style={{ color: C.mutedText }}>COMMUNITY RESOURCES</p>
+              <CommunityResourcesSection />
+            </div>
             <FillableWorksheets />
             <LocalResources />
           </>
