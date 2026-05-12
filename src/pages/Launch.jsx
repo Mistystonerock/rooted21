@@ -148,28 +148,71 @@ export default function Launch() {
         </div>
 
         {/* ── FOUNDER'S NOTE ── */}
-        <div style={{ background: "#fff", borderRadius: 20, padding: "28px 22px", borderLeft: `5px solid ${GREEN}`, boxShadow: "0 4px 24px rgba(0,0,0,0.3)", marginBottom: 28 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3a7a5a", marginBottom: 16 }}>A note from the founder</p>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a" }}>
-            I built this because I know what it feels like to parent from fear — to lie awake wondering if you did enough, said the right thing, or if tomorrow the system will decide your love isn't enough.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
-            I've sat in those court waiting rooms. I've flipped through case plans that felt like a mountain with no trail. I've had caseworker visits that left me shaking — not because I had anything to hide, but because I didn't know my rights or what I was supposed to say. Nobody handed me a guide. Nobody told me it was okay to ask for help.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
-            That's exactly why Rooted 21 exists. Not to replace your caseworker, your attorney, or your therapist — but to be the calm, knowledgeable voice that shows up at 2am when none of them can. To help you document what matters, understand what's happening, and walk into every meeting a little more prepared and a little less alone.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
-            Whether you're a foster parent, adoptive family, kinship caregiver, or biological parent fighting for your children — you deserve real tools, not judgment. You deserve support that sees the full picture of your family, not just the paperwork. You deserve to feel <em>rooted</em>.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#1a2a1a", marginTop: 12 }}>
-            Thank you for trusting us with the hardest parts of your journey. We built every feature in this app with you in mind — and we're just getting started.
-          </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 22 }}>
-            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#0d2818", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🌿</div>
-            <div>
-              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 18, fontStyle: "italic", color: "#0d2818", margin: 0 }}>Misty Stonerock</p>
-              <p style={{ fontSize: 11, color: "#5a7a5a", marginTop: 2 }}>Founder, Rooted 21 Parenting Network</p>
+        <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.5)", marginBottom: 28 }}>
+          {/* Top: photo + dark green content side by side */}
+          <div style={{ display: "flex", minHeight: 340 }}>
+            {/* Photo */}
+            <div style={{ flex: "0 0 42%", position: "relative", overflow: "hidden" }}>
+              <img
+                src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/657094531_5061CC5C-2841-45A8-A3F9-073AC259189A.png"
+                alt="Misty Stonerock"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
+              />
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, background: "#0d2c1a", padding: "22px 18px", display: "flex", flexDirection: "column", gap: 0 }}>
+              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 900, fontSize: "clamp(1.4rem, 6vw, 1.9rem)", color: "#f0e8d8", lineHeight: 1.1, marginBottom: 14 }}>
+                Founder's<br />Note
+              </p>
+              <div style={{ width: 28, height: 2, background: GOLD, marginBottom: 16, borderRadius: 2 }} />
+
+              {[
+                {
+                  heading: "MY WHY",
+                  body: "Rooted 21 was born from my own journey—navigating trauma, systems, and the fight to break generational cycles. I created this platform so no parent has to feel alone, overwhelmed, or unheard.",
+                },
+                {
+                  heading: "OUR MISSION",
+                  body: "To empower parents and families with real-time support, practical tools, and a community that walks with you through every season. We blend education, behavioral support, and connection to help you build a stronger, rooted foundation for your family.",
+                },
+                {
+                  heading: "OUR PROMISE",
+                  body: "We lead with compassion, respect, and real solutions. Your privacy, your story, and your family's well-being will always be at the heart of everything we do.",
+                },
+              ].map((s, i) => (
+                <div key={s.heading} style={{ marginBottom: i < 2 ? 14 : 0 }}>
+                  <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.14em", color: GOLD, marginBottom: 5, textTransform: "uppercase" }}>{s.heading}</p>
+                  <p style={{ fontSize: 11, lineHeight: 1.7, color: "rgba(240,232,216,0.8)" }}>{s.body}</p>
+                  {i < 2 && <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: 12 }} />}
+                </div>
+              ))}
+
+              {/* Logo mark */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 16 }}>
+                <span style={{ fontSize: 18 }}>🌿</span>
+                <div>
+                  <p style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 13, color: "#f0e8d8", lineHeight: 1 }}>Rooted <span style={{ color: GOLD }}>21</span></p>
+                  <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.1em", color: MUTED, marginTop: 2 }}>PARENTING NETWORK</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom: quote + signature */}
+          <div style={{ background: "#e8e0d0", padding: "18px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+            <div style={{ display: "flex", gap: 10, alignItems: "flex-start", flex: 1 }}>
+              <span style={{ fontSize: 28, lineHeight: 1, color: "#3a6a4a", fontFamily: "Georgia, serif", marginTop: -4, flexShrink: 0 }}>"</span>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#1a2a1a", fontStyle: "italic" }}>
+                Healing our past.<br />
+                Strengthening our present.<br />
+                Building their future.
+              </p>
+            </div>
+            <div style={{ textAlign: "right", flexShrink: 0 }}>
+              <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 700, fontSize: 16, color: "#1a2a1a", marginBottom: 4 }}>Misty Stonerock</p>
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: "#5a7a5a", textTransform: "uppercase" }}>Founder</p>
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.08em", color: "#5a7a5a", textTransform: "uppercase" }}>Rooted 21 Parenting Network</p>
             </div>
           </div>
         </div>
