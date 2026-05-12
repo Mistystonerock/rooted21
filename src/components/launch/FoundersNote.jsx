@@ -1,6 +1,6 @@
-const GOLD = "#c9973a";
-const TEXT = "#F7E8C6";
-const MUTED = "#BFAF8A";
+const GOLD = "#a67c52";
+const TEXT = "#3d2817";
+const MUTED = "#8b7355";
 
 const sections = [
   {
@@ -26,7 +26,7 @@ export default function FoundersNote() {
         borderRadius: 24,
         overflow: "hidden",
         marginBottom: 16,
-        boxShadow: `0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,151,58,0.15)`,
+        boxShadow: `0 8px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(120,85,60,0.15)`,
         position: "relative",
       }}>
         <img
@@ -44,20 +44,20 @@ export default function FoundersNote() {
         {/* bottom fade */}
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
-          background: "linear-gradient(transparent, #0a1f12)",
+          background: "linear-gradient(transparent, #faf6f1)",
         }} />
       </div>
 
       {/* ── Header card ── */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(13,44,26,0.95) 0%, rgba(10,31,18,0.98) 100%)",
+        background: "#ffffff",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        border: `1px solid rgba(201,151,58,0.2)`,
+        border: `1.5px solid rgba(120,85,60,0.15)`,
         borderRadius: 20,
         padding: "24px 22px 20px",
         marginBottom: 12,
-        boxShadow: `0 4px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(201,151,58,0.1)`,
+        boxShadow: `0 2px 12px rgba(0,0,0,0.06)`,
         position: "relative",
         overflow: "hidden",
       }}>
@@ -65,7 +65,7 @@ export default function FoundersNote() {
         <div style={{
           position: "absolute", top: -40, right: -40, width: 160, height: 160,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(201,151,58,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(166,124,82,0.05) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
 
@@ -77,7 +77,7 @@ export default function FoundersNote() {
         <p style={{
           fontFamily: "var(--font-serif)", fontWeight: 900,
           fontSize: "clamp(1.7rem, 7vw, 2.2rem)",
-          color: TEXT, lineHeight: 1.1, marginBottom: 12,
+          color: "#6b9d6e", lineHeight: 1.1, marginBottom: 12,
         }}>
           Founder's<br />Note
         </p>
@@ -93,20 +93,20 @@ export default function FoundersNote() {
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {sections.map((s, i) => (
           <div key={s.heading} style={{
-            background: "linear-gradient(135deg, rgba(13,44,26,0.9) 0%, rgba(10,31,18,0.95) 100%)",
+            background: "#f5ede2",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
-            border: `1px solid rgba(247,232,198,0.2)`,
+            border: `1px solid rgba(120,85,60,0.15)`,
             borderRadius: 16,
             padding: "18px 20px",
-            boxShadow: "0 2px 20px rgba(0,0,0,0.3)",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
             position: "relative",
             overflow: "hidden",
           }}>
             {/* left accent bar */}
             <div style={{
               position: "absolute", left: 0, top: 16, bottom: 16,
-              width: 3, background: GOLD, borderRadius: "0 3px 3px 0", opacity: 0.6,
+              width: 3, background: "#6b9d6e", borderRadius: "0 3px 3px 0", opacity: 0.8,
             }} />
             <p style={{
               fontSize: 10, fontWeight: 800, letterSpacing: "0.18em",
@@ -114,7 +114,7 @@ export default function FoundersNote() {
             }}>{s.heading}</p>
             <p style={{
               fontSize: "clamp(13px, 3.5vw, 15px)",
-              lineHeight: 1.75, color: "#E6D8B8", marginLeft: 8,
+              lineHeight: 1.75, color: TEXT, marginLeft: 8,
             }}>{s.body}</p>
           </div>
         ))}
@@ -145,7 +145,7 @@ export default function FoundersNote() {
         </div>
 
         {/* Divider */}
-        <div style={{ height: 1, background: "rgba(0,0,0,0.1)", margin: "0 22px" }} />
+        <div style={{ height: 1, background: "rgba(120,85,60,0.15)", margin: "0 22px" }} />
 
         {/* Signature row */}
         <div style={{
@@ -155,7 +155,7 @@ export default function FoundersNote() {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
               width: 44, height: 44, borderRadius: "50%", overflow: "hidden",
-              border: "2px solid rgba(58,106,74,0.3)", flexShrink: 0,
+              border: "2px solid rgba(107,157,110,0.4)", flexShrink: 0,
             }}>
               <img
                 src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/b73f4af3a_5061CC5C-2841-45A8-A3F9-073AC259189A.png"
@@ -168,10 +168,10 @@ export default function FoundersNote() {
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontStyle: "italic", fontWeight: 700,
                 fontSize: "clamp(15px, 4vw, 18px)",
-                color: "#1a2a1a", marginBottom: 2,
+                color: "#3d2817", marginBottom: 2,
               }}>Misty Stonerock</p>
-              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", color: "#5a7a5a", textTransform: "uppercase" }}>Founder</p>
-              <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.08em", color: "#5a7a5a", textTransform: "uppercase" }}>Rooted 21 Parenting Network</p>
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, textTransform: "uppercase" }}>Founder</p>
+              <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.08em", color: MUTED, textTransform: "uppercase" }}>Rooted 21 Parenting Network</p>
             </div>
           </div>
 
@@ -180,9 +180,9 @@ export default function FoundersNote() {
             <div>
               <p style={{
                 fontFamily: "var(--font-serif)", fontWeight: 800,
-                fontSize: 14, color: "#1a3a1a", lineHeight: 1,
-              }}>Rooted <span style={{ color: "#8a6a1a" }}>21</span></p>
-              <p style={{ fontSize: 7, fontWeight: 700, letterSpacing: "0.12em", color: "#5a7a5a", textTransform: "uppercase" }}>PARENTING NETWORK</p>
+                fontSize: 14, color: "#6b9d6e", lineHeight: 1,
+              }}>Rooted <span style={{ color: GOLD }}>21</span></p>
+              <p style={{ fontSize: 7, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, textTransform: "uppercase" }}>PARENTING NETWORK</p>
             </div>
           </div>
         </div>

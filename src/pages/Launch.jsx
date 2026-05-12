@@ -27,14 +27,14 @@ function useCountdown() {
   return time;
 }
 
-const BG = "#0d2818";
-const CARD = "#132d1f";
-const CARD2 = "#162f21";
-const BORDER = "rgba(247,232,198,0.45)";
-const GREEN = "#48D17A";
-const GOLD = "#c9973a";
-const TEXT = "#F7E8C6";
-const MUTED = "#BFAF8A";
+const BG = "#faf6f1";
+const CARD = "#ffffff";
+const CARD2 = "#f5ede2";
+const BORDER = "rgba(120,85,60,0.2)";
+const GREEN = "#6b9d6e";
+const GOLD = "#a67c52";
+const TEXT = "#3d2817";
+const MUTED = "#8b7355";
 
 const WHAT_WE_HELP = [
   { emoji: "⚖️", title: "Court & CPS", desc: "Know your rights. Track every date, document, and requirement." },
@@ -91,9 +91,9 @@ export default function Launch() {
   return (
     <div style={{ background: BG, minHeight: "100vh", fontFamily: "var(--font-sans)", color: TEXT, overflowX: "hidden" }}>
 
-      {/* Ambient glows */}
-      <div style={{ position: "fixed", top: "-10%", right: "-20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(61,184,112,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div style={{ position: "fixed", bottom: "10%", left: "-20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,151,58,0.06) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+      {/* Ambient glows - root/growth aesthetic */}
+      <div style={{ position: "fixed", top: "-10%", right: "-20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,157,110,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "fixed", bottom: "10%", left: "-20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(166,124,82,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* ── NAV ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "max(18px, env(safe-area-inset-top)) 20px 14px", position: "relative", zIndex: 1 }}>
@@ -108,7 +108,7 @@ export default function Launch() {
         </div>
         <button
           onClick={() => base44.auth.redirectToLogin("/home")}
-          style={{ background: CARD, border: `1px solid ${GREEN}60`, borderRadius: 10, color: "#48D17A", fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
+          style={{ background: CARD, border: `1.5px solid ${GREEN}`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
         >
           Sign In
         </button>
@@ -127,25 +127,25 @@ export default function Launch() {
             You don't have to figure<br />this out alone.
           </h1>
 
-          <p style={{ fontSize: 16, lineHeight: 1.75, color: "#E6D8B8", maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
             Rooted 21 is a calm, private place for foster, adoptive, kinship, and biological parents navigating hard systems.
           </p>
 
           {/* Countdown */}
-          <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "14px 20px", display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
+          <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 14, padding: "14px 20px", display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
             <div style={{ textAlign: "center" }}>
               <p style={{ fontWeight: 900, fontSize: 34, color: GREEN, lineHeight: 1, margin: 0 }}>{time.days}</p>
               <p style={{ fontSize: 10, color: MUTED, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 3 }}>days</p>
             </div>
             <div style={{ width: 1, height: 40, background: BORDER }} />
             <div style={{ textAlign: "left" }}>
-              <p style={{ fontWeight: 700, fontSize: 14, color: "#F7E8C6", margin: 0 }}>Opening June 10, 2026</p>
-              <p style={{ fontSize: 12, color: "#E6D8B8", marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
+              <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, margin: 0 }}>Opening June 10, 2026</p>
+              <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
             </div>
           </div>
 
           {count !== null && count > 0 && (
-            <p style={{ fontSize: 12, color: "#E6D8B8", marginTop: 8 }}>🌱 {count} families already on the list</p>
+           <p style={{ fontSize: 12, color: MUTED, marginTop: 8 }}>🌱 {count} families already on the list</p>
           )}
         </div>
 
@@ -171,8 +171,8 @@ export default function Launch() {
             {WHAT_WE_HELP.map(item => (
               <div key={item.title} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "14px 12px" }}>
                 <div style={{ fontSize: 22, marginBottom: 8 }}>{item.emoji}</div>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6", marginBottom: 5 }}>{item.title}</p>
-                <p style={{ fontSize: 11, lineHeight: 1.55, color: "#E6D8B8" }}>{item.desc}</p>
+                <p style={{ fontWeight: 700, fontSize: 13, color: TEXT, marginBottom: 5 }}>{item.title}</p>
+                <p style={{ fontSize: 11, lineHeight: 1.55, color: MUTED }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -181,15 +181,15 @@ export default function Launch() {
         {/* ── JOIN WAITLIST ── */}
         <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 18px", marginBottom: 28 }}>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 6, lineHeight: 1.15 }}>Save your spot</h2>
-          <p style={{ fontSize: 13, color: "#E6D8B8", marginBottom: 20, lineHeight: 1.65 }}>
+          <p style={{ fontSize: 13, color: MUTED, marginBottom: 20, lineHeight: 1.65 }}>
             We'll email you when we open. No spam. Just a heads up that your support is ready.
           </p>
 
           {submitted ? (
-            <div style={{ background: "rgba(61,184,112,0.12)", border: `1.5px solid ${GREEN}40`, borderRadius: 14, padding: "28px 20px", textAlign: "center" }}>
+            <div style={{ background: `rgba(107,157,110,0.08)`, border: `1.5px solid ${GREEN}30`, borderRadius: 14, padding: "28px 20px", textAlign: "center" }}>
               <p style={{ fontSize: 32, marginBottom: 10 }}>🌱</p>
               <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 20, color: TEXT, marginBottom: 8 }}>You're on the list.</p>
-              <p style={{ fontSize: 13, color: "#E6D8B8", lineHeight: 1.65 }}>We'll be in touch before June 10. Thank you for believing in this.</p>
+              <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.65 }}>We'll be in touch before June 10. Thank you for believing in this.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -216,12 +216,12 @@ export default function Launch() {
                 <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
               </div>
 
-              {error && <p style={{ background: "rgba(192,57,43,0.15)", border: "1px solid rgba(192,57,43,0.3)", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#ff9090" }}>{error}</p>}
+              {error && <p style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.25)", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#c85a3a" }}>{error}</p>}
 
-              <button type="submit" disabled={loading} style={{ width: "100%", padding: "15px", background: loading ? `${GREEN}50` : GREEN, border: "none", borderRadius: 12, color: "#0d2818", fontWeight: 800, fontSize: 15, cursor: loading ? "default" : "pointer", boxShadow: loading ? "none" : `0 4px 20px ${GREEN}40`, fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <button type="submit" disabled={loading} style={{ width: "100%", padding: "15px", background: loading ? `${GREEN}50` : GREEN, border: "none", borderRadius: 12, color: "#fff", fontWeight: 800, fontSize: 15, cursor: loading ? "default" : "pointer", boxShadow: loading ? "none" : `0 4px 20px ${GREEN}30`, fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 {loading ? "Saving your spot…" : (<><Sparkles size={15} /> Yes, notify me when we open</>)}
               </button>
-              <p style={{ textAlign: "center", fontSize: 11, color: "#BFAF8A", marginTop: 2 }}>No spam. No selling your info. Ever.</p>
+              <p style={{ textAlign: "center", fontSize: 11, color: MUTED, marginTop: 2 }}>No spam. No selling your info. Ever.</p>
             </form>
           )}
         </div>
@@ -234,20 +234,20 @@ export default function Launch() {
             { label: "Admin Access", href: "/founder-access" },
           ].map((btn, i) => (
             btn.href ? (
-              <a key={btn.label} href={btn.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", color: "#E6D8B8", textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
-                {btn.label} <ChevronRight size={14} color="#BFAF8A" />
+              <a key={btn.label} href={btn.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", color: MUTED, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
+                {btn.label} <ChevronRight size={14} color={MUTED} />
               </a>
             ) : (
-              <button key={btn.label} onClick={btn.action} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", background: "none", border: "none", color: "#E6D8B8", fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "left" }}>
-                {btn.label} <ChevronRight size={14} color="#BFAF8A" />
+              <button key={btn.label} onClick={btn.action} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", background: "none", border: "none", color: MUTED, fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "left" }}>
+                {btn.label} <ChevronRight size={14} color={MUTED} />
               </button>
             )
           ))}
         </div>
 
         <div style={{ display: "flex", gap: 20, justifyContent: "center", alignItems: "center", padding: "8px 0 40px" }}>
-          <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Give Feedback</a>
-          <a href="/legal-disclaimers" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Legal & Disclaimers</a>
+          <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Give Feedback</a>
+          <a href="/legal-disclaimers" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Legal & Disclaimers</a>
           <span style={{ fontSize: 11, color: MUTED }}>© {new Date().getFullYear()} Rooted 21</span>
         </div>
 
