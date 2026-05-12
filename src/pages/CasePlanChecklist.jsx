@@ -4,7 +4,8 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ChecklistUploader from "@/components/checklist/ChecklistUploader";
 import ChecklistItem from "@/components/checklist/ChecklistItem";
-import { Plus, ChevronDown, ChevronUp, Trash2, CheckCircle2 } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp, Trash2, FileText } from "lucide-react";
+import StatusReportModal from "@/components/checklist/StatusReportModal";
 
 const SOURCE_LABELS = {
   cps: "CPS",
@@ -40,6 +41,7 @@ export default function CasePlanChecklist() {
   const [pendingParsed, setPendingParsed] = useState(null); // parsed doc waiting for child selection
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [reportChecklist, setReportChecklist] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(async u => {
@@ -338,12 +340,19 @@ export default function CasePlanChecklist() {
                     </div>
                   )}
 
-                  {/* Delete */}
-                  <button onClick={() => setDeleteConfirm(cl.id)}
-                    className="flex items-center gap-1.5 text-[11px] font-bold mt-1"
-                    style={{ background: "none", border: "none", cursor: "pointer", color: C.mutedText }}>
-                    <Trash2 size={12} /> Remove this checklist
-                  </button>
+                  {/* Actions row */}
+                  <div className="flex items-center justify-between pt-1">
+                    <button onClick={() => setReportChecklist(cl)}
+                      className="flex items-center gap-1.5 text-[11px] font-bold px-3 py-2 rounded-xl"
+                      style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
+                      <FileText size={12} /> Status Report
+                    </button>
+                    <button onClick={() => setDeleteConfirm(cl.id)}
+                      className="flex items-center gap-1.5 text-[11px] font-bold"
+                      style={{ background: "none", border: "none", cursor: "pointer", color: C.mutedText }}>
+                      <Trash2 size={12} /> Remove
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -361,6 +370,11 @@ export default function CasePlanChecklist() {
 
         <div className="pb-8" />
       </div>
+
+      {/* Status Report Modal */}
+      {reportChecklist && (
+        <StatusReportModal checklist={reportChecklist} onClose={() => setReportChecklist(null)} />
+      )}
 
       {/* Delete confirm */}
       {deleteConfirm && (
