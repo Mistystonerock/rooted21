@@ -1,6 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { C } from "@/lib/rooted-constants";
 import { Home, BookOpen, Target, TrendingUp, MessageCircle } from "lucide-react";
+
+const GOLD = "#c9973a";
+const TEXT = "#f5e6c8";
+const MUTED = "rgba(245,230,200,0.45)";
 
 const NAV = [
   { path: "/dashboard", label: "Dashboard", icon: Home },
@@ -15,12 +18,12 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around px-1 pt-2 pb-3"
+      className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around px-1 pt-2"
       style={{
-        background: C.white,
-        borderTop: `1px solid ${C.cream}`,
-        boxShadow: "0 -2px 12px rgba(47,75,58,.08)",
-        paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))"
+        background: "linear-gradient(180deg, #0a3d20 0%, #071f10 100%)",
+        borderTop: `1px solid rgba(201,151,58,0.35)`,
+        boxShadow: "0 -4px 20px rgba(0,0,0,0.4)",
+        paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
       }}
     >
       {NAV.map(({ path, label, icon: Icon }) => {
@@ -34,12 +37,12 @@ export default function BottomNav() {
           >
             <Icon
               size={20}
-              color={active ? C.darkGreen : C.mutedText}
+              color={active ? GOLD : MUTED}
               strokeWidth={active ? 2.5 : 1.8}
             />
             <span
               className="text-[9px] font-bold"
-              style={{ color: active ? C.darkGreen : C.mutedText }}
+              style={{ color: active ? GOLD : MUTED }}
             >
               {label}
             </span>
