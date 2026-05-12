@@ -4,6 +4,7 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Users, Eye, CheckCircle2, MessageSquare, TrendingUp, Download } from "lucide-react";
 import AdminManagement from "@/components/rooted/AdminManagement";
+import AdminCodeManager from "@/components/admin/AdminCodeManager";
 
 export default function FounderDashboard() {
   const [user, setUser] = useState(null);
@@ -298,7 +299,10 @@ export default function FounderDashboard() {
 
         {/* Admins tab */}
         {activeTab === "admins" && (
-          <AdminManagement />
+          <div className="space-y-6">
+            <AdminCodeManager />
+            <AdminManagement />
+          </div>
         )}
 
         {activeTab === "surveys" && (
