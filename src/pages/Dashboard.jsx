@@ -3,19 +3,78 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
-import { C } from "@/lib/rooted-constants";
-import { BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar, Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare, FileText, CreditCard, QrCode, MapPin, CheckSquare, UserSearch, Info } from "lucide-react";
+import {
+  BookOpen, Target, TrendingUp, AlertTriangle, Zap, KeyRound, Users, Calendar,
+  Heart, Library, BarChart2, CalendarDays, Shield, BookMarked, MessageSquare,
+  FileText, CreditCard, QrCode, MapPin, CheckSquare, UserSearch, Info,
+  ChevronRight, Sparkles,
+} from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import BottomNav from "@/components/rooted/BottomNav";
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
-import MobileHeader from "@/components/mobile/MobileHeader";
 import MobileRefresh from "@/components/mobile/MobileRefresh";
-import MobileText from "@/components/mobile/MobileText";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
+
+const BG = "#0b1f12";
+const CARD = "#12271a";
+const BORDER = "rgba(255,255,255,0.07)";
+const GOLD = "#c9973a";
+const GREEN = "#3db870";
+const TEXT = "#f0e8d8";
+const MUTED = "rgba(240,232,216,0.5)";
+
+// Feature tiles — each with its own color accent
+const TILES = [
+  { to: "/personalized-chat", emoji: null, icon: <Zap size={20} color={GOLD} />, label: "Parenting Support", sub: "Personalized to your family", accent: "#2a1f0a", border: `${GOLD}40` },
+  { to: "/lessons", emoji: null, icon: <BookOpen size={20} color={GREEN} />, label: "Lessons", sub: null, accent: "#0e2a1a", border: `${GREEN}40` },
+  { to: "/goals", emoji: null, icon: <Target size={20} color="#e07070" />, label: "Goals", sub: null, accent: "#2a1010", border: "#e0707040" },
+  { to: "/daily-checkin", emoji: null, icon: <TrendingUp size={20} color={GREEN} />, label: "Daily Check-In", sub: "Quick mood & calm log", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/my-team", emoji: null, icon: <Users size={20} color="#7aaaee" />, label: "My Support Team", sub: "Message professionals", accent: "#12203a", border: "#7aaaee40" },
+  { to: "/journal", emoji: null, icon: <BookMarked size={20} color={GOLD} />, label: "Reflection Journal", sub: "Private daily reflections", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/support-guide", emoji: null, icon: <MessageSquare size={20} color={GREEN} />, label: "Support Conversation", sub: "AI talking points", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/family-dashboard", emoji: null, icon: <Calendar size={20} color="#7aaaee" />, label: "Family Dashboard", sub: "Calendar & inbox", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/respite-care", emoji: null, icon: <Heart size={20} color="#e07070" />, label: "Respite Care", sub: "Find vetted providers", accent: "#2a1010", border: "#e0707030" },
+  { to: "/personalized-legal-feed", emoji: null, icon: <Library size={20} color={GOLD} />, label: "Legal Feed", sub: "Articles for your cases", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/safety-plan", emoji: null, icon: <Shield size={20} color="#7aaaee" />, label: "Safety Plan", sub: "Crisis prep & resources", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/household-routine", emoji: null, icon: <CalendarDays size={20} color={GREEN} />, label: "Household Routine", sub: "Daily schedule", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/monthly-report", emoji: null, icon: <FileText size={20} color={GOLD} />, label: "Monthly Report", sub: "PDF for care team", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/behavior-logs", emoji: null, icon: <BarChart2 size={20} color="#a09ef0" />, label: "Behavior Logs", sub: "Daily tracking", accent: "#1a1535", border: "#a09ef030" },
+  { to: "/analytics", emoji: null, icon: <BarChart2 size={20} color={GOLD} />, label: "Behavior Analytics", sub: "Trends & insights", accent: "#2a1f0a", border: `${GOLD}40` },
+  { to: "/milestones", emoji: "🏅", icon: null, label: "Milestones", sub: "Badges & rewards", accent: "#1a1808", border: "#c9973a30" },
+  { to: "/co-parent-portal", emoji: null, icon: <Users size={20} color={GREEN} />, label: "Co-Parent Portal", sub: "Court-supervised messaging", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/billing", emoji: null, icon: <CreditCard size={20} color="#7aaaee" />, label: "Billing", sub: "Subscription & pricing", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/weekly-habits", emoji: null, icon: <CheckSquare size={20} color={GREEN} />, label: "Weekly Habits", sub: "Daily parenting streak", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/local-resources", emoji: null, icon: <MapPin size={20} color="#e07070" />, label: "Local Resources", sub: "Crisis lines near you", accent: "#2a1010", border: "#e0707030" },
+  { to: "/professional-directory", emoji: null, icon: <UserSearch size={20} color={GREEN} />, label: "Find a Professional", sub: "Therapists & coaches", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/app-guide", emoji: null, icon: <Info size={20} color={GOLD} />, label: "App Guide", sub: "Everything this app can do", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/care-calendar", emoji: null, icon: <CalendarDays size={20} color={GREEN} />, label: "Care Calendar", sub: "Shared family events", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/sensory-toolbox", emoji: "🧠", icon: null, label: "Sensory Toolbox", sub: "3-min regulation activities", accent: "#1a1535", border: "#a09ef030" },
+  { to: "/emergency-toolbox", emoji: "🚨", icon: null, label: "Emergency Toolbox", sub: "Real-time crisis strategies", accent: "#2a0a0a", border: "#c0392b40", text: "#ff8070" },
+  { to: "/child-profiles", emoji: "🧒", icon: null, label: "Child Profiles", sub: "Personalize AI insights", accent: "#0e2a1a", border: `${GREEN}20` },
+  { to: "/growth-insights", emoji: "🌱", icon: null, label: "Growth Insights", sub: "AI weekly behavior reports", accent: "#0e2a1a", border: `${GREEN}40` },
+  { to: "/behavioral-trends", emoji: "📈", icon: null, label: "Behavioral Trends", sub: "Visual progress charts", accent: "#1a1535", border: "#a09ef030" },
+  { to: "/job-resources", emoji: "💼", icon: null, label: "Job Resources", sub: "Career, training & aid", accent: "#2a1f0a", border: `${GOLD}20` },
+  { to: "/live-classes", emoji: "🎓", icon: null, label: "Live Classes", sub: "Join a parenting group", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/case-management", emoji: "⚖️", icon: null, label: "Case Management", sub: "Track legal matters", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/case-plan-checklist", emoji: "✅", icon: null, label: "Case Plan Checklist", sub: "AI-powered task tracker", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/documents", emoji: "🔒", icon: null, label: "Secure Documents", sub: "Store & share files", accent: "#12203a", border: "#7aaaee20" },
+  { to: "/document-scanner", emoji: "📷", icon: null, label: "Document Scanner", sub: "AI OCR & extraction", accent: "#1a1535", border: "#a09ef030" },
+  { to: "/court-ready-export", emoji: "⚖️", icon: null, label: "Court-Ready Export", sub: "Certified PDF for court", accent: "#2a1005", border: "#e0702030", text: "#ff9060" },
+  { to: "/court-ready-summary", emoji: "📜", icon: null, label: "Court-Ready Summary", sub: "Journal + incidents → PDF", accent: "#2a1005", border: "#e0702030", text: "#ff9060" },
+  { to: "/visitation-tracker", emoji: "👨‍👧", icon: null, label: "Visitation Tracker", sub: "Log visits for court", accent: "#0e2a1a", border: `${GREEN}20` },
+  { to: "/medication-manager", emoji: "💊", icon: null, label: "Medications", sub: "Track prescriptions & refills", accent: "#12203a", border: "#7aaaee20" },
+  { to: "/incident-reports", emoji: "📋", icon: null, label: "Incident Reports", sub: "Document critical events", accent: "#2a1005", border: "#e0702030", text: "#ff9060" },
+  { to: "/reunification-tracker", emoji: "🏠", icon: null, label: "Reunification Plan", sub: "Track court-ordered services", accent: "#0e2a1a", border: `${GREEN}20` },
+  { to: "/team-contacts", emoji: "📞", icon: null, label: "Team Contacts", sub: "Caseworker, CASA & more", accent: "#0e2a1a", border: `${GREEN}20` },
+  { to: "/peer-support", emoji: "🤝", icon: null, label: "Parent Community", sub: "Connect with parents", accent: "#251232", border: "#c080e030" },
+  { to: "/life-story", emoji: "📖", icon: null, label: "Child Life Story", sub: "Build their timeline", accent: "#0e2a1a", border: `${GREEN}20` },
+  { to: "/education-hub", emoji: "📚", icon: null, label: "Education Hub", sub: "FASD, RAD, grief & more", accent: "#12203a", border: "#7aaaee30" },
+  { to: "/rights-card", emoji: "🪪", icon: null, label: "Know Your Rights", sub: "IEP, CPS, court", accent: "#0e2a1a", border: `${GREEN}20` },
+];
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -43,48 +102,36 @@ export default function Dashboard() {
   useEffect(() => {
     handleRefresh();
     const hasSeenTour = localStorage.getItem("rooted21_tour_seen");
-    if (!hasSeenTour) {
-      setShowTour(true);
-    }
+    if (!hasSeenTour) setShowTour(true);
   }, []);
 
   const completedLessons = lessonProgress.length;
-  const totalLessons = 21;
-  const progressPct = Math.round((completedLessons / totalLessons) * 100);
-
+  const progressPct = Math.round((completedLessons / 21) * 100);
   const latestCheckin = recentCheckins[0];
 
   return (
-    <div className="min-h-screen" style={{ background: C.offWhite }}>
-      {/* iOS-style dashboard header */}
-      <div
-        role="banner"
-        style={{
-          background: C.darkGreen,
-          paddingTop: "max(12px, env(safe-area-inset-top))",
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-        }}
-      >
+    <div className="min-h-screen" style={{ background: BG, color: TEXT, fontFamily: "var(--font-sans)" }}>
+      {/* Header */}
+      <div style={{
+        background: BG, paddingTop: "max(12px, env(safe-area-inset-top))",
+        position: "sticky", top: 0, zIndex: 10,
+        borderBottom: `1px solid ${BORDER}`,
+      }}>
         <div className="flex items-center gap-3 px-4 pb-3">
           <TreeLogo size={32} />
           <div>
-            <div className="font-serif font-bold text-base" style={{ color: C.cream }}>
-              Rooted <span style={{ color: C.gold }}>21</span>
+            <div className="font-serif font-bold text-base" style={{ color: TEXT }}>
+              Rooted <span style={{ color: GOLD }}>21</span>
             </div>
-            <MobileText variant="caption" style={{ color: C.lightGreen }}>
-              PARENTING NETWORK
-            </MobileText>
+            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.13em", color: MUTED, marginTop: 1 }}>PARENTING NETWORK</p>
           </div>
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className="ml-auto flex items-center gap-2">
             <DarkModeToggle />
             <NotificationBell />
             <button
               onClick={() => navigate("/profile")}
               aria-label="My profile"
-              className="rounded-full flex items-center justify-center font-bold text-base"
-              style={{ width: 44, height: 44, background: C.midGreen, color: C.white, border: "none", cursor: "pointer", flexShrink: 0 }}
+              style={{ width: 38, height: 38, borderRadius: "50%", background: `${GREEN}20`, border: `2px solid ${GREEN}40`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14, color: TEXT, cursor: "pointer" }}
             >
               {user?.full_name?.[0] || "?"}
             </button>
@@ -93,389 +140,167 @@ export default function Dashboard() {
       </div>
 
       <MobileRefresh onRefresh={handleRefresh}>
-        <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
-        {/* Welcome */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl p-5"
-          style={{ background: C.darkGreen }}
-        >
-          <p className="font-serif font-bold text-2xl" style={{ color: C.cream }}>
-            Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌳
-          </p>
-          <p className="text-base mt-1" style={{ color: C.lightGreen }}>
-            You are not alone in this journey.
-          </p>
-        </motion.div>
+        <div className="max-w-[520px] mx-auto px-4 py-4 space-y-5">
 
-        {/* 3-TAP QUICK ACTIONS — most common tasks */}
-        <div>
-          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>QUICK ACTIONS</p>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { to: "/daily-checkin", emoji: "✅", label: "Check-In", color: C.darkGreen, light: false },
-              { to: "/behavior-logs", emoji: "📊", label: "Log Behavior", color: "#1a5c34", light: false },
-              { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", color: "#4a2c0a", light: false },
-            ].map((a, i) => (
-              <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
-                <Link to={a.to} className="block rounded-2xl p-4 text-center transition-all active:scale-95" style={{ background: a.color, border: `1.5px solid rgba(255,255,255,0.1)` }}>
-                  <div className="text-3xl mb-2">{a.emoji}</div>
-                  <p className="font-bold text-sm leading-tight" style={{ color: "#f5e6c8" }}>{a.label}</p>
-                </Link>
-              </motion.div>
-            ))}
+          {/* Welcome */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            style={{ background: `linear-gradient(135deg, #162e1f 0%, #0f2216 100%)`, border: `1.5px solid ${GREEN}30`, borderRadius: 18, padding: "18px 18px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, boxShadow: `0 4px 24px rgba(61,184,112,0.08)` }}
+          >
+            <div>
+              <p className="font-serif font-bold" style={{ fontSize: 21, color: TEXT, lineHeight: 1.2 }}>
+                Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌿
+              </p>
+              <p style={{ fontSize: 13, color: MUTED, marginTop: 5 }}>You are not alone in this journey.</p>
+            </div>
+            <Link to="/personalized-chat" style={{ background: `${GREEN}18`, border: `1.5px solid ${GREEN}50`, borderRadius: 11, padding: "9px 14px", display: "flex", alignItems: "center", gap: 6, textDecoration: "none", flexShrink: 0 }}>
+              <Sparkles size={13} color={GREEN} />
+              <span style={{ fontSize: 12, fontWeight: 800, color: GREEN, whiteSpace: "nowrap" }}>AI Coach</span>
+            </Link>
+          </motion.div>
+
+          {/* Quick Actions */}
+          <div>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: MUTED, marginBottom: 10 }}>QUICK ACTIONS</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+              {[
+                { to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: "linear-gradient(145deg,#3a0f0f,#5a1a1a)", border: "#c0392b", textColor: "#ff8070", issos: true },
+                { to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: `linear-gradient(145deg, #0e2a1a, #162e20)`, border: GREEN, textColor: GREEN },
+                { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: `linear-gradient(145deg, #101830, #182240)`, border: "#4a80d0", textColor: "#7aaaee" },
+              ].map((a, i) => (
+                <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
+                  <Link to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}40`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 2px 14px ${a.border}18` }}>
+                    {a.issos ? (
+                      <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#c0392b", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", border: "2.5px solid #ff4444", fontWeight: 900, fontSize: 11, color: "#fff", boxShadow: "0 2px 10px rgba(192,57,43,0.5)" }}>SOS</div>
+                    ) : (
+                      <div style={{ fontSize: 28, marginBottom: 8 }}>{a.emoji}</div>
+                    )}
+                    <p style={{ fontWeight: 800, fontSize: 12, color: a.textColor, lineHeight: 1.3, whiteSpace: "pre-line" }}>{a.label}</p>
+                    <p style={{ fontSize: 10, color: MUTED, marginTop: 4 }}>{a.sub}</p>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Lesson progress ring + last check-in glance */}
-        <div className="grid grid-cols-2 gap-3">
-          <Link to="/lessons" className="rounded-2xl p-5 flex flex-col items-center gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <ProgressRing pct={progressPct} size={72} color={C.midGreen} />
-            <p className="font-bold text-sm text-center" style={{ color: C.darkGreen }}>Lessons</p>
-            <p className="text-xs text-center" style={{ color: C.mutedText }}>{completedLessons}/{totalLessons} done</p>
-          </Link>
-          {latestCheckin ? (
-            <Link to="/progress" className="rounded-2xl p-5 flex flex-col justify-center gap-3 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-              <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>Last Check-In</p>
-              <div className="flex gap-4 items-center">
-                <div className="text-center">
-                  <p className="text-3xl font-black" style={{ color: C.midGreen }}>{latestCheckin.child_regulation}</p>
-                  <p className="text-xs" style={{ color: C.mutedText }}>Child</p>
+          {/* Progress + Last Check-in */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <Link to="/lessons" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${GREEN}30`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none" }}>
+              <ProgressRing pct={progressPct} size={72} color={GREEN} />
+              <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Lessons</p>
+              <p style={{ fontSize: 11, color: MUTED }}>{completedLessons}/21 done</p>
+            </Link>
+            {latestCheckin ? (
+              <Link to="/progress" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", justifyContent: "center", gap: 10, textDecoration: "none" }}>
+                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 14, color: TEXT }}>Last Check-In</p>
+                <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: 30, fontWeight: 900, color: GREEN, lineHeight: 1 }}>{latestCheckin.child_regulation}</p>
+                    <p style={{ fontSize: 10, color: MUTED }}>Child</p>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: 30, fontWeight: 900, color: GOLD, lineHeight: 1 }}>{latestCheckin.parent_calm}</p>
+                    <p style={{ fontSize: 10, color: MUTED }}>You</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-3xl font-black" style={{ color: C.gold }}>{latestCheckin.parent_calm}</p>
-                  <p className="text-xs" style={{ color: C.mutedText }}>You</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: GREEN }}>View trends →</p>
+              </Link>
+            ) : (
+              <Link to="/daily-checkin" style={{ background: `${GREEN}10`, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", textAlign: "center" }}>
+                <p style={{ fontSize: 26 }}>📊</p>
+                <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Start your first check-in</p>
+              </Link>
+            )}
+          </div>
+
+          {/* All Features */}
+          <div>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: MUTED, marginBottom: 10 }}>ALL FEATURES</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {TILES.map((tile, i) => (
+                <Link key={tile.to + tile.label} to={tile.to} style={{
+                  background: `linear-gradient(145deg, ${tile.accent}, #0b1f12)`,
+                  border: `1.5px solid ${tile.border}`,
+                  borderRadius: 16, padding: "14px 12px",
+                  textDecoration: "none", display: "flex", flexDirection: "column", gap: 6,
+                  boxShadow: `0 2px 10px rgba(0,0,0,0.2)`,
+                }}>
+                  {tile.icon ? (
+                    <div style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {tile.icon}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 24 }}>{tile.emoji}</div>
+                  )}
+                  <p style={{ fontWeight: 700, fontSize: 13, color: tile.text || TEXT, lineHeight: 1.25 }}>{tile.label}</p>
+                  {tile.sub && <p style={{ fontSize: 11, color: MUTED, lineHeight: 1.4 }}>{tile.sub}</p>}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Child profile */}
+          {child ? (
+            <Link to="/child-profile" style={{ display: "block", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🧒</div>
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>{child.first_name}</p>
+                  <p style={{ fontSize: 11, color: MUTED }}>Child profile · Tap to edit</p>
                 </div>
               </div>
-              <p className="text-xs font-bold" style={{ color: C.midGreen }}>View trends →</p>
             </Link>
           ) : (
-            <Link to="/daily-checkin" className="rounded-2xl p-5 flex flex-col items-center justify-center gap-2 text-center transition-all" style={{ background: C.cream, border: `1.5px dashed ${C.midGreen}` }}>
-              <p className="text-2xl">📊</p>
-              <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Start your first check-in</p>
+            <Link to="/child-profile" style={{ display: "block", background: `${GREEN}10`, border: `1.5px dashed ${GREEN}40`, borderRadius: 16, padding: 14, textDecoration: "none", textAlign: "center" }}>
+              <p style={{ fontWeight: 700, fontSize: 13, color: GREEN }}>+ Add Child Profile</p>
+              <p style={{ fontSize: 11, color: MUTED, marginTop: 4 }}>Helps professionals support your family</p>
             </Link>
           )}
-        </div>
 
-        {/* All features grid */}
-        <p className="text-sm font-bold px-1 pt-2" style={{ color: C.mutedText }}>ALL FEATURES</p>
-        <div className="grid grid-cols-2 gap-3">
-
-          <Link to="/personalized-chat" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <Zap size={22} color={C.gold} />
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Parenting Support</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>Personalized to your family</p>
-          </Link>
-          <Link to="/lessons" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <BookOpen size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Lessons</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>{completedLessons}/{totalLessons} completed</p>
-          </Link>
-          <Link to="/goals" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Target size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Goals</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>{goals.length} active</p>
-          </Link>
-          <Link to="/daily-checkin" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <TrendingUp size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Daily Check-In</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Quick mood & calm log</p>
-          </Link>
-          <Link to="/my-team" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Users size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>My Support Team</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Message professionals</p>
-          </Link>
-          <Link to="/journal" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <BookMarked size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Reflection Journal</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Private daily reflections</p>
-          </Link>
-          <Link to="/support-guide" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <MessageSquare size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Support Conversation</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>AI talking points for your team</p>
-          </Link>
-          <Link to="/family-dashboard" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Calendar size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Family Dashboard</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Calendar & inbox</p>
-          </Link>
-          <Link to="/respite-care" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Heart size={22} color="#B84C2A" />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Respite Care</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Find vetted providers</p>
-          </Link>
-          <Link to="/personalized-legal-feed" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Library size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Legal Feed</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Articles for your cases</p>
-          </Link>
-          <Link to="/safety-plan" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Shield size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Safety Plan</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Crisis prep & resources</p>
-          </Link>
-          <Link to="/household-routine" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <CalendarDays size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>My Household Routine</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Your home's daily schedule</p>
-          </Link>
-          <Link to="/monthly-report" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <FileText size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Monthly Report</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>PDF for care team</p>
-          </Link>
-          <Link to="/behavior-logs" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <BarChart2 size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Behavior Logs</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Daily behavior tracking</p>
-          </Link>
-          <Link to="/analytics" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <BarChart2 size={22} color={C.gold} />
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Behavior Analytics</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>Trends, patterns & insights</p>
-          </Link>
-          <Link to="/milestones" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🏅</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Milestones</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Badges & rewards</p>
-          </Link>
-          <Link to="/co-parent-portal" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Users size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Co-Parent Portal</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Court-supervised messaging</p>
-          </Link>
-          <Link to="/billing" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <CreditCard size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Billing</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Subscription & pricing</p>
-          </Link>
-          <Link to="/weekly-habits" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <CheckSquare size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Weekly Habits</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Daily parenting streak tracker</p>
-          </Link>
-          <Link to="/local-resources" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <MapPin size={22} color="#B84C2A" />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Local Resources</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Crisis lines & centers near you</p>
-          </Link>
-          <Link to="/professional-directory" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <UserSearch size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Find a Professional</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Therapists, coaches & advocates</p>
-          </Link>
-          <Link to="/app-guide" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <Info size={22} color={C.brown} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>App Guide</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Everything this app can do</p>
-          </Link>
-          <Link to="/care-calendar" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <CalendarDays size={22} color={C.midGreen} />
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Care Calendar</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Shared family & care team events</p>
-          </Link>
-          <Link to="/sensory-toolbox" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🧠</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Sensory Toolbox</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>3-min regulation activities</p>
-          </Link>
-          <Link to="/emergency-toolbox" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FDECEC", border: `1.5px solid #F5BEBE` }}>
-            <div style={{ fontSize: "22px" }}>🚨</div>
-            <p className="font-bold text-sm" style={{ color: "#C0392B" }}>Emergency Toolbox</p>
-            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Real-time crisis strategies</p>
-          </Link>
-          <Link to="/child-profiles" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🧒</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Child Profiles</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Personalize AI insights</p>
-          </Link>
-          <Link to="/growth-insights" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>🌱</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Growth Insights</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>AI weekly behavior reports</p>
-          </Link>
-          <Link to="/behavioral-trends" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>📈</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Behavioral Trends</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>Visual progress charts</p>
-          </Link>
-          <Link to="/job-resources" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>💼</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Job Resources</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Career, training & aid</p>
-          </Link>
-          <Link to="/live-classes" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>🎓</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Live Classes</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>Join a parenting group</p>
-          </Link>
-          <Link to="/case-management" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>⚖️</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Case Management</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Track legal matters & cases</p>
-          </Link>
-          <Link to="/case-plan-checklist" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>✅</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Case Plan Checklist</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>AI-powered task tracker</p>
-          </Link>
-          <Link to="/documents" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🔒</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Secure Documents</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Store & share sensitive files</p>
-          </Link>
-          <Link to="/document-scanner" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>📷</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Document Scanner</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>AI OCR & data extraction</p>
-          </Link>
-          <Link to="/court-ready-export" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
-            <div style={{ fontSize: "22px" }}>⚖️</div>
-            <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Export</p>
-            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Certified PDF for court & CPS</p>
-          </Link>
-          <Link to="/court-ready-summary" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
-            <div style={{ fontSize: "22px" }}>📜</div>
-            <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Summary</p>
-            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Journal + incidents → legal PDF</p>
-          </Link>
-          <Link to="/visitation-tracker" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>👨‍👧</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Visitation Tracker</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Log visits for court records</p>
-          </Link>
-          <Link to="/medication-manager" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>💊</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Medications</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Track prescriptions & refills</p>
-          </Link>
-          <Link to="/incident-reports" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
-            <div style={{ fontSize: "22px" }}>📋</div>
-            <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Incident Reports</p>
-            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Document critical events</p>
-          </Link>
-          <Link to="/reunification-tracker" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🏠</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Reunification Plan</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Track court-ordered services</p>
-          </Link>
-          <Link to="/team-contacts" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>📞</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Team Contacts</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Caseworker, CASA, GAL & more</p>
-          </Link>
-          <Link to="/peer-support" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>🤝</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Parent Community</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>Connect with parents like you</p>
-          </Link>
-          <Link to="/life-story" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>📖</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Child Life Story</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>Build their timeline & history</p>
-          </Link>
-          <Link to="/education-hub" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.darkGreen, border: `1.5px solid ${C.darkGreen}` }}>
-            <div style={{ fontSize: "22px" }}>📚</div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>Education Hub</p>
-            <p className="text-[11px]" style={{ color: C.lightGreen }}>FASD, RAD, grief, rights & more</p>
-          </Link>
-          <Link to="/rights-card" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
-            <div style={{ fontSize: "22px" }}>🪪</div>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Know Your Rights</p>
-            <p className="text-[11px]" style={{ color: C.mutedText }}>IEP, CPS, court at a glance</p>
-          </Link>
-        </div>
-
-        {/* Child profile card */}
-        {child ? (
-          <Link to="/child-profile" className="block rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg" style={{ background: C.cream }}>
-                🧒
-              </div>
-              <div>
-                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>{child.first_name}</p>
-                <p className="text-[11px]" style={{ color: C.mutedText }}>Child profile · Tap to edit</p>
-              </div>
-            </div>
-          </Link>
-        ) : (
-          <Link to="/child-profile" className="block rounded-2xl p-4 text-center" style={{ background: C.cream, border: `1.5px dashed ${C.midGreen}` }}>
-            <p className="text-sm font-bold" style={{ color: C.darkGreen }}>+ Add Child Profile</p>
-            <p className="text-[11px] mt-0.5" style={{ color: C.mutedText }}>Helps professionals support your family</p>
-          </Link>
-        )}
-
-
-
-        {/* Access code entry */}
-        {showCodeEntry ? (
-          <AccessCodeEntry
-            onLinked={() => setShowCodeEntry(false)}
-            onDismiss={() => setShowCodeEntry(false)}
-          />
-        ) : (
-          <>
-            <button
-              onClick={() => setShowCodeEntry(true)}
-              className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
-              style={{ background: C.white, border: `1.5px dashed ${C.midGreen}` }}
-            >
-              <KeyRound size={20} color={C.midGreen} />
-              <div>
-                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Enter Professional Access Code</p>
-                <p className="text-[11px]" style={{ color: C.mutedText }}>Link your account to your assigned professional</p>
-              </div>
-            </button>
-
-            {child && (
-              <button
-                onClick={() => setShowInvitationModal(true)}
-                className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-all hover:shadow-md"
-                style={{ background: C.white, border: `1.5px dashed ${C.brown}` }}
-              >
-                <QrCode size={20} color={C.brown} />
+          {/* Access codes */}
+          {showCodeEntry ? (
+            <AccessCodeEntry onLinked={() => setShowCodeEntry(false)} onDismiss={() => setShowCodeEntry(false)} />
+          ) : (
+            <>
+              <button onClick={() => setShowCodeEntry(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
+                <KeyRound size={20} color={GREEN} />
                 <div>
-                  <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Generate Invitation Code</p>
-                  <p className="text-[11px]" style={{ color: C.mutedText }}>Share with a professional to auto-link them</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Enter Professional Access Code</p>
+                  <p style={{ fontSize: 11, color: MUTED }}>Link your account to your assigned professional</p>
                 </div>
               </button>
-            )}
-          </>
-        )}
+              {child && (
+                <button onClick={() => setShowInvitationModal(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GOLD}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
+                  <QrCode size={20} color={GOLD} />
+                  <div>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Generate Invitation Code</p>
+                    <p style={{ fontSize: 11, color: MUTED }}>Share with a professional to auto-link them</p>
+                  </div>
+                </button>
+              )}
+            </>
+          )}
 
-        {/* INVITATION MODAL */}
-        {showInvitationModal && (
-          <GenerateInvitationModal
-            childName={child?.first_name}
-            onClose={() => setShowInvitationModal(false)}
-            onSuccess={() => setShowInvitationModal(false)}
-          />
-        )}
+          {showInvitationModal && (
+            <GenerateInvitationModal childName={child?.first_name} onClose={() => setShowInvitationModal(false)} onSuccess={() => setShowInvitationModal(false)} />
+          )}
 
-        <div className="pb-16" />
-        {/* Crisis reminder */}
-        <div className="rounded-xl p-3 flex items-start gap-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
-          <AlertTriangle size={16} color="#B84C2A" className="mt-0.5 flex-shrink-0" />
-          <p className="text-[11px]" style={{ color: "#B84C2A" }}>
-            In crisis? Call or text <strong>988</strong>. In danger, call <strong>911</strong>.
-          </p>
+          {/* Crisis reminder */}
+          <div style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.3)", borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <AlertTriangle size={15} color="#ff8070" style={{ flexShrink: 0, marginTop: 2 }} />
+            <p style={{ fontSize: 12, color: "#ff8070" }}>
+              In crisis? Call or text <strong>988</strong>. In danger, call <strong>911</strong>.
+            </p>
+          </div>
+
+          <div className="pb-16" />
         </div>
-      </div>
       </MobileRefresh>
+
       <BottomNav />
 
-      {/* Onboarding Tour */}
       {showTour && (
-        <OnboardingTour
-          onComplete={() => {
-            setShowTour(false);
-            localStorage.setItem("rooted21_tour_seen", "true");
-          }}
-        />
+        <OnboardingTour onComplete={() => { setShowTour(false); localStorage.setItem("rooted21_tour_seen", "true"); }} />
       )}
     </div>
   );
