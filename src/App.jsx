@@ -39,6 +39,7 @@ import CourtReadySummary from '@/pages/CourtReadySummary';
 import MedicationManager from '@/pages/MedicationManager';
 import FormHelper from '@/pages/FormHelper';
 import CommunityResourceMap from '@/pages/CommunityResourceMap';
+import LegalAndDisclaimers from '@/pages/LegalAndDisclaimers';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -144,6 +145,7 @@ function App() {
               <Route path="/form-helper" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><FormHelper /></FeatureLockGate></Suspense>} />
               <Route path="/community-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CommunityResourceMap /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-summary" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CourtReadySummary /></FeatureLockGate></Suspense>} />
+              <Route path="/legal-disclaimers" element={<Suspense fallback={<LoadingFallback />}><LegalAndDisclaimers /></Suspense>} />
               <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.IncidentReportBuilder /></FeatureLockGate></Suspense>} />
               <Route path="/reunification-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ReunificationTracker /></FeatureLockGate></Suspense>} />
               <Route path="/team-contacts" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TeamContacts /></FeatureLockGate></Suspense>} />

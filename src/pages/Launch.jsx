@@ -247,7 +247,7 @@ export default function Launch() {
 
         <div style={{ display: "flex", gap: 20, justifyContent: "center", alignItems: "center", padding: "8px 0 40px" }}>
           <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Give Feedback</a>
-          <a href="/legal-policy" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Terms & Privacy</a>
+          <a href="/legal-disclaimers" style={{ fontSize: 11, color: MUTED, textDecoration: "underline" }}>Legal & Disclaimers</a>
           <span style={{ fontSize: 11, color: MUTED }}>© {new Date().getFullYear()} Rooted 21</span>
         </div>
 
