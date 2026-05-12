@@ -102,16 +102,16 @@ export default function Dashboard() {
           style={{ background: C.darkGreen }}
         >
           <p className="font-serif font-bold text-2xl" style={{ color: C.cream }}>
-            Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌳
+            {user?.full_name ? `Hey, ${user.full_name.split(" ")[0]} 🌿` : "Welcome back 🌿"}
           </p>
           <p className="text-base mt-1" style={{ color: C.lightGreen }}>
-            You are not alone in this journey.
+            Whatever today holds — you're not facing it alone.
           </p>
         </motion.div>
 
         {/* 3-TAP QUICK ACTIONS — most common tasks */}
         <div>
-          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>QUICK ACTIONS</p>
+          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>WHAT DO YOU NEED RIGHT NOW?</p>
           <div className="grid grid-cols-3 gap-2">
             {[
               { to: "/daily-checkin", emoji: "✅", label: "Check-In", color: C.darkGreen, light: false },
@@ -452,11 +452,10 @@ export default function Dashboard() {
         )}
 
         <div className="pb-16" />
-        {/* Crisis reminder */}
-        <div className="rounded-xl p-3 flex items-start gap-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
-          <AlertTriangle size={16} color="#B84C2A" className="mt-0.5 flex-shrink-0" />
-          <p className="text-[11px]" style={{ color: "#B84C2A" }}>
-            In crisis? Call or text <strong>988</strong>. In danger, call <strong>911</strong>.
+        {/* Crisis reminder — calm, not alarming */}
+        <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: "rgba(245,230,200,0.08)", border: "1px solid rgba(245,230,200,0.15)" }}>
+          <p className="text-xs" style={{ color: C.mutedText }}>
+            If you or your child are in crisis, help is one call away: <strong style={{ color: C.cream }}>988</strong> (call or text) &nbsp;·&nbsp; Emergency: <strong style={{ color: C.cream }}>911</strong>
           </p>
         </div>
       </div>
