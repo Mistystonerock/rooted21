@@ -41,11 +41,14 @@ import FormHelper from '@/pages/FormHelper';
 import CommunityResourceMap from '@/pages/CommunityResourceMap';
 import LegalAndDisclaimers from '@/pages/LegalAndDisclaimers';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import TermsOfService from '@/pages/TermsOfService';
+import TermsOfServicePage from '@/pages/TermsOfServicePage';
 import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
 import ResourceMatcher from '@/components/resources/ResourceMatcher';
+import About from '@/pages/About';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -176,11 +179,14 @@ function App() {
               <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />
               <Route path="/legal-policy" element={<Suspense fallback={<LoadingFallback />}><LegalPolicy /></Suspense>} />
               <Route path="/privacy-policy" element={<Suspense fallback={<LoadingFallback />}><PrivacyPolicy /></Suspense>} />
+              <Route path="/privacy-policy-page" element={<Suspense fallback={<LoadingFallback />}><PrivacyPolicyPage /></Suspense>} />
               <Route path="/terms-of-service" element={<Suspense fallback={<LoadingFallback />}><TermsOfService /></Suspense>} />
+              <Route path="/terms-of-service-page" element={<Suspense fallback={<LoadingFallback />}><TermsOfServicePage /></Suspense>} />
               <Route path="/crisis-disclaimer" element={<Suspense fallback={<LoadingFallback />}><CrisisDisclaimer /></Suspense>} />
               <Route path="/ai-disclaimer" element={<Suspense fallback={<LoadingFallback />}><AIDisclaimer /></Suspense>} />
               <Route path="/data-use-policy" element={<Suspense fallback={<LoadingFallback />}><DataUsePolicy /></Suspense>} />
               <Route path="/resource-matcher" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ResourceMatcher /></FeatureLockGate></Suspense>} />
+              <Route path="/about" element={<Suspense fallback={<LoadingFallback />}><About /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
