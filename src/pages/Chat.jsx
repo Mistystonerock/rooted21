@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
-import { ChevronLeft, Send, AlertTriangle, RefreshCw } from "lucide-react";
+import { ChevronLeft, Send, AlertTriangle, RefreshCw, Mic, MicOff } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import ChatMessage from "@/components/rooted/ChatMessage";
 import { FOLLOW_UP_DEFAULTS } from "@/lib/rooted-constants";
@@ -26,8 +26,11 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [followUps, setFollowUps] = useState([]);
+  const [listening, setListening] = useState(false);
+  const [speechSupported] = useState(() => "webkitSpeechRecognition" in window || "SpeechRecognition" in window);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -130,6 +133,47 @@ export default function Chat() {
       });
       setSessionId(session?.id || null);
     }
+  }
+
+  function toggleListening() {
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let finalTranscript = "";
+
+    recognition.onresult = (event) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + " ";
+        } else {
+          interim = transcript;
+        }
+      }
+      setInput(finalTranscript + interim);
+    };
+
+    recognition.onerror = () => {
+      setListening(false);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setListening(true);
   }
 
   function handleReset() {
@@ -257,28 +301,49 @@ export default function Chat() {
               handleSend();
             }
           }}
-          placeholder="Describe what's happening right now…"
+          placeholder={listening ? "🎙️ Listening… speak now" : "Describe what's happening right now…"}
           rows={2}
           className="flex-1 rounded-xl px-3 py-2.5 text-sm font-sans resize-none"
           style={{
-            border: `1.5px solid ${C.cream}`,
-            background: C.offWhite,
+            border: `1.5px solid ${listening ? "#c9973a" : C.cream}`,
+            background: listening ? "rgba(201,151,58,0.08)" : "#faf7f2",
             maxHeight: 120,
-            color: "#000000",
+            color: "#1a1a1a",
+            transition: "border-color 0.2s, background 0.2s",
           }}
         />
-        <button
-          onClick={handleSend}
-          disabled={!input.trim() || loading}
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:opacity-90 active:scale-95"
-          style={{
-            background: input.trim() ? C.darkGreen : C.cream,
-            border: "none",
-            cursor: input.trim() ? "pointer" : "default",
-          }}
-        >
-          <Send size={16} color={input.trim() ? C.white : C.mutedText} />
-        </button>
+        <div className="flex flex-col gap-1.5">
+          {speechSupported && (
+            <button
+              onClick={toggleListening}
+              title={listening ? "Stop recording" : "Speak your message"}
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:opacity-90 active:scale-95"
+              style={{
+                background: listening ? "#c9973a" : C.cream,
+                border: "none",
+                cursor: "pointer",
+                animation: listening ? "breathe 1.5s ease-in-out infinite" : "none",
+              }}
+            >
+              {listening
+                ? <MicOff size={16} color="#fff" />
+                : <Mic size={16} color={C.darkGreen} />
+              }
+            </button>
+          )}
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || loading}
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:opacity-90 active:scale-95"
+            style={{
+              background: input.trim() ? C.darkGreen : C.cream,
+              border: "none",
+              cursor: input.trim() ? "pointer" : "default",
+            }}
+          >
+            <Send size={16} color={input.trim() ? "#fff" : C.mutedText} />
+          </button>
+        </div>
       </div>
     </div>
   );
