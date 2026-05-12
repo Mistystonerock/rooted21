@@ -1,0 +1,103 @@
+{
+  "name": "CoParentingCall",
+  "type": "object",
+  "properties": {
+    "partnership_id": {
+      "type": "string",
+      "description": "ID of the CoParentingPartnership"
+    },
+    "initiator_email": {
+      "type": "string",
+      "description": "Email of the parent who initiated the call"
+    },
+    "initiator_name": {
+      "type": "string",
+      "description": "Name of the parent who initiated the call"
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email of the other parent"
+    },
+    "recipient_name": {
+      "type": "string",
+      "description": "Name of the other parent"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the call was initiated"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the call ended"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "description": "Length of call in seconds"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "initiated",
+        "ringing",
+        "answered",
+        "missed",
+        "declined",
+        "ended",
+        "failed"
+      ],
+      "default": "initiated",
+      "description": "Current status of the call"
+    },
+    "recording_url": {
+      "type": "string",
+      "description": "URL to the encrypted call recording"
+    },
+    "transcript": {
+      "type": "string",
+      "description": "AI-generated call transcript (optional)"
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "schedule",
+        "health",
+        "education",
+        "behavior",
+        "finances",
+        "general"
+      ],
+      "default": "general",
+      "description": "Topic of the call"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes from either parent about the call"
+    },
+    "tension_detected": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether AI detected conflict during call"
+    },
+    "tension_summary": {
+      "type": "string",
+      "description": "AI analysis of call tone and conflict"
+    },
+    "read_by_court": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether court staff has reviewed this recording"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this call relates to"
+    }
+  },
+  "required": [
+    "partnership_id",
+    "initiator_email",
+    "recipient_email",
+    "start_time"
+  ]
+}

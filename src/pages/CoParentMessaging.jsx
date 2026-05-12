@@ -6,6 +6,8 @@ import { ChevronLeft, Send, ShieldCheck, Download, Loader2, ShieldAlert } from "
 import CoParentMessageConsentModal, { hasCoParentMessageConsent } from "@/components/legal/CoParentMessageConsentModal";
 import ConflictLanguageChecker from "@/components/messaging/ConflictLanguageChecker";
 import TensionAlert from "@/components/messaging/TensionAlert";
+import VoiceCallButton from "@/components/coparenting/VoiceCallButton";
+import CoParentingCallHistory from "@/components/coparenting/CoParentingCallHistory";
 
 const TOPICS = ["schedule", "health", "education", "behavior", "finances", "general"];
 
@@ -32,6 +34,7 @@ export default function CoParentMessaging() {
   const [user, setUser] = useState(null);
   const [partnership, setPartnership] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [calls, setCalls] = useState([]);
   const [input, setInput] = useState("");
   const [topic, setTopic] = useState("general");
   const [loading, setLoading] = useState(true);
@@ -41,6 +44,8 @@ export default function CoParentMessaging() {
   const [showConflictCheck, setShowConflictCheck] = useState(false);
   const [tensionAnalysis, setTensionAnalysis] = useState(null);
   const [analyzingTension, setAnalyzingTension] = useState(false);
+  const [activeTab, setActiveTab] = useState("messages");
+  const [recordingCall, setRecordingCall] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -55,7 +60,11 @@ export default function CoParentMessaging() {
       const msgs = await base44.entities.CoParentingMessage.filter(
         { partnership_id: partnershipId }, "created_date", 500
       );
+      const callsData = await base44.entities.CoParentingCall.filter(
+        { partnership_id: partnershipId }, "-start_time", 100
+      );
       setMessages(msgs);
+      setCalls(callsData);
       setLoading(false);
     });
   }, [partnershipId]);
@@ -146,6 +155,34 @@ export default function CoParentMessaging() {
     setExporting(false);
   }
 
+  async function handleCallStart() {
+    const callRecord = await base44.entities.CoParentingCall.create({
+      partnership_id: partnershipId,
+      initiator_email: user.email,
+      initiator_name: user.full_name,
+      recipient_email: partnership?.parent_1_email === user?.email ? partnership?.parent_2_email : partnership?.parent_1_email,
+      recipient_name: partnership?.parent_1_email === user?.email ? partnership?.parent_2_name : partnership?.parent_1_name,
+      start_time: new Date().toISOString(),
+      status: "answered",
+      child_name: partnership?.child_name,
+      topic: topic,
+    });
+    setRecordingCall(callRecord);
+  }
+
+  async function handleCallEnd(duration) {
+    if (!recordingCall) return;
+    
+    const updatedCall = await base44.entities.CoParentingCall.update(recordingCall.id, {
+      end_time: new Date().toISOString(),
+      duration_seconds: Math.round(duration),
+      status: "ended",
+    });
+
+    setCalls(prev => [updatedCall, ...prev]);
+    setRecordingCall(null);
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: C.offWhite }}>
@@ -182,14 +219,51 @@ export default function CoParentMessaging() {
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>{coparent}</p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>🧒 {partnership?.child_name}</p>
         </div>
+        <VoiceCallButton 
+          partnership={partnership}
+          user={user}
+          onCallStart={handleCallStart}
+          onCallEnd={handleCallEnd}
+          disabled={recordingCall !== null}
+        />
         <button
           onClick={handleExport}
-          disabled={exporting || messages.length === 0}
+          disabled={exporting || (activeTab === "messages" && messages.length === 0) || (activeTab === "calls" && calls.length === 0)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold flex-shrink-0"
           style={{ background: "rgba(255,255,255,0.15)", color: C.cream, border: "none", cursor: "pointer" }}
         >
           {exporting ? <Loader2 size={11} className="animate-spin" /> : <Download size={11} />}
           {exporting ? "Exporting…" : "Export PDF"}
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-0 sticky top-[56px] z-10" style={{ background: C.white, borderBottom: `1px solid ${C.cream}` }}>
+        <button
+          onClick={() => setActiveTab("messages")}
+          className="flex-1 py-2 text-xs font-bold border-b-2 transition-colors"
+          style={{
+            borderColor: activeTab === "messages" ? C.darkGreen : "transparent",
+            color: activeTab === "messages" ? C.darkGreen : C.mutedText,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          💬 Messages
+        </button>
+        <button
+          onClick={() => setActiveTab("calls")}
+          className="flex-1 py-2 text-xs font-bold border-b-2 transition-colors"
+          style={{
+            borderColor: activeTab === "calls" ? C.darkGreen : "transparent",
+            color: activeTab === "calls" ? C.darkGreen : C.mutedText,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          ☎️ Calls
         </button>
       </div>
 
@@ -214,64 +288,76 @@ export default function CoParentMessaging() {
         </div>
       )}
 
-      {/* Messages */}
+      {/* Content */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
-        {messages.length === 0 ? (
-          <div className="text-center py-10">
-            <p className="text-2xl mb-2">💬</p>
-            <p className="font-bold text-sm" style={{ color: C.darkGreen }}>No messages yet</p>
-            <p className="text-xs mt-1" style={{ color: C.mutedText }}>All messages are securely saved and court-admissible.</p>
-          </div>
-        ) : (
-          messages.map((msg, i) => {
-            const isOwn = msg.sender_email === user?.email;
-            const tc = TOPIC_COLORS[msg.topic] || TOPIC_COLORS.general;
-            const fullTs = new Date(msg.created_date).toLocaleString("en-US", {
-              month: "short", day: "numeric", year: "numeric",
-              hour: "2-digit", minute: "2-digit", second: "2-digit",
-            });
-            return (
-              <div key={msg.id} className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
-                {!isOwn && (
-                  <p className="text-[9px] font-bold mb-0.5 px-1" style={{ color: C.midGreen }}>
-                    {msg.sender_name}
-                  </p>
-                )}
-                <div
-                  className="rounded-2xl px-3.5 py-2.5 max-w-[78%]"
-                  style={{
-                    background: isOwn ? C.darkGreen : C.white,
-                    border: isOwn ? "none" : `1px solid ${C.cream}`,
-                  }}
-                >
-                  <p className="text-sm break-words leading-relaxed"
-                    style={{ color: isOwn ? C.cream : C.darkGreen }}>
-                    {msg.body}
-                  </p>
-                  {/* Topic badge */}
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full capitalize"
-                      style={{ background: isOwn ? "rgba(255,255,255,0.15)" : tc.bg, color: isOwn ? C.lightGreen : tc.text }}>
-                      {msg.topic || "general"}
-                    </span>
-                    {msg.read_by_court && (
-                      <span className="text-[8px] font-bold" style={{ color: isOwn ? C.lightGreen : C.midGreen }}>
-                        ✓ Court reviewed
-                      </span>
-                    )}
-                  </div>
-                  {/* Full timestamp */}
-                  <p className="text-[8px] font-mono mt-1.5" style={{ color: isOwn ? `${C.lightGreen}cc` : C.mutedText }}>
-                    🕐 {fullTs} ET
-                  </p>
-                  {/* Tamper indicator */}
-                  <p className="text-[7px] font-mono mt-0.5" style={{ color: isOwn ? `${C.lightGreen}77` : `${C.midGreen}66` }}>
-                    🔒 audit-logged · immutable
-                  </p>
-                </div>
+        {activeTab === "messages" ? (
+          <>
+            {messages.length === 0 ? (
+              <div className="text-center py-10">
+                <p className="text-2xl mb-2">💬</p>
+                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>No messages yet</p>
+                <p className="text-xs mt-1" style={{ color: C.mutedText }}>All messages are securely saved and court-admissible.</p>
               </div>
-            );
-          })
+            ) : (
+              messages.map((msg, i) => {
+                const isOwn = msg.sender_email === user?.email;
+                const tc = TOPIC_COLORS[msg.topic] || TOPIC_COLORS.general;
+                const fullTs = new Date(msg.created_date).toLocaleString("en-US", {
+                  month: "short", day: "numeric", year: "numeric",
+                  hour: "2-digit", minute: "2-digit", second: "2-digit",
+                });
+                return (
+                  <div key={msg.id} className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
+                    {!isOwn && (
+                      <p className="text-[9px] font-bold mb-0.5 px-1" style={{ color: C.midGreen }}>
+                        {msg.sender_name}
+                      </p>
+                    )}
+                    <div
+                      className="rounded-2xl px-3.5 py-2.5 max-w-[78%]"
+                      style={{
+                        background: isOwn ? C.darkGreen : C.white,
+                        border: isOwn ? "none" : `1px solid ${C.cream}`,
+                      }}
+                    >
+                      <p className="text-sm break-words leading-relaxed"
+                        style={{ color: isOwn ? C.cream : C.darkGreen }}>
+                        {msg.body}
+                      </p>
+                      {/* Topic badge */}
+                      <div className="flex items-center gap-2 mt-2 flex-wrap">
+                        <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full capitalize"
+                          style={{ background: isOwn ? "rgba(255,255,255,0.15)" : tc.bg, color: isOwn ? C.lightGreen : tc.text }}>
+                          {msg.topic || "general"}
+                        </span>
+                        {msg.read_by_court && (
+                          <span className="text-[8px] font-bold" style={{ color: isOwn ? C.lightGreen : C.midGreen }}>
+                            ✓ Court reviewed
+                          </span>
+                        )}
+                      </div>
+                      {/* Full timestamp */}
+                      <p className="text-[8px] font-mono mt-1.5" style={{ color: isOwn ? `${C.lightGreen}cc` : C.mutedText }}>
+                        🕐 {fullTs} ET
+                      </p>
+                      {/* Tamper indicator */}
+                      <p className="text-[7px] font-mono mt-0.5" style={{ color: isOwn ? `${C.lightGreen}77` : `${C.midGreen}66` }}>
+                        🔒 audit-logged · immutable
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </>
+        ) : (
+          <div className="pt-4">
+            <CoParentingCallHistory 
+              calls={calls}
+              onExport={handleExport}
+              exporting={exporting}
+            />
+          </div>
         )}
         <div ref={bottomRef} />
       </div>
@@ -286,50 +372,52 @@ export default function CoParentMessaging() {
         />
       )}
 
-      {/* Input */}
-      <div className="px-4 py-3 flex gap-2 items-end"
-        style={{ background: C.white, borderTop: `1px solid ${C.cream}` }}>
-        <div className="flex-1 space-y-1.5">
-          <select
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            className="w-full text-xs px-2.5 py-1.5 rounded-lg capitalize"
-            style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
-          >
-            {TOPICS.map(t => (
-              <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
-            ))}
-          </select>
-          <div className="flex items-center gap-1.5 px-1 mb-1">
-            <ShieldAlert size={10} color={C.midGreen} />
-            <p className="text-[9px] font-bold" style={{ color: C.midGreen }}>AI tone check before sending</p>
+      {/* Input (only show for messages tab) */}
+      {activeTab === "messages" && (
+        <div className="px-4 py-3 flex gap-2 items-end"
+          style={{ background: C.white, borderTop: `1px solid ${C.cream}` }}>
+          <div className="flex-1 space-y-1.5">
+            <select
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full text-xs px-2.5 py-1.5 rounded-lg capitalize"
+              style={{ border: `1px solid ${C.cream}`, background: C.offWhite }}
+            >
+              {TOPICS.map(t => (
+                <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+              ))}
+            </select>
+            <div className="flex items-center gap-1.5 px-1 mb-1">
+              <ShieldAlert size={10} color={C.midGreen} />
+              <p className="text-[9px] font-bold" style={{ color: C.midGreen }}>AI tone check before sending</p>
+            </div>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+              placeholder="Your message… (timestamped & saved)"
+              rows={2}
+              className="w-full rounded-xl px-3 py-2.5 text-sm font-sans resize-none"
+              style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}
+            />
           </div>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            placeholder="Your message… (timestamped & saved)"
-            rows={2}
-            className="w-full rounded-xl px-3 py-2.5 text-sm font-sans resize-none"
-            style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}
-          />
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || sending}
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all"
+            style={{
+              background: input.trim() ? C.darkGreen : C.cream,
+              border: "none",
+              cursor: input.trim() ? "pointer" : "default",
+            }}
+          >
+            {sending
+              ? <Loader2 size={14} className="animate-spin" color={C.white} />
+              : <Send size={14} color={input.trim() ? C.white : C.mutedText} />
+            }
+          </button>
         </div>
-        <button
-          onClick={handleSend}
-          disabled={!input.trim() || sending}
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all"
-          style={{
-            background: input.trim() ? C.darkGreen : C.cream,
-            border: "none",
-            cursor: input.trim() ? "pointer" : "default",
-          }}
-        >
-          {sending
-            ? <Loader2 size={14} className="animate-spin" color={C.white} />
-            : <Send size={14} color={input.trim() ? C.white : C.mutedText} />
-          }
-        </button>
-      </div>
+      )}
     </div>
   );
 }
