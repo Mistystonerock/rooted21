@@ -192,13 +192,13 @@
 /* ── Semantic Design System ── */
 /* Global text visibility on dark backgrounds */
 body, p, span, div, label, h1, h2, h3, h4, h5, h6, a, button, li {
-  color: #FFFFFF !important;
+  color: #f0f0f0 !important;
 }
 label, .text-xs, .text-sm, small {
-  color: #E8E8E8 !important;
+  color: #d0d0d0 !important;
 }
 input, textarea, select, button {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 * {
   text-shadow: none !important;
