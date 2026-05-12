@@ -35,6 +35,8 @@ import LegalCalendar from '@/pages/LegalCalendar';
 import CoParentingHealthDashboard from '@/pages/CoParentingHealthDashboard';
 import ProfessionalPresentation from '@/pages/ProfessionalPresentation';
 import ComprehensiveCaseReport from '@/pages/ComprehensiveCaseReport';
+import CourtReadySummary from '@/pages/CourtReadySummary';
+import MedicationManager from '@/pages/MedicationManager';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -136,7 +138,8 @@ function App() {
               <Route path="/case-plan-checklist" element={<FeatureLockGate user={user}><CasePlanChecklist /></FeatureLockGate>} />
               <Route path="/expense-tracker" element={<FeatureLockGate user={user}><ExpenseTracker /></FeatureLockGate>} />
               <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.VisitationTracker /></FeatureLockGate></Suspense>} />
-              <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MedicationManager /></FeatureLockGate></Suspense>} />
+              <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><MedicationManager /></FeatureLockGate></Suspense>} />
+              <Route path="/court-ready-summary" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CourtReadySummary /></FeatureLockGate></Suspense>} />
               <Route path="/incident-reports" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.IncidentReportBuilder /></FeatureLockGate></Suspense>} />
               <Route path="/reunification-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ReunificationTracker /></FeatureLockGate></Suspense>} />
               <Route path="/team-contacts" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TeamContacts /></FeatureLockGate></Suspense>} />

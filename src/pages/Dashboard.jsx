@@ -102,16 +102,16 @@ export default function Dashboard() {
           style={{ background: C.darkGreen }}
         >
           <p className="font-serif font-bold text-2xl" style={{ color: C.cream }}>
-            {user?.full_name ? `Hey, ${user.full_name.split(" ")[0]} 🌿` : "Welcome back 🌿"}
+            Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌳
           </p>
           <p className="text-base mt-1" style={{ color: C.lightGreen }}>
-            Whatever today holds — you're not facing it alone.
+            You are not alone in this journey.
           </p>
         </motion.div>
 
         {/* 3-TAP QUICK ACTIONS — most common tasks */}
         <div>
-          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>WHAT DO YOU NEED RIGHT NOW?</p>
+          <p className="text-sm font-bold mb-2 px-1" style={{ color: C.mutedText }}>QUICK ACTIONS</p>
           <div className="grid grid-cols-3 gap-2">
             {[
               { to: "/daily-checkin", emoji: "✅", label: "Check-In", color: C.darkGreen, light: false },
@@ -337,6 +337,11 @@ export default function Dashboard() {
             <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Export</p>
             <p className="text-[11px]" style={{ color: "#B84C2A" }}>Certified PDF for court & CPS</p>
           </Link>
+          <Link to="/court-ready-summary" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: "#FEF3EE", border: `1.5px solid #F4C9B8` }}>
+            <div style={{ fontSize: "22px" }}>📜</div>
+            <p className="font-bold text-sm" style={{ color: "#7B2D00" }}>Court-Ready Summary</p>
+            <p className="text-[11px]" style={{ color: "#B84C2A" }}>Journal + incidents → legal PDF</p>
+          </Link>
           <Link to="/visitation-tracker" className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:shadow-md" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <div style={{ fontSize: "22px" }}>👨‍👧</div>
             <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Visitation Tracker</p>
@@ -452,10 +457,11 @@ export default function Dashboard() {
         )}
 
         <div className="pb-16" />
-        {/* Crisis reminder — calm, not alarming */}
-        <div className="rounded-xl p-3 flex items-center gap-3" style={{ background: "rgba(245,230,200,0.08)", border: "1px solid rgba(245,230,200,0.15)" }}>
-          <p className="text-xs" style={{ color: C.mutedText }}>
-            If you or your child are in crisis, help is one call away: <strong style={{ color: C.cream }}>988</strong> (call or text) &nbsp;·&nbsp; Emergency: <strong style={{ color: C.cream }}>911</strong>
+        {/* Crisis reminder */}
+        <div className="rounded-xl p-3 flex items-start gap-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
+          <AlertTriangle size={16} color="#B84C2A" className="mt-0.5 flex-shrink-0" />
+          <p className="text-[11px]" style={{ color: "#B84C2A" }}>
+            In crisis? Call or text <strong>988</strong>. In danger, call <strong>911</strong>.
           </p>
         </div>
       </div>
