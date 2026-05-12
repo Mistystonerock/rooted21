@@ -148,76 +148,13 @@ export default function Launch() {
           )}
         </div>
 
-        {/* ── FOUNDER'S NOTE ── */}
+        {/* ── FOUNDER PHOTO ── */}
         <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.5)", marginBottom: 28 }}>
-
-          {/* Photo — full width on mobile */}
-          <div style={{ width: "100%", height: 280, overflow: "hidden", position: "relative" }}>
-            <img
-              src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/657094531_5061CC5C-2841-45A8-A3F9-073AC259189A.png"
-              alt="Misty Stonerock"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%", display: "block" }}
-            />
-            {/* Gradient fade into content below */}
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 80, background: "linear-gradient(transparent, #0d2c1a)" }} />
-          </div>
-
-          {/* Content */}
-          <div style={{ background: "#0d2c1a", padding: "24px 22px 28px" }}>
-            <p style={{ fontFamily: "var(--font-serif)", fontWeight: 900, fontSize: "2rem", color: "#f0e8d8", lineHeight: 1.1, marginBottom: 10 }}>
-              Founder's Note
-            </p>
-            <div style={{ width: 32, height: 3, background: GOLD, marginBottom: 24, borderRadius: 2 }} />
-
-            {[
-              {
-                heading: "MY WHY",
-                body: "Rooted 21 was born from my own journey—navigating trauma, systems, and the fight to break generational cycles. I created this platform so no parent has to feel alone, overwhelmed, or unheard.",
-              },
-              {
-                heading: "OUR MISSION",
-                body: "To empower parents and families with real-time support, practical tools, and a community that walks with you through every season. We blend education, behavioral support, and connection to help you build a stronger, rooted foundation for your family.",
-              },
-              {
-                heading: "OUR PROMISE",
-                body: "We lead with compassion, respect, and real solutions. Your privacy, your story, and your family's well-being will always be at the heart of everything we do.",
-              },
-            ].map((s, i) => (
-              <div key={s.heading} style={{ marginBottom: i < 2 ? 20 : 0 }}>
-                <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", color: GOLD, marginBottom: 8, textTransform: "uppercase" }}>{s.heading}</p>
-                <p style={{ fontSize: 14, lineHeight: 1.75, color: "rgba(240,232,216,0.85)" }}>{s.body}</p>
-                {i < 2 && <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: 20 }} />}
-              </div>
-            ))}
-
-            {/* Logo mark */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 24 }}>
-              <span style={{ fontSize: 22 }}>🌿</span>
-              <div>
-                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 16, color: "#f0e8d8", lineHeight: 1 }}>
-                  Rooted <span style={{ color: GOLD }}>21</span>
-                </p>
-                <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, marginTop: 3 }}>PARENTING NETWORK</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom: quote + signature */}
-          <div style={{ background: "#e8e0d0", padding: "20px 22px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-            <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flex: 1 }}>
-              <span style={{ fontSize: 32, lineHeight: 0.8, color: "#3a6a4a", fontFamily: "Georgia, serif", flexShrink: 0, marginTop: 4 }}>"</span>
-              <p style={{ fontSize: 13, lineHeight: 1.65, color: "#1a2a1a", fontStyle: "italic" }}>
-                Healing our past.<br />
-                Strengthening our present.<br />
-                Building their future.
-              </p>
-            </div>
-            <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 700, fontSize: 17, color: "#1a2a1a", marginBottom: 4 }}>Misty Stonerock</p>
-              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", color: "#5a7a5a", textTransform: "uppercase" }}>Founder</p>
-              <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.07em", color: "#5a7a5a", textTransform: "uppercase" }}>Rooted 21 Parenting Network</p>
-            </div>
-          </div>
+          <img
+            src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/8f5c76ea9_IMG_6975.jpg"
+            alt="Misty Stonerock"
+            style={{ width: "100%", display: "block", objectFit: "cover" }}
+          />
         </div>
 
         {/* ── APP TOUR ── */}
