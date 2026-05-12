@@ -155,7 +155,7 @@ export default function CoParentMessaging() {
     setExporting(false);
   }
 
-  async function handleCallStart() {
+  async function handleCallStart(twilioData) {
     const callRecord = await base44.entities.CoParentingCall.create({
       partnership_id: partnershipId,
       initiator_email: user.email,
@@ -167,7 +167,7 @@ export default function CoParentMessaging() {
       child_name: partnership?.child_name,
       topic: topic,
     });
-    setRecordingCall(callRecord);
+    setRecordingCall({ ...callRecord, twilioToken: twilioData?.token });
   }
 
   async function handleCallEnd(duration) {
@@ -177,6 +177,17 @@ export default function CoParentMessaging() {
       end_time: new Date().toISOString(),
       duration_seconds: Math.round(duration),
       status: "ended",
+    });
+
+    // Audit log for call completion
+    await base44.entities.AuditLog.create({
+      action: 'coparenting_call_ended',
+      user_email: user.email,
+      resource_type: 'coparenting_call',
+      resource_id: recordingCall.id,
+      timestamp: new Date().toISOString(),
+      status: 'success',
+      details: `Call duration: ${Math.round(duration)}s`,
     });
 
     setCalls(prev => [updatedCall, ...prev]);
@@ -224,6 +235,7 @@ export default function CoParentMessaging() {
           user={user}
           onCallStart={handleCallStart}
           onCallEnd={handleCallEnd}
+          callId={recordingCall?.id}
           disabled={recordingCall !== null}
         />
         <button
