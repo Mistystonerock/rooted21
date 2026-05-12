@@ -1,54 +1,78 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Target, TrendingUp, MessageCircle } from "lucide-react";
+import { Home, LayoutGrid, BookOpen, MoreHorizontal } from "lucide-react";
 
-const GOLD = "#c9973a";
-const TEXT = "#f5e6c8";
-const MUTED = "rgba(245,230,200,0.45)";
-
-const NAV = [
-  { path: "/dashboard", label: "Dashboard", icon: Home },
-  { path: "/chat", label: "AI Chat", icon: MessageCircle },
-  { path: "/lessons", label: "Lessons", icon: BookOpen },
-  { path: "/goals", label: "Goals", icon: Target },
-  { path: "/progress", label: "Progress", icon: TrendingUp },
-];
+const BG = "#0f1f14";
+const BORDER = "rgba(255,255,255,0.08)";
+const GREEN = "#3db870";
+const MUTED = "rgba(240,232,216,0.45)";
 
 export default function BottomNav() {
   const { pathname } = useLocation();
 
+  const isActive = (path) => pathname === path;
+
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around px-1 pt-2"
       style={{
-        background: "linear-gradient(180deg, #0a3d20 0%, #071f10 100%)",
-        borderTop: `1px solid rgba(201,151,58,0.35)`,
-        boxShadow: "0 -4px 20px rgba(0,0,0,0.4)",
-        paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 30,
+        background: BG,
+        borderTop: `1px solid ${BORDER}`,
+        paddingBottom: "max(12px, env(safe-area-inset-bottom))",
+        display: "flex",
+        alignItems: "center",
       }}
     >
-      {NAV.map(({ path, label, icon: Icon }) => {
-        const active = pathname === path;
-        return (
-          <Link
-            key={path}
-            to={path}
-            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all"
-            style={{ minWidth: 52, textDecoration: "none" }}
-          >
-            <Icon
-              size={20}
-              color={active ? GOLD : MUTED}
-              strokeWidth={active ? 2.5 : 1.8}
-            />
-            <span
-              className="text-[9px] font-bold"
-              style={{ color: active ? GOLD : MUTED }}
-            >
-              {label}
-            </span>
-          </Link>
-        );
-      })}
+      {/* Home */}
+      <Link to="/home" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/home") ? GREEN : MUTED }}>
+        <Home size={20} strokeWidth={isActive("/home") ? 2.5 : 1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Home</span>
+      </Link>
+
+      {/* Dashboard */}
+      <Link to="/dashboard" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/dashboard") ? GREEN : MUTED }}>
+        <LayoutGrid size={20} strokeWidth={isActive("/dashboard") ? 2.5 : 1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Dashboard</span>
+      </Link>
+
+      {/* SOS center button */}
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", paddingBottom: 4 }}>
+        <Link
+          to="/chat?crisis=1"
+          style={{
+            width: 54,
+            height: 54,
+            borderRadius: "50%",
+            background: "#c0392b",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textDecoration: "none",
+            boxShadow: "0 4px 16px rgba(192,57,43,0.5)",
+            border: `3px solid ${BG}`,
+            marginTop: -18,
+          }}
+        >
+          <span style={{ fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.04em" }}>SOS</span>
+        </Link>
+        <span style={{ position: "absolute", fontSize: 9, fontWeight: 700, color: MUTED, marginTop: 46, paddingTop: 10 }}>SOS</span>
+      </div>
+
+      {/* Lessons */}
+      <Link to="/lessons" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/lessons") ? GREEN : MUTED }}>
+        <BookOpen size={20} strokeWidth={isActive("/lessons") ? 2.5 : 1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Lessons</span>
+      </Link>
+
+      {/* More */}
+      <Link to="/dashboard" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: MUTED }}>
+        <MoreHorizontal size={20} strokeWidth={1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>More</span>
+      </Link>
     </nav>
   );
 }
