@@ -21,11 +21,11 @@ import ProgressRing from "@/components/rooted/ProgressRing";
 
 const BG = "#0b1f12";
 const CARD = "#12271a";
-const BORDER = "rgba(255,255,255,0.07)";
+const BORDER = "rgba(247,232,198,0.45)";
 const GOLD = "#c9973a";
-const GREEN = "#3db870";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.5)";
+const GREEN = "#48D17A";
+const TEXT = "#F7E8C6";
+const MUTED = "#BFAF8A";
 
 // Feature tiles — each with its own color accent
 const TILES = [
@@ -125,7 +125,7 @@ export default function Dashboard() {
             <div className="font-serif font-bold text-base" style={{ color: TEXT }}>
               Rooted <span style={{ color: GOLD }}>21</span>
             </div>
-            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.13em", color: MUTED, marginTop: 1 }}>PARENTING NETWORK</p>
+            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.13em", color: "#BFAF8A", marginTop: 1 }}>PARENTING NETWORK</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <DarkModeToggle />
@@ -153,7 +153,7 @@ export default function Dashboard() {
               <p className="font-serif font-bold" style={{ fontSize: 21, color: TEXT, lineHeight: 1.2 }}>
                 Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌿
               </p>
-              <p style={{ fontSize: 13, color: MUTED, marginTop: 5 }}>You are not alone in this journey.</p>
+              <p style={{ fontSize: 13, color: "#E6D8B8", marginTop: 5 }}>You are not alone in this journey.</p>
             </div>
             <Link to="/personalized-chat" style={{ background: `${GREEN}18`, border: `1.5px solid ${GREEN}50`, borderRadius: 11, padding: "9px 14px", display: "flex", alignItems: "center", gap: 6, textDecoration: "none", flexShrink: 0 }}>
               <Sparkles size={13} color={GREEN} />
@@ -163,7 +163,7 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div>
-            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: MUTED, marginBottom: 10 }}>QUICK ACTIONS</p>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "#BFAF8A", marginBottom: 10 }}>QUICK ACTIONS</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
               {[
                 { to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: "linear-gradient(145deg,#3a0f0f,#5a1a1a)", border: "#c0392b", textColor: "#ff8070", issos: true },
@@ -178,7 +178,7 @@ export default function Dashboard() {
                       <div style={{ fontSize: 28, marginBottom: 8 }}>{a.emoji}</div>
                     )}
                     <p style={{ fontWeight: 800, fontSize: 12, color: a.textColor, lineHeight: 1.3, whiteSpace: "pre-line" }}>{a.label}</p>
-                    <p style={{ fontSize: 10, color: MUTED, marginTop: 4 }}>{a.sub}</p>
+                    <p style={{ fontSize: 10, color: "#E6D8B8", marginTop: 4 }}>{a.sub}</p>
                   </Link>
                 </motion.div>
               ))}
@@ -189,20 +189,20 @@ export default function Dashboard() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <Link to="/lessons" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${GREEN}30`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none" }}>
               <ProgressRing pct={progressPct} size={72} color={GREEN} />
-              <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Lessons</p>
-              <p style={{ fontSize: 11, color: MUTED }}>{completedLessons}/21 done</p>
+              <p style={{ fontWeight: 700, fontSize: 12, color: "#F7E8C6" }}>Lessons</p>
+              <p style={{ fontSize: 11, color: "#E6D8B8" }}>{completedLessons}/21 done</p>
             </Link>
             {latestCheckin ? (
               <Link to="/progress" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", justifyContent: "center", gap: 10, textDecoration: "none" }}>
-                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 14, color: TEXT }}>Last Check-In</p>
+                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 14, color: "#F7E8C6" }}>Last Check-In</p>
                 <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
                   <div style={{ textAlign: "center" }}>
                     <p style={{ fontSize: 30, fontWeight: 900, color: GREEN, lineHeight: 1 }}>{latestCheckin.child_regulation}</p>
-                    <p style={{ fontSize: 10, color: MUTED }}>Child</p>
+                    <p style={{ fontSize: 10, color: "#E6D8B8" }}>Child</p>
                   </div>
                   <div style={{ textAlign: "center" }}>
                     <p style={{ fontSize: 30, fontWeight: 900, color: GOLD, lineHeight: 1 }}>{latestCheckin.parent_calm}</p>
-                    <p style={{ fontSize: 10, color: MUTED }}>You</p>
+                    <p style={{ fontSize: 10, color: "#E6D8B8" }}>You</p>
                   </div>
                 </div>
                 <p style={{ fontSize: 11, fontWeight: 700, color: GREEN }}>View trends →</p>
@@ -210,14 +210,14 @@ export default function Dashboard() {
             ) : (
               <Link to="/daily-checkin" style={{ background: `${GREEN}10`, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", textAlign: "center" }}>
                 <p style={{ fontSize: 26 }}>📊</p>
-                <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Start your first check-in</p>
+                <p style={{ fontWeight: 700, fontSize: 12, color: "#F7E8C6" }}>Start your first check-in</p>
               </Link>
             )}
           </div>
 
           {/* All Features */}
           <div>
-            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: MUTED, marginBottom: 10 }}>ALL FEATURES</p>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "#BFAF8A", marginBottom: 10 }}>ALL FEATURES</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {TILES.map((tile, i) => (
                 <Link key={tile.to + tile.label} to={tile.to} style={{
@@ -234,8 +234,8 @@ export default function Dashboard() {
                   ) : (
                     <div style={{ fontSize: 24 }}>{tile.emoji}</div>
                   )}
-                  <p style={{ fontWeight: 700, fontSize: 13, color: tile.text || TEXT, lineHeight: 1.25 }}>{tile.label}</p>
-                  {tile.sub && <p style={{ fontSize: 11, color: MUTED, lineHeight: 1.4 }}>{tile.sub}</p>}
+                  <p style={{ fontWeight: 700, fontSize: 13, color: tile.text || "#F7E8C6", lineHeight: 1.25 }}>{tile.label}</p>
+                  {tile.sub && <p style={{ fontSize: 11, color: "#E6D8B8", lineHeight: 1.4 }}>{tile.sub}</p>}
                 </Link>
               ))}
             </div>
@@ -247,15 +247,15 @@ export default function Dashboard() {
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🧒</div>
                 <div>
-                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>{child.first_name}</p>
-                  <p style={{ fontSize: 11, color: MUTED }}>Child profile · Tap to edit</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>{child.first_name}</p>
+                  <p style={{ fontSize: 11, color: "#E6D8B8" }}>Child profile · Tap to edit</p>
                 </div>
               </div>
             </Link>
           ) : (
             <Link to="/child-profile" style={{ display: "block", background: `${GREEN}10`, border: `1.5px dashed ${GREEN}40`, borderRadius: 16, padding: 14, textDecoration: "none", textAlign: "center" }}>
-              <p style={{ fontWeight: 700, fontSize: 13, color: GREEN }}>+ Add Child Profile</p>
-              <p style={{ fontSize: 11, color: MUTED, marginTop: 4 }}>Helps professionals support your family</p>
+              <p style={{ fontWeight: 700, fontSize: 13, color: "#48D17A" }}>+ Add Child Profile</p>
+              <p style={{ fontSize: 11, color: "#E6D8B8", marginTop: 4 }}>Helps professionals support your family</p>
             </Link>
           )}
 
@@ -267,16 +267,16 @@ export default function Dashboard() {
               <button onClick={() => setShowCodeEntry(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
                 <KeyRound size={20} color={GREEN} />
                 <div>
-                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Enter Professional Access Code</p>
-                  <p style={{ fontSize: 11, color: MUTED }}>Link your account to your assigned professional</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>Enter Professional Access Code</p>
+                  <p style={{ fontSize: 11, color: "#E6D8B8" }}>Link your account to your assigned professional</p>
                 </div>
               </button>
               {child && (
                 <button onClick={() => setShowInvitationModal(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GOLD}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
                   <QrCode size={20} color={GOLD} />
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Generate Invitation Code</p>
-                    <p style={{ fontSize: 11, color: MUTED }}>Share with a professional to auto-link them</p>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>Generate Invitation Code</p>
+                    <p style={{ fontSize: 11, color: "#E6D8B8" }}>Share with a professional to auto-link them</p>
                   </div>
                 </button>
               )}
@@ -290,7 +290,7 @@ export default function Dashboard() {
           {/* Crisis reminder */}
           <div style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.3)", borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "flex-start", gap: 10 }}>
             <AlertTriangle size={15} color="#ff8070" style={{ flexShrink: 0, marginTop: 2 }} />
-            <p style={{ fontSize: 12, color: "#ff8070" }}>
+            <p style={{ fontSize: 12, color: "#FF6B5A", fontWeight: 600 }}>
               In crisis? Call or text <strong>988</strong>. In danger, call <strong>911</strong>.
             </p>
           </div>

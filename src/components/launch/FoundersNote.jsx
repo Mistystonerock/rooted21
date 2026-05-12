@@ -1,6 +1,6 @@
 const GOLD = "#c9973a";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.6)";
+const TEXT = "#F7E8C6";
+const MUTED = "#BFAF8A";
 
 const sections = [
   {
@@ -96,7 +96,7 @@ export default function FoundersNote() {
             background: "linear-gradient(135deg, rgba(13,44,26,0.9) 0%, rgba(10,31,18,0.95) 100%)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
-            border: `1px solid rgba(255,255,255,0.07)`,
+            border: `1px solid rgba(247,232,198,0.2)`,
             borderRadius: 16,
             padding: "18px 20px",
             boxShadow: "0 2px 20px rgba(0,0,0,0.3)",
@@ -114,7 +114,7 @@ export default function FoundersNote() {
             }}>{s.heading}</p>
             <p style={{
               fontSize: "clamp(13px, 3.5vw, 15px)",
-              lineHeight: 1.75, color: "rgba(240,232,216,0.85)", marginLeft: 8,
+              lineHeight: 1.75, color: "#E6D8B8", marginLeft: 8,
             }}>{s.body}</p>
           </div>
         ))}

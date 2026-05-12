@@ -30,11 +30,11 @@ function useCountdown() {
 const BG = "#0d2818";
 const CARD = "#132d1f";
 const CARD2 = "#162f21";
-const BORDER = "rgba(255,255,255,0.08)";
-const GREEN = "#3db870";
+const BORDER = "rgba(247,232,198,0.45)";
+const GREEN = "#48D17A";
 const GOLD = "#c9973a";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.55)";
+const TEXT = "#F7E8C6";
+const MUTED = "#BFAF8A";
 
 const WHAT_WE_HELP = [
   { emoji: "⚖️", title: "Court & CPS", desc: "Know your rights. Track every date, document, and requirement." },
@@ -108,7 +108,7 @@ export default function Launch() {
         </div>
         <button
           onClick={() => base44.auth.redirectToLogin("/home")}
-          style={{ background: CARD, border: `1px solid ${GREEN}50`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
+          style={{ background: CARD, border: `1px solid ${GREEN}60`, borderRadius: 10, color: "#48D17A", fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
         >
           Sign In
         </button>
@@ -120,14 +120,14 @@ export default function Launch() {
         <div style={{ textAlign: "center", padding: "20px 0 28px" }}>
           {/* Rotating affirmation pill */}
           <div style={{ background: CARD, border: `1px solid ${GREEN}30`, borderRadius: 50, padding: "7px 18px", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 22, minHeight: 34 }}>
-            <p style={{ fontSize: 12, color: GREEN, fontStyle: "italic", margin: 0 }}>"{TRUTHS[activeTruth]}"</p>
+            <p style={{ fontSize: 12, color: "#48D17A", fontStyle: "italic", margin: 0 }}>"{TRUTHS[activeTruth]}"</p>
           </div>
 
           <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 900, fontSize: "clamp(1.9rem, 8vw, 2.6rem)", lineHeight: 1.1, color: TEXT, marginBottom: 14, letterSpacing: "-0.5px" }}>
             You don't have to figure<br />this out alone.
           </h1>
 
-          <p style={{ fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, color: "#E6D8B8", maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
             Rooted 21 is a calm, private place for foster, adoptive, kinship, and biological parents navigating hard systems.
           </p>
 
@@ -139,13 +139,13 @@ export default function Launch() {
             </div>
             <div style={{ width: 1, height: 40, background: BORDER }} />
             <div style={{ textAlign: "left" }}>
-              <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, margin: 0 }}>Opening June 10, 2026</p>
-              <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
+              <p style={{ fontWeight: 700, fontSize: 14, color: "#F7E8C6", margin: 0 }}>Opening June 10, 2026</p>
+              <p style={{ fontSize: 12, color: "#E6D8B8", marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
             </div>
           </div>
 
           {count !== null && count > 0 && (
-            <p style={{ fontSize: 12, color: MUTED, marginTop: 8 }}>🌱 {count} families already on the list</p>
+            <p style={{ fontSize: 12, color: "#E6D8B8", marginTop: 8 }}>🌱 {count} families already on the list</p>
           )}
         </div>
 
@@ -171,8 +171,8 @@ export default function Launch() {
             {WHAT_WE_HELP.map(item => (
               <div key={item.title} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "14px 12px" }}>
                 <div style={{ fontSize: 22, marginBottom: 8 }}>{item.emoji}</div>
-                <p style={{ fontWeight: 700, fontSize: 13, color: TEXT, marginBottom: 5 }}>{item.title}</p>
-                <p style={{ fontSize: 11, lineHeight: 1.55, color: MUTED }}>{item.desc}</p>
+                <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6", marginBottom: 5 }}>{item.title}</p>
+                <p style={{ fontSize: 11, lineHeight: 1.55, color: "#E6D8B8" }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -181,7 +181,7 @@ export default function Launch() {
         {/* ── JOIN WAITLIST ── */}
         <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 18px", marginBottom: 28 }}>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 6, lineHeight: 1.15 }}>Save your spot</h2>
-          <p style={{ fontSize: 13, color: MUTED, marginBottom: 20, lineHeight: 1.65 }}>
+          <p style={{ fontSize: 13, color: "#E6D8B8", marginBottom: 20, lineHeight: 1.65 }}>
             We'll email you when we open. No spam. Just a heads up that your support is ready.
           </p>
 
@@ -189,7 +189,7 @@ export default function Launch() {
             <div style={{ background: "rgba(61,184,112,0.12)", border: `1.5px solid ${GREEN}40`, borderRadius: 14, padding: "28px 20px", textAlign: "center" }}>
               <p style={{ fontSize: 32, marginBottom: 10 }}>🌱</p>
               <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 20, color: TEXT, marginBottom: 8 }}>You're on the list.</p>
-              <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.65 }}>We'll be in touch before June 10. Thank you for believing in this.</p>
+              <p style={{ fontSize: 13, color: "#E6D8B8", lineHeight: 1.65 }}>We'll be in touch before June 10. Thank you for believing in this.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -221,7 +221,7 @@ export default function Launch() {
               <button type="submit" disabled={loading} style={{ width: "100%", padding: "15px", background: loading ? `${GREEN}50` : GREEN, border: "none", borderRadius: 12, color: "#0d2818", fontWeight: 800, fontSize: 15, cursor: loading ? "default" : "pointer", boxShadow: loading ? "none" : `0 4px 20px ${GREEN}40`, fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 {loading ? "Saving your spot…" : (<><Sparkles size={15} /> Yes, notify me when we open</>)}
               </button>
-              <p style={{ textAlign: "center", fontSize: 11, color: MUTED, marginTop: 2 }}>No spam. No selling your info. Ever.</p>
+              <p style={{ textAlign: "center", fontSize: 11, color: "#BFAF8A", marginTop: 2 }}>No spam. No selling your info. Ever.</p>
             </form>
           )}
         </div>
@@ -234,12 +234,12 @@ export default function Launch() {
             { label: "Admin Access", href: "/founder-access" },
           ].map((btn, i) => (
             btn.href ? (
-              <a key={btn.label} href={btn.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", color: MUTED, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
-                {btn.label} <ChevronRight size={14} color={MUTED} />
+              <a key={btn.label} href={btn.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", color: "#E6D8B8", textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
+                {btn.label} <ChevronRight size={14} color="#BFAF8A" />
               </a>
             ) : (
-              <button key={btn.label} onClick={btn.action} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", background: "none", border: "none", color: MUTED, fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "left" }}>
-                {btn.label} <ChevronRight size={14} color={MUTED} />
+              <button key={btn.label} onClick={btn.action} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", background: "none", border: "none", color: "#E6D8B8", fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "left" }}>
+                {btn.label} <ChevronRight size={14} color="#BFAF8A" />
               </button>
             )
           ))}

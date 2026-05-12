@@ -10,9 +10,9 @@
     --font-sans: 'Inter', system-ui, sans-serif;
 
     --background: 150 62% 14%;
-    --foreground: 38 73% 89%;
+    --foreground: 43 82% 94%;
     --card: 150 55% 17%;
-    --card-foreground: 38 73% 89%;
+    --card-foreground: 43 82% 94%;
     --popover: 150 55% 17%;
     --popover-foreground: 38 73% 89%;
     --primary: 38 56% 51%;
@@ -20,7 +20,7 @@
     --secondary: 150 45% 22%;
     --secondary-foreground: 38 73% 89%;
     --muted: 150 40% 19%;
-    --muted-foreground: 38 40% 68%;
+    --muted-foreground: 38 42% 76%;
     --accent: 42 65% 59%;
     --accent-foreground: 150 62% 10%;
     --destructive: 14 60% 44%;
@@ -55,9 +55,9 @@
 
   .dark {
     --background: 150 62% 10%;
-    --foreground: 38 73% 89%;
+    --foreground: 43 82% 94%;
     --card: 150 55% 14%;
-    --card-foreground: 38 73% 89%;
+    --card-foreground: 43 82% 94%;
     --popover: 150 55% 14%;
     --popover-foreground: 38 73% 89%;
     --primary: 38 56% 51%;
@@ -65,7 +65,7 @@
     --secondary: 150 45% 18%;
     --secondary-foreground: 38 73% 89%;
     --muted: 150 40% 16%;
-    --muted-foreground: 38 40% 65%;
+    --muted-foreground: 38 42% 74%;
     --accent: 42 65% 59%;
     --accent-foreground: 150 62% 10%;
     --destructive: 14 60% 44%;
