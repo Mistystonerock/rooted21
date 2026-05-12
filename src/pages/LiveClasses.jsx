@@ -283,6 +283,158 @@ export default function LiveClasses() {
           </div>
         )}
 
+        {/* ── ANGER MANAGEMENT GROUPS ── */}
+        <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${C.cream}` }}>
+          <div className="px-4 py-3" style={{ background: "#4a1c1c" }}>
+            <span className="text-[10px] font-extrabold tracking-widest px-2 py-0.5 rounded-full" style={{ background: "#ffffff22", color: "#fff" }}>
+              ANGER MANAGEMENT
+            </span>
+            <p className="font-serif font-bold text-sm mt-2" style={{ color: "#fff" }}>Anger Management Groups</p>
+            <p className="text-[11px] mt-1" style={{ color: "rgba(255,220,200,0.8)" }}>
+              Court-approved, community-based, and online options for parents navigating mandated or voluntary anger management.
+            </p>
+          </div>
+          <div className="p-4 space-y-4" style={{ background: "#fff" }}>
+
+            {/* Court-Approved */}
+            <div>
+              <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: "#4a1c1c" }}>⚖️ COURT-APPROVED PROGRAMS</p>
+              {[
+                {
+                  name: "Anger Management Online (AMO)",
+                  format: "Online · Self-paced",
+                  desc: "CSACS-certified, court-recognized online anger management classes. Certificate of completion provided. Accepted by most courts.",
+                  url: "https://www.angermanagementonline.com",
+                },
+                {
+                  name: "Anderson & Anderson Anger Management",
+                  format: "Online or In-Person",
+                  desc: "One of the most widely court-accepted programs nationwide. Offers 8, 12, 26, and 52-week programs with a certificate.",
+                  url: "https://www.andersonservices.com",
+                },
+                {
+                  name: "CCALAC (Court-Certified Anger Mgmt)",
+                  format: "Online · Group or Individual",
+                  desc: "Court-certified provider. Sliding-scale fees. Spanish available. Ask your caseworker if this provider is approved in your county.",
+                  url: "https://www.ccalac.org",
+                },
+              ].map(g => (
+                <div key={g.name} className="rounded-xl p-3 mb-2" style={{ background: "#fdf8f5", border: "1px solid #f0e0d0" }}>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <p className="font-bold text-xs" style={{ color: "#4a1c1c" }}>{g.name}</p>
+                      <p className="text-[10px] font-bold mt-0.5" style={{ color: "#a06040" }}>{g.format}</p>
+                      <p className="text-[11px] mt-1 leading-relaxed" style={{ color: "#5a3a2a" }}>{g.desc}</p>
+                    </div>
+                  </div>
+                  <a
+                    href={g.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2.5 flex items-center justify-center gap-2 py-2 rounded-lg font-bold text-xs"
+                    style={{ background: "#4a1c1c", color: "#fff", textDecoration: "none" }}
+                  >
+                    Visit Website <ExternalLink size={11} />
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            {/* Community-Based */}
+            <div>
+              <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: C.darkGreen }}>🏘️ COMMUNITY-BASED GROUPS</p>
+              {[
+                {
+                  name: "2-1-1 Helpline — Local Referrals",
+                  format: "Phone · Nationwide",
+                  desc: "Call or text 211 to find free and low-cost anger management groups near you. Available in every state.",
+                  url: "https://www.211.org",
+                },
+                {
+                  name: "SAMHSA Behavioral Health Treatment Locator",
+                  format: "Online Search Tool",
+                  desc: "Find local community mental health centers offering anger management and emotion regulation groups. Many are free or sliding-scale.",
+                  url: "https://findtreatment.gov",
+                },
+                {
+                  name: "Local YMCA / Community Centers",
+                  format: "In-Person · Varies by location",
+                  desc: "Many YMCAs and recreation centers offer low-cost or free anger management groups. Search your local YMCA for current offerings.",
+                  url: "https://www.ymca.org",
+                },
+              ].map(g => (
+                <div key={g.name} className="rounded-xl p-3 mb-2" style={{ background: "#f0f6f0", border: `1px solid ${C.cream}` }}>
+                  <div className="flex-1">
+                    <p className="font-bold text-xs" style={{ color: C.darkGreen }}>{g.name}</p>
+                    <p className="text-[10px] font-bold mt-0.5" style={{ color: C.midGreen }}>{g.format}</p>
+                    <p className="text-[11px] mt-1 leading-relaxed" style={{ color: "#3a3028" }}>{g.desc}</p>
+                  </div>
+                  <a
+                    href={g.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2.5 flex items-center justify-center gap-2 py-2 rounded-lg font-bold text-xs"
+                    style={{ background: C.darkGreen, color: "#fff", textDecoration: "none" }}
+                  >
+                    Find a Group <ExternalLink size={11} />
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            {/* Online Options */}
+            <div>
+              <p className="text-[10px] font-extrabold tracking-wider mb-2" style={{ color: "#1A5FAD" }}>💻 ONLINE GROUP OPTIONS</p>
+              {[
+                {
+                  name: "BetterHelp Group Sessions",
+                  format: "Online · Subscription",
+                  desc: "Access therapist-led online groups focused on anger, emotion regulation, and stress management. Financial aid available.",
+                  url: "https://www.betterhelp.com",
+                },
+                {
+                  name: "Anger Management for Everyone (Book + Workbook)",
+                  format: "Self-Guided · Free to access",
+                  desc: "Widely used evidence-based workbook. Free excerpts available online. Pairs well with any group program.",
+                  url: "https://www.newharbinger.com/9781684034635/anger-management-for-everyone",
+                },
+                {
+                  name: "Open Path Collective — Affordable Therapy",
+                  format: "Online · $30–$80/session",
+                  desc: "Find affordable licensed therapists who specialize in anger and impulse control. Sessions as low as $30.",
+                  url: "https://openpathcollective.org",
+                },
+              ].map(g => (
+                <div key={g.name} className="rounded-xl p-3 mb-2" style={{ background: "#f0f4fb", border: "1px solid #d0ddf0" }}>
+                  <div className="flex-1">
+                    <p className="font-bold text-xs" style={{ color: "#1A3A6A" }}>{g.name}</p>
+                    <p className="text-[10px] font-bold mt-0.5" style={{ color: "#1A5FAD" }}>{g.format}</p>
+                    <p className="text-[11px] mt-1 leading-relaxed" style={{ color: "#2a3a5a" }}>{g.desc}</p>
+                  </div>
+                  <a
+                    href={g.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2.5 flex items-center justify-center gap-2 py-2 rounded-lg font-bold text-xs"
+                    style={{ background: "#1A5FAD", color: "#fff", textDecoration: "none" }}
+                  >
+                    Learn More <ExternalLink size={11} />
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            {/* Court tip */}
+            <div className="rounded-xl p-3" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
+              <p className="text-[11px] font-bold mb-1" style={{ color: "#B84C2A" }}>⚖️ If your program is court-ordered:</p>
+              <p className="text-[11px] leading-relaxed" style={{ color: "#7a2d00" }}>
+                Always confirm with your caseworker or attorney that the specific program you choose is approved by the court before you enroll. Ask for a certificate of completion and keep a copy for your case file.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
         {/* How it works */}
         <div className="rounded-2xl p-4 space-y-3" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
           <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>How It Works</p>

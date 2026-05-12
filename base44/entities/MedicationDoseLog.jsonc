@@ -1,0 +1,69 @@
+{
+  "name": "MedicationDoseLog",
+  "type": "object",
+  "properties": {
+    "parent_email": {
+      "type": "string"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "medication_record_id": {
+      "type": "string",
+      "description": "ID of the linked MedicationRecord"
+    },
+    "medication_name": {
+      "type": "string"
+    },
+    "dosage": {
+      "type": "string"
+    },
+    "administered_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "administered_time": {
+      "type": "string",
+      "description": "e.g. 08:00 AM"
+    },
+    "time_of_day_slot": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "midday",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "description": "Bucketed time slot for correlation analysis"
+    },
+    "given": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the dose was actually given"
+    },
+    "skipped_reason": {
+      "type": "string",
+      "description": "Reason if dose was skipped"
+    },
+    "behavior_log_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of BehaviorLog entries linked to this dose window"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "side_effects_observed": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "parent_email",
+    "child_name",
+    "medication_name",
+    "administered_date"
+  ]
+}
