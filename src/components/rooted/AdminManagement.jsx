@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Shield, Trash2, Edit2, Plus, CheckCircle2, AlertCircle, Copy, XCircle } from "lucide-react";
+import CertificateGenerator from "@/components/admin/CertificateGenerator";
 
 const PERMISSION_OPTIONS = [
   { value: "view_all_data", label: "View All Data" },
@@ -89,7 +90,7 @@ export default function AdminManagement() {
     <div className="space-y-4">
       {/* Tabs */}
       <div className="flex gap-1 border-b" style={{ borderColor: C.cream }}>
-        {["codes", "admins"].map(tab => (
+        {["codes", "admins", "certificates"].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -101,7 +102,7 @@ export default function AdminManagement() {
               cursor: "pointer",
             }}
           >
-            {tab === "codes" ? "🔑 Access Codes" : "👥 Admin Permissions"}
+            {tab === "codes" ? "🔑 Access Codes" : tab === "admins" ? "👥 Admin Permissions" : "🎓 Certificates"}
           </button>
         ))}
       </div>
@@ -317,6 +318,10 @@ export default function AdminManagement() {
             </div>
           )}
           </div>
+          )}
+
+          {activeTab === "certificates" && (
+          <CertificateGenerator />
           )}
           </div>
           );
