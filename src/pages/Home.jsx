@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
@@ -9,6 +9,18 @@ import HistorySidebar from "@/components/rooted/HistorySidebar";
 import TrendsScreen from "@/components/rooted/TrendsScreen";
 
 export default function Home() {
+  // Auto-redeem pending admin code after login
+  useEffect(() => {
+    const pendingCode = localStorage.getItem("pending_admin_code");
+    if (!pendingCode) return;
+    localStorage.removeItem("pending_admin_code");
+    base44.functions.invoke("redeemAdminAccessCode", { code: pendingCode }).then(res => {
+      if (res.data?.success) {
+        window.location.reload();
+      }
+    }).catch(() => {});
+  }, []);
+
   const [screen, setScreen] = useState("home");
   const [response, setResponse] = useState("");
   const [messages, setMessages] = useState([]);

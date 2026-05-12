@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { C } from "@/lib/rooted-constants";
 import { X, Lock, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+
+const GOLD = "#c9973a";
+const TEXT = "#f5e6c8";
+const MUTED = "rgba(245,230,200,0.65)";
+const CARD_BG = "rgba(0,0,0,0.85)";
+const BORDER = "rgba(201,151,58,0.4)";
 
 export default function AdminCodeRedemption({ onClose, onSuccess }) {
   const [code, setCode] = useState("");
@@ -16,8 +21,18 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
     setLoading(true);
     setError("");
 
+    const trimmed = code.trim().toUpperCase();
+    const isAuthed = await base44.auth.isAuthenticated();
+
+    if (!isAuthed) {
+      // Save code and redirect to login — code will be redeemed after login
+      localStorage.setItem("pending_admin_code", trimmed);
+      base44.auth.redirectToLogin("/home");
+      return;
+    }
+
     const response = await base44.functions.invoke("redeemAdminAccessCode", {
-      code: code.trim().toUpperCase(),
+      code: trimmed,
     });
 
     if (response.data?.success) {
@@ -27,86 +42,102 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
         window.location.reload();
       }, 1500);
     } else {
-      setError(response.data?.error || "Failed to redeem code");
+      setError(response.data?.error || "Invalid or expired code");
     }
     setLoading(false);
   }
 
   if (success) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto" style={{ background: "#EAF4EA" }}>
-            <CheckCircle2 size={24} color={C.midGreen} />
+      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div className="rounded-2xl p-6 max-w-sm w-full text-center space-y-4"
+          style={{ background: CARD_BG, border: `2px solid ${GOLD}` }}>
+          <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto"
+            style={{ background: "rgba(201,151,58,0.2)" }}>
+            <CheckCircle2 size={24} color={GOLD} />
           </div>
-          <h2 className="font-bold text-lg" style={{ color: C.darkGreen }}>Success! 🎉</h2>
-          <p className="text-sm" style={{ color: C.mutedText }}>You're now an admin with full access to Rooted 21.</p>
+          <h2 className="font-bold text-lg" style={{ color: TEXT }}>You're in! 🎉</h2>
+          <p className="text-sm" style={{ color: MUTED }}>You now have admin access to Rooted 21.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4">
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <div className="rounded-2xl p-6 max-w-sm w-full space-y-4"
+        style={{ background: CARD_BG, border: `2px solid ${BORDER}` }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Lock size={20} color={C.darkGreen} />
-            <h2 className="font-bold" style={{ color: C.darkGreen }}>Redeem Admin Code</h2>
+            <Lock size={20} color={GOLD} />
+            <h2 className="font-bold" style={{ color: TEXT }}>Redeem Access Code</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded hover:opacity-70"
-            style={{ background: "transparent", border: "none", cursor: "pointer" }}
-          >
-            <X size={18} color={C.mutedText} />
+          <button onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", padding: 4 }}>
+            <X size={18} color={MUTED} />
           </button>
         </div>
 
         <form onSubmit={handleRedeem} className="space-y-3">
           <div>
-            <label className="text-[10px] font-bold block mb-1" style={{ color: C.mutedText }}>
-              ENTER CODE
+            <label className="text-[10px] font-bold block mb-1" style={{ color: MUTED }}>
+              ENTER YOUR CODE
             </label>
             <input
               type="text"
-              placeholder="e.g., ABC12345"
+              placeholder="e.g., ABC123"
               value={code}
               onChange={e => setCode(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2.5 rounded-xl text-sm border outline-none text-center font-mono"
-              style={{ borderColor: C.cream, background: C.offWhite }}
+              className="w-full px-3 py-3 rounded-xl text-base border outline-none text-center font-mono tracking-widest"
+              style={{
+                borderColor: BORDER,
+                background: "rgba(255,255,255,0.08)",
+                color: TEXT,
+              }}
               disabled={loading}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
           </div>
 
           {error && (
-            <div className="flex gap-2 p-3 rounded-lg" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
-              <AlertCircle size={14} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
-              <p className="text-[11px]" style={{ color: "#B84C2A" }}>{error}</p>
+            <div className="flex gap-2 p-3 rounded-lg" style={{ background: "rgba(192,57,43,0.2)", border: "1px solid rgba(192,57,43,0.4)" }}>
+              <AlertCircle size={14} color="#ff9090" className="flex-shrink-0 mt-0.5" />
+              <p className="text-[11px]" style={{ color: "#ff9090" }}>{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={!code.trim() || loading}
-            className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
             style={{
-              background: code.trim() ? C.darkGreen : C.cream,
-              color: code.trim() ? "#fff" : C.mutedText,
+              width: "100%",
+              padding: "14px",
+              background: code.trim() ? `linear-gradient(135deg, ${GOLD}, #a07020)` : "rgba(255,255,255,0.1)",
               border: "none",
+              borderRadius: 10,
+              color: code.trim() ? "#1a1a1a" : MUTED,
+              fontWeight: 800,
+              fontSize: 13,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
               cursor: code.trim() ? "pointer" : "default",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
             }}
           >
             {loading ? (
               <><Loader2 size={16} className="animate-spin" /> Verifying...</>
             ) : (
-              "Redeem Code"
+              "Continue with Code"
             )}
           </button>
         </form>
 
-        <p className="text-[10px] text-center" style={{ color: C.mutedText }}>
-          Get a code from your founder account.
+        <p className="text-[10px] text-center" style={{ color: MUTED }}>
+          If you're not logged in, you'll be asked to sign in first.
         </p>
       </div>
     </div>
