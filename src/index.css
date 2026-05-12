@@ -184,3 +184,72 @@
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,151,58,0.4); }
   50% { box-shadow: 0 0 0 12px rgba(201,151,58,0); }
 }
+
+/* ── Global Readability Overrides ── */
+* {
+  text-shadow: none !important;
+}
+
+body, p, span, div, label, button, a {
+  color: #F3E6C8;
+}
+
+h1, h2, h3, h4, h5, h6,
+.card-title,
+.resource-title,
+.feature-title,
+.section-title {
+  color: #FFF1CF !important;
+  font-weight: 700 !important;
+}
+
+.subtitle,
+.description,
+.muted,
+.resource-description,
+.card-description {
+  color: #D8C8A3 !important;
+}
+
+.card,
+.resource-card,
+.feature-card {
+  background: rgba(5, 42, 24, 0.92) !important;
+  border: 1.5px solid rgba(255, 231, 190, 0.65) !important;
+}
+
+.chip,
+.category-chip,
+.filter-chip {
+  color: #12351F !important;
+  background: #F5E6BF !important;
+}
+
+.chip.active,
+.category-chip.active,
+.filter-chip.active {
+  color: #FFF1CF !important;
+  background: #0B3D26 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #CBB98E !important;
+  opacity: 1;
+}
+
+/* Ensure dark text only on explicitly light backgrounds */
+.bg-white, .bg-cream, [class*="bg-amber"], [class*="bg-yellow"] {
+  color: #12351F !important;
+}
+.bg-white *, .bg-cream *, [class*="bg-amber"] *, [class*="bg-yellow"] * {
+  color: #12351F !important;
+}
+
+/* Never dark-on-dark: green cards keep light text */
+[style*="background: rgba(5"] *,
+[style*="background: #0d2818"] *,
+[style*="background: #132d1f"] *,
+[style*="background: #0a3d20"] * {
+  color: #F3E6C8;
+}
