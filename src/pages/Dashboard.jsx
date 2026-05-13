@@ -19,13 +19,13 @@ import MobileRefresh from "@/components/mobile/MobileRefresh";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
 
-const BG = "#0b1f12";
-const CARD = "#12271a";
-const BORDER = "rgba(247,232,198,0.45)";
-const GOLD = "#c9973a";
-const GREEN = "#48D17A";
-const TEXT = "#F7E8C6";
-const MUTED = "#BFAF8A";
+const BG = "#faf6f1";
+const CARD = "#ffffff";
+const BORDER = "rgba(120,85,60,0.2)";
+const GOLD = "#a67c52";
+const GREEN = "#6b9d6e";
+const TEXT = "#1a1a1a";
+const MUTED = "#8b6f54";
 
 // Feature tiles — each with its own color accent
 const TILES = [
@@ -126,7 +126,7 @@ export default function Dashboard() {
             <div className="font-serif font-bold text-base" style={{ color: TEXT }}>
               Rooted <span style={{ color: GOLD }}>21</span>
             </div>
-            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.13em", color: "#BFAF8A", marginTop: 1 }}>PARENTING NETWORK</p>
+            <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.13em", color: MUTED, marginTop: 1 }}>PARENTING NETWORK</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <DarkModeToggle />
@@ -134,7 +134,7 @@ export default function Dashboard() {
             <button
               onClick={() => navigate("/profile")}
               aria-label="My profile"
-              style={{ width: 38, height: 38, borderRadius: "50%", background: `${GREEN}20`, border: `2px solid ${GREEN}40`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14, color: TEXT, cursor: "pointer" }}
+              style={{ width: 38, height: 38, borderRadius: "50%", background: CARD, border: `2px solid ${GREEN}`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14, color: TEXT, cursor: "pointer" }}
             >
               {user?.full_name?.[0] || "?"}
             </button>
@@ -148,38 +148,38 @@ export default function Dashboard() {
           {/* Welcome */}
           <motion.div
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            style={{ background: `linear-gradient(135deg, #162e1f 0%, #0f2216 100%)`, border: `1.5px solid ${GREEN}30`, borderRadius: 18, padding: "18px 18px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, boxShadow: `0 4px 24px rgba(61,184,112,0.08)` }}
+            style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "20px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}
           >
             <div>
               <p className="font-serif font-bold" style={{ fontSize: 21, color: TEXT, lineHeight: 1.2 }}>
                 Welcome back{user?.full_name ? `, ${user.full_name.split(" ")[0]}` : ""} 🌿
               </p>
-              <p style={{ fontSize: 13, color: "#E6D8B8", marginTop: 5 }}>You are not alone in this journey.</p>
+              <p style={{ fontSize: 13, color: MUTED, marginTop: 5 }}>You are not alone in this journey.</p>
             </div>
-            <Link to="/personalized-chat" style={{ background: `${GREEN}18`, border: `1.5px solid ${GREEN}50`, borderRadius: 11, padding: "9px 14px", display: "flex", alignItems: "center", gap: 6, textDecoration: "none", flexShrink: 0 }}>
-              <Sparkles size={13} color={GREEN} />
-              <span style={{ fontSize: 12, fontWeight: 800, color: GREEN, whiteSpace: "nowrap" }}>AI Coach</span>
+            <Link to="/personalized-chat" style={{ background: GREEN, border: `1.5px solid ${GREEN}`, borderRadius: 11, padding: "9px 14px", display: "flex", alignItems: "center", gap: 6, textDecoration: "none", flexShrink: 0 }}>
+              <Sparkles size={13} color="#ffffff" />
+              <span style={{ fontSize: 12, fontWeight: 800, color: "#ffffff", whiteSpace: "nowrap" }}>AI Coach</span>
             </Link>
           </motion.div>
 
           {/* Quick Actions */}
           <div>
-            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "#BFAF8A", marginBottom: 10 }}>QUICK ACTIONS</p>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: GREEN, marginBottom: 10 }}>QUICK ACTIONS</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
               {[
-                { to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: "linear-gradient(145deg,#3a0f0f,#5a1a1a)", border: "#c0392b", textColor: "#ff8070", issos: true },
-                { to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: `linear-gradient(145deg, #0e2a1a, #162e20)`, border: GREEN, textColor: GREEN },
-                { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: `linear-gradient(145deg, #101830, #182240)`, border: "#4a80d0", textColor: "#7aaaee" },
+                { to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
+                { to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: CARD, border: GREEN, textColor: GREEN },
+                { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: CARD, border: GOLD, textColor: GOLD },
               ].map((a, i) => (
                 <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
-                  <Link to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}40`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 2px 14px ${a.border}18` }}>
+                  <Link to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
                     {a.issos ? (
                       <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#c0392b", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", border: "2.5px solid #ff4444", fontWeight: 900, fontSize: 11, color: "#fff", boxShadow: "0 2px 10px rgba(192,57,43,0.5)" }}>SOS</div>
                     ) : (
                       <div style={{ fontSize: 28, marginBottom: 8 }}>{a.emoji}</div>
                     )}
                     <p style={{ fontWeight: 800, fontSize: 12, color: a.textColor, lineHeight: 1.3, whiteSpace: "pre-line" }}>{a.label}</p>
-                    <p style={{ fontSize: 10, color: "#E6D8B8", marginTop: 4 }}>{a.sub}</p>
+                    <p style={{ fontSize: 10, color: MUTED, marginTop: 4 }}>{a.sub}</p>
                   </Link>
                 </motion.div>
               ))}
@@ -188,22 +188,22 @@ export default function Dashboard() {
 
           {/* Progress + Last Check-in */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <Link to="/lessons" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${GREEN}30`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none" }}>
+            <Link to="/lessons" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
               <ProgressRing pct={progressPct} size={72} color={GREEN} />
-              <p style={{ fontWeight: 700, fontSize: 12, color: "#F7E8C6" }}>Lessons</p>
-              <p style={{ fontSize: 11, color: "#E6D8B8" }}>{completedLessons}/21 done</p>
+              <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Lessons</p>
+              <p style={{ fontSize: 11, color: MUTED }}>{completedLessons}/21 done</p>
             </Link>
             {latestCheckin ? (
-              <Link to="/progress" style={{ background: `linear-gradient(135deg,#12271a,#0f1f14)`, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", justifyContent: "center", gap: 10, textDecoration: "none" }}>
-                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 14, color: "#F7E8C6" }}>Last Check-In</p>
+              <Link to="/progress" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", justifyContent: "center", gap: 10, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
+                <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 14, color: TEXT }}>Last Check-In</p>
                 <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
                   <div style={{ textAlign: "center" }}>
                     <p style={{ fontSize: 30, fontWeight: 900, color: GREEN, lineHeight: 1 }}>{latestCheckin.child_regulation}</p>
-                    <p style={{ fontSize: 10, color: "#E6D8B8" }}>Child</p>
+                    <p style={{ fontSize: 10, color: MUTED }}>Child</p>
                   </div>
                   <div style={{ textAlign: "center" }}>
                     <p style={{ fontSize: 30, fontWeight: 900, color: GOLD, lineHeight: 1 }}>{latestCheckin.parent_calm}</p>
-                    <p style={{ fontSize: 10, color: "#E6D8B8" }}>You</p>
+                    <p style={{ fontSize: 10, color: MUTED }}>You</p>
                   </div>
                 </div>
                 <p style={{ fontSize: 11, fontWeight: 700, color: GREEN }}>View trends →</p>
@@ -211,22 +211,22 @@ export default function Dashboard() {
             ) : (
               <Link to="/daily-checkin" style={{ background: `${GREEN}10`, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", textAlign: "center" }}>
                 <p style={{ fontSize: 26 }}>📊</p>
-                <p style={{ fontWeight: 700, fontSize: 12, color: "#F7E8C6" }}>Start your first check-in</p>
+                <p style={{ fontWeight: 700, fontSize: 12, color: TEXT }}>Start your first check-in</p>
               </Link>
             )}
           </div>
 
           {/* All Features */}
           <div>
-            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "#BFAF8A", marginBottom: 10 }}>ALL FEATURES</p>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: GREEN, marginBottom: 10 }}>ALL FEATURES</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {TILES.map((tile, i) => (
                 <Link key={tile.to + tile.label} to={tile.to} style={{
-                  background: `linear-gradient(145deg, ${tile.accent}, #0b1f12)`,
-                  border: `1.5px solid ${tile.border}`,
+                  background: CARD,
+                  border: `1.5px solid ${BORDER}`,
                   borderRadius: 16, padding: "14px 12px",
                   textDecoration: "none", display: "flex", flexDirection: "column", gap: 6,
-                  boxShadow: `0 2px 10px rgba(0,0,0,0.2)`,
+                  boxShadow: `0 8px 24px rgba(61,40,23,0.08)`,
                 }}>
                   {tile.icon ? (
                     <div style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -235,8 +235,8 @@ export default function Dashboard() {
                   ) : (
                     <div style={{ fontSize: 24 }}>{tile.emoji}</div>
                   )}
-                  <p style={{ fontWeight: 700, fontSize: 13, color: tile.text || "#F7E8C6", lineHeight: 1.25 }}>{tile.label}</p>
-                  {tile.sub && <p style={{ fontSize: 11, color: "#E6D8B8", lineHeight: 1.4 }}>{tile.sub}</p>}
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT, lineHeight: 1.25 }}>{tile.label}</p>
+                  {tile.sub && <p style={{ fontSize: 11, color: MUTED, lineHeight: 1.4 }}>{tile.sub}</p>}
                 </Link>
               ))}
             </div>
@@ -244,19 +244,19 @@ export default function Dashboard() {
 
           {/* Child profile */}
           {child ? (
-            <Link to="/child-profile" style={{ display: "block", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none" }}>
+            <Link to="/child-profile" style={{ display: "block", background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🧒</div>
                 <div>
-                  <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>{child.first_name}</p>
-                  <p style={{ fontSize: 11, color: "#E6D8B8" }}>Child profile · Tap to edit</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>{child.first_name}</p>
+                  <p style={{ fontSize: 11, color: MUTED }}>Child profile · Tap to edit</p>
                 </div>
               </div>
             </Link>
           ) : (
             <Link to="/child-profile" style={{ display: "block", background: `${GREEN}10`, border: `1.5px dashed ${GREEN}40`, borderRadius: 16, padding: 14, textDecoration: "none", textAlign: "center" }}>
               <p style={{ fontWeight: 700, fontSize: 13, color: "#48D17A" }}>+ Add Child Profile</p>
-              <p style={{ fontSize: 11, color: "#E6D8B8", marginTop: 4 }}>Helps professionals support your family</p>
+              <p style={{ fontSize: 11, color: MUTED, marginTop: 4 }}>Helps professionals support your family</p>
             </Link>
           )}
 
@@ -268,16 +268,16 @@ export default function Dashboard() {
               <button onClick={() => setShowCodeEntry(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GREEN}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
                 <KeyRound size={20} color={GREEN} />
                 <div>
-                  <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>Enter Professional Access Code</p>
-                  <p style={{ fontSize: 11, color: "#E6D8B8" }}>Link your account to your assigned professional</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Enter Professional Access Code</p>
+                  <p style={{ fontSize: 11, color: MUTED }}>Link your account to your assigned professional</p>
                 </div>
               </button>
               {child && (
                 <button onClick={() => setShowInvitationModal(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GOLD}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
                   <QrCode size={20} color={GOLD} />
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: 13, color: "#F7E8C6" }}>Generate Invitation Code</p>
-                    <p style={{ fontSize: 11, color: "#E6D8B8" }}>Share with a professional to auto-link them</p>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Generate Invitation Code</p>
+                    <p style={{ fontSize: 11, color: MUTED }}>Share with a professional to auto-link them</p>
                   </div>
                 </button>
               )}

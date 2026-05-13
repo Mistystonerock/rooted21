@@ -3,13 +3,13 @@ import { base44 } from '@/api/base44Client';
 import { Copy, Trash2, Eye, EyeOff, Lock, AlertCircle } from 'lucide-react';
 import MobileHeader from '@/components/mobile/MobileHeader';
 
-const BG = '#0d2818';
-const CARD = '#132d1f';
-const BORDER = 'rgba(247,232,198,0.45)';
-const TEXT = '#F7E8C6';
-const MUTED = '#E6D8B8';
-const GREEN = '#48D17A';
-const GOLD = '#c9973a';
+const BG = '#faf6f1';
+const CARD = '#ffffff';
+const BORDER = 'rgba(120,85,60,0.2)';
+const TEXT = '#1a1a1a';
+const MUTED = '#8b6f54';
+const GREEN = '#6b9d6e';
+const GOLD = '#a67c52';
 
 const ADMIN_PERMISSIONS = {
   moderate_content: { label: 'Moderate Content', desc: 'Flag and manage community posts' },
@@ -153,7 +153,7 @@ export default function FounderAdminManagement() {
       <div style={{ maxWidth: 520, margin: '0 auto', padding: '0 16px' }}>
         {/* Role Hierarchy Overview */}
         <div style={{ marginBottom: 24 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: '#48D17A', marginBottom: 12, textTransform: 'uppercase' }}>
+          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: GREEN, marginBottom: 12, textTransform: 'uppercase' }}>
             🏛️ Role Hierarchy
           </p>
 
@@ -182,7 +182,7 @@ export default function FounderAdminManagement() {
             <div
               style={{
                 background: CARD,
-                border: `1.5px solid ${GREEN}40`,
+                border: `1.5px solid ${GREEN}`,
                 borderRadius: 14,
                 padding: '14px',
               }}
@@ -264,7 +264,7 @@ export default function FounderAdminManagement() {
                     style={{
                       width: '100%',
                       padding: '10px 12px',
-                      background: 'rgba(0,0,0,0.3)',
+                      background: '#ffffff',
                       border: `1px solid ${BORDER}`,
                       borderRadius: 8,
                       color: TEXT,
@@ -285,7 +285,7 @@ export default function FounderAdminManagement() {
                     style={{
                       width: '100%',
                       padding: '10px 12px',
-                      background: 'rgba(0,0,0,0.3)',
+                      background: '#ffffff',
                       border: `1px solid ${BORDER}`,
                       borderRadius: 8,
                       color: TEXT,
@@ -338,7 +338,7 @@ export default function FounderAdminManagement() {
                   background: generatingCode || !codeForm.created_for.trim() ? `${GREEN}50` : GREEN,
                   border: 'none',
                   borderRadius: 10,
-                  color: '#0d2818',
+                  color: '#ffffff',
                   fontWeight: 800,
                   fontSize: 13,
                   cursor: generatingCode || !codeForm.created_for.trim() ? 'default' : 'pointer',
@@ -387,8 +387,8 @@ export default function FounderAdminManagement() {
                         alert('Code copied to clipboard');
                       }}
                       style={{
-                        background: `${GREEN}25`,
-                        border: `1px solid ${GREEN}40`,
+                        background: '#ffffff',
+                        border: `1px solid ${GREEN}`,
                         borderRadius: 8,
                         padding: '8px',
                         color: GREEN,
@@ -466,8 +466,8 @@ export default function FounderAdminManagement() {
                             key={perm}
                             style={{
                               fontSize: 9,
-                              background: `${GREEN}20`,
-                              color: GREEN,
+                              background: '#f5ede2',
+                              color: TEXT,
                               padding: '3px 8px',
                               borderRadius: 5,
                               fontWeight: 600,
@@ -519,7 +519,7 @@ export default function FounderAdminManagement() {
 
             <div
               style={{
-                background: 'rgba(0,0,0,0.3)',
+                background: '#ffffff',
                 border: `2px solid ${GREEN}`,
                 borderRadius: 14,
                 padding: '20px',
@@ -552,7 +552,7 @@ export default function FounderAdminManagement() {
                   background: GREEN,
                   border: 'none',
                   borderRadius: 8,
-                  color: '#0d2818',
+                  color: '#ffffff',
                   fontWeight: 800,
                   fontSize: 12,
                   cursor: 'pointer',

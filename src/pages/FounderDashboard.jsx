@@ -83,17 +83,17 @@ export default function FounderDashboard() {
       <div className="max-w-[680px] mx-auto px-4 py-5 space-y-4">
         {/* Docs link */}
         <a href="/app-docs" className="flex items-center justify-between rounded-2xl p-4"
-          style={{ background: C.darkGreen, textDecoration: "none" }}>
+          style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none" }}>
           <div>
-            <p className="font-bold text-sm" style={{ color: C.cream }}>📋 App Documentation</p>
-            <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>Frontend guide · Backend reference · LLM narrative</p>
+            <p className="font-bold text-sm" style={{ color: "#1a1a1a" }}>📋 App Documentation</p>
+            <p className="text-[11px] mt-0.5" style={{ color: "#8b6f54" }}>Frontend guide · Backend reference · LLM narrative</p>
           </div>
-          <span className="text-lg" style={{ color: C.gold }}>→</span>
+          <span className="text-lg" style={{ color: "#a67c52" }}>→</span>
         </a>
 
         {/* Key metrics */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+          <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
             <div className="flex items-center gap-2 mb-2">
               <Eye size={16} color={C.midGreen} />
               <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>Page Views</p>
@@ -102,7 +102,7 @@ export default function FounderDashboard() {
             <p className="text-[9px] mt-1" style={{ color: C.mutedText }}>Landing page visits</p>
           </div>
 
-          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+          <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle2 size={16} color={C.midGreen} />
               <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>Signups</p>
@@ -111,7 +111,7 @@ export default function FounderDashboard() {
             <p className="text-[9px] mt-1" style={{ color: C.mutedText }}>Waitlist registrations</p>
           </div>
 
-          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+          <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
             <div className="flex items-center gap-2 mb-2">
               <Users size={16} color={C.midGreen} />
               <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>Users</p>
@@ -120,7 +120,7 @@ export default function FounderDashboard() {
             <p className="text-[9px] mt-1" style={{ color: C.mutedText }}>App accounts created</p>
           </div>
 
-          <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+          <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp size={16} color={C.midGreen} />
               <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>Conversion</p>
@@ -154,7 +154,7 @@ export default function FounderDashboard() {
         {/* Overview tab */}
         {activeTab === "overview" && (
           <div className="space-y-4">
-            <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+            <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
               <p className="text-[10px] font-bold mb-3" style={{ color: C.mutedText }}>SURVEY INSIGHTS</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -183,7 +183,7 @@ export default function FounderDashboard() {
             </div>
 
             {/* Waitlist breakdown */}
-            <div className="rounded-2xl p-4" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
+            <div className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
               <p className="text-[10px] font-bold mb-3" style={{ color: C.mutedText }}>WAITLIST BREAKDOWN</p>
               <p className="text-sm mb-2" style={{ color: C.darkGreen }}>Total signups: <strong>{stats?.waitlistSignups}</strong></p>
               <p className="text-xs" style={{ color: C.mutedText }}>
@@ -192,7 +192,7 @@ export default function FounderDashboard() {
             </div>
 
             {/* Growth info */}
-            <div className="rounded-2xl p-4" style={{ background: C.cream }}>
+            <div className="rounded-2xl p-4" style={{ background: "#f5ede2", border: "1.5px solid rgba(120,85,60,0.2)" }}>
               <p className="text-xs leading-relaxed" style={{ color: C.darkGreen }}>
                 <strong>Next Steps:</strong> Invite more founders/team members by creating additional admin users. Each admin gets full dashboard and data access.
               </p>
@@ -218,7 +218,7 @@ export default function FounderDashboard() {
                   URL.revokeObjectURL(url);
                 }}
                 className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
-                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                style={{ background: "#6b9d6e", color: "#ffffff", border: "none", cursor: "pointer" }}
               >
                 <Download size={12} /> Export
               </button>
@@ -229,12 +229,12 @@ export default function FounderDashboard() {
               value={userSearch}
               onChange={e => setUserSearch(e.target.value)}
               className="w-full px-3 py-2 rounded-xl text-sm border outline-none"
-              style={{ borderColor: C.cream, background: C.offWhite }}
+              style={{ borderColor: "rgba(120,85,60,0.2)", background: "#ffffff", color: "#1a1a1a" }}
             />
             {allUsers
               .filter(u => !userSearch || u.email?.toLowerCase().includes(userSearch.toLowerCase()) || u.full_name?.toLowerCase().includes(userSearch.toLowerCase()))
               .map(u => (
-              <div key={u.id} className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+              <div key={u.id} className="rounded-xl p-3 flex items-center gap-3" style={{ background: "#ffffff", border: "1px solid rgba(120,85,60,0.2)", boxShadow: "0 6px 18px rgba(61,40,23,0.06)" }}>
                 <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
                   style={{ background: C.cream, color: C.darkGreen }}>
                   {u.full_name?.[0] || u.email?.[0]?.toUpperCase() || "?"}
@@ -273,13 +273,13 @@ export default function FounderDashboard() {
                   URL.revokeObjectURL(url);
                 }}
                 className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
-                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                style={{ background: "#6b9d6e", color: "#ffffff", border: "none", cursor: "pointer" }}
               >
                 <Download size={12} /> Export
               </button>
             </div>
             {waitlist.map(w => (
-              <div key={w.id} className="rounded-xl p-3" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+              <div key={w.id} className="rounded-xl p-3" style={{ background: "#ffffff", border: "1px solid rgba(120,85,60,0.2)", boxShadow: "0 6px 18px rgba(61,40,23,0.06)" }}>
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{w.full_name || "—"}</p>
@@ -339,7 +339,7 @@ export default function FounderDashboard() {
                     URL.revokeObjectURL(url);
                   }}
                   className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold"
-                  style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                  style={{ background: "#6b9d6e", color: "#ffffff", border: "none", cursor: "pointer" }}
                 >
                   <Download size={12} /> Export
                 </button>
@@ -353,7 +353,7 @@ export default function FounderDashboard() {
               </div>
             ) : (
               surveys.map(survey => (
-                <div key={survey.id} className="rounded-2xl p-4" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+                <div key={survey.id} className="rounded-2xl p-4" style={{ background: "#ffffff", border: "1px solid rgba(120,85,60,0.2)", boxShadow: "0 6px 18px rgba(61,40,23,0.06)" }}>
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{survey.full_name || survey.email}</p>

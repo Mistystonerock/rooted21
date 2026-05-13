@@ -45,7 +45,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: C.darkGreen }}>
+      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
         <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
         <div>
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>My Profile</p>
@@ -79,10 +79,10 @@ export default function Profile() {
               style={{ background: C.darkGreen, textDecoration: "none" }}
             >
               <div>
-                <p className="font-bold text-sm" style={{ color: C.cream }}>📊 Founder Dashboard</p>
-                <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>Users · Waitlist · Surveys · Analytics</p>
+                <p className="font-bold text-sm" style={{ color: "#1a1a1a" }}>📊 Founder Dashboard</p>
+                <p className="text-[11px] mt-0.5" style={{ color: "#8b6f54" }}>Users · Waitlist · Surveys · Analytics</p>
               </div>
-              <span className="text-lg" style={{ color: C.gold }}>→</span>
+              <span className="text-lg" style={{ color: "#a67c52" }}>→</span>
             </Link>
 
             <Link
@@ -91,10 +91,10 @@ export default function Profile() {
               style={{ background: C.darkGreen, textDecoration: "none" }}
             >
               <div>
-                <p className="font-bold text-sm" style={{ color: C.cream }}>🛡️ Admin Management</p>
-                <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>Role hierarchy · Codes · Permissions</p>
+                <p className="font-bold text-sm" style={{ color: "#1a1a1a" }}>🛡️ Admin Management</p>
+                <p className="text-[11px] mt-0.5" style={{ color: "#8b6f54" }}>Role hierarchy · Codes · Permissions</p>
               </div>
-              <span className="text-lg" style={{ color: C.gold }}>→</span>
+              <span className="text-lg" style={{ color: "#a67c52" }}>→</span>
             </Link>
           </>
         )}
