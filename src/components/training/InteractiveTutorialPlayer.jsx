@@ -14,7 +14,29 @@ function getTargetRect(targetElementId) {
 
 function chooseWarmVoice() {
   const voices = window.speechSynthesis?.getVoices?.() || [];
-  return voices.find(v => /female|samantha|victoria|karen|zira|susan|ava|allison|serena/i.test(`${v.name} ${v.voiceURI}`)) || voices.find(v => /en-US|en_/i.test(v.lang)) || voices[0];
+  const preferred = voices
+    .filter(v => /^en[-_]/i.test(v.lang || ""))
+    .map(v => {
+      const label = `${v.name} ${v.voiceURI}`.toLowerCase();
+      let score = 0;
+      if (/natural|neural|enhanced|premium|online/.test(label)) score += 8;
+      if (/samantha|ava|jenny|aria|zira|victoria|allison|serena|karen|susan/.test(label)) score += 6;
+      if (/google|microsoft|apple/.test(label)) score += 3;
+      if (/female/.test(label)) score += 2;
+      if (/en-us/.test(v.lang || "")) score += 1;
+      return { voice: v, score };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  return preferred[0]?.voice || voices[0];
+}
+
+function humanizeSpeechText(text = "") {
+  return text
+    .replace(/\. /g, ".  ")
+    .replace(/, /g, ", ")
+    .replace(/ — /g, ". ")
+    .replace(/:/g, ".");
 }
 
 export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplete }) {
@@ -70,10 +92,10 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
   function speak(text) {
     if (!text || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.82;
-    utterance.pitch = 1.08;
-    utterance.volume = 0.95;
+    const utterance = new SpeechSynthesisUtterance(humanizeSpeechText(text));
+    utterance.rate = 0.76;
+    utterance.pitch = 1.04;
+    utterance.volume = 0.92;
     const voice = chooseWarmVoice();
     if (voice) utterance.voice = voice;
     utterance.onstart = () => setSpeaking(true);
