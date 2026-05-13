@@ -1,22 +1,21 @@
 import { SURFACES, TEXT } from './design-system.js';
 
 export const C = {
-  // Surface colors (for backgrounds)
-  darkGreen: "#060d08",
-  midGreen: "#0c1610",
-  lightGreen: "#48d17a",
-  darkGreenElevated: "#132d1f",
-  cream: "#f5e6c8",
-  offWhite: "#f5e6c8",
+  // Launch page brand colors
+  darkGreen: "#6b9d6e",
+  midGreen: "#6b9d6e",
+  lightGreen: "#6b9d6e",
+  darkGreenElevated: "#f5ede2",
+  cream: "#f5ede2",
+  offWhite: "#faf6f1",
   white: "#ffffff",
-  gold: "#c9973a",
-  brown: "#f59e0b",
+  gold: "#a67c52",
+  brown: "#a67c52",
   
-  // Text colors - DEPRECATED, use TEXT from design-system instead
-  // Kept for backwards compatibility during migration
-  darkText: TEXT.onDark,
-  mutedText: TEXT.onDarkSecondary,
-  warmText: TEXT.accentSecondary,
+  // Text colors
+  darkText: "#1a1a1a",
+  mutedText: "#5a3d28",
+  warmText: "#8b6f54",
   
   // Direct design system access
   surfaces: SURFACES,

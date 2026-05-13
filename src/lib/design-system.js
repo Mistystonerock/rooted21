@@ -19,104 +19,104 @@
 
 export const SURFACES = {
   // Primary app background
-  appBg: '#060d08',
+  appBg: '#faf6f1',
   
   // Card and container surfaces
-  darkCard: '#0c1610',
-  darkCardBorder: 'rgba(74, 222, 128, 0.25)',
+  darkCard: '#ffffff',
+  darkCardBorder: 'rgba(120,85,60,0.2)',
   
   lightCard: '#ffffff',
-  lightCardBorder: '#f5e6c8',
+  lightCardBorder: 'rgba(120,85,60,0.2)',
   
   // Elevated surfaces
-  darkCardElevated: '#132d1f',
-  darkCardElevatedBorder: 'rgba(74, 222, 128, 0.4)',
+  darkCardElevated: '#f5ede2',
+  darkCardElevatedBorder: 'rgba(120,85,60,0.2)',
   
   // Modal and overlay
-  modalBg: '#060d08',
+  modalBg: '#ffffff',
   modalBgLight: '#ffffff',
-  modalOverlay: 'rgba(0, 0, 0, 0.5)',
+  modalOverlay: 'rgba(61, 40, 23, 0.45)',
   
   // Dashboard specific
-  dashboardBg: '#060d08',
-  dashboardCard: '#0c1610',
+  dashboardBg: '#faf6f1',
+  dashboardCard: '#ffffff',
   
   // Form and input
-  formFieldBg: '#0a0f0c',
-  formFieldBorder: 'rgba(74, 222, 128, 0.2)',
-  formFieldBorderFocus: '#48d17a',
+  formFieldBg: '#ffffff',
+  formFieldBorder: 'rgba(120,85,60,0.2)',
+  formFieldBorderFocus: '#6b9d6e',
   
   // Button surfaces
-  buttonPrimary: '#48d17a',
-  buttonPrimaryText: '#060d08',
-  buttonSecondary: 'transparent',
-  buttonSecondaryBorder: 'rgba(74, 222, 128, 0.4)',
+  buttonPrimary: '#6b9d6e',
+  buttonPrimaryText: '#ffffff',
+  buttonSecondary: '#ffffff',
+  buttonSecondaryBorder: '#6b9d6e',
   
   // Alert and danger
-  alertBg: 'rgba(192, 57, 43, 0.12)',
-  alertBorder: 'rgba(192, 57, 43, 0.3)',
-  alertText: '#FF6B5A',
+  alertBg: 'rgba(184, 76, 42, 0.1)',
+  alertBorder: 'rgba(184, 76, 42, 0.25)',
+  alertText: '#B84C2A',
   
   // Success
-  successBg: 'rgba(74, 222, 128, 0.12)',
-  successBorder: 'rgba(74, 222, 128, 0.3)',
+  successBg: 'rgba(107, 157, 110, 0.1)',
+  successBorder: 'rgba(107, 157, 110, 0.3)',
   
   // Tab surfaces
   tabInactive: 'transparent',
-  tabActive: 'transparent',
-  tabActiveBorder: '#48d17a',
+  tabActive: '#ffffff',
+  tabActiveBorder: '#6b9d6e',
   
   // SOS/Emergency cards
-  sosBg: '#0a3d20',
-  sosBorder: '#48d17a',
+  sosBg: '#ffffff',
+  sosBorder: '#B84C2A',
   
   // Gold accent
-  goldBg: 'rgba(201, 151, 58, 0.15)',
-  goldBorder: 'rgba(201, 151, 58, 0.4)',
+  goldBg: 'rgba(166, 124, 82, 0.12)',
+  goldBorder: 'rgba(166, 124, 82, 0.35)',
 };
 
 export const TEXT = {
-  // Primary text on dark surfaces
-  onDark: '#f5e6c8',
-  onDarkSecondary: '#bfaf8a',
-  onDarkMuted: '#999999',
+  // Primary text
+  onDark: '#1a1a1a',
+  onDarkSecondary: '#5a3d28',
+  onDarkMuted: '#8b6f54',
   
   // Text on light surfaces
-  onLight: '#060d08',
-  onLightSecondary: '#666666',
-  onLightMuted: '#999999',
+  onLight: '#1a1a1a',
+  onLightSecondary: '#5a3d28',
+  onLightMuted: '#8b6f54',
   
   // Semantic text colors
-  accent: '#48d17a',
-  accentSecondary: '#c9973a',
-  danger: '#FF6B5A',
-  success: '#48d17a',
-  warning: '#f59e0b',
+  accent: '#6b9d6e',
+  accentSecondary: '#a67c52',
+  danger: '#B84C2A',
+  success: '#6b9d6e',
+  warning: '#a67c52',
   
   // Heading
-  headingDark: '#f5e6c8',
-  headingLight: '#060d08',
+  headingDark: '#1a1a1a',
+  headingLight: '#1a1a1a',
   
   // Muted variants
-  mutedDark: '#bfaf8a',
-  mutedLight: '#999999',
+  mutedDark: '#8b6f54',
+  mutedLight: '#8b6f54',
   
   // Special
-  placeholder: '#888070',
-  disabled: '#666666',
+  placeholder: '#8b6f54',
+  disabled: '#8b6f54',
 };
 
 export const BORDERS = {
-  light: 'rgba(245, 230, 200, 0.45)',
-  medium: 'rgba(74, 222, 128, 0.25)',
-  strong: 'rgba(74, 222, 128, 0.4)',
+  light: 'rgba(120, 85, 60, 0.15)',
+  medium: 'rgba(120, 85, 60, 0.2)',
+  strong: 'rgba(107, 157, 110, 0.45)',
 };
 
 export const SHADOWS = {
-  sm: '0 2px 8px rgba(0, 0, 0, 0.3)',
-  md: '0 4px 16px rgba(0, 0, 0, 0.4)',
-  lg: '0 8px 24px rgba(0, 0, 0, 0.5)',
-  glow: '0 0 20px rgba(74, 222, 128, 0.08), 0 0 1px rgba(74, 222, 128, 0.2)',
+  sm: '0 2px 8px rgba(61, 40, 23, 0.06)',
+  md: '0 8px 24px rgba(61, 40, 23, 0.08)',
+  lg: '0 12px 34px rgba(61, 40, 23, 0.12)',
+  glow: '0 8px 28px rgba(107, 157, 110, 0.12), 0 0 0 1px rgba(120,85,60,0.12)',
 };
 
 /**
@@ -131,9 +131,9 @@ export const CARD_COLORS = {
     label: '#ffffff',
   },
   checkin: {
-    border: '#48d17a',
-    icon: '#48d17a',
-    label: '#ffffff',
+    border: '#6b9d6e',
+    icon: '#6b9d6e',
+    label: '#1a1a1a',
   },
   behavior: {
     border: '#9b59b6',
