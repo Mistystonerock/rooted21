@@ -41,6 +41,13 @@
           },
           "path": {
             "type": "string"
+          },
+          "targetElementId": {
+            "type": "string"
+          },
+          "requiresClick": {
+            "type": "boolean",
+            "default": false
           }
         }
       }

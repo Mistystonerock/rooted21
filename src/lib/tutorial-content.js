@@ -8,7 +8,10 @@ export const DEFAULT_TUTORIALS = [
     path: "/dashboard",
     steps: [
       { title: "Your calm home base", narration: "Welcome. The dashboard is your gentle starting point. Everything important is organized into small, clear choices so you do not have to hunt when life feels heavy.", prompt: "Notice the quick action area at the top.", button_label: "Open Dashboard", path: "/dashboard" },
-      { title: "Quick actions", narration: "These buttons help you move quickly: immediate support, daily check-in, and safety planning. Each one is designed to reduce stress and guide your next step.", prompt: "Look for the three quick action buttons.", button_label: "Show me", path: "/dashboard" },
+      { title: "Quick actions", narration: "These buttons help you move quickly.", prompt: "This whole row is here for the moments you need a next step fast.", targetElementId: "quick-actions", button_label: "Show me", path: "/dashboard" },
+      { title: "SOS support", narration: "Tap SOS when you need support right now.", prompt: "Click this button to practice opening immediate support.", targetElementId: "sos-button", requiresClick: true, button_label: "Tap SOS", path: "/chat?crisis=1" },
+      { title: "Daily Check-In", narration: "Tap Check-In to track how you are feeling today.", prompt: "Click Check-In to continue.", targetElementId: "checkin-button", requiresClick: true, button_label: "Tap Check-In", path: "/daily-checkin" },
+      { title: "Behavior tracking", narration: "Tap Log Behavior to track patterns and triggers.", prompt: "Click the Behavior card to continue.", targetElementId: "behavior-log-button", requiresClick: true, button_label: "Tap Behavior", path: "/behavior-hub" },
       { title: "Replay anytime", narration: "You can return to these walkthroughs anytime. Support is here when you need a reminder, not only on the first day.", prompt: "Tap replay whenever you want to practice again.", button_label: "Finish", path: "/training-videos" }
     ]
   },

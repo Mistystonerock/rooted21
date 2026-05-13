@@ -32,7 +32,7 @@ const MUTED = "#8b6f54";
 const TILES = [
   { to: "/resources", emoji: "🗂️", icon: null, label: "Resources", sub: "Local help, jobs, benefits, court forms, substance support", accent: "#0e2a1a", border: `${GREEN}30` },
   { to: "/support-hub", emoji: "🤝", icon: null, label: "Support", sub: "Crisis tools, conversations, team contacts", accent: "#12203a", border: "#7aaaee30" },
-  { to: "/behavior-hub", emoji: "🧠", icon: null, label: "Behavior", sub: "Logs, analytics, trends, regulation tools", accent: "#1a1535", border: "#a09ef030" },
+  { id: "behavior-log-button", to: "/behavior-hub", emoji: "🧠", icon: null, label: "Behavior", sub: "Logs, analytics, trends, regulation tools", accent: "#1a1535", border: "#a09ef030" },
   { to: "/education-hub", emoji: "📚", icon: null, label: "Education", sub: "Lessons, classes, guides, worksheets", accent: "#2a1f0a", border: `${GOLD}30` },
 ];
 
@@ -122,16 +122,16 @@ export default function Dashboard() {
           <TrainingVideoSeries compact />
 
           {/* Quick Actions */}
-          <div>
+          <div id="quick-actions">
             <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: GREEN, marginBottom: 10 }}>QUICK ACTIONS</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
               {[
-                { to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
-                { to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: CARD, border: GREEN, textColor: GREEN },
-                { to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: CARD, border: GOLD, textColor: GOLD },
+                { id: "sos-button", to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
+                { id: "checkin-button", to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: CARD, border: GREEN, textColor: GREEN },
+                { id: "safety-plan-button", to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: CARD, border: GOLD, textColor: GOLD },
               ].map((a, i) => (
                 <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
-                  <Link to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
+                  <Link id={a.id} to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
                     {a.issos ? (
                       <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#c0392b", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", border: "2.5px solid #ff4444", fontWeight: 900, fontSize: 11, color: "#fff", boxShadow: "0 2px 10px rgba(192,57,43,0.5)" }}>SOS</div>
                     ) : (
@@ -180,7 +180,7 @@ export default function Dashboard() {
             <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: GREEN, marginBottom: 10 }}>ALL FEATURES</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {TILES.map((tile, i) => (
-                <Link key={tile.to + tile.label} to={tile.to} style={{
+                <Link id={tile.id} key={tile.to + tile.label} to={tile.to} style={{
                   background: CARD,
                   border: `1.5px solid ${BORDER}`,
                   borderRadius: 16, padding: "14px 12px",

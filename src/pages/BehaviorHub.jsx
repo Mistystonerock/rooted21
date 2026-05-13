@@ -3,7 +3,7 @@ import HubCard from "@/components/hubs/HubCard";
 import { C } from "@/lib/rooted-constants";
 
 const BEHAVIOR_ITEMS = [
-  { title: "Behavior Daily Logs", description: "Track patterns, triggers, mood, and regulation over time.", url: "/behavior-logs", emoji: "📋" },
+  { id: "behavior-log-button", title: "Behavior Daily Logs", description: "Track patterns, triggers, mood, and regulation over time.", url: "/behavior-logs", emoji: "📋" },
   { title: "Behavior Analytics", description: "View trends and understand what may be driving behaviors.", url: "/analytics", emoji: "📊" },
   { title: "Behavioral Trends", description: "Visual progress charts for patterns and improvements.", url: "/behavioral-trends", emoji: "📈" },
   { title: "Growth Insights", description: "AI weekly behavior summaries and next-step ideas.", url: "/growth-insights", emoji: "🌱", tag: "AI" },

@@ -23,8 +23,8 @@ export default function HubCard({ item }) {
   const style = { background: C.white, border: `1.5px solid ${C.cream}`, textDecoration: "none" };
 
   return isExternal ? (
-    <a href={item.url} target={item.url?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={className} style={style}>{content}</a>
+    <a id={item.id} href={item.url} target={item.url?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={className} style={style}>{content}</a>
   ) : (
-    <Link to={item.url} className={className} style={style}>{content}</Link>
+    <Link id={item.id} to={item.url} className={className} style={style}>{content}</Link>
   );
 }
