@@ -73,8 +73,12 @@ const STATE_RESOURCES = {
     { name: "Youth Crisis Center (Tulsa)", phone: "19185839988", phoneLabel: "1-918-583-9988", website: "https://www.turningpointok.org", type: "crisis", description: "24/7 crisis shelter and intervention for youth in Tulsa area." },
   ],
   OH: [
-    { name: "Ohio RISE", phone: "18009349555", phoneLabel: "1-833-OH-RISE1", website: "https://managedcare.medicaid.ohio.gov/ohio-rise", type: "support", description: "Statewide respite and crisis stabilization for Medicaid-eligible youth." },
-    { name: "Ohio 2-1-1", phone: "211", website: "https://oh211.org", type: "support", description: "Statewide helpline connecting Ohioans to local services." },
+    { name: "Ohio RISE", phone: "18336474731", phoneLabel: "1-833-647-4731", website: "https://managedcare.medicaid.ohio.gov/ohio-rise", type: "support", description: "Statewide care coordination, intensive services, and crisis stabilization for eligible Ohio youth." },
+    { name: "Ohio 2-1-1", phone: "211", website: "https://oh211.org", type: "support", description: "Statewide helpline connecting Ohioans to food, housing, mental health, utilities, transportation, and local services." },
+    { name: "OCECD — Ohio IEP Support", phone: "18443822604", phoneLabel: "1-844-382-2604", website: "https://www.ocecd.org", type: "support", description: "Ohio Coalition for the Education of Children with Disabilities. IEP, special education rights, parent mentoring, and school advocacy support." },
+    { name: "OhioKAN Kinship & Adoption Navigator", phone: "18446446526", phoneLabel: "1-844-OHIO-KAN", website: "https://ohiokan.jfs.ohio.gov", type: "support", description: "Connections and navigation support for kinship and adoptive families across Ohio." },
+    { name: "Disability Rights Ohio", phone: "18002809182", phoneLabel: "1-800-282-9181", website: "https://www.disabilityrightsohio.org", type: "support", description: "Protection and advocacy organization for Ohioans with disabilities, including education and access rights." },
+    { name: "Ohio Legal Help", website: "https://www.ohiolegalhelp.org", type: "support", description: "Free legal information and referrals for Ohio families navigating court, custody, housing, benefits, and protection orders." },
   ],
   TX: [
     { name: "Texas 2-1-1", phone: "211", website: "https://www.211texas.org", type: "support", description: "Free, confidential social services referral for Texans." },

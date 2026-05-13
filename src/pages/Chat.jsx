@@ -195,7 +195,7 @@ export default function Chat() {
         className="flex items-center gap-3 px-4 py-3 sticky top-0 z-10 flex-shrink-0"
         style={{ background: C.darkGreen }}
       >
-        <Link to="/">
+        <Link to="/dashboard">
           <button className="rounded-lg p-1.5" style={{ background: "#ffffff18", border: "none" }}>
             <ChevronLeft size={18} color={C.cream} />
           </button>

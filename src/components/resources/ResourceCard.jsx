@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { C } from "@/lib/rooted-constants";
 import { FileText, Headphones, Video, BookOpen, Globe, ExternalLink, Bookmark } from "lucide-react";
 import { useSaved } from "@/components/resources/SavedResourcesContext";
@@ -89,7 +89,19 @@ export default function ResourceCard({ r }) {
         )}
 
         {/* Link */}
-        {r.url && (
+        {r.url && (r.url.startsWith("/") ? (
+          <Link
+            to={r.url}
+            className="inline-flex items-center gap-1 text-[10px] font-bold mt-2 px-2.5 py-1 rounded-lg"
+            style={{
+              background: `${C.darkGreen}10`,
+              color: C.darkGreen,
+              textDecoration: "none",
+            }}
+          >
+            <ExternalLink size={9} /> View Resource
+          </Link>
+        ) : (
           <a
             href={r.url}
             target="_blank"
@@ -103,7 +115,7 @@ export default function ResourceCard({ r }) {
           >
             <ExternalLink size={9} /> View Resource
           </a>
-        )}
+        ))}
       </div>
     </div>
   );

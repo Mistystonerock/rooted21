@@ -36,6 +36,8 @@ const RESOURCES = [
       { title: "National Domestic Violence Hotline", desc: "Call 1-800-799-7233 or text START to 88788 — 24/7 safe, confidential support", url: "tel:18007997233", type: "crisis" },
       { title: "Substance Abuse Helpline (SAMHSA)", desc: "Call 1-800-662-4357 — Free, confidential treatment referrals 24/7", url: "tel:18006624357", type: "crisis" },
       { title: "Legal Aid Near You", desc: "Free civil legal help for low-income families — find your local office", url: "https://www.lawhelp.org", type: "basic" },
+      { title: "Ohio IEP Support — OCECD", desc: "Ohio special education, IEP, and parent mentor support from the Ohio Coalition for the Education of Children with Disabilities", url: "https://www.ocecd.org", type: "basic" },
+      { title: "OhioKAN Kinship & Adoption Navigator", desc: "Ohio connections and support for kinship and adoptive families", url: "https://ohiokan.jfs.ohio.gov", type: "basic" },
       { title: "Transportation Assistance", desc: "Find Medicaid transportation, community rides, and transit aid programs in your area", url: "https://www.needhelppayingbills.com/html/transportation_assistance.html", type: "basic" },
       { title: "Utility Bill Assistance (LIHEAP)", desc: "Low Income Home Energy Assistance Program — help paying heating and cooling bills", url: "https://www.acf.hhs.gov/ocs/programs/liheap", type: "basic" },
     ]

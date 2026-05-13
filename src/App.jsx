@@ -30,6 +30,7 @@ import EmergencyToolbox from '@/pages/EmergencyToolbox';
 import AngerManagementHub from '@/pages/AngerManagementHub';
 import Launch from '@/pages/Launch';
 import CourtReadyExport from '@/pages/CourtReadyExport';
+import CourtPreparationChecklist from '@/pages/CourtPreparationChecklist';
 import CasePlanChecklist from '@/pages/CasePlanChecklist';
 import ExpenseSplit from '@/pages/ExpenseSplit';
 import ExpenseTracker from '@/pages/ExpenseTracker';
@@ -150,6 +151,7 @@ function App() {
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><EmergencyToolbox /></FeatureLockGate></Suspense>} />
               <Route path="/anger-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><AngerManagementHub /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-export" element={<FeatureLockGate user={user}><CourtReadyExport /></FeatureLockGate>} />
+              <Route path="/court-preparation-checklist" element={<FeatureLockGate user={user}><CourtPreparationChecklist /></FeatureLockGate>} />
               <Route path="/expense-split" element={<FeatureLockGate user={user}><ExpenseSplit /></FeatureLockGate>} />
               <Route path="/document-scanner" element={<FeatureLockGate user={user}><DocumentScanner /></FeatureLockGate>} />
               <Route path="/case-plan-checklist" element={<FeatureLockGate user={user}><CasePlanChecklist /></FeatureLockGate>} />
