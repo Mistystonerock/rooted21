@@ -18,6 +18,7 @@ import OnboardingTour from "@/components/onboarding/OnboardingTour";
 import MobileRefresh from "@/components/mobile/MobileRefresh";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
+import TrainingVideoSeries from "@/components/training/TrainingVideoSeries";
 
 const BG = "#faf6f1";
 const CARD = "#ffffff";
@@ -117,6 +118,8 @@ export default function Dashboard() {
               <span style={{ fontSize: 12, fontWeight: 800, color: "#ffffff", whiteSpace: "nowrap" }}>AI Coach</span>
             </Link>
           </motion.div>
+
+          <TrainingVideoSeries compact />
 
           {/* Quick Actions */}
           <div>
