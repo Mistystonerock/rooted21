@@ -6,6 +6,9 @@ const EVENT_LABELS = {
   meeting: "🤝 Meeting",
   therapy: "💛 Therapy",
   school: "🏫 School",
+  school_meeting: "🏫 School Meeting",
+  medication: "💊 Medication",
+  activity: "🎯 Activity",
   other: "📅 Event",
 };
 
@@ -44,7 +47,12 @@ Deno.serve(async (req) => {
     const tomorrowStr = tomorrow.toISOString().split("T")[0];
 
     // Fetch all events happening tomorrow
-    const events = await base44.asServiceRole.entities.FamilyEvent.filter({ date: tomorrowStr });
+    const familyEvents = await base44.asServiceRole.entities.FamilyEvent.filter({ date: tomorrowStr });
+    const careEvents = await base44.asServiceRole.entities.CareCalendarEvent.filter({ date: tomorrowStr });
+    const events = [
+      ...familyEvents,
+      ...careEvents.map(e => ({ ...e, added_by_role: "care_calendar" }))
+    ];
 
     if (events.length === 0) {
       return Response.json({ ok: true, note: "No events tomorrow", sent: 0 });

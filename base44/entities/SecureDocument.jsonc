@@ -76,6 +76,36 @@
       "type": "number",
       "default": 1,
       "description": "Version number"
+    },
+    "analysis_summary": {
+      "type": "string",
+      "description": "AI-generated summary from scanner analysis"
+    },
+    "extracted_dates": {
+      "type": "array",
+      "description": "Dates extracted from the document",
+      "items": {
+        "type": "string"
+      }
+    },
+    "extracted_requirements": {
+      "type": "array",
+      "description": "Requirements or action items extracted from the document",
+      "items": {
+        "type": "string"
+      }
+    },
+    "calendar_event_ids": {
+      "type": "array",
+      "description": "Care Calendar events created from this document",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scanner_source": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this document came from the scanner workflow"
     }
   },
   "required": [

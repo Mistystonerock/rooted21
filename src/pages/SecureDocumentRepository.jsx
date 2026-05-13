@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { FileText, Upload, Search, Tag, Share2, Trash2, Eye, Lock, AlertCircle } from "lucide-react";
+import { FileText, Upload, Search, ScanLine } from "lucide-react";
 import DocumentUploadModal from "@/components/documents/DocumentUploadModal";
 import DocumentSearchFilter from "@/components/documents/DocumentSearchFilter";
 import DocumentCard from "@/components/documents/DocumentCard";
@@ -102,14 +103,23 @@ export default function SecureDocumentRepository() {
 
       <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
         
-        {/* Upload button */}
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
-          style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
-        >
-          <Upload size={16} /> Upload Document
-        </button>
+        {/* Upload actions */}
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+            style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+          >
+            <Upload size={16} /> Upload
+          </button>
+          <Link
+            to="/document-scanner"
+            className="py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+            style={{ background: C.white, color: C.darkGreen, border: `1.5px solid ${C.cream}`, textDecoration: "none" }}
+          >
+            <ScanLine size={16} /> Scan
+          </Link>
+        </div>
 
         {/* Search */}
         <div className="relative">

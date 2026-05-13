@@ -23,6 +23,7 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
   const [saveAsNote, setSaveAsNote] = useState(false);
   const [caseId, setCaseId] = useState("");
   const [childName, setChildName] = useState("");
+  const [addToCalendar, setAddToCalendar] = useState(true);
   const [cases, setCases] = useState([]);
   const [children, setChildren] = useState([]);
   const [showRawText, setShowRawText] = useState(false);
@@ -217,6 +218,16 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           </div>
         )}
 
+        {analysis.calendar_items?.length > 0 && (
+          <label className="flex items-start gap-3 cursor-pointer rounded-xl p-3" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+            <input type="checkbox" checked={addToCalendar} onChange={e => setAddToCalendar(e.target.checked)}
+              style={{ accentColor: C.darkGreen, width: 15, height: 15, marginTop: 2 }} />
+            <p className="text-xs leading-relaxed" style={{ color: C.darkGreen }}>
+              Add <strong>{analysis.calendar_items.length}</strong> extracted date{analysis.calendar_items.length !== 1 ? "s" : ""} / deadline{analysis.calendar_items.length !== 1 ? "s" : ""} to the <strong>Care Calendar</strong> for reminders.
+            </p>
+          </label>
+        )}
+
         {caseId && (
           <label className="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" checked={saveAsNote} onChange={e => setSaveAsNote(e.target.checked)}
@@ -255,7 +266,7 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           <RefreshCw size={14} /> Scan Again
         </button>
         <button
-          onClick={() => onSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote })}
+          onClick={() => onSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar })}
           disabled={saving || !title}
           className="flex-[2] py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
           style={{
