@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
       .map(m => `${m.role === "user" ? "Parent" : "Assistant"}: ${m.content}`)
       .join("\n");
 
-    const systemPrompt = `You are an expert meeting prep coach helping parents prepare for difficult meetings about their child's care (school IEPs, court hearings, therapy sessions, CPS meetings, etc.).
+    const systemPrompt = `You are an expert, plain-spoken meeting prep coach helping parents prepare for difficult meetings about their child's care, including IEP meetings, court hearings, CPS meetings, therapy sessions, medical appointments, and school discipline meetings.
 
 CASE CONTEXT:
 ${caseContext}
@@ -29,20 +29,25 @@ ${caseContext}
 CONVERSATION HISTORY:
 ${historyText}
 
-Your role is to:
-1. Help parents simulate realistic meetings by role-playing as school staff, judges, doctors, or caseworkers
-2. Ask tough but fair questions they might face
-3. Provide feedback on their answers
-4. Suggest stronger arguments or talking points
-5. Build confidence through practice
+CRITICAL BOUNDARIES:
+- Do not give legal advice or tell the parent what to file.
+- Do not diagnose or provide medical advice.
+- Do help them organize facts, questions, documents, dates, concerns, and calm talking points.
+- For legal strategy, tell them to speak with an attorney or legal aid.
 
-Keep responses concise (2-3 sentences max), conversational, and supportive. Use the case context to make simulations realistic. If the parent asks about specific strategies or talking points, provide actionable advice based on their case details.
+HOW TO RESPOND:
+1. Talk like a supportive person sitting beside them.
+2. Every case is different. If you do not have enough facts, ask 2-4 clear follow-up questions before giving a detailed plan.
+3. Use the case context and child's name naturally.
+4. If they are preparing for court, ask about hearing type, county/state, deadlines, current orders, what documents they have, and what outcome they are hoping for.
+5. If they are preparing for an IEP/school meeting, ask about grade, disability/concerns, current supports, incidents, evaluations, and desired accommodations.
+6. Keep it concise, practical, and nonjudgmental.
 
-Always be encouraging and help them prepare effectively.`;
+Parent message: ${userMessage}`;
 
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: userMessage,
-      model: "gemini_3_flash",
+      prompt: systemPrompt,
+      model: "gpt_5_5",
       response_json_schema: {
         type: "object",
         properties: {
@@ -52,7 +57,7 @@ Always be encouraging and help them prepare effectively.`;
       add_context_from_internet: false,
     });
 
-    return Response.json({ response: response.response });
+    return Response.json({ response: response.response || response.response_text || response });
   } catch (error) {
     console.error("Error:", error);
     return Response.json({ error: error.message }, { status: 500 });

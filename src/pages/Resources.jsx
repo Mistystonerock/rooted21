@@ -17,6 +17,7 @@ const RESOURCE_SECTIONS = [
   {
     title: "Court, Legal & Paperwork",
     items: [
+      { title: "Court Prep & Rights by State", description: "Choose your state for official forms, parent rights, IEP safeguards, and legal education links.", url: "/court-rights-education", emoji: "⚖️", tag: "STATE LINKS" },
       { title: "Supreme Court of Ohio Forms", description: "Official Ohio court forms and court document categories.", url: "https://www.supremecourt.ohio.gov/forms/all-forms/", emoji: "⚖️", tag: "FORMS" },
       { title: "Ross County Clerk Legal Forms", description: "Local Ross County legal forms including divorce/dissolution and court paperwork links.", url: "http://www.co.ross.oh.us/clerk/legal-forms.html", emoji: "📄", meta: "Ross County" },
       { title: "Secure Documents", description: "Upload, scan, store, and organize legal and family documents securely.", url: "/documents", emoji: "🔒" },

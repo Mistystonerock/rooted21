@@ -17,6 +17,7 @@ const routes = {
   SupportHub: lazy(() => import("@/pages/SupportHub")),
   BehaviorHub: lazy(() => import("@/pages/BehaviorHub")),
   SubstanceAbuseResources: lazy(() => import("@/pages/SubstanceAbuseResources")),
+  CourtRightsEducation: lazy(() => import("@/pages/CourtRightsEducation")),
   Chat: lazy(() => import("@/pages/Chat")),
   MyTeam: lazy(() => import("@/pages/MyTeam")),
   FamilyDashboard: lazy(() => import("@/pages/FamilyDashboard")),

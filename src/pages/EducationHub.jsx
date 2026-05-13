@@ -127,6 +127,7 @@ export default function EducationHub() {
             { title: "Live Classes", subtitle: "Join parenting groups and guided learning", path: "/live-classes", emoji: "🎓" },
             { title: "Resource Library", subtitle: "Articles, worksheets, books, and videos", path: "/resource-library", emoji: "📚" },
             { title: "App Guide", subtitle: "Learn what every tool in Rooted 21 does", path: "/app-guide", emoji: "🧭" },
+            { title: "Court Prep & Rights by State", subtitle: "Official forms, IEP rights, and court education links", path: "/court-rights-education", emoji: "⚖️" },
           ].map(item => (
             <Link key={item.path} to={item.path}
               className="flex items-center gap-3 rounded-2xl p-4"
