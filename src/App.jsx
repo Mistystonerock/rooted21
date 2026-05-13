@@ -66,6 +66,12 @@ function App() {
         } catch (e) {
           // Silently fail if function doesn't exist yet
         }
+
+        const pendingBetaCode = localStorage.getItem("pending_beta_code");
+        if (pendingBetaCode) {
+          await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
+          localStorage.removeItem("pending_beta_code");
+        }
       }
     }).catch(() => setUser(null));
   }, []);

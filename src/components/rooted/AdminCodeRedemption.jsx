@@ -26,14 +26,14 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
 
     if (!isAuthed) {
       // Save code and redirect to login — code will be redeemed after login
-      localStorage.setItem("pending_admin_code", trimmed);
+      localStorage.setItem(trimmed.length === 8 ? "pending_beta_code" : "pending_admin_code", trimmed);
       base44.auth.redirectToLogin("/home");
       return;
     }
 
-    const response = await base44.functions.invoke("redeemAdminAccessCode", {
-      code: trimmed,
-    });
+    const response = trimmed.length === 8
+      ? await base44.functions.invoke("redeemBetaTesterCode", { code: trimmed })
+      : await base44.functions.invoke("redeemAdminAccessCode", { code: trimmed });
 
     if (response.data?.success) {
       setSuccess(true);
@@ -57,7 +57,7 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
             <CheckCircle2 size={24} color={GOLD} />
           </div>
           <h2 className="font-bold text-lg" style={{ color: TEXT }}>You're in! 🎉</h2>
-          <p className="text-sm" style={{ color: MUTED }}>You now have admin access to Rooted 21.</p>
+          <p className="text-sm" style={{ color: MUTED }}>Your Rooted 21 access is now active.</p>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
             </label>
             <input
               type="text"
-              placeholder="e.g., ABC123"
+              placeholder="e.g., ABC12345"
               value={code}
               onChange={e => setCode(e.target.value.toUpperCase())}
               className="w-full px-3 py-3 rounded-xl text-base border outline-none text-center font-mono tracking-widest"

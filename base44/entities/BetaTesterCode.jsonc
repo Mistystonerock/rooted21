@@ -1,0 +1,58 @@
+{
+  "name": "BetaTesterCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Unique 8-character beta tester access code"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "used",
+        "revoked"
+      ],
+      "default": "active",
+      "description": "Current code status"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Expiration date, 60 days from creation"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Who the code is for"
+    },
+    "tester_role": {
+      "type": "string",
+      "enum": [
+        "Parent",
+        "Professional",
+        "Court Staff"
+      ],
+      "default": "Parent",
+      "description": "Beta tester role"
+    },
+    "used_by_email": {
+      "type": "string",
+      "description": "Email address that redeemed the code"
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the code was redeemed"
+    },
+    "created_by_email": {
+      "type": "string",
+      "description": "Founder who created the code"
+    }
+  },
+  "required": [
+    "code",
+    "status",
+    "expires_at",
+    "tester_role"
+  ]
+}

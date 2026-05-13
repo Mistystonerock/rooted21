@@ -5,6 +5,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import { Users, Eye, CheckCircle2, MessageSquare, TrendingUp, Download } from "lucide-react";
 import AdminManagement from "@/components/rooted/AdminManagement";
 import AdminCodeManager from "@/components/admin/AdminCodeManager";
+import BetaTesterCodeManager from "@/components/admin/BetaTesterCodeManager";
 
 export default function FounderDashboard() {
   const [user, setUser] = useState(null);
@@ -134,7 +135,7 @@ export default function FounderDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 border-b overflow-x-auto" style={{ borderColor: C.cream }}>
-          {["overview", "users", "waitlist", "surveys", "admins"].map(tab => (
+          {["overview", "users", "waitlist", "surveys", "beta", "admins"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -295,6 +296,10 @@ export default function FounderDashboard() {
               </div>
             ))}
           </div>
+        )}
+
+        {activeTab === "beta" && (
+          <BetaTesterCodeManager />
         )}
 
         {/* Admins tab */}
