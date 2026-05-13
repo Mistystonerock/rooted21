@@ -54,7 +54,7 @@ const TRUTHS = [
 
 export default function Launch() {
   const time = useCountdown();
-  const [form, setForm] = useState({ full_name: "", email: "", family_type: "foster", message: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", family_type: "foster", message: "", beta_code: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -72,6 +72,21 @@ export default function Launch() {
     e.preventDefault();
     if (!form.full_name.trim() || !form.email.trim()) { setError("Please enter your name and email."); return; }
     setLoading(true); setError("");
+
+    const betaCode = form.beta_code.trim().toUpperCase();
+    if (betaCode) {
+      try {
+        await base44.functions.invoke("validateBetaTesterCode", { code: betaCode });
+        localStorage.setItem("pending_beta_code", betaCode);
+        base44.auth.redirectToLogin("/home");
+        return;
+      } catch {
+        setError("This code is not valid. Please contact Misty at rooted21parenting.com for access.");
+        setLoading(false);
+        return;
+      }
+    }
+
     await base44.entities.WaitlistSignup.create({
       full_name: form.full_name.trim(),
       email: form.email.trim().toLowerCase(),
@@ -214,6 +229,10 @@ export default function Launch() {
               <div>
                 <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Anything you want us to know? (optional)</label>
                 <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here.</label>
+                <input type="text" value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta code" maxLength={8} style={{ ...inp, textTransform: "uppercase", letterSpacing: "0.08em" }} />
               </div>
 
               {error && <p style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.25)", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#c85a3a" }}>{error}</p>}
