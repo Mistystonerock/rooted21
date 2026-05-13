@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Plus, Trash2, CheckCircle, Circle, Upload } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import ReunificationRoadmap from "@/components/reunification/ReunificationRoadmap";
 
 const SERVICE_STATUSES = {
   not_started: { label: "Not Started", color: C.mutedText, bg: C.cream },
@@ -23,12 +24,20 @@ export default function ReunificationTracker() {
   const [form, setForm] = useState({ child_name: "", case_number: "", caseworker_name: "", caseworker_email: "", court_date: "", target_reunification_date: "", notes: "", services: [] });
   const [saving, setSaving] = useState(false);
   const [activePlanId, setActivePlanId] = useState(null);
+  const [behaviorLogs, setBehaviorLogs] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
     base44.auth.me().then(u => {
       setUser(u);
-      base44.entities.ReunificationPlan.filter({ parent_email: u.email }, "-created_date", 20).then(data => {
+      Promise.all([
+        base44.entities.ReunificationPlan.filter({ parent_email: u.email }, "-created_date", 20),
+        base44.entities.BehaviorLog.list("-created_date", 100),
+        base44.entities.SecureDocument.filter({ owner_email: u.email }, "-created_date", 100),
+      ]).then(([data, logs, docs]) => {
         setPlans(data);
+        setBehaviorLogs(logs);
+        setDocuments(docs);
         if (data.length > 0 && !activePlanId) setActivePlanId(data[0].id);
       });
     });
@@ -37,7 +46,7 @@ export default function ReunificationTracker() {
   function addService(name = "") {
     setForm(p => ({
       ...p,
-      services: [...(p.services || []), { id: Date.now().toString(), name, provider: "", status: "not_started", completion_date: "", proof_url: "", notes: "" }]
+      services: [...(p.services || []), { id: Date.now().toString(), name, provider: "", status: "not_started", completion_date: "", milestone_date: "", proof_url: "", proof_items: [], notes: "" }]
     }));
   }
 
@@ -63,9 +72,7 @@ export default function ReunificationTracker() {
     setSaving(false);
   }
 
-  async function updateServiceStatus(plan, svcIdx, newStatus) {
-    const services = [...(plan.services || [])];
-    services[svcIdx] = { ...services[svcIdx], status: newStatus, completion_date: newStatus === "completed" ? new Date().toISOString().slice(0, 10) : services[svcIdx].completion_date };
+  async function updatePlanServices(plan, services) {
     const updated = await base44.entities.ReunificationPlan.update(plan.id, { services });
     setPlans(prev => prev.map(p => p.id === plan.id ? updated : p));
   }
@@ -155,13 +162,23 @@ export default function ReunificationTracker() {
                 ))}
               </div>
               {form.services.map((svc, idx) => (
-                <div key={svc.id} className="flex items-center gap-2 mb-1.5">
-                  <input value={svc.name} onChange={e => updateService(idx, "name", e.target.value)}
-                    placeholder="Service name" className="flex-1 px-2 py-1.5 rounded-lg text-xs border outline-none"
-                    style={{ borderColor: C.cream, background: C.offWhite }} />
-                  <button onClick={() => removeService(idx)} style={{ background: "none", border: "none", cursor: "pointer" }}>
-                    <Trash2 size={12} color={C.mutedText} />
-                  </button>
+                <div key={svc.id} className="rounded-xl p-2 mb-2 space-y-2" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+                  <div className="flex items-center gap-2">
+                    <input value={svc.name} onChange={e => updateService(idx, "name", e.target.value)}
+                      placeholder="Service name" className="flex-1 px-2 py-1.5 rounded-lg text-xs border outline-none"
+                      style={{ borderColor: C.cream, background: C.white }} />
+                    <button onClick={() => removeService(idx)} style={{ background: "none", border: "none", cursor: "pointer" }}>
+                      <Trash2 size={12} color={C.mutedText} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input value={svc.provider} onChange={e => updateService(idx, "provider", e.target.value)}
+                      placeholder="Provider / agency" className="px-2 py-1.5 rounded-lg text-xs border outline-none"
+                      style={{ borderColor: C.cream, background: C.white }} />
+                    <input type="date" value={svc.milestone_date} onChange={e => updateService(idx, "milestone_date", e.target.value)}
+                      className="px-2 py-1.5 rounded-lg text-xs border outline-none"
+                      style={{ borderColor: C.cream, background: C.white }} />
+                  </div>
                 </div>
               ))}
               <button onClick={() => addService()} className="text-xs font-bold mt-1"
@@ -205,36 +222,12 @@ export default function ReunificationTracker() {
               {activePlan.caseworker_name && <p className="text-[10px] mt-1" style={{ color: C.lightGreen }}>Caseworker: {activePlan.caseworker_name}</p>}
             </div>
 
-            {/* Services */}
-            <div className="space-y-2">
-              <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>COURT-ORDERED SERVICES</p>
-              {(activePlan.services || []).map((svc, idx) => {
-                const st = SERVICE_STATUSES[svc.status] || SERVICE_STATUSES.not_started;
-                return (
-                  <div key={svc.id || idx} className="rounded-xl p-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        {svc.status === "completed"
-                          ? <CheckCircle size={16} color={C.midGreen} />
-                          : <Circle size={16} color={C.cream} />
-                        }
-                        <p className="font-bold text-sm" style={{ color: C.darkGreen }}>{svc.name}</p>
-                      </div>
-                      <select value={svc.status}
-                        onChange={e => updateServiceStatus(activePlan, idx, e.target.value)}
-                        className="text-[10px] font-bold px-2 py-1 rounded-full border-none outline-none cursor-pointer"
-                        style={{ background: st.bg, color: st.color }}>
-                        {Object.entries(SERVICE_STATUSES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-                      </select>
-                    </div>
-                    {svc.completion_date && <p className="text-[10px] mt-1 ml-6" style={{ color: C.mutedText }}>Completed: {svc.completion_date}</p>}
-                  </div>
-                );
-              })}
-              {(activePlan.services || []).length === 0 && (
-                <p className="text-sm text-center py-4" style={{ color: C.mutedText }}>No services added yet.</p>
-              )}
-            </div>
+            <ReunificationRoadmap
+              plan={activePlan}
+              behaviorLogs={behaviorLogs}
+              documents={documents}
+              onUpdateServices={(services) => updatePlanServices(activePlan, services)}
+            />
 
             <button onClick={() => handleDelete(activePlan.id)}
               className="w-full py-2 rounded-xl text-xs font-bold"

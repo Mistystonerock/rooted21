@@ -49,8 +49,51 @@
             "type": "string",
             "format": "date"
           },
+          "milestone_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Target or court milestone date for this service"
+          },
           "proof_url": {
             "type": "string"
+          },
+          "proof_items": {
+            "type": "array",
+            "description": "Linked proof of progress items such as behavior logs, certificates, and uploaded documents",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "behavior_log",
+                    "therapy_certificate",
+                    "document",
+                    "other"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "source_id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "linked_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            },
+            "default": []
           },
           "notes": {
             "type": "string"
