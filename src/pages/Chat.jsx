@@ -6,6 +6,7 @@ import { SYSTEM_PROMPT } from "@/lib/rooted-constants";
 import { ChevronLeft, Send, AlertTriangle, RefreshCw, Mic, MicOff } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
 import ChatMessage from "@/components/rooted/ChatMessage";
+import CrisisSafetyOverlay from "@/components/crisis/CrisisSafetyOverlay";
 import { FOLLOW_UP_DEFAULTS } from "@/lib/rooted-constants";
 
 function parseFollowUps(text) {
@@ -20,6 +21,18 @@ function stripFollowUps(text) {
   return text.replace(/\nFOLLOWUPS:\[.*?\]/s, "").trim();
 }
 
+const CRISIS_MARKERS = [
+  "suicide", "kill myself", "kill them", "hurt myself", "hurt them", "self harm", "self-harm",
+  "cutting", "overdose", "weapon", "gun", "knife", "choking", "not safe", "unsafe",
+  "danger", "emergency", "run away", "running away", "abuse", "hit me", "hitting me",
+  "can't keep safe", "cannot keep safe", "911", "988"
+];
+
+function detectCrisisMessage(text) {
+  const normalized = text.toLowerCase();
+  return CRISIS_MARKERS.some(marker => normalized.includes(marker));
+}
+
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -27,10 +40,18 @@ export default function Chat() {
   const [sessionId, setSessionId] = useState(null);
   const [followUps, setFollowUps] = useState([]);
   const [listening, setListening] = useState(false);
+  const [childProfile, setChildProfile] = useState(null);
+  const [crisisOverlay, setCrisisOverlay] = useState(null);
   const [speechSupported] = useState(() => "webkitSpeechRecognition" in window || "SpeechRecognition" in window);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    base44.entities.ChildProfile.list("-updated_date", 1).then(list => {
+      setChildProfile(list?.[0] || null);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -57,7 +78,16 @@ export default function Chat() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  function updateCrisisState(txt) {
+    if (detectCrisisMessage(txt)) {
+      setCrisisOverlay({ message: txt });
+      return true;
+    }
+    return false;
+  }
+
   async function autoSend(txt) {
+    updateCrisisState(txt);
     setInput("");
     setLoading(true);
     const userMsg = { role: "user", content: txt };
@@ -94,6 +124,7 @@ export default function Chat() {
     const txt = input.trim();
     if (!txt || loading) return;
 
+    updateCrisisState(txt);
     setInput("");
     setLoading(true);
 
@@ -190,6 +221,12 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
+      <CrisisSafetyOverlay
+        open={!!crisisOverlay}
+        onClose={() => setCrisisOverlay(null)}
+        childProfile={childProfile}
+        message={crisisOverlay?.message}
+      />
       {/* Header */}
       <div
         className="flex items-center gap-3 px-4 py-3 sticky top-0 z-10 flex-shrink-0"
