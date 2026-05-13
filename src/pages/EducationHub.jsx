@@ -121,12 +121,24 @@ export default function EducationHub() {
           ))}
         </div>
 
-        {/* Coming soon */}
-        <div className="rounded-2xl p-4" style={{ background: C.cream, border: `1px solid ${C.cream}` }}>
-          <p className="font-bold text-xs mb-1" style={{ color: C.darkGreen }}>📖 Also in the app</p>
-          <p className="text-[11px] leading-relaxed" style={{ color: C.mutedText }}>
-            The 21-lesson TBRI® curriculum, sensory toolbox, emergency toolbox, and resource library are also part of your education toolkit. Explore them from your dashboard.
-          </p>
+        <div className="space-y-3">
+          {[
+            { title: "21 Parenting Lessons", subtitle: "The full Rooted 21 learning path", path: "/lessons", emoji: "🌿" },
+            { title: "Live Classes", subtitle: "Join parenting groups and guided learning", path: "/live-classes", emoji: "🎓" },
+            { title: "Resource Library", subtitle: "Articles, worksheets, books, and videos", path: "/resource-library", emoji: "📚" },
+            { title: "App Guide", subtitle: "Learn what every tool in Rooted 21 does", path: "/app-guide", emoji: "🧭" },
+          ].map(item => (
+            <Link key={item.path} to={item.path}
+              className="flex items-center gap-3 rounded-2xl p-4"
+              style={{ background: C.white, border: `1.5px solid ${C.cream}`, textDecoration: "none" }}>
+              <span className="text-2xl">{item.emoji}</span>
+              <div className="flex-1">
+                <p className="font-bold text-sm" style={{ color: C.darkGreen }}>{item.title}</p>
+                <p className="text-[11px]" style={{ color: C.mutedText }}>{item.subtitle}</p>
+              </div>
+              <span style={{ color: C.cream }}>›</span>
+            </Link>
+          ))}
         </div>
 
         <div className="pb-8" />

@@ -91,6 +91,9 @@ function App() {
               <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfile /></FeatureLockGate></Suspense>} />
               <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalPortal /></FeatureLockGate></Suspense>} />
               <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Resources /></FeatureLockGate></Suspense>} />
+              <Route path="/support-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportHub /></FeatureLockGate></Suspense>} />
+              <Route path="/behavior-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorHub /></FeatureLockGate></Suspense>} />
+              <Route path="/substance-abuse-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SubstanceAbuseResources /></FeatureLockGate></Suspense>} />
               <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
               <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/respite-care" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.RespiteCare /></FeatureLockGate></Suspense>} />
