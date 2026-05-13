@@ -1,0 +1,57 @@
+{
+  "name": "TutorialScript",
+  "type": "object",
+  "properties": {
+    "section_id": {
+      "type": "string",
+      "description": "Tutorial section identifier"
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "parent",
+        "professional",
+        "both"
+      ],
+      "default": "both"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "array",
+      "description": "Editable tutorial steps and narration",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "narration": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "button_label": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "section_id",
+    "title",
+    "steps"
+  ]
+}

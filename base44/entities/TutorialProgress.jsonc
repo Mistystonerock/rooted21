@@ -1,0 +1,30 @@
+{
+  "name": "TutorialProgress",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "completed_section_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "last_section_id": {
+      "type": "string"
+    },
+    "last_step_index": {
+      "type": "number",
+      "default": 0
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}
