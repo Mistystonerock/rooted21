@@ -71,6 +71,7 @@ const routes = {
   MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),
   CommunicationsPortal: lazy(() => import("@/pages/CommunicationsPortal")),
   CourtFilingWorkflow: lazy(() => import("@/pages/CourtFilingWorkflow")),
+  ComplianceRiskDashboard: lazy(() => import("@/pages/ComplianceRiskDashboard")),
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
   BehavioralTrends: lazy(() => import("@/pages/BehavioralTrends")),
   JobResources: lazy(() => import("@/pages/JobResources")),
