@@ -43,7 +43,7 @@ export default function DonationPanel() {
       </div>
 
       <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 16 }}>
-        Your gift helps build a safer, calmer place for parents walking through court dates, case plans, trauma behaviors, reunification, adoption, and the moments when they feel completely alone.
+        Your gift helps build a safer, calmer place for parents walking through court dates, case plans, trauma behaviors, reunification, adoption, and the moments when they feel completely alone. Donations also help create anger management group materials, parenting class handouts, worksheets, and facilitator guides.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 12 }}>
