@@ -2,12 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 
-const BG = "#0d2818";
-const CARD = "#132d1f";
-const GREEN = "#3db870";
-const GOLD = "#c9973a";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.55)";
+const BG = "#faf6f1";
+const CARD = "#ffffff";
+const CREAM = "#f5ede2";
+const BORDER = "rgba(120,85,60,0.2)";
+const GREEN = "#6b9d6e";
+const DARK_GREEN = "#0a3d20";
+const GOLD = "#a67c52";
+const TEXT = "#5a3d28";
+const MUTED = "#8b6f54";
 
 const SLIDES = [
   {
@@ -195,23 +198,23 @@ export default function FeatureShowcase() {
   const slide = SLIDES[current];
 
   return (
-    <div style={{ borderRadius: 24, overflow: "hidden", border: `1.5px solid rgba(255,255,255,0.08)`, boxShadow: "0 12px 60px rgba(0,0,0,0.6)" }}>
+    <div style={{ borderRadius: 24, overflow: "hidden", background: CARD, border: `1.5px solid ${BORDER}`, boxShadow: "0 10px 34px rgba(61,40,23,0.12)" }}>
 
       {/* Header bar — like a video player */}
-      <div style={{ background: "#090f0b", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+      <div style={{ background: CREAM, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10, borderBottom: `1px solid ${BORDER}` }}>
         <div style={{ display: "flex", gap: 5 }}>
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} />
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} />
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: GOLD }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: GREEN }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: DARK_GREEN }} />
         </div>
         <div style={{ flex: 1, textAlign: "center" }}>
-          <p style={{ fontSize: 11, color: MUTED, fontWeight: 600 }}>Rooted 21 — App Tour</p>
+          <p style={{ fontSize: 11, color: MUTED, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" }}>Rooted 21 App Tour</p>
         </div>
-        <p style={{ fontSize: 10, color: MUTED }}>{current + 1}/{SLIDES.length}</p>
+        <p style={{ fontSize: 10, color: MUTED, fontWeight: 700 }}>{current + 1}/{SLIDES.length}</p>
       </div>
 
       {/* Progress bar */}
-      <div style={{ height: 2, background: "rgba(255,255,255,0.08)", position: "relative" }}>
+      <div style={{ height: 3, background: "rgba(120,85,60,0.12)", position: "relative" }}>
         <motion.div
           style={{ height: "100%", background: slide.color, position: "absolute", left: 0, top: 0 }}
           animate={{ width: `${progress}%` }}
@@ -245,7 +248,7 @@ export default function FeatureShowcase() {
             </p>
 
             {/* Description */}
-            <p style={{ fontSize: 13, lineHeight: 1.75, color: "rgba(240,232,216,0.82)", marginBottom: 18 }}>
+            <p style={{ fontSize: 13, lineHeight: 1.75, color: MUTED, marginBottom: 18 }}>
               {slide.description}
             </p>
 
@@ -262,19 +265,19 @@ export default function FeatureShowcase() {
       </div>
 
       {/* Controls */}
-      <div style={{ background: "#0a1a10", padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={prev} style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ background: CREAM, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10, borderTop: `1px solid ${BORDER}` }}>
+        <button onClick={prev} style={{ width: 36, height: 36, borderRadius: 10, background: CARD, border: `1px solid ${BORDER}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <ChevronLeft size={16} color={MUTED} />
         </button>
 
         <button
           onClick={() => setPlaying(p => !p)}
-          style={{ width: 36, height: 36, borderRadius: 10, background: GREEN, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+          style={{ width: 36, height: 36, borderRadius: 10, background: DARK_GREEN, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(10,61,32,0.25)" }}
         >
-          {playing ? <Pause size={14} color="#0a1a10" /> : <Play size={14} color="#0a1a10" />}
+          {playing ? <Pause size={14} color={CREAM} /> : <Play size={14} color={CREAM} />}
         </button>
 
-        <button onClick={next} style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <button onClick={next} style={{ width: 36, height: 36, borderRadius: 10, background: CARD, border: `1px solid ${BORDER}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <ChevronRight size={16} color={MUTED} />
         </button>
 
@@ -286,7 +289,7 @@ export default function FeatureShowcase() {
               onClick={() => goTo(i)}
               style={{
                 flexShrink: 0, width: i === current ? 20 : 6, height: 6, borderRadius: 99,
-                background: i === current ? slide.color : "rgba(255,255,255,0.15)",
+                background: i === current ? slide.color : "rgba(120,85,60,0.22)",
                 border: "none", cursor: "pointer", transition: "all 0.3s", padding: 0,
               }}
             />
