@@ -37,14 +37,24 @@ export default function DonationPanel() {
           <Heart size={20} color={GREEN} fill={GREEN} />
         </div>
         <div>
-          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", color: GREEN, textTransform: "uppercase" }}>Support the mission</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 24, color: TEXT, lineHeight: 1.15 }}>Help Rooted 21 grow</h2>
+          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", color: GREEN, textTransform: "uppercase" }}>Support Rooted 21</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 24, color: TEXT, lineHeight: 1.15 }}>Help us keep this free for every family that needs it.</h2>
         </div>
       </div>
 
       <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 16 }}>
-        Your gift helps build a safer, calmer place for parents walking through court dates, case plans, trauma behaviors, reunification, adoption, and the moments when they feel completely alone. Donations also help create anger management group materials, parenting class handouts, worksheets, and facilitator guides.
+        Rooted 21 is a nonprofit organization dedicated to breaking generational cycles by providing free trauma-informed parenting tools, classes, and resources to families navigating hard things. Every donation — no matter the size — helps us keep this platform free and expand our reach to more families across Ohio and beyond.
       </p>
+
+      <div style={{ background: "#F0F6F0", border: `1px solid ${GREEN}35`, borderRadius: 14, padding: "13px 14px", marginBottom: 16 }}>
+        <p style={{ fontSize: 12, fontWeight: 900, color: TEXT, marginBottom: 8 }}>Your gift helps us:</p>
+        <ul style={{ margin: 0, paddingLeft: 18, color: MUTED, fontSize: 12, lineHeight: 1.7 }}>
+          <li>Keep the app completely free for families.</li>
+          <li>Offer free and sliding-scale parenting classes.</li>
+          <li>Build more tools for parents, professionals, and courts.</li>
+          <li>Serve more counties that have no parenting support programs.</li>
+        </ul>
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 12 }}>
         {AMOUNTS.map(value => (
@@ -81,11 +91,18 @@ export default function DonationPanel() {
         disabled={loading || !selectedAmount || selectedAmount < 1}
         style={{ width: "100%", marginTop: 14, padding: "15px", background: loading ? `${GREEN}70` : GREEN, border: "none", borderRadius: 14, color: "#fff", fontWeight: 900, fontSize: 14, cursor: loading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
       >
-        {loading ? <><Loader2 size={15} className="animate-spin" /> Opening secure checkout…</> : <><Sparkles size={15} /> Donate ${selectedAmount || amount} to the mission</>}
+        {loading ? <><Loader2 size={15} className="animate-spin" /> Opening secure checkout…</> : <><Sparkles size={15} /> Donate Now — Support Our Mission</>}
       </button>
 
-      <p style={{ textAlign: "center", fontSize: 11, color: GOLD, marginTop: 10, fontWeight: 700 }}>
-        Every dollar helps make support more reachable for families who need it most.
+      <a
+        href="mailto:mstonerock@rooted21parenting.com?subject=Grant%20Partnership%20Application"
+        style={{ width: "100%", marginTop: 10, padding: "12px", background: "#fff", border: `1.5px solid ${GREEN}`, borderRadius: 14, color: GREEN, fontWeight: 900, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}
+      >
+        Apply for a Grant Partnership
+      </a>
+
+      <p style={{ textAlign: "center", fontSize: 10, color: GOLD, marginTop: 10, fontWeight: 700, lineHeight: 1.5 }}>
+        Rooted 21 Parenting Network Inc. is a 501(c)(3) nonprofit organization — pending IRS approval. All donations are tax deductible upon approval. No family is ever charged for access.
       </p>
     </section>
   );
