@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
 import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
+import DonationPanel from "@/components/launch/DonationPanel";
 import { Sparkles, ChevronRight } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
@@ -166,6 +167,9 @@ export default function Launch() {
 
         {/* ── FOUNDER'S NOTE ── */}
         <FoundersNote />
+
+        {/* ── DONATIONS ── */}
+        <DonationPanel />
 
         {/* ── APP TOUR ── */}
         <div style={{ marginBottom: 28 }}>
