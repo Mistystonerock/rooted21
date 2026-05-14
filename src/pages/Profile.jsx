@@ -45,24 +45,24 @@ export default function Profile() {
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       {/* Header */}
-      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
-        <Link to="/dashboard"><ChevronLeft size={20} color={C.cream} /></Link>
+      <div className="px-5 py-4 flex items-center gap-3 sticky top-0 z-10" style={{ background: "linear-gradient(135deg, #0a3d20 0%, #0d5c2a 100%)", borderBottom: "1px solid rgba(201,151,58,0.3)", boxShadow: "0 8px 24px rgba(61,40,23,0.12)", paddingTop: "max(14px, env(safe-area-inset-top))" }}>
+        <Link to="/dashboard" className="rounded-xl" style={{ background: "rgba(245,230,200,0.12)", border: "1px solid rgba(245,230,200,0.18)" }}><ChevronLeft size={20} color={C.cream} /></Link>
         <div>
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>My Profile</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>Account & notification settings</p>
+          <p className="text-[10px]" style={{ color: "rgba(245,230,200,0.75)" }}>Account & notification settings</p>
         </div>
       </div>
 
       <div className="max-w-[480px] mx-auto px-4 py-5 space-y-4">
         {/* User info */}
-        <div className="rounded-2xl p-4 flex items-center gap-4" style={{ background: C.card, border: `1px solid ${C.cream}` }}>
+        <div className="rounded-2xl p-4 flex items-center gap-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
           <div className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0"
-            style={{ background: C.darkGreen, color: C.cream }}>
+            style={{ background: C.darkGreen, color: C.cream, border: `2px solid ${C.gold}` }}>
             {user?.full_name?.[0] || "?"}
           </div>
           <div>
-            <p className="font-serif font-bold text-base" style={{ color: C.cream }}>{user?.full_name || "—"}</p>
-            <p className="text-xs" style={{ color: C.cream }}>{user?.email}</p>
+            <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>{user?.full_name || "—"}</p>
+            <p className="text-xs" style={{ color: C.mutedText }}>{user?.email}</p>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 inline-block capitalize"
               style={{ background: `${C.midGreen}20`, color: C.midGreen }}>
               {user?.role || "user"}
@@ -70,44 +70,44 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Founder Dashboard link — only for founder/admin */}
-        {user?.role === "admin" && (
-          <>
-            <Link
-              to="/founder-dashboard"
-              className="flex items-center justify-between rounded-2xl p-4"
-              style={{ background: C.darkGreen, textDecoration: "none" }}
-            >
-              <div>
-                <p className="font-bold text-sm" style={{ color: "#1a1a1a" }}>📊 Founder Dashboard</p>
-                <p className="text-[11px] mt-0.5" style={{ color: "#8b6f54" }}>Users · Waitlist · Surveys · Analytics</p>
-              </div>
-              <span className="text-lg" style={{ color: "#a67c52" }}>→</span>
-            </Link>
+        {/* Founder/Admin links */}
+        {user?.role === "founder" && (
+          <Link
+            to="/founder-dashboard"
+            className="flex items-center justify-between rounded-2xl p-4"
+            style={{ background: "linear-gradient(135deg, #0a3d20 0%, #0d5c2a 100%)", border: `1.5px solid ${C.gold}`, boxShadow: "0 8px 24px rgba(61,40,23,0.12)", textDecoration: "none" }}
+          >
+            <div>
+              <p className="font-bold text-sm" style={{ color: C.cream }}>📊 Founder Dashboard</p>
+              <p className="text-[11px] mt-0.5" style={{ color: "rgba(245,230,200,0.75)" }}>Users · Waitlist · Surveys · Analytics</p>
+            </div>
+            <span className="text-lg" style={{ color: C.gold }}>→</span>
+          </Link>
+        )}
 
-            <Link
-              to="/founder-admin-management"
-              className="flex items-center justify-between rounded-2xl p-4"
-              style={{ background: C.darkGreen, textDecoration: "none" }}
-            >
-              <div>
-                <p className="font-bold text-sm" style={{ color: "#1a1a1a" }}>🛡️ Admin Management</p>
-                <p className="text-[11px] mt-0.5" style={{ color: "#8b6f54" }}>Role hierarchy · Codes · Permissions</p>
-              </div>
-              <span className="text-lg" style={{ color: "#a67c52" }}>→</span>
-            </Link>
-          </>
+        {["founder", "admin"].includes(user?.role) && (
+          <Link
+            to="/founder-admin-management"
+            className="flex items-center justify-between rounded-2xl p-4"
+            style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none" }}
+          >
+            <div>
+              <p className="font-bold text-sm" style={{ color: C.darkGreen }}>🛡️ Admin Management</p>
+              <p className="text-[11px] mt-0.5" style={{ color: C.mutedText }}>Role hierarchy · Codes · Permissions</p>
+            </div>
+            <span className="text-lg" style={{ color: C.gold }}>→</span>
+          </Link>
         )}
 
         {/* SMS Reminders */}
-        <div className="rounded-2xl p-4 space-y-4" style={{ background: C.card, border: `1px solid ${C.cream}` }}>
+        <div className="rounded-2xl p-4 space-y-4" style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)" }}>
           <div className="flex items-center gap-2 mb-1">
             <Phone size={16} color={C.midGreen} />
-            <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>SMS Reminders</p>
+            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>SMS Reminders</p>
           </div>
 
           <div>
-            <label className="text-xs font-bold block mb-1.5" style={{ color: C.cream }}>
+            <label className="text-xs font-bold block mb-1.5" style={{ color: C.mutedText }}>
               MOBILE PHONE NUMBER
             </label>
             <input
@@ -116,23 +116,23 @@ export default function Profile() {
               onChange={e => setPhone(e.target.value)}
               placeholder="+15551234567"
               className="w-full rounded-xl px-3 py-2.5 text-sm font-sans"
-              style={{ border: `1.5px solid ${C.cream}`, background: '#1a1a1a', color: '#ffffff' }}
+              style={{ border: `1.5px solid ${C.cream}`, background: '#ffffff', color: '#1a1a1a' }}
             />
-            <p className="text-[10px] mt-1" style={{ color: C.cream }}>
+            <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>
               Enter in E.164 format, e.g. +15551234567 (include country code)
             </p>
           </div>
 
           {/* Toggle */}
           <div className="flex items-center justify-between rounded-xl px-3.5 py-3"
-            style={{ background: '#1a1a1a', border: `1px solid ${C.cream}` }}>
+            style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
             <div className="flex items-center gap-2.5">
               {smsReminders
                 ? <Bell size={15} color={C.midGreen} />
-                : <BellOff size={15} color={C.cream} />}
+                : <BellOff size={15} color={C.mutedText} />}
               <div>
-                <p className="text-sm font-bold" style={{ color: C.cream }}>Event reminders</p>
-                <p className="text-[10px]" style={{ color: C.cream }}>
+                <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Event reminders</p>
+                <p className="text-[10px]" style={{ color: C.mutedText }}>
                   Text reminder the day before calendar events
                 </p>
               </div>
@@ -171,14 +171,14 @@ export default function Profile() {
         {/* Font Size Control */}
         <FontSizeControl />
 
-        <p className="text-[11px] text-center" style={{ color: C.cream }}>
+        <p className="text-[11px] text-center" style={{ color: C.mutedText }}>
           Reminders are sent at 9am the day before each calendar event.
         </p>
         {/* LEGAL LINK */}
         <Link
           to="/legal"
           className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
-          style={{ background: C.card, border: `1px solid ${C.cream}`, textDecoration: "none", color: C.cream }}
+          style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}
         >
           📋 Legal Documents & Consent Forms
         </Link>
