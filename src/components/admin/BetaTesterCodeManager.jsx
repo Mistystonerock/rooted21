@@ -12,6 +12,7 @@ const STATUS_STYLES = {
 
 export default function BetaTesterCodeManager() {
   const [codes, setCodes] = useState([]);
+  const [noteDrafts, setNoteDrafts] = useState({});
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
 
@@ -21,13 +22,16 @@ export default function BetaTesterCodeManager() {
     setLoading(true);
     const data = await base44.entities.BetaTesterCode.list("-created_date", 200);
     setCodes(data);
+    setNoteDrafts(Object.fromEntries(data.map(code => [code.id, code.notes || ""])));
     setLoading(false);
   }
 
   async function generateCodes() {
     setGenerating(true);
     const response = await base44.functions.invoke("generateBetaTesterCodes", {});
-    setCodes(prev => [...(response.data?.codes || []), ...prev]);
+    const newCodes = response.data?.codes || [];
+    setCodes(prev => [...newCodes, ...prev]);
+    setNoteDrafts(prev => ({ ...Object.fromEntries(newCodes.map(code => [code.id, code.notes || ""])), ...prev }));
     setGenerating(false);
   }
 
@@ -91,7 +95,22 @@ export default function BetaTesterCodeManager() {
                       </div>
                     </td>
                     <td className="py-2 pr-3">
-                      <input value={code.notes || ""} onChange={e => updateCode(code, { notes: e.target.value })} placeholder="Name or note" className="w-full px-2 py-1.5 rounded-lg text-xs border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+                      <div className="flex items-center gap-2">
+                        <input
+                          value={noteDrafts[code.id] ?? code.notes ?? ""}
+                          onChange={e => setNoteDrafts(prev => ({ ...prev, [code.id]: e.target.value }))}
+                          placeholder="Name or note"
+                          className="w-full px-2 py-1.5 rounded-lg text-xs border outline-none"
+                          style={{ borderColor: C.cream, background: C.offWhite }}
+                        />
+                        <button
+                          onClick={() => updateCode(code, { notes: noteDrafts[code.id] ?? "" })}
+                          className="px-3 py-1.5 rounded-lg text-[10px] font-bold"
+                          style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}
+                        >
+                          Save
+                        </button>
+                      </div>
                     </td>
                     <td className="py-2 pr-3">
                       <select value={code.tester_role || "Parent"} onChange={e => updateCode(code, { tester_role: e.target.value })} className="px-2 py-1.5 rounded-lg text-xs border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} disabled={code.status !== "active"}>
