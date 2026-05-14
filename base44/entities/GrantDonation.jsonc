@@ -1,0 +1,53 @@
+{
+  "name": "GrantDonation",
+  "type": "object",
+  "properties": {
+    "source_name": {
+      "type": "string",
+      "description": "Grantor, donor, or funding source"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "grant",
+        "donation",
+        "sponsorship",
+        "expense"
+      ],
+      "default": "donation"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount received or spent"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "prospect",
+        "applied",
+        "awarded",
+        "received",
+        "declined",
+        "spent"
+      ],
+      "default": "received"
+    },
+    "record_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "restricted_to": {
+      "type": "string",
+      "description": "Program or purpose restriction"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_name",
+    "record_type",
+    "amount",
+    "record_date"
+  ]
+}

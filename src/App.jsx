@@ -12,7 +12,7 @@ import { ThemeProvider } from '@/lib/ThemeContext';
 import LoadingFallback from '@/components/mobile/LoadingFallback';
 import routes from '@/hooks/useLazyLoadRoutes';
 import FeatureLockGate from '@/components/rooted/FeatureLockGate';
-import FounderDashboard from '@/pages/FounderDashboard';
+import FounderDashboard from '@/pages/FounderDashboard.jsx';
 import AppDocs from '@/pages/AppDocs';
 import FounderAccessPortal from '@/pages/FounderAccessPortal';
 import FounderAdminManagement from '@/pages/FounderAdminManagement';

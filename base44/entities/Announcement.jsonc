@@ -1,0 +1,47 @@
+{
+  "name": "Announcement",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "target_role": {
+      "type": "string",
+      "enum": [
+        "all",
+        "user",
+        "professional",
+        "admin",
+        "founder"
+      ],
+      "default": "all"
+    },
+    "sent_by": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recipient_count": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "title",
+    "message",
+    "target_role"
+  ]
+}

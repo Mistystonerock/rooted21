@@ -1,0 +1,62 @@
+{
+  "name": "ContentItem",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Content or resource title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "resource_library",
+        "app_content",
+        "legal",
+        "education",
+        "support"
+      ],
+      "default": "app_content"
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "article",
+        "pdf",
+        "book",
+        "video",
+        "audio",
+        "website",
+        "copy"
+      ],
+      "default": "copy"
+    },
+    "body": {
+      "type": "string",
+      "description": "Content body, notes, or description"
+    },
+    "url": {
+      "type": "string",
+      "description": "Optional link for resources"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or source"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}
