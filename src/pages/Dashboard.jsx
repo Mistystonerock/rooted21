@@ -36,6 +36,7 @@ const TILES = [
   { to: "/education-hub", emoji: "📚", icon: null, label: "Education", sub: "Lessons, classes, guides, worksheets", accent: "#2a1f0a", border: `${GOLD}30` },
   { to: "/communications", emoji: "💬", icon: null, label: "Communications", sub: "Messages, agency emails, meeting notes, court audit trail", accent: "#102b24", border: `${GREEN}30` },
   { to: "/compliance-risks", emoji: "⚖️", icon: null, label: "Compliance Risks", sub: "AI court-readiness predictions and corrective actions", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/consent-forms", emoji: "📝", icon: null, label: "Consent Forms", sub: "Release of information and signed consent templates", accent: "#102b24", border: `${GREEN}30` },
 ];
 
 export default function Dashboard() {

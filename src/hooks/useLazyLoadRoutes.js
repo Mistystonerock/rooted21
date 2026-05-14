@@ -72,6 +72,7 @@ const routes = {
   CommunicationsPortal: lazy(() => import("@/pages/CommunicationsPortal")),
   CourtFilingWorkflow: lazy(() => import("@/pages/CourtFilingWorkflow")),
   ComplianceRiskDashboard: lazy(() => import("@/pages/ComplianceRiskDashboard")),
+  ConsentForms: lazy(() => import("@/pages/ConsentForms")),
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
   BehavioralTrends: lazy(() => import("@/pages/BehavioralTrends")),
   JobResources: lazy(() => import("@/pages/JobResources")),
