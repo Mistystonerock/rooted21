@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Calendar, Video, Clock, Users, ExternalLink, Bell, Plus, Pencil, Trash2, X, Check, BarChart3 } from "lucide-react";
+import { Calendar, Video, Clock, ExternalLink, Bell, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import ClassAndGroupMaterials from "@/components/classes/ClassAndGroupMaterials";
 
 function ClassForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(initial || {
@@ -209,9 +210,11 @@ export default function LiveClasses() {
         <div className="rounded-xl p-3.5 flex items-start gap-3" style={{ background: "#F0F6F0", border: `1px solid ${C.midGreen}` }}>
           <span className="text-base flex-shrink-0">📋</span>
           <p className="text-[11px] leading-relaxed" style={{ color: C.darkGreen }}>
-            <strong>Please note:</strong> These are facilitated group classes. No training materials or curriculum documents will be shared. All learning happens live during the session.
+            <strong>Class support:</strong> Facilitated group classes now include practical handouts, worksheets, and take-home reflection materials to support learning between sessions.
           </p>
         </div>
+
+        <ClassAndGroupMaterials category="parenting" />
 
         {/* Admin: Add class buttons */}
         {isAdmin && !showForm && !editingClass && (
@@ -442,7 +445,7 @@ export default function LiveClasses() {
             ["🔗", "A Teams or Zoom link will be shared before each class"],
             ["👥", "Open to all parents and caregivers in the Rooted 21 community"],
             ["🎓", "Taught by a certified facilitator — come ready to participate"],
-            ["🔒", "No materials are distributed — learning happens live in the group"],
+            ["📄", "Downloadable handouts and worksheets are available above for between-session practice"],
           ].map(([emoji, text]) => (
             <div key={text} className="flex items-start gap-3">
               <span className="text-base flex-shrink-0">{emoji}</span>

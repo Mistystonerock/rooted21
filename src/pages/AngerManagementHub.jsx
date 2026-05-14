@@ -7,6 +7,7 @@ import AngerToolkit from "@/components/anger-management/AngerToolkit";
 import GroupsDirectory from "@/components/anger-management/GroupsDirectory";
 import StreakTracker from "@/components/anger-management/StreakTracker";
 import CrisisStrip from "@/components/anger-management/CrisisStrip";
+import ClassAndGroupMaterials from "@/components/classes/ClassAndGroupMaterials";
 
 export default function AngerManagementHub() {
   const [user, setUser] = useState(null);
@@ -37,6 +38,7 @@ export default function AngerManagementHub() {
         {[
           { id: "emergency", label: "🚨 Emergency" },
           { id: "toolkit", label: "🛠️ Toolkit" },
+          { id: "materials", label: "📄 Materials" },
           { id: "streak", label: "🔥 Streak" },
           { id: "groups", label: "👥 Groups" },
         ].map(tab => (
@@ -76,6 +78,16 @@ export default function AngerManagementHub() {
               Build your anger management toolkit over time. The more you practice, the faster you'll react.
             </p>
             <AngerToolkit />
+          </div>
+        )}
+
+        {/* Materials Tab */}
+        {activeTab === "materials" && (
+          <div className="space-y-4">
+            <p className="text-xs" style={{ color: C.mutedText }}>
+              Download practical worksheets and handouts for anger management groups.
+            </p>
+            <ClassAndGroupMaterials category="anger" />
           </div>
         )}
 
