@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { Check, X, Loader2, ChevronRight, Bell } from "lucide-react";
+import { Check, Loader2, ChevronRight, CalendarDays, MailCheck } from "lucide-react";
+
+function parseClassDate(value) {
+  if (!value) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toISOString().slice(0, 10);
+}
 
 function EnrollmentCard({ cls, isEnrolled, isOnWaitlist, enrollmentCount, onEnroll, onJoinWaitlist, loading }) {
   const isFull = enrollmentCount >= (cls.max_capacity || 30);
@@ -97,6 +105,7 @@ export default function ClassEnrollment() {
   const [loading, setLoading] = useState(true);
   const [enrollingId, setEnrollingId] = useState(null);
   const [enrollmentCounts, setEnrollmentCounts] = useState({});
+  const [confirmation, setConfirmation] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -133,27 +142,49 @@ export default function ClassEnrollment() {
     if (!user) return;
     setEnrollingId(cls.id);
 
-    try {
-      const newEnrollment = await base44.entities.ClassEnrollment.create({
-        user_email: user.email,
-        user_name: user.full_name || "Unknown",
-        class_id: cls.id,
-        class_title: cls.title,
-        enrollment_date: new Date().toISOString().slice(0, 10),
-        status: "active",
-        sessions_attended: 0,
-      });
+    const classDate = parseClassDate(cls.date);
+    const calendarEvent = classDate ? await base44.entities.CareCalendarEvent.create({
+      title: `Live Class: ${cls.title}`,
+      event_type: "activity",
+      date: classDate,
+      time: cls.time || "",
+      location: cls.join_url || "Virtual class link will be shared before class",
+      notes: cls.description || "Rooted 21 live parenting class enrollment",
+      status: "confirmed",
+      family_email: user.email,
+      added_by_email: user.email,
+      added_by_name: user.full_name || user.email,
+      recurrence: "none",
+      source_type: "live_class_enrollment",
+      source_id: cls.id,
+    }) : null;
 
-      setEnrollments(prev => [...prev, newEnrollment]);
-      setEnrollmentCounts(prev => ({
-        ...prev,
-        [cls.id]: (prev[cls.id] || 0) + 1,
-      }));
-    } catch (err) {
-      console.error("Enrollment failed:", err);
-    } finally {
-      setEnrollingId(null);
-    }
+    const newEnrollment = await base44.entities.ClassEnrollment.create({
+      user_email: user.email,
+      user_name: user.full_name || "Unknown",
+      class_id: cls.id,
+      class_title: cls.title,
+      enrollment_date: new Date().toISOString().slice(0, 10),
+      status: "active",
+      sessions_attended: 0,
+      calendar_event_id: calendarEvent?.id || "",
+      confirmation_sent_at: new Date().toISOString(),
+    });
+
+    await base44.integrations.Core.SendEmail({
+      to: user.email,
+      subject: `You're enrolled: ${cls.title}`,
+      from_name: "Rooted 21",
+      body: `Hi ${user.full_name || "there"},\n\nYou're enrolled in ${cls.title}.\n\nDate: ${cls.date || "TBA"}\nTime: ${cls.time || "TBA"}\n${cls.join_url ? `Join link: ${cls.join_url}\n` : "A class link will be shared before class.\n"}\nThis class has also been added to your Rooted 21 Care Calendar.\n\nRooted 21 Parenting Network`,
+    });
+
+    setEnrollments(prev => [...prev, newEnrollment]);
+    setEnrollmentCounts(prev => ({
+      ...prev,
+      [cls.id]: (prev[cls.id] || 0) + 1,
+    }));
+    setConfirmation({ title: cls.title, date: cls.date, time: cls.time });
+    setEnrollingId(null);
   }
 
   async function handleJoinWaitlist(cls) {
@@ -205,10 +236,27 @@ export default function ClassEnrollment() {
           </p>
         </div>
 
+        {confirmation && (
+          <div className="rounded-2xl p-4 flex items-start gap-3" style={{ background: "#EAF4EA", border: `1.5px solid ${C.midGreen}` }}>
+            <MailCheck size={20} color={C.midGreen} className="flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Enrollment confirmed</p>
+              <p className="text-xs mt-1 leading-relaxed" style={{ color: C.mutedText }}>
+                You joined {confirmation.title}. A confirmation email was sent and the class was added to your calendar.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* My Enrollments */}
         {enrollments.length > 0 && (
           <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1.5px solid ${C.midGreen}` }}>
-            <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>My Classes</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>My Classes</p>
+              <Link to="/class-calendar" className="flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold" style={{ background: C.cream, color: C.darkGreen, textDecoration: "none" }}>
+                <CalendarDays size={11} /> Calendar
+              </Link>
+            </div>
             {enrollments.map(enr => (
               <Link
                 key={enr.id}
@@ -234,6 +282,14 @@ export default function ClassEnrollment() {
             ))}
           </div>
         )}
+
+        <Link to="/class-calendar" className="flex items-center justify-between rounded-2xl p-4" style={{ background: C.darkGreen, textDecoration: "none" }}>
+          <div>
+            <p className="text-sm font-bold" style={{ color: C.cream }}>Class Calendar Dashboard</p>
+            <p className="text-[11px] mt-0.5" style={{ color: C.lightGreen }}>See upcoming enrolled classes synced to your app</p>
+          </div>
+          <ChevronRight size={16} color={C.cream} />
+        </Link>
 
         {/* Available Classes */}
         <div>
