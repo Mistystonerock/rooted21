@@ -52,6 +52,7 @@ import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
 import ResourceMatcher from '@/components/resources/ResourceMatcher';
+import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -109,6 +110,7 @@ function App() {
               <Route path="/analytics" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Analytics /></FeatureLockGate></Suspense>} />
               <Route path="/schedule" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ScheduleCreator /></FeatureLockGate></Suspense>} />
               <Route path="/safety-plan" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SafetyPlan /></FeatureLockGate></Suspense>} />
+              <Route path="/family-safety-crisis-plan" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><FamilySafetyCrisisPlan /></FeatureLockGate></Suspense>} />
               <Route path="/journal" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Journal /></FeatureLockGate></Suspense>} />
               <Route path="/support-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportGuide /></FeatureLockGate></Suspense>} />
               <Route path="/monthly-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MonthlyReport /></FeatureLockGate></Suspense>} />
