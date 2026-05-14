@@ -66,6 +66,7 @@ const routes = {
   CaseManagement: lazy(() => import("@/pages/CaseManagement")),
   CaseManagementNew: lazy(() => import("@/pages/CaseManagementNew")),
   LegalKnowledgeBase: lazy(() => import("@/pages/LegalKnowledgeBase")),
+  CasePrepDashboard: lazy(() => import("@/pages/CasePrepDashboard")),
   SystemGuides: lazy(() => import("@/pages/SystemGuides")),
   MeetingPrepChatbot: lazy(() => import("@/pages/MeetingPrepChatbot")),
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),

@@ -164,6 +164,7 @@ function App() {
               <Route path="/anger-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><AngerManagementHub /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-export" element={<FeatureLockGate user={user}><CourtReadyExport /></FeatureLockGate>} />
               <Route path="/court-preparation-checklist" element={<FeatureLockGate user={user}><CourtPreparationChecklist /></FeatureLockGate>} />
+              <Route path="/case-prep-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CasePrepDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/expense-split" element={<FeatureLockGate user={user}><ExpenseSplit /></FeatureLockGate>} />
               <Route path="/document-scanner" element={<FeatureLockGate user={user}><DocumentScanner /></FeatureLockGate>} />
               <Route path="/case-plan-checklist" element={<FeatureLockGate user={user}><CasePlanChecklist /></FeatureLockGate>} />
