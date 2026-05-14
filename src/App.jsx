@@ -75,6 +75,14 @@ function App() {
           await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
           localStorage.removeItem("pending_beta_code");
         }
+
+        const pendingAdminCode = localStorage.getItem("pending_admin_code");
+        if (pendingAdminCode) {
+          await base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode });
+          localStorage.removeItem("pending_admin_code");
+          const refreshedUser = await base44.auth.me();
+          setUser(refreshedUser);
+        }
       }
     }).catch(() => setUser(null));
   }, []);
