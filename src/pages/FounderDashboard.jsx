@@ -11,12 +11,12 @@ import {
   Shield, Star, UserCog, Users
 } from "lucide-react";
 
-const DARK = "#0b2f1b";
+const DARK = "#5a3d28";
 const GREEN = "#6b9d6e";
-const CREAM = "#f5e6c8";
-const BG = "#071a10";
+const CREAM = "#f5ede2";
+const BG = "#faf6f1";
 const CARD = "#ffffff";
-const MUTED = "#6b5b48";
+const MUTED = "#8b6f54";
 
 const sectionList = [
   "analytics", "users", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
@@ -162,7 +162,7 @@ export default function FounderDashboard() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center" style={{ background: BG }}><div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: `${CREAM} transparent ${CREAM} ${CREAM}` }} /></div>;
+    return <div className="min-h-screen flex items-center justify-center" style={{ background: BG }}><div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: `${GREEN} transparent ${GREEN} ${GREEN}` }} /></div>;
   }
 
   if (denied) {
@@ -170,15 +170,15 @@ export default function FounderDashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: `radial-gradient(circle at top, #16482d 0%, ${BG} 44%, #041008 100%)`, color: DARK }}>
-      <header className="sticky top-0 z-20 border-b border-white/10 backdrop-blur-xl" style={{ background: "rgba(7,26,16,0.86)", paddingTop: "max(14px, env(safe-area-inset-top))" }}>
+    <div className="min-h-screen" style={{ background: BG, color: DARK }}>
+      <header className="sticky top-0 z-20 backdrop-blur-xl" style={{ background: "rgba(255,255,255,0.92)", borderBottom: `1.5px solid ${CREAM}`, paddingTop: "max(14px, env(safe-area-inset-top))" }}>
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center border border-amber-200/30" style={{ background: "rgba(245,230,200,0.12)" }}><Shield color={CREAM} /></div>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: CREAM, border: `1.5px solid ${GREEN}30` }}><Shield color={GREEN} /></div>
           <div>
-            <p className="text-[10px] font-extrabold tracking-[0.22em]" style={{ color: "#d7c7aa" }}>ROOTED 21</p>
-            <h1 className="font-serif font-bold text-xl md:text-2xl" style={{ color: CREAM }}>Founder Dashboard</h1>
+            <p className="text-[10px] font-extrabold tracking-[0.22em]" style={{ color: MUTED }}>ROOTED 21</p>
+            <h1 className="font-serif font-bold text-xl md:text-2xl" style={{ color: DARK }}>Founder Dashboard</h1>
           </div>
-          <button onClick={loadFounderData} className="ml-auto rounded-xl px-3 py-2 text-xs font-bold" style={{ background: CREAM, color: DARK, border: "none" }}>Refresh</button>
+          <button onClick={loadFounderData} className="ml-auto rounded-xl px-3 py-2 text-xs font-bold" style={{ background: GREEN, color: "#fff", border: "none" }}>Refresh</button>
         </div>
       </header>
 

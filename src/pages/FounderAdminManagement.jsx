@@ -160,11 +160,11 @@ export default function FounderAdminManagement() {
         backTo="/profile"
       />
 
-      <div style={{ maxWidth: 520, margin: '0 auto', padding: '0 16px' }}>
+      <div style={{ maxWidth: 520, margin: '0 auto', padding: '20px 16px 0' }}>
         {/* Role Hierarchy Overview */}
         <div style={{ marginBottom: 24 }}>
           <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: GREEN, marginBottom: 12, textTransform: 'uppercase' }}>
-            🏛️ Role Hierarchy
+            🌿 Role Hierarchy
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
