@@ -54,6 +54,7 @@ import DataUsePolicy from '@/pages/DataUsePolicy';
 import ResourceMatcher from '@/components/resources/ResourceMatcher';
 import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
+import Donate from '@/pages/Donate';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -88,6 +89,7 @@ function App() {
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Launch />} />
+              <Route path="/donate" element={<Donate />} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Chat /></FeatureLockGate></Suspense>} />
