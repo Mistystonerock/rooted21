@@ -53,6 +53,7 @@ import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
 import ResourceMatcher from '@/components/resources/ResourceMatcher';
 import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
+import CommunicationToneTool from '@/pages/CommunicationToneTool';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -158,6 +159,7 @@ function App() {
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SystemGuides /></FeatureLockGate></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MeetingPrepChatbot /></FeatureLockGate></Suspense>} />
               <Route path="/communications" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CommunicationsPortal /></FeatureLockGate></Suspense>} />
+              <Route path="/communication-tone-tool" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CommunicationToneTool /></FeatureLockGate></Suspense>} />
               <Route path="/court-filings" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtFilingWorkflow /></FeatureLockGate></Suspense>} />
               <Route path="/compliance-risks" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ComplianceRiskDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/consent-forms" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ConsentForms /></FeatureLockGate></Suspense>} />
