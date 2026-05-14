@@ -1,0 +1,78 @@
+{
+  "name": "CourtFiling",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "User who created this filing"
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Linked case file ID"
+    },
+    "case_plan_id": {
+      "type": "string",
+      "description": "Linked CasePlanChecklist ID"
+    },
+    "filing_type": {
+      "type": "string",
+      "enum": [
+        "status_update",
+        "compliance_summary",
+        "hearing_statement",
+        "communication_exhibit"
+      ],
+      "default": "status_update",
+      "description": "Type of court-ready filing"
+    },
+    "title": {
+      "type": "string",
+      "description": "Filing title"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child or case subject"
+    },
+    "draft_markdown": {
+      "type": "string",
+      "description": "Generated court-ready filing draft text"
+    },
+    "preparation_tasks": {
+      "type": "array",
+      "description": "Specific tasks to complete before submitting",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_summary": {
+      "type": "string",
+      "description": "Summary of case plan and communication audit data used"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "signed"
+      ],
+      "default": "draft"
+    },
+    "signed_file_url": {
+      "type": "string",
+      "description": "URL of signed official document file"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the user signed the filing"
+    },
+    "signature_name": {
+      "type": "string",
+      "description": "Printed signer name"
+    }
+  },
+  "required": [
+    "owner_email",
+    "filing_type",
+    "title"
+  ]
+}

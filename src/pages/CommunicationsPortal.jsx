@@ -6,7 +6,8 @@ import CommunicationTimeline from "@/components/communications/CommunicationTime
 import CommunicationFilters from "@/components/communications/CommunicationFilters";
 import AgencyEmailLogForm from "@/components/communications/AgencyEmailLogForm";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, Mail, MessageSquare, NotebookPen } from "lucide-react";
+import { Download, FileText, Mail, MessageSquare, NotebookPen, FileSignature, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function formatDate(value) {
   if (!value) return "No date";
@@ -182,6 +183,16 @@ export default function CommunicationsPortal() {
               <Button onClick={exportPdf} disabled={exporting} className="w-full rounded-xl" style={{ background: C.darkGreen, color: "#fff" }}>
                 <Download size={15} /> {exporting ? "Exporting…" : "Export audit PDF"}
               </Button>
+              <Link to="/court-filings" className="flex items-center justify-between rounded-2xl p-4" style={{ background: C.cream, textDecoration: "none" }}>
+                <div className="flex items-center gap-3">
+                  <FileSignature size={18} color={C.midGreen} />
+                  <div>
+                    <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Draft court filing</p>
+                    <p className="text-[11px] mt-0.5" style={{ color: C.mutedText }}>Use this audit trail as source data</p>
+                  </div>
+                </div>
+                <ChevronRight size={16} color={C.mutedText} />
+              </Link>
             </div>
             <CommunicationTimeline items={filteredItems} />
           </div>
