@@ -4,6 +4,7 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Send, Download, RotateCcw, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import MeetingAgendaBuilder from "@/components/meeting/MeetingAgendaBuilder";
 
 export default function MeetingPrepChatbot() {
   const [user, setUser] = useState(null);
@@ -48,7 +49,7 @@ Recent Notes: ${notes.slice(0, 3).map(n => `${n.title}: ${n.body.substring(0, 10
     setMessages([
       {
         role: "assistant",
-        content: `I'm here to help you prepare for meetings about ${selectedCaseData.child_name}'s case. I can help you:\n\n1. **Simulate the meeting** - I'll play the role of school staff, court officials, or doctors\n2. **Practice tough questions** - Get comfortable with challenging questions\n3. **Generate talking points** - Create a cheat sheet of key points to make\n\nWhat type of meeting are you preparing for? (e.g., IEP meeting, court hearing, therapy session, school discipline meeting)`
+        content: `I'm here to help you prepare for meetings about ${selectedCaseData.child_name}'s case. I can help you:\n\n1. **Create an agenda** - auto-populated with recent incidents, messages, and unresolved checklist items\n2. **Simulate the meeting** - I'll play the role of school staff, court officials, or doctors\n3. **Practice tough questions** - Get comfortable with challenging questions\n4. **Generate talking points** - Create a cheat sheet of key points to make\n\nOpen the Auto Agenda Builder above, or tell me what type of meeting you're preparing for.`
       }
     ]);
   }
@@ -144,7 +145,7 @@ Recent Notes: ${notes.slice(0, 3).map(n => `${n.title}: ${n.body.substring(0, 10
               setPhase("chatting");
               setMessages([{
                 role: "assistant",
-                content: "I'm your Meeting Prep Assistant! I can help you:\n\n1. **Simulate a meeting** — I'll roleplay as school staff, court officials, or doctors\n2. **Practice tough questions** — get comfortable before the real thing\n3. **Generate talking points** — a cheat sheet to bring with you\n\nWhat type of meeting are you preparing for? (e.g., IEP meeting, court hearing, therapy session)"
+                content: "I'm your Meeting Prep Assistant! I can help you:\n\n1. **Create an agenda** — auto-populated with incidents, messages, and checklist items\n2. **Simulate a meeting** — I'll roleplay as school staff, court officials, or doctors\n3. **Practice tough questions** — get comfortable before the real thing\n4. **Generate talking points** — a cheat sheet to bring with you\n\nOpen the Auto Agenda Builder above, or tell me what type of meeting you're preparing for."
               }]);
             }}
             className="w-full rounded-2xl p-4 text-left transition-all hover:shadow-md"
@@ -208,6 +209,8 @@ Recent Notes: ${notes.slice(0, 3).map(n => `${n.title}: ${n.body.substring(0, 10
       />
 
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
+        <MeetingAgendaBuilder user={user} selectedCase={selectedCase} />
+
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
