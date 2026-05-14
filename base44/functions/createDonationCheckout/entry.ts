@@ -21,10 +21,21 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Donation amount must be at least $1.' }, { status: 400 });
     }
 
+    const donationMetadata = {
+      purpose: 'Rooted 21 mission donation',
+      organization: 'Rooted 21 Parenting Network Inc.',
+      donation_type: donationType,
+      donor_first_name: donorFirstName || '',
+      donor_last_name: donorLastName || '',
+      donor_email: donorEmail || '',
+      in_honor_or_memory_of: honorMemory || '',
+    };
+
     const session = await stripe.checkout.sessions.create({
       mode: isMonthly ? 'subscription' : 'payment',
       payment_method_types: ['card'],
       customer_email: donorEmail || undefined,
+      customer_creation: isMonthly ? undefined : 'always',
       line_items: [
         {
           price_data: {
@@ -39,13 +50,10 @@ Deno.serve(async (req) => {
           quantity: 1,
         },
       ],
-      metadata: {
-        purpose: 'Rooted 21 mission donation',
-        donation_type: donationType,
-        donor_first_name: donorFirstName || '',
-        donor_last_name: donorLastName || '',
-        in_honor_or_memory_of: honorMemory || '',
-      },
+      metadata: donationMetadata,
+      ...(isMonthly
+        ? { subscription_data: { metadata: donationMetadata } }
+        : { payment_intent_data: { receipt_email: donorEmail || undefined, metadata: donationMetadata } }),
       success_url: successUrl || 'https://rooted21.app/donate?donation=success',
       cancel_url: cancelUrl || 'https://rooted21.app/donate?donation=cancelled',
     });
