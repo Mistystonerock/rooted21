@@ -79,7 +79,7 @@ export default function TrialStatus({ subscription }) {
       </div>
 
       <p className="text-[10px] mt-2" style={{ color: C.mutedText }}>
-        After trial ends, you'll be charged $19.99/month
+      Rooted 21 access is free for families as part of our nonprofit mission.
       </p>
     </div>
   );
