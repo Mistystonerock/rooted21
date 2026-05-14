@@ -4,6 +4,7 @@ import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
 import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
 import DonationPanel from "@/components/launch/DonationPanel";
+import QuickPageSearch from "@/components/launch/QuickPageSearch";
 import { Sparkles, ChevronRight } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
@@ -105,11 +106,12 @@ export default function Launch() {
   };
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", fontFamily: "var(--font-sans)", color: TEXT, overflowX: "hidden" }}>
+    <div id="top" style={{ background: BG, minHeight: "100vh", fontFamily: "var(--font-sans)", color: TEXT, overflowX: "hidden" }}>
 
       {/* Ambient glows - root/growth aesthetic */}
       <div style={{ position: "fixed", top: "-10%", right: "-20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,157,110,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
       <div style={{ position: "fixed", bottom: "10%", left: "-20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(166,124,82,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+      <QuickPageSearch />
 
       {/* ── NAV ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "max(18px, env(safe-area-inset-top)) 20px 14px", position: "relative", zIndex: 1 }}>
@@ -166,13 +168,17 @@ export default function Launch() {
         </div>
 
         {/* ── FOUNDER'S NOTE ── */}
-        <FoundersNote />
+        <div id="founders-note" style={{ scrollMarginTop: 90 }}>
+          <FoundersNote />
+        </div>
 
         {/* ── DONATIONS ── */}
-        <DonationPanel />
+        <div id="donations" style={{ scrollMarginTop: 90 }}>
+          <DonationPanel />
+        </div>
 
         {/* ── APP TOUR ── */}
-        <div style={{ marginBottom: 28 }}>
+        <div id="app-tour" style={{ marginBottom: 28, scrollMarginTop: 90 }}>
           <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>See it in action</p>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.25 }}>
             Everything inside Rooted 21
@@ -181,7 +187,7 @@ export default function Launch() {
         </div>
 
         {/* ── WHAT WE HELP WITH ── */}
-        <div style={{ marginBottom: 28 }}>
+        <div id="what-we-help" style={{ marginBottom: 28, scrollMarginTop: 90 }}>
           <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>What Rooted 21 helps with</p>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.25 }}>
             Everything the system throws at you —<br />in one calm place
@@ -198,7 +204,7 @@ export default function Launch() {
         </div>
 
         {/* ── JOIN WAITLIST ── */}
-        <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 18px", marginBottom: 28 }}>
+        <div id="waitlist" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 18px", marginBottom: 28, scrollMarginTop: 90 }}>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 6, lineHeight: 1.15 }}>Save your spot</h2>
           <p style={{ fontSize: 13, color: MUTED, marginBottom: 20, lineHeight: 1.65 }}>
             We'll email you when we open. No spam. Just a heads up that your support is ready.
@@ -250,7 +256,7 @@ export default function Launch() {
         </div>
 
         {/* ── FOOTER ACTIONS ── */}
-        <div style={{ background: CARD, borderRadius: 16, overflow: "hidden", marginBottom: 16, border: `1px solid ${BORDER}` }}>
+        <div id="footer-actions" style={{ background: CARD, borderRadius: 16, overflow: "hidden", marginBottom: 16, border: `1px solid ${BORDER}`, scrollMarginTop: 90 }}>
           {[
             { label: "Sign In", action: () => base44.auth.redirectToLogin("/home") },
             { label: "Redeem Access Code", action: () => setShowCodeModal(true) },
