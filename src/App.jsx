@@ -155,6 +155,7 @@ function App() {
               <Route path="/legal-calendar" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LegalCalendar /></FeatureLockGate></Suspense>} />
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SystemGuides /></FeatureLockGate></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MeetingPrepChatbot /></FeatureLockGate></Suspense>} />
+              <Route path="/communications" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CommunicationsPortal /></FeatureLockGate></Suspense>} />
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><SecureDocumentRepository /></FeatureLockGate></Suspense>} />
               <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><PersonalizedChat /></FeatureLockGate></Suspense>} />
               <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><GrowthInsights /></FeatureLockGate></Suspense>} />

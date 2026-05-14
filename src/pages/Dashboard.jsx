@@ -34,6 +34,7 @@ const TILES = [
   { to: "/support-hub", emoji: "🤝", icon: null, label: "Support", sub: "Crisis tools, conversations, team contacts", accent: "#12203a", border: "#7aaaee30" },
   { id: "behavior-log-button", to: "/behavior-hub", emoji: "🧠", icon: null, label: "Behavior", sub: "Logs, analytics, trends, regulation tools", accent: "#1a1535", border: "#a09ef030" },
   { to: "/education-hub", emoji: "📚", icon: null, label: "Education", sub: "Lessons, classes, guides, worksheets", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/communications", emoji: "💬", icon: null, label: "Communications", sub: "Messages, agency emails, meeting notes, court audit trail", accent: "#102b24", border: `${GREEN}30` },
 ];
 
 export default function Dashboard() {

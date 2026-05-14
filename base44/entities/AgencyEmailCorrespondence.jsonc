@@ -1,0 +1,67 @@
+{
+  "name": "AgencyEmailCorrespondence",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "Parent or caregiver who owns this email log"
+    },
+    "agency_name": {
+      "type": "string",
+      "description": "Agency, court, school, provider, or organization name"
+    },
+    "contact_email": {
+      "type": "string",
+      "description": "Agency representative email address"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Agency representative name"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "received"
+      ],
+      "default": "sent",
+      "description": "Whether the email was sent or received by the user"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line"
+    },
+    "body": {
+      "type": "string",
+      "description": "Email body or summary"
+    },
+    "correspondence_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the email was sent or received"
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Optional linked case file ID"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this correspondence relates to"
+    },
+    "attachment_url": {
+      "type": "string",
+      "description": "Optional uploaded attachment or proof URL"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Private context notes"
+    }
+  },
+  "required": [
+    "owner_email",
+    "agency_name",
+    "subject",
+    "body",
+    "correspondence_date"
+  ]
+}
