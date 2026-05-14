@@ -19,6 +19,12 @@ const ADMIN_PERMISSIONS = {
   review_surveys: { label: 'Review Surveys', desc: 'View user feedback and surveys' },
 };
 
+const FOUNDER_EMAIL = 'misty.stonerock88@gmail.com';
+
+function isFounderAccount(account) {
+  return account?.role === 'founder' || account?.email?.toLowerCase() === FOUNDER_EMAIL;
+}
+
 const FOUNDER_ONLY = {
   create_admin_codes: { label: 'Create Admin Codes', desc: 'Generate new admin invitations' },
   remove_admins: { label: 'Remove Admins', desc: 'Revoke admin access and codes' },
@@ -54,8 +60,12 @@ export default function FounderAdminManagement() {
       const me = await base44.auth.me();
       setUser(me);
 
+      await base44.functions.invoke('initializeFounder', {});
+      const refreshedMe = await base44.auth.me();
+      setUser(refreshedMe);
+
       // Check if founder
-      if (me?.role !== 'admin') {
+      if (!isFounderAccount(refreshedMe)) {
         setLoading(false);
         return;
       }
@@ -130,7 +140,7 @@ export default function FounderAdminManagement() {
     return <div style={{ background: BG, minHeight: '100vh', padding: '20px' }}>Loading...</div>;
   }
 
-  if (user?.role !== 'admin') {
+  if (!isFounderAccount(user)) {
     return (
       <div style={{ background: BG, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <Lock size={48} color={GOLD} style={{ marginBottom: 16 }} />
