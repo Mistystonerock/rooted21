@@ -23,7 +23,8 @@ Deno.serve(async (req) => {
 
     const donationMetadata = {
       purpose: 'Rooted 21 mission donation',
-      organization: 'Rooted 21 Parenting Network Inc.',
+      organization: 'Rooted 21 Parenting Network LLC',
+      tax_note: 'Donations are not currently tax deductible because Rooted 21 Parenting Network LLC is an LLC.',
       donation_type: donationType,
       donor_first_name: donorFirstName || '',
       donor_last_name: donorLastName || '',

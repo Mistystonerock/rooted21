@@ -27,7 +27,7 @@ const CONTENT = {
       {
         heading: "2. Platform License & Permitted Use",
         content:
-          "All curriculum content, lesson materials, behavioral frameworks, AI coaching logic, branding, and proprietary parenting methodology on Rooted 21 are owned by Rooted 21, LLC. You are granted a limited, non-exclusive, non-transferable license to use the platform for personal or professional support purposes only. You may NOT: copy, redistribute, sublicense, or sell any content; reproduce curriculum materials for group use without written authorization; use automated tools to extract platform data; or create competing derivative works. Violations may result in immediate account termination.",
+          "All curriculum content, lesson materials, behavioral frameworks, AI coaching logic, branding, and proprietary parenting methodology on Rooted 21 are owned by Rooted 21 Parenting Network LLC. You are granted a limited, non-exclusive, non-transferable license to use the platform for personal or professional support purposes only. You may NOT: copy, redistribute, sublicense, or sell any content; reproduce curriculum materials for group use without written authorization; use automated tools to extract platform data; or create competing derivative works. Violations may result in immediate account termination.",
       },
       {
         heading: "3. Co-Parent Portal — Supervised Messaging Terms",
@@ -42,7 +42,7 @@ const CONTENT = {
       {
         heading: "5. Limitation of Liability & Liability Cap",
         content:
-          "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROOTED 21'S TOTAL AGGREGATE LIABILITY FOR ANY CLAIM ARISING FROM USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF: (a) $100.00 USD; or (b) the total subscription fees paid by the claimant in the 3 months preceding the claim. Rooted 21 is NOT liable for: indirect, incidental, punitive, or consequential damages; loss of data, income, or business opportunity; emotional distress or therapeutic harm; outcomes of professional relationships facilitated by the platform; or unauthorized access to your account. This limitation applies even if Rooted 21 has been advised of the possibility of such damages.",
+          "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROOTED 21 PARENTING NETWORK LLC'S TOTAL AGGREGATE LIABILITY FOR ANY CLAIM ARISING FROM USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF: (a) $100.00 USD; or (b) the total subscription fees paid by the claimant in the 3 months preceding the claim. Rooted 21 is NOT liable for: indirect, incidental, punitive, or consequential damages; loss of data, income, or business opportunity; emotional distress or therapeutic harm; outcomes of professional relationships facilitated by the platform; or unauthorized access to your account. This limitation applies even if Rooted 21 has been advised of the possibility of such damages.",
       },
       {
         heading: "6. Court Staff Access & Data Obligations",
@@ -57,7 +57,7 @@ const CONTENT = {
       {
         heading: "8. Indemnification",
         content:
-          "You agree to indemnify, defend, and hold harmless Rooted 21, LLC, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorneys' fees) arising from: your use of the platform; your violation of these terms; your violation of any law or third-party rights; content you submit; or your relationship with any professional, co-parent, or court party facilitated through the platform.",
+          "You agree to indemnify, defend, and hold harmless Rooted 21 Parenting Network LLC, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorneys' fees) arising from: your use of the platform; your violation of these terms; your violation of any law or third-party rights; content you submit; or your relationship with any professional, co-parent, or court party facilitated through the platform.",
       },
       {
         heading: "9. Dispute Resolution & Governing Law",
@@ -79,7 +79,7 @@ const CONTENT = {
       {
         heading: "Overview & Regulatory Framework",
         content:
-          "This Privacy Policy governs the collection, use, and protection of personal information by Rooted 21, LLC. We are committed to compliance with: HIPAA (Health Insurance Portability and Accountability Act) — for health-related behavioral data; COPPA (Children's Online Privacy Protection Act) — for data involving children under 13; FERPA (Family Educational Rights and Privacy Act) — for educational records; and CCPA (California Consumer Privacy Act) — for California residents. This platform is designed for adults (18+) acting as parents or caregivers. Children do not directly create accounts or submit data.",
+          "This Privacy Policy governs the collection, use, and protection of personal information by Rooted 21 Parenting Network LLC. We are committed to compliance with: HIPAA (Health Insurance Portability and Accountability Act) — for health-related behavioral data; COPPA (Children's Online Privacy Protection Act) — for data involving children under 13; FERPA (Family Educational Rights and Privacy Act) — for educational records; and CCPA (California Consumer Privacy Act) — for California residents. This platform is designed for adults (18+) acting as parents or caregivers. Children do not directly create accounts or submit data.",
       },
       {
         heading: "1. Data We Collect & HIPAA-Aligned Handling",
@@ -220,12 +220,12 @@ const CONTENT = {
       {
         heading: "2. ORC §3109.04 — Co-Parenting Messaging & Court Admissibility",
         content:
-          "Under Ohio Revised Code §3109.04 (Allocation of parental rights and responsibilities), court-supervised communication records are routinely considered in custody determinations. Rooted 21's Co-Parent Portal is designed for this legal context: (a) MANDATORY CONSENT: Before a user sends their first message, they must complete a dual-checkbox consent modal acknowledging that all messages are court-admissible and that they consent to monitoring. This consent is timestamped. (b) TAMPER-PROOF RECORDS: Every message is cryptographically hashed (SHA-256) at send time and stored in an immutable MessageAuditLog. Any post-send alteration is detectable. (c) PERMANENT RECORD: Messages cannot be deleted by users. Records are preserved for the duration of the active case and archived per applicable court order. (d) COURT ACCESS: Judges, GALs, CASA volunteers, and attorneys of record may access message history at any time through court-authorized credentials. (e) PROHIBITED CONTENT: Threatening, harassing, or abusive messages are prohibited and may be flagged for immediate court review. (f) EXPORT: The full message thread can be exported as a court-formatted PDF at any time by either party.",
+          "Under Ohio Revised Code §3109.04 (Allocation of parental rights and responsibilities), court-supervised communication records are routinely considered in custody determinations. Rooted 21 Parenting Network LLC's Co-Parent Portal is designed for this legal context: (a) MANDATORY CONSENT: Before a user sends their first message, they must complete a dual-checkbox consent modal acknowledging that all messages are court-admissible and that they consent to monitoring. This consent is timestamped. (b) TAMPER-PROOF RECORDS: Every message is cryptographically hashed (SHA-256) at send time and stored in an immutable MessageAuditLog. Any post-send alteration is detectable. (c) PERMANENT RECORD: Messages cannot be deleted by users. Records are preserved for the duration of the active case and archived per applicable court order. (d) COURT ACCESS: Judges, GALs, CASA volunteers, and attorneys of record may access message history at any time through court-authorized credentials. (e) PROHIBITED CONTENT: Threatening, harassing, or abusive messages are prohibited and may be flagged for immediate court review. (f) EXPORT: The full message thread can be exported as a court-formatted PDF at any time by either party.",
       },
       {
         heading: "3. AI-Generated Advice — Liability Limitation & Disclosure",
         content:
-          "Rooted 21's AI parenting support features present meaningful liability exposure if users rely on AI-generated content as professional advice. The following disclosures and protections are in place: (a) MANDATORY CONSENT GATE: Users must complete an AI disclaimer acknowledgment modal (AIConsentModal) before accessing AI chat features. This modal requires an explicit checkbox acknowledging that the AI is an educational support tool and not a licensed therapist, doctor, or attorney. Consent is timestamped. (b) PERSISTENT IN-CHAT DISCLAIMER: A visible banner in the AI chat interface states 'Educational support only — not medical, legal, or therapeutic advice' with a link to this legal page. (c) SYSTEM PROMPT HARDENING: The AI model is instructed to never diagnose, never recommend specific medications, never provide legal strategy, and to always route clinical, legal, or safety questions to licensed professionals. The model is prompted to include 911/988 crisis routing whenever safety risk is detected. (d) RESPONSE LABELING: AI-generated responses include the prefix context 'Rooted 21 is an educational support tool, not a licensed medical, therapeutic, or legal service.' (e) LIABILITY CAP: As stated in Terms of Service Section 5, Rooted 21's aggregate liability is capped at $100 or 3 months of subscription fees, whichever is greater. (f) NON-CLINICAL SCOPE: Rooted 21 does not market its AI features as therapy, counseling, psychiatric care, or legal services. All AI content is framed as 'parenting education' and 'coaching support.'",
+          "Rooted 21 Parenting Network LLC's AI parenting support features present meaningful liability exposure if users rely on AI-generated content as professional advice. The following disclosures and protections are in place: (a) MANDATORY CONSENT GATE: Users must complete an AI disclaimer acknowledgment modal (AIConsentModal) before accessing AI chat features. This modal requires an explicit checkbox acknowledging that the AI is an educational support tool and not a licensed therapist, doctor, or attorney. Consent is timestamped. (b) PERSISTENT IN-CHAT DISCLAIMER: A visible banner in the AI chat interface states 'Educational support only — not medical, legal, or therapeutic advice' with a link to this legal page. (c) SYSTEM PROMPT HARDENING: The AI model is instructed to never diagnose, never recommend specific medications, never provide legal strategy, and to always route clinical, legal, or safety questions to licensed professionals. The model is prompted to include 911/988 crisis routing whenever safety risk is detected. (d) RESPONSE LABELING: AI-generated responses include the prefix context 'Rooted 21 is an educational support tool, not a licensed medical, therapeutic, or legal service.' (e) LIABILITY CAP: As stated in Terms of Service Section 5, Rooted 21 Parenting Network LLC's aggregate liability is capped at $100 or 3 months of subscription fees, whichever is greater. (f) NON-CLINICAL SCOPE: Rooted 21 does not market its AI features as therapy, counseling, psychiatric care, or legal services. All AI content is framed as 'parenting education' and 'coaching support.'",
       },
       {
         heading: "4. HIPAA-Aligned Data Handling for Behavioral Health Records",
@@ -277,17 +277,17 @@ const CONTENT = {
       {
         heading: "AI Chat & Coaching Language",
         content:
-          "In AI-generated responses and coaching features, Rooted 21 uses: 'trauma-informed parenting approach'; 'trust-building parenting strategies'; 'regulation-first parenting'; 'connection before correction' (general principle in common usage); 'felt safety and nurture' for attunement. All AI language is based on Rooted 21's own framework and publicly available parenting research.",
+          "In AI-generated responses and coaching features, Rooted 21 uses: 'trauma-informed parenting approach'; 'trust-building parenting strategies'; 'regulation-first parenting'; 'connection before correction' (general principle in common usage); 'felt safety and nurture' for attunement. All AI language is based on Rooted 21 Parenting Network LLC's own framework and publicly available parenting research.",
       },
       {
         heading: "App UI & Navigation Labels",
         content:
-          "All UI labels use Rooted 21's own terminology: 'Trauma-Informed Practice Goal'; 'Parenting Principle in Focus'; 'Regulation Habits'; 'Trust-Building Habits'; 'trauma-informed parenting' in all taglines. The Weekly Habits tracker uses descriptive labels (e.g., 'Got curious and playful today') rather than framework-specific names.",
+          "All UI labels use Rooted 21 Parenting Network LLC's own terminology: 'Trauma-Informed Practice Goal'; 'Parenting Principle in Focus'; 'Regulation Habits'; 'Trust-Building Habits'; 'trauma-informed parenting' in all taglines. The Weekly Habits tracker uses descriptive labels (e.g., 'Got curious and playful today') rather than framework-specific names.",
       },
       {
         heading: "Rooted 21 Methodology Statement",
         content:
-          "Rooted 21's curriculum is built on Rooted 21's own trauma-informed parenting framework, drawing from publicly available attachment science, developmental research, and best practices in trauma-sensitive care. Our approach is inspired by the broader field of trauma-informed parenting and is original to Rooted 21, LLC.",
+          "Rooted 21 Parenting Network LLC's curriculum is built on Rooted 21 Parenting Network LLC's own trauma-informed parenting framework, drawing from publicly available attachment science, developmental research, and best practices in trauma-sensitive care. Our approach is inspired by the broader field of trauma-informed parenting and is original to Rooted 21 Parenting Network LLC.",
       },
     ],
   },

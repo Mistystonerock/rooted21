@@ -11,8 +11,8 @@ export default function Billing() {
         </Link>
         <HeartHandshake size={16} color={C.lightGreen} />
         <div>
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Nonprofit Access</p>
-          <p className="text-[10px]" style={{ color: C.lightGreen }}>Rooted 21 is free for families</p>
+          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Mission-Driven Access</p>
+          <p className="text-[10px]" style={{ color: C.lightGreen }}>Rooted 21 stays free for families</p>
         </div>
       </div>
 
@@ -21,7 +21,7 @@ export default function Billing() {
           <p className="text-4xl mb-3">🌿</p>
           <h1 className="font-serif font-bold text-2xl" style={{ color: C.darkGreen }}>No subscription charges</h1>
           <p className="text-sm leading-relaxed mt-3" style={{ color: C.mutedText }}>
-            Rooted 21 is becoming a nonprofit, so families are not charged for access to parenting tools, crisis support, lessons, documents, or care resources.
+            Rooted 21 is a mission-driven parenting support company, so families are not charged for access to parenting tools, crisis support, lessons, documents, or care resources.
           </p>
         </div>
 

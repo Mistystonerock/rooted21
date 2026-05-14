@@ -277,7 +277,7 @@ export default function Launch() {
         <div style={{ display: "flex", gap: 20, justifyContent: "center", alignItems: "center", padding: "8px 0 40px" }}>
           <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Give Feedback</a>
           <a href="/legal-disclaimers" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Legal & Disclaimers</a>
-          <span style={{ fontSize: 11, color: MUTED }}>© {new Date().getFullYear()} Rooted 21</span>
+          <span style={{ fontSize: 11, color: MUTED }}>Rooted 21 Parenting Network LLC — Chillicothe, Ross County, Ohio — A mission-driven company dedicated to serving families at low or no cost</span>
         </div>
 
       </div>

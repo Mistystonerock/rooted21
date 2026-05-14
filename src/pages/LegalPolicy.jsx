@@ -3,7 +3,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import TreeLogo from "@/components/rooted/TreeLogo";
 
 const LAST_UPDATED = "May 11, 2026";
-const COMPANY = "Rooted 21 Parenting Network";
+const COMPANY = "Rooted 21 Parenting Network LLC";
 const STATE = "Ohio";
 const CONTACT_EMAIL = "admin@rooted21parenting.com";
 

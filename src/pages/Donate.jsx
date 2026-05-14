@@ -88,9 +88,9 @@ export default function Donate() {
             Your generosity means a parent somewhere will have the tools they need to show up differently for their child. You just helped break a cycle. That matters more than you know.
           </p>
           <p className="mt-6 font-serif font-bold text-lg">Misty Stonerock</p>
-          <p className="text-sm" style={{ color: MUTED }}>Founder, Rooted 21 Parenting Network Inc.</p>
+          <p className="text-sm" style={{ color: MUTED }}>Founder, Rooted 21 Parenting Network LLC</p>
           <p className="mt-6 text-xs leading-relaxed" style={{ color: MUTED }}>
-            A tax receipt has been sent to your email. Rooted 21 Parenting Network Inc. is a 501(c)(3) nonprofit organization — pending IRS approval.
+            Rooted 21 Parenting Network LLC accepts voluntary donations to support our mission of keeping this platform free for families. Please note that as an LLC, donations are not currently tax deductible. We intend to pursue nonprofit status in the future.
           </p>
         </div>
       </main>
@@ -101,7 +101,7 @@ export default function Donate() {
     <main className="min-h-screen px-4 py-8" style={{ background: BG, color: DARK }}>
       <div className="max-w-[860px] mx-auto space-y-6">
         <header className="text-center py-5">
-          <p className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{ color: GREEN }}>Rooted 21 Parenting Network Inc.</p>
+          <p className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{ color: GREEN }}>Rooted 21 Parenting Network LLC</p>
           <h1 className="font-serif font-bold text-4xl mt-3 leading-tight">Make a Difference Today 🌿</h1>
           <p className="mt-3 text-base" style={{ color: MUTED }}>Every dollar you give goes directly to supporting families in crisis.</p>
         </header>
@@ -190,7 +190,7 @@ export default function Donate() {
         </section>
 
         <footer className="text-center text-xs leading-relaxed py-8" style={{ color: "#8a8a8a" }}>
-          Rooted 21 Parenting Network Inc. — Chillicothe, Ross County, Ohio — rooted21parenting.com — misty.stonerock88@gmail.com — 501(c)(3) Pending — No family is ever charged for access to Rooted 21.
+          Rooted 21 Parenting Network LLC — Chillicothe, Ross County, Ohio — A mission-driven company dedicated to serving families at low or no cost
         </footer>
       </div>
     </main>

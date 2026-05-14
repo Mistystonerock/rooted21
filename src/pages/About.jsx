@@ -11,7 +11,7 @@ const TEXT = "#F7E8C6";
 const MUTED = "#BFAF8A";
 
 const BOARD = [
-  { name: "Morgan Stone-Rock", title: "Founder & Executive Director", org: "Rooted 21" },
+  { name: "Morgan Stone-Rock", title: "Founder", org: "Rooted 21" },
   { name: "Dr. Sarah Chen", title: "Clinical Advisor", org: "Ohio Children's Services" },
   { name: "Judge Michael Torres", title: "Court Systems Liaison", org: "Franklin County Probate Court" },
   { name: "Rev. James Wright", title: "Community Partner", org: "Faith Leaders Coalition" },
@@ -59,7 +59,7 @@ export default function About() {
             <p style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 18, color: TEXT, lineHeight: 1, margin: 0 }}>
               Rooted <span style={{ color: GOLD }}>21</span>
             </p>
-            <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, marginTop: 2 }}>NONPROFIT PARENTING NETWORK</p>
+            <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, marginTop: 2 }}>MISSION-DRIVEN PARENTING SUPPORT</p>
           </div>
         </Link>
         <Link to="/" style={{ fontSize: 12, fontWeight: 700, color: GREEN, textDecoration: "none" }}>← Back Home</Link>
@@ -73,13 +73,12 @@ export default function About() {
             Supporting foster, adoptive, and kinship families through hard systems.
           </h1>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "#E6D8B8", maxWidth: 500, margin: "0 auto 28px" }}>
-            Rooted 21 is a 501(c)(3) nonprofit building tools that help parents and court professionals work together smarter.
+            Rooted 21 Parenting Network LLC is a mission-driven limited liability company founded by Misty Stonerock in Chillicothe, Ohio. We are committed to keeping our platform and services free or low cost for every family that needs us.
           </p>
 
-          {/* 501c3 pending notice */}
           <div style={{ background: CARD, border: `1px solid ${GOLD}40`, borderRadius: 12, padding: "12px 16px", display: "inline-block", marginBottom: 24 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: GOLD, margin: 0, letterSpacing: "0.05em" }}>
-              📋 501(c)(3) nonprofit status pending — application filed 2026
+              📋 Mission-driven parenting support company — nonprofit status may be pursued in the future
             </p>
           </div>
         </div>
@@ -134,11 +133,11 @@ export default function About() {
           </p>
         </div>
 
-        {/* Board of Directors */}
+        {/* Leadership Team */}
         <div style={{ marginBottom: 28 }}>
           <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 12, textAlign: "center" }}>Leadership</p>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.2 }}>
-            Board of Directors
+            Leadership Team
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             {BOARD.map((member, i) => (
@@ -150,7 +149,7 @@ export default function About() {
             ))}
           </div>
           <p style={{ fontSize: 11, color: MUTED, textAlign: "center", marginTop: 14, fontStyle: "italic" }}>
-            Board expansion in progress — we're recruiting experts in trauma, law, and community health.
+            Leadership expansion in progress — we're recruiting experts in trauma, law, and community health.
           </p>
         </div>
 
@@ -160,7 +159,7 @@ export default function About() {
           <div style={{ background: CARD, border: `1.5px solid ${GOLD}40`, borderRadius: 16, padding: "20px 14px", textAlign: "center" }}>
             <Heart size={20} color={GOLD} style={{ margin: "0 auto 10px" }} />
             <p style={{ fontWeight: 700, fontSize: 12, color: TEXT, marginBottom: 6, margin: "0 0 6px" }}>Donate Now</p>
-            <p style={{ fontSize: 11, color: "#D8C8A3", marginBottom: 12, margin: "0 0 12px" }}>Support our 501(c)(3) mission</p>
+            <p style={{ fontSize: 11, color: "#D8C8A3", marginBottom: 12, margin: "0 0 12px" }}>Support our mission-driven work</p>
             <button
               onClick={() => alert("Donation portal coming June 2026")}
               style={{

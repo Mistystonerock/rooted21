@@ -5,7 +5,7 @@ import { C } from "@/lib/rooted-constants";
 const SECTIONS = [
   {
     title: "1. Who We Are",
-    content: "Rooted 21 is a nonprofit parenting support organization dedicated to providing trauma-informed resources, coaching, and community connection to foster families, adoptive families, kinship caregivers, and biological parents navigating complex systems (CPS, family court, behavioral health). We are a 501(c)(3) tax-exempt organization pending status. Our mission is to reduce parental isolation and increase access to evidence-based parenting support.",
+    content: "Rooted 21 Parenting Network LLC is a mission-driven parenting support company dedicated to providing trauma-informed resources, coaching, and community connection to foster families, adoptive families, kinship caregivers, and biological parents navigating complex systems (CPS, family court, behavioral health). Our mission is to reduce parental isolation and increase access to evidence-based parenting support.",
   },
   {
     title: "2. Data We Collect",
@@ -49,7 +49,7 @@ const SECTIONS = [
   },
   {
     title: "12. Contact Us",
-    content: "For questions about this Privacy Policy, to request access to your data, or to exercise your privacy rights, contact: Rooted 21 | Privacy Team | privacy@rooted21parenting.com. We will respond to all privacy requests within 30 days. For urgent privacy or security concerns, please call our nonprofit administrator at mstonerock@rooted21parenting.com.",
+    content: "For questions about this Privacy Policy, to request access to your data, or to exercise your privacy rights, contact: Rooted 21 Parenting Network LLC | Privacy Team | privacy@rooted21parenting.com. We will respond to all privacy requests within 30 days. For urgent privacy or security concerns, please contact mstonerock@rooted21parenting.com.",
   },
 ];
 
@@ -76,13 +76,12 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
 
-        {/* Nonprofit notice */}
         <div style={{ background: C.white, border: `1.5px solid ${C.gold}30`, borderRadius: 14, padding: 14, marginBottom: 24 }}>
           <p style={{ fontSize: 12, fontWeight: 700, color: C.darkGreen, margin: "0 0 6px 0" }}>
-            🌿 Nonprofit Organization
+            🌿 Mission-Driven Company
           </p>
           <p style={{ fontSize: 11, color: C.mutedText, margin: 0, lineHeight: 1.6 }}>
-            Rooted 21 is a 501(c)(3) nonprofit parenting support organization. This Privacy Policy reflects our commitment to protecting family data and complying with Ohio law, particularly ORC §1349.09 (student/child data protection).
+            Rooted 21 Parenting Network LLC is a mission-driven parenting support company. This Privacy Policy reflects our commitment to protecting family data and complying with Ohio law, particularly ORC §1349.09 (student/child data protection).
           </p>
         </div>
 

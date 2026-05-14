@@ -43,7 +43,7 @@ export default function DonationPanel() {
       </div>
 
       <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 16 }}>
-        Rooted 21 is a nonprofit organization dedicated to breaking generational cycles by providing free trauma-informed parenting tools, classes, and resources to families navigating hard things. Every donation — no matter the size — helps us keep this platform free and expand our reach to more families across Ohio and beyond.
+        Rooted 21 is a mission-driven parenting support company dedicated to breaking generational cycles by providing free trauma-informed parenting tools, classes, and resources to families navigating hard things. Every donation — no matter the size — helps us keep this platform free and expand our reach to more families across Ohio and beyond.
       </p>
 
       <div style={{ background: "#F0F6F0", border: `1px solid ${GREEN}35`, borderRadius: 14, padding: "13px 14px", marginBottom: 16 }}>
@@ -102,7 +102,7 @@ export default function DonationPanel() {
       </a>
 
       <p style={{ textAlign: "center", fontSize: 10, color: GOLD, marginTop: 10, fontWeight: 700, lineHeight: 1.5 }}>
-        Rooted 21 Parenting Network Inc. is a 501(c)(3) nonprofit organization — pending IRS approval. All donations are tax deductible upon approval. No family is ever charged for access.
+        Rooted 21 Parenting Network LLC accepts voluntary donations to support our mission of keeping this platform free for families. Please note that as an LLC, donations are not currently tax deductible. We intend to pursue nonprofit status in the future.
       </p>
     </section>
   );

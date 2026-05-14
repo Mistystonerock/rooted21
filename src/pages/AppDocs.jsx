@@ -129,7 +129,7 @@ SMS via Twilio: import twilio from 'npm:twilio' — use TWILIO_* secrets`
     sections: [
       {
         title: "What Is Rooted 21?",
-        body: `Rooted 21 Parenting Network is a trauma-informed parenting support platform built for foster, adoptive, kinship, and biological families — especially those navigating the child welfare system. It was founded by Misty Stonerock, who built it from lived experience with childhood trauma and years working in behavioral health, juvenile systems, and child welfare agencies.
+        body: `Rooted 21 Parenting Network LLC is a trauma-informed parenting support platform built for foster, adoptive, kinship, and biological families — especially those navigating the child welfare system. It was founded by Misty Stonerock, who built it from lived experience with childhood trauma and years working in behavioral health, juvenile systems, and child welfare agencies.
 
 The "21" represents the 21 days said to form new habits. The core mission: help parents recognize trauma responses, rewire unhealthy patterns, and parent from connection rather than fear — for free, accessible to every family regardless of income.`
       },
@@ -279,7 +279,7 @@ export default function AppDocs() {
 
         <div className="rounded-xl p-3 text-center" style={{ background: C.cream }}>
           <p className="text-[10px]" style={{ color: C.mutedText }}>
-            Last updated: May 2026 · Rooted 21 Parenting Network
+            Last updated: May 2026 · Rooted 21 Parenting Network LLC
           </p>
         </div>
 

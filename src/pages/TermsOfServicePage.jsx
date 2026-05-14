@@ -5,7 +5,7 @@ import { C } from "@/lib/rooted-constants";
 const SECTIONS = [
   {
     title: "1. Acceptance of Terms",
-    content: "By accessing and using Rooted 21, you agree to be bound by these Terms of Service. If you do not agree to any part of these terms, you may not use our platform. These terms apply to all users, including parents, professionals, court staff, and other visitors. Rooted 21 is a nonprofit organization providing parenting support services.",
+    content: "By accessing and using Rooted 21, you agree to be bound by these Terms of Service. If you do not agree to any part of these terms, you may not use our platform. These terms apply to all users, including parents, professionals, court staff, and other visitors. Rooted 21 Parenting Network LLC is a mission-driven parenting support company providing parenting support services.",
   },
   {
     title: "2. Use License",
@@ -60,8 +60,8 @@ const SECTIONS = [
     content: "These Terms of Service are governed by the laws of the State of Ohio, without regard to conflict of laws principles. Any disputes shall be resolved in the state or federal courts of Ohio. You consent to the exclusive jurisdiction of Ohio courts. If any provision of these terms is found unenforceable, the remaining provisions will remain in effect.",
   },
   {
-    title: "15. Nonprofit Status & Tax Deduction",
-    content: "Rooted 21 is a 501(c)(3) nonprofit organization pending status. Voluntary donations and fees paid to Rooted 21 may be tax-deductible. Consult a tax professional to determine your eligibility for deductions. Donations to Rooted 21 do not entitle you to ownership or voting rights in the organization.",
+    title: "15. LLC Status & Donations",
+    content: "Rooted 21 Parenting Network LLC accepts voluntary donations to support our mission of keeping this platform free for families. Please note that as an LLC, donations are not currently tax deductible. We intend to pursue nonprofit status in the future. Donations to Rooted 21 do not entitle you to ownership or voting rights in the company.",
   },
   {
     title: "16. Contact & Support",
@@ -92,13 +92,12 @@ export default function TermsOfServicePage() {
           </p>
         </div>
 
-        {/* Nonprofit notice */}
         <div style={{ background: C.white, border: `1.5px solid ${C.gold}30`, borderRadius: 14, padding: 14, marginBottom: 24 }}>
           <p style={{ fontSize: 12, fontWeight: 700, color: C.darkGreen, margin: "0 0 6px 0" }}>
             ⚖️ Legal Compliance
           </p>
           <p style={{ fontSize: 11, color: C.mutedText, margin: 0, lineHeight: 1.6 }}>
-            These Terms of Service reflect our commitment to operating as a nonprofit parenting support organization under Ohio law. We comply with ORC §3109.04 (family court), ORC §1349.09 (child data), and all mandatory reporting requirements.
+            These Terms of Service reflect our commitment to operating as a mission-driven parenting support company under Ohio law. We comply with ORC §3109.04 (family court), ORC §1349.09 (child data), and all mandatory reporting requirements.
           </p>
         </div>
 

@@ -4,7 +4,7 @@ import { Search, X } from "lucide-react";
 const ITEMS = [
   { id: "top", label: "Top of page", keywords: "home rooted 21 sign in launch opening countdown" },
   { id: "founders-note", label: "Founder’s note", keywords: "founder story misty mission why rooted 21" },
-  { id: "donations", label: "Donations", keywords: "donate support monthly giving nonprofit funds money" },
+  { id: "donations", label: "Donations", keywords: "donate support monthly giving mission-driven funds money" },
   { id: "app-tour", label: "App tour", keywords: "features inside app tour tools preview" },
   { id: "what-we-help", label: "What we help with", keywords: "court cps behavior trauma case plans co parenting medical meds" },
   { id: "waitlist", label: "Join waitlist / beta code", keywords: "save spot email beta access code notify signup" },
