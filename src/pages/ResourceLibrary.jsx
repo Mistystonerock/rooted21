@@ -66,6 +66,42 @@ const SEED_RESOURCES = [
   { id: 31, category: "reading", type: "book", title: "No-Drama Discipline", author: "Daniel J. Siegel & Tina Payne Bryson", desc: "How to redirect behavior and build a whole brain — the companion to The Whole-Brain Child.", url: "https://www.drdansiegel.com/book/no-drama-discipline/", free: false },
 ];
 
+const AUDIENCES = [
+  { id: "all", label: "All Audiences" },
+  { id: "parent", label: "Parents" },
+  { id: "professional", label: "Professionals" },
+  { id: "school", label: "School Teams" },
+  { id: "court", label: "Court / CPS" },
+];
+
+const DIFFICULTIES = [
+  { id: "all", label: "All Levels" },
+  { id: "beginner", label: "Beginner" },
+  { id: "practical", label: "Practical" },
+  { id: "advanced", label: "Advanced" },
+];
+
+const RESOURCE_METADATA = {
+  trauma: { audience: "parent", difficulty: "beginner", tags: ["trauma", "brain", "ACEs", "healing"] },
+  sensory: { audience: "parent", difficulty: "practical", tags: ["sensory", "calming", "regulation", "home tools"] },
+  selfcare: { audience: "parent", difficulty: "beginner", tags: ["burnout", "stress", "caregiver wellness", "support"] },
+  attachment: { audience: "parent", difficulty: "practical", tags: ["attachment", "connection", "repair", "trust"] },
+  behavior: { audience: "parent", difficulty: "practical", tags: ["behavior", "discipline", "de-escalation", "communication"] },
+  grief: { audience: "parent", difficulty: "beginner", tags: ["grief", "loss", "identity", "life story"] },
+  system: { audience: "court", difficulty: "practical", tags: ["court", "CPS", "IEP", "advocacy", "documentation"] },
+  reading: { audience: "parent", difficulty: "advanced", tags: ["book", "learning", "trauma-informed", "parenting"] },
+};
+
+function enrichResource(resource) {
+  const metadata = RESOURCE_METADATA[resource.category] || {};
+  return {
+    audience: resource.audience || metadata.audience || "parent",
+    difficulty: resource.difficulty || metadata.difficulty || "beginner",
+    tags: resource.tags || metadata.tags || [],
+    ...resource,
+  };
+}
+
 const CUSTOM_KEY = "rooted21_custom_resources";
 
 function LibraryContent() {
@@ -73,6 +109,9 @@ function LibraryContent() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeType, setActiveType] = useState(null);
+  const [activeAudience, setActiveAudience] = useState("all");
+  const [activeDifficulty, setActiveDifficulty] = useState("all");
+  const [activeTag, setActiveTag] = useState("all");
   const [tab, setTab] = useState("browse"); // "browse" | "saved"
   const [user, setUser] = useState(null);
   const [customResources, setCustomResources] = useState(() => {
@@ -83,7 +122,12 @@ function LibraryContent() {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  const allResources = useMemo(() => [...SEED_RESOURCES, ...customResources], [customResources]);
+  const allResources = useMemo(() => [...SEED_RESOURCES, ...customResources].map(enrichResource), [customResources]);
+  const allTags = useMemo(() => {
+    const tags = new Set();
+    allResources.forEach(resource => (resource.tags || []).forEach(tag => tags.add(tag)));
+    return Array.from(tags).sort();
+  }, [allResources]);
 
   function handleAddResource(r) {
     const updated = [...customResources, r];
@@ -97,10 +141,14 @@ function LibraryContent() {
     return pool.filter(r => {
       const matchCat = activeCategory === "all" || r.category === activeCategory;
       const matchType = !activeType || r.type === activeType;
-      const matchSearch = !q || r.title.toLowerCase().includes(q) || r.author?.toLowerCase().includes(q) || r.desc?.toLowerCase().includes(q);
-      return matchCat && matchType && matchSearch;
+      const matchAudience = activeAudience === "all" || r.audience === activeAudience;
+      const matchDifficulty = activeDifficulty === "all" || r.difficulty === activeDifficulty;
+      const matchTag = activeTag === "all" || (r.tags || []).includes(activeTag);
+      const searchable = [r.title, r.author, r.desc, r.audience, r.difficulty, ...(r.tags || [])].filter(Boolean).join(" ").toLowerCase();
+      const matchSearch = !q || searchable.includes(q);
+      return matchCat && matchType && matchAudience && matchDifficulty && matchTag && matchSearch;
     });
-  }, [search, activeCategory, activeType, tab, allResources, saved]);
+  }, [search, activeCategory, activeType, activeAudience, activeDifficulty, activeTag, tab, allResources, saved]);
 
   const featured = filtered.filter(r => r.featured);
   const rest = filtered.filter(r => !r.featured);
@@ -178,30 +226,67 @@ function LibraryContent() {
           ))}
         </div>
 
-        {/* Type filter pills */}
-        <div className="flex gap-1.5 flex-wrap">
-          {Object.entries(TYPE_META).map(([key, meta]) => {
-            const Icon = meta.icon;
-            return (
-              <button key={key} onClick={() => setActiveType(activeType === key ? null : key)}
-                className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full"
-                style={{
-                  background: activeType === key ? meta.color : `${meta.color}15`,
-                  color: activeType === key ? "white" : meta.color,
-                  border: "none", cursor: "pointer",
-                }}>
-                <Icon size={9} /> {meta.label}
+        {/* Advanced filters */}
+        <div className="rounded-2xl p-3 space-y-3" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[10px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>FILTER BY TYPE, AUDIENCE, LEVEL & TAG</p>
+            {(activeType || activeAudience !== "all" || activeDifficulty !== "all" || activeTag !== "all") && (
+              <button
+                onClick={() => { setActiveType(null); setActiveAudience("all"); setActiveDifficulty("all"); setActiveTag("all"); }}
+                className="text-[10px] font-bold underline"
+                style={{ background: "none", border: "none", color: C.midGreen, cursor: "pointer" }}
+              >
+                Clear
               </button>
-            );
-          })}
+            )}
+          </div>
+
+          <div className="flex gap-1.5 flex-wrap">
+            {Object.entries(TYPE_META).map(([key, meta]) => {
+              const Icon = meta.icon;
+              return (
+                <button key={key} onClick={() => setActiveType(activeType === key ? null : key)}
+                  className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full"
+                  style={{
+                    background: activeType === key ? meta.color : `${meta.color}15`,
+                    color: activeType === key ? "white" : meta.color,
+                    border: "none", cursor: "pointer",
+                  }}>
+                  <Icon size={9} /> {meta.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <select value={activeAudience} onChange={e => setActiveAudience(e.target.value)} className="rounded-xl px-3 py-2 text-xs border outline-none" style={{ borderColor: C.cream, background: C.offWhite }}>
+              {AUDIENCES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+            </select>
+            <select value={activeDifficulty} onChange={e => setActiveDifficulty(e.target.value)} className="rounded-xl px-3 py-2 text-xs border outline-none" style={{ borderColor: C.cream, background: C.offWhite }}>
+              {DIFFICULTIES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+            </select>
+            <select value={activeTag} onChange={e => setActiveTag(e.target.value)} className="rounded-xl px-3 py-2 text-xs border outline-none" style={{ borderColor: C.cream, background: C.offWhite }}>
+              <option value="all">All Tags</option>
+              {allTags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+            </select>
+          </div>
         </div>
 
         {/* Results count */}
-        {(search || activeCategory !== "all" || activeType) && (
-          <p className="text-[11px]" style={{ color: C.mutedText }}>
-            {filtered.length} result{filtered.length !== 1 ? "s" : ""}
-            {activeCategory !== "all" && ` in ${CATEGORIES.find(c => c.id === activeCategory)?.label}`}
-          </p>
+        {(search || activeCategory !== "all" || activeType || activeAudience !== "all" || activeDifficulty !== "all" || activeTag !== "all") && (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[11px]" style={{ color: C.mutedText }}>
+              {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+              {activeCategory !== "all" && ` in ${CATEGORIES.find(c => c.id === activeCategory)?.label}`}
+            </p>
+            <button
+              onClick={() => { setSearch(""); setActiveCategory("all"); setActiveType(null); setActiveAudience("all"); setActiveDifficulty("all"); setActiveTag("all"); }}
+              className="text-[11px] font-bold underline"
+              style={{ background: "none", border: "none", color: C.midGreen, cursor: "pointer" }}
+            >
+              Clear all
+            </button>
+          </div>
         )}
 
         {/* Empty state */}
@@ -214,7 +299,7 @@ function LibraryContent() {
             <p className="text-xs mt-1" style={{ color: C.mutedText }}>
               {tab === "saved"
                 ? "Tap the bookmark icon on any resource to save it here."
-                : "Try clearing the search or selecting a different category."}
+                : "Try clearing the search or changing your filters."}
             </p>
           </div>
         )}
