@@ -47,6 +47,15 @@
       "type": "string",
       "format": "date",
       "description": "Date certificate was issued"
+    },
+    "calendar_event_id": {
+      "type": "string",
+      "description": "Linked CareCalendarEvent created for this class enrollment"
+    },
+    "confirmation_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the enrollment confirmation email was sent"
     }
   },
   "required": [

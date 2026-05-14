@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
@@ -17,15 +17,18 @@ export default function DocumentScanner() {
   async function handleFileReady(uploadedUrl, localPreview) {
     setFileUrl(uploadedUrl);
     setPreviewUrl(localPreview);
+    if (uploadedUrl) {
+      await handleAnalyze(uploadedUrl);
+    }
   }
 
-  async function handleAnalyze() {
-    if (!fileUrl) return;
+  async function handleAnalyze(uploadedUrl = fileUrl) {
+    if (!uploadedUrl) return;
     setPhase("analyzing");
     setError(null);
 
     const res = await base44.functions.invoke("analyzeDocumentScan", {
-      file_url: fileUrl,
+      file_url: uploadedUrl,
       document_hint: documentHint,
     });
 
@@ -83,7 +86,48 @@ export default function DocumentScanner() {
     return created;
   }
 
-  async function handleSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar }) {
+  function normalizeText(value) {
+    return String(value || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function itemMatchesScan(item) {
+    const scanText = normalizeText([
+      analysis?.extracted_text,
+      analysis?.summary_note,
+      ...(analysis?.key_data?.action_items || []),
+      ...(analysis?.requirements || []),
+    ].join(" "));
+    const itemText = normalizeText(item.text);
+    if (!scanText || !itemText) return false;
+    if (scanText.includes(itemText) || itemText.includes(scanText.slice(0, 80))) return true;
+    const keywords = itemText.split(" ").filter(word => word.length > 4);
+    return keywords.length >= 2 && keywords.filter(word => scanText.includes(word)).length >= Math.min(3, keywords.length);
+  }
+
+  async function updateCasePlanFromScan({ checklistId, fileUrl, title }) {
+    if (!checklistId) return 0;
+    const [checklist] = await base44.entities.CasePlanChecklist.filter({ id: checklistId }, "-created_date", 1);
+    const items = (checklist.items || []).map(item => {
+      if (item.completed || !itemMatchesScan(item)) return item;
+      return {
+        ...item,
+        completed: true,
+        completed_date: new Date().toISOString(),
+        proof_url: fileUrl,
+        proof_filename: title,
+        notes: item.notes || "Completed from scanned document findings.",
+      };
+    });
+    const updatedCount = items.filter((item, idx) => item.completed && !checklist.items[idx]?.completed).length;
+    if (updatedCount === 0) return 0;
+    await base44.entities.CasePlanChecklist.update(checklistId, {
+      items,
+      status: items.every(item => item.completed) ? "completed" : "active",
+    });
+    return updatedCount;
+  }
+
+  async function handleSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId }) {
     setPhase("saving");
     const user = await base44.auth.me();
 
@@ -110,6 +154,8 @@ export default function DocumentScanner() {
       await base44.entities.SecureDocument.update(newDoc.id, { calendar_event_ids: calendarEventIds });
     }
 
+    const updatedChecklistItems = await updateCasePlanFromScan({ checklistId, fileUrl, title });
+
     // Optionally also save as a CaseNote
     if (saveAsNote && caseId) {
       await base44.entities.CaseNote.create({
@@ -124,7 +170,7 @@ export default function DocumentScanner() {
       });
     }
 
-    setSaveSuccess({ title, category, calendarCount: calendarEventIds.length });
+    setSaveSuccess({ title, category, calendarCount: calendarEventIds.length, updatedChecklistItems });
     setPhase("result");
   }
 
@@ -132,7 +178,7 @@ export default function DocumentScanner() {
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader
         title="Document Scanner"
-        subtitle="AI-powered OCR & data extraction"
+        subtitle="Camera capture, AI analysis & case plan updates"
         backTo="/documents"
       />
 
@@ -142,7 +188,7 @@ export default function DocumentScanner() {
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>📷 Scan Any Document</p>
           <p className="text-[11px] mt-1 leading-relaxed" style={{ color: C.lightGreen }}>
-            Take a photo or upload an image of any document — court letters, school reports, medication labels, IEPs, or medical records. AI will read and analyze it automatically.
+            Take a photo or upload an image of any court letter, case plan, IEP, school report, medication label, or medical record. AI will read it automatically and can update matching case plan tasks.
           </p>
         </div>
 
@@ -161,7 +207,7 @@ export default function DocumentScanner() {
             style={{ background: "#EAF4EA", border: `1px solid ${C.midGreen}` }}>
             <span>✅</span>
             <p className="text-xs font-bold" style={{ color: C.darkGreen }}>
-              "{saveSuccess.title}" saved to Secure Documents{saveSuccess.calendarCount ? ` and ${saveSuccess.calendarCount} reminder${saveSuccess.calendarCount !== 1 ? "s" : ""} added to Care Calendar` : ""}.
+              "{saveSuccess.title}" saved to Secure Documents{saveSuccess.calendarCount ? `, ${saveSuccess.calendarCount} reminder${saveSuccess.calendarCount !== 1 ? "s" : ""} added to Care Calendar` : ""}{saveSuccess.updatedChecklistItems ? `, and ${saveSuccess.updatedChecklistItems} case plan item${saveSuccess.updatedChecklistItems !== 1 ? "s" : ""} marked complete` : ""}.
             </p>
           </div>
         )}

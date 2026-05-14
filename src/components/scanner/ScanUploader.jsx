@@ -44,8 +44,8 @@ export default function ScanUploader({
           style={{ border: `2px dashed ${C.midGreen}`, background: C.white }}
         >
           <Upload size={32} color={C.midGreen} />
-          <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Tap to upload an image</p>
-          <p className="text-[10px]" style={{ color: C.mutedText }}>JPG, PNG, HEIC — up to 10MB</p>
+          <p className="font-bold text-sm" style={{ color: C.darkGreen }}>Tap to upload or scan</p>
+          <p className="text-[10px]" style={{ color: C.mutedText }}>Photo starts AI analysis automatically</p>
         </div>
       )}
 

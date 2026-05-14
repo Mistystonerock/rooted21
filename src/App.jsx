@@ -140,6 +140,7 @@ function App() {
               <Route path="/child-profiles" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfiles /></FeatureLockGate></Suspense>} />
               <Route path="/live-classes" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LiveClasses /></FeatureLockGate></Suspense>} />
               <Route path="/class-enrollment" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ClassEnrollment /></FeatureLockGate></Suspense>} />
+              <Route path="/class-calendar" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ClassCalendarDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/class-progress/:enrollmentId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ClassProgress /></FeatureLockGate></Suspense>} />
               <Route path="/instructor-feedback" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.InstructorFeedbackDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/instructor-analytics" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.InstructorAnalytics /></FeatureLockGate></Suspense>} />

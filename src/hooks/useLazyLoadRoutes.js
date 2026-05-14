@@ -59,6 +59,7 @@ const routes = {
   ChildProfiles: lazy(() => import("@/pages/ChildProfiles")),
   LiveClasses: lazy(() => import("@/pages/LiveClasses")),
   ClassEnrollment: lazy(() => import("@/pages/ClassEnrollment")),
+  ClassCalendarDashboard: lazy(() => import("@/pages/ClassCalendarDashboard")),
   ClassProgress: lazy(() => import("@/pages/ClassProgress")),
   InstructorFeedbackDashboard: lazy(() => import("@/pages/InstructorFeedbackDashboard")),
   InstructorAnalytics: lazy(() => import("@/pages/InstructorAnalytics")),

@@ -26,18 +26,23 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
   const [addToCalendar, setAddToCalendar] = useState(true);
   const [cases, setCases] = useState([]);
   const [children, setChildren] = useState([]);
+  const [checklists, setChecklists] = useState([]);
+  const [checklistId, setChecklistId] = useState("");
   const [showRawText, setShowRawText] = useState(false);
   const [showKeyData, setShowKeyData] = useState(true);
 
   useEffect(() => {
     base44.auth.me().then(async (user) => {
-      const [cs, ch] = await Promise.all([
+      const [cs, ch, lists] = await Promise.all([
         base44.entities.CaseFile.filter({ parent_email: user.email }, "-created_date", 20),
         base44.entities.ChildProfile.list("-created_date", 10),
+        base44.entities.CasePlanChecklist.filter({ parent_email: user.email, status: "active" }, "-created_date", 20),
       ]);
       setCases(cs);
       setChildren(ch);
+      setChecklists(lists);
       if (ch.length > 0) setChildName(ch[0].first_name);
+      if (lists.length > 0) setChecklistId(lists[0].id);
     });
   }, []);
 
@@ -228,6 +233,21 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           </label>
         )}
 
+        {checklists.length > 0 && (
+          <div>
+            <label className="block text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>UPDATE CASE PLAN STATUS</label>
+            <select value={checklistId} onChange={e => setChecklistId(e.target.value)}
+              className="w-full rounded-xl px-3 py-2.5 text-sm border outline-none"
+              style={{ borderColor: C.cream, background: C.offWhite }}>
+              <option value="">Do not update a checklist</option>
+              {checklists.map(list => <option key={list.id} value={list.id}>{list.title}</option>)}
+            </select>
+            <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>
+              Matching checklist items will be marked complete and linked to this scan as proof.
+            </p>
+          </div>
+        )}
+
         {caseId && (
           <label className="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" checked={saveAsNote} onChange={e => setSaveAsNote(e.target.checked)}
@@ -266,7 +286,7 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           <RefreshCw size={14} /> Scan Again
         </button>
         <button
-          onClick={() => onSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar })}
+          onClick={() => onSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId })}
           disabled={saving || !title}
           className="flex-[2] py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
           style={{

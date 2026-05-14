@@ -81,6 +81,14 @@
     "child_name": {
       "type": "string",
       "description": "Child this event is for"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "Optional source that created this event, such as live_class_enrollment"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Optional source record ID linked to this event"
     }
   },
   "required": [
