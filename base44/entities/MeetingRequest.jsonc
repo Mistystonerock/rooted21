@@ -104,5 +104,17 @@
     "case_id",
     "parent_email",
     "meeting_type"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "parent_email": "{{user.email}}"
+    },
+    "update": {
+      "parent_email": "{{user.email}}"
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

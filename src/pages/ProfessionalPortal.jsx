@@ -30,8 +30,7 @@ export default function ProfessionalPortal() {
   }, []);
 
   async function loadFamilies(u) {
-    const query = u.role === "admin" ? {} : { professional_email: u.email };
-    const assigned = await base44.entities.AssignedFamily.filter(query, "-created_date", 100);
+    const assigned = await base44.entities.AssignedFamily.filter({ professional_email: u.email }, "-created_date", 100);
     setFamilies(assigned);
 
     // Load data for each family in parallel
@@ -52,9 +51,9 @@ export default function ProfessionalPortal() {
   async function handleAssign() {
     if (!assignForm.family_email.trim()) return;
     setSaving(true);
+    if (user?.role !== "admin") return;
     const f = await base44.entities.AssignedFamily.create({
       ...assignForm,
-      professional_email: user.email,
       status: "active",
     });
     setFamilies(prev => [f, ...prev]);
@@ -65,6 +64,7 @@ export default function ProfessionalPortal() {
   }
 
   const isProOrAdmin = user?.role === "admin" || user?.role === "professional";
+  const canAssignFamilies = user?.role === "admin";
 
   const filtered = families.filter(f => {
     const q = search.toLowerCase();
@@ -110,7 +110,7 @@ export default function ProfessionalPortal() {
           <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Professional Portal</p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>Rooted 21 · Professional Dashboard</p>
         </div>
-        {isProOrAdmin && (
+        {canAssignFamilies && (
           <button
             onClick={() => setShowAssignForm(true)}
             className="ml-auto flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold"
@@ -154,7 +154,7 @@ export default function ProfessionalPortal() {
         {isProOrAdmin && (
           <>
             {/* Assign family form */}
-            {showAssignForm && (
+            {showAssignForm && canAssignFamilies && (
               <div className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.midGreen}` }}>
                 <p className="font-serif font-bold text-sm mb-3" style={{ color: C.darkGreen }}>Assign a Family</p>
                 <div className="space-y-2.5">
@@ -234,9 +234,11 @@ export default function ProfessionalPortal() {
                 <Users size={28} color={C.cream} className="mx-auto mb-2" />
                 <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>No families assigned yet</p>
                 <p className="text-xs mt-1 mb-3" style={{ color: C.mutedText }}>Add a family to begin monitoring their progress.</p>
-                <button onClick={() => setShowAssignForm(true)} className="text-xs font-bold px-4 py-2 rounded-lg border-none" style={{ background: C.darkGreen, color: C.white }}>
-                  + Assign First Family
-                </button>
+                {canAssignFamilies && (
+                  <button onClick={() => setShowAssignForm(true)} className="text-xs font-bold px-4 py-2 rounded-lg border-none" style={{ background: C.darkGreen, color: C.white }}>
+                    + Assign First Family
+                  </button>
+                )}
               </div>
             )}
 

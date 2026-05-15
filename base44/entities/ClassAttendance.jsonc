@@ -42,5 +42,24 @@
     "enrollment_id",
     "session_number",
     "session_date"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "marked_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "marked_by_email": "{{user.email}}"
+    },
+    "delete": {
+      "marked_by_email": "{{user.email}}"
+    }
+  }
 }

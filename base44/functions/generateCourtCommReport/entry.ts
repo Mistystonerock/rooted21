@@ -34,6 +34,10 @@ Deno.serve(async (req) => {
     }
 
     const partnership = partnerships[0];
+    const canAccess = partnership.parent_1_email === user.email || partnership.parent_2_email === user.email || partnership.court_email === user.email || user.role === 'founder';
+    if (!canAccess) {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     // Fetch all messages and calls
     const [messages, calls] = await Promise.all([

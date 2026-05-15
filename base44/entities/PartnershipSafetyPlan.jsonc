@@ -6,6 +6,18 @@
       "type": "string",
       "description": "ID of the CoParentingPartnership"
     },
+    "parent_1_email": {
+      "type": "string",
+      "description": "First parent allowed to access this plan"
+    },
+    "parent_2_email": {
+      "type": "string",
+      "description": "Second parent allowed to access this plan"
+    },
+    "court_email": {
+      "type": "string",
+      "description": "Assigned court staff allowed to access this plan"
+    },
     "child_name": {
       "type": "string",
       "description": "Child's name"
@@ -104,5 +116,44 @@
   "required": [
     "partnership_id",
     "child_name"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
 }

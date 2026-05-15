@@ -115,5 +115,17 @@
     "parent_email",
     "child_name",
     "case_type"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "parent_email": "{{user.email}}"
+    },
+    "update": {
+      "parent_email": "{{user.email}}"
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

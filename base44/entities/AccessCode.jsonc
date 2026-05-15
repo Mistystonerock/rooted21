@@ -41,5 +41,31 @@
     "code",
     "professional_email",
     "expires_at"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "used_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "used_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "professional_email": "{{user.email}}"
+    }
+  }
 }

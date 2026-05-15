@@ -8,10 +8,11 @@
         "founder",
         "admin",
         "professional",
+        "court_staff",
         "user"
       ],
       "default": "user",
-      "description": "User role: founder = system owner, admin = platform admin, professional = agency staff, user = parent/caregiver"
+      "description": "User role: founder = system owner, admin = platform admin, professional = agency staff, court_staff = assigned court staff, user = parent/caregiver"
     },
     "phone": {
       "type": "string",

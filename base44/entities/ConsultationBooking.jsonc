@@ -63,5 +63,31 @@
     "parent_email",
     "date",
     "time_slot"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "parent_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "parent_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

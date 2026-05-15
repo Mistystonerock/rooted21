@@ -6,6 +6,14 @@
       "type": "string",
       "description": "ID of the CoParentingPartnership this appointment is for"
     },
+    "parent_1_email": {
+      "type": "string",
+      "description": "First parent notified"
+    },
+    "parent_2_email": {
+      "type": "string",
+      "description": "Second parent notified"
+    },
     "title": {
       "type": "string",
       "description": "Appointment title (e.g., Court Hearing, Check-in, Mediation)"
@@ -42,5 +50,38 @@
     "title",
     "date",
     "court_staff_email"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "court_staff_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "court_staff_email": "{{user.email}}"
+        },
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "court_staff_email": "{{user.email}}"
+    },
+    "delete": {
+      "court_staff_email": "{{user.email}}"
+    }
+  }
 }

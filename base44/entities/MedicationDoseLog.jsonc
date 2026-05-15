@@ -65,5 +65,17 @@
     "child_name",
     "medication_name",
     "administered_date"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "parent_email": "{{user.email}}"
+    },
+    "update": {
+      "parent_email": "{{user.email}}"
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

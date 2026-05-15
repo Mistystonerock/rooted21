@@ -88,5 +88,17 @@
     "owner_email",
     "title",
     "date"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
 }

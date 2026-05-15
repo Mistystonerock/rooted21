@@ -58,5 +58,31 @@
     "title",
     "date",
     "family_email"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "added_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "added_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "added_by_email": "{{user.email}}"
+    }
+  }
 }

@@ -107,5 +107,31 @@
     "assigned_to_email",
     "assigned_by_email",
     "due_date"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "assigned_to_email": "{{user.email}}"
+        },
+        {
+          "assigned_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "assigned_to_email": "{{user.email}}"
+        },
+        {
+          "assigned_by_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "assigned_by_email": "{{user.email}}"
+    }
+  }
 }

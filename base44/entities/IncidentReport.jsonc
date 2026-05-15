@@ -88,5 +88,17 @@
     "incident_date",
     "description",
     "parent_email"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "parent_email": "{{user.email}}"
+    },
+    "update": {
+      "parent_email": "{{user.email}}"
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

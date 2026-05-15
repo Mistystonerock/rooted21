@@ -14,8 +14,11 @@ Deno.serve(async (req) => {
     let participants = "";
 
     if (threadType === "coparenting" && partnershipId) {
-      const partnerships = await base44.entities.CoParentingPartnership.list();
-      const partnership = partnerships.find(p => p.id === partnershipId);
+      const partnerships = await base44.entities.CoParentingPartnership.filter({ id: partnershipId }, "", 1);
+      const partnership = partnerships[0];
+      if (!partnership || (partnership.parent_1_email !== user.email && partnership.parent_2_email !== user.email && partnership.court_email !== user.email)) {
+        return Response.json({ error: "Forbidden" }, { status: 403 });
+      }
       messages = await base44.entities.CoParentingMessage.filter(
         { partnership_id: partnershipId }, "created_date", 500
       );
@@ -30,7 +33,7 @@ Deno.serve(async (req) => {
     }
 
     // Also fetch audit logs for hash verification
-    const auditLogs = await base44.asServiceRole.entities.MessageAuditLog.filter(
+    const auditLogs = await base44.entities.MessageAuditLog.filter(
       { partnership_id: partnershipId || "" }, "sent_at", 500
     );
 

@@ -6,6 +6,10 @@
       "type": "string",
       "description": "ID of the ProfessionalListing"
     },
+    "professional_email": {
+      "type": "string",
+      "description": "Email of the professional receiving this request"
+    },
     "professional_name": {
       "type": "string"
     },
@@ -47,5 +51,31 @@
     "professional_id",
     "parent_email",
     "message"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "parent_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "parent_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

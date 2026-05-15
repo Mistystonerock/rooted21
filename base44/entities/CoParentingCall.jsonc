@@ -22,6 +22,10 @@
       "type": "string",
       "description": "Name of the other parent"
     },
+    "court_email": {
+      "type": "string",
+      "description": "Assigned court staff email allowed to review this call"
+    },
     "start_time": {
       "type": "string",
       "format": "date-time",
@@ -99,5 +103,37 @@
     "initiator_email",
     "recipient_email",
     "start_time"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "initiator_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "initiator_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "initiator_email": "{{user.email}}"
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { queryClientInstance } from '@/lib/query-client';
 
 const AuthContext = createContext();
 
@@ -35,6 +36,13 @@ export const AuthProvider = ({ children }) => {
     checkUserAuth();
   }, []);
 
+  const logout = async () => {
+    queryClientInstance.clear();
+    localStorage.clear();
+    sessionStorage.clear();
+    await base44.auth.logout('/');
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -43,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       authChecked,
       authError,
       checkUserAuth,
+      logout,
     }}>
       {children}
     </AuthContext.Provider>

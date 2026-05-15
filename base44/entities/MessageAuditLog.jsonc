@@ -54,5 +54,24 @@
     "sender_email",
     "sent_at",
     "content_hash"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "sender_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "sender_email": "{{user.email}}"
+    },
+    "delete": {
+      "sender_email": "{{user.email}}"
+    }
+  }
 }

@@ -10,6 +10,10 @@
       "type": "string",
       "description": "ID of the ClassEnrollment"
     },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the participant who submitted feedback"
+    },
     "instructor_rating": {
       "type": "number",
       "minimum": 1,
@@ -46,5 +50,38 @@
     "enrollment_id",
     "instructor_rating",
     "content_rating"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    }
+  }
 }

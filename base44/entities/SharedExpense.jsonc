@@ -97,5 +97,31 @@
     "category",
     "total_amount",
     "paid_by_email"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "paid_by_email": "{{user.email}}"
+        },
+        {
+          "other_parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "paid_by_email": "{{user.email}}"
+        },
+        {
+          "other_parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "paid_by_email": "{{user.email}}"
+    }
+  }
 }

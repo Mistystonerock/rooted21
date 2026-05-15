@@ -55,8 +55,12 @@ export default function CoParentMessaging() {
       if (!hasCoParentMessageConsent()) {
         setShowConsentModal(true);
       }
-      const ps = await base44.entities.CoParentingPartnership.list();
-      const p = ps.find(x => x.id === partnershipId);
+      const matches = await base44.entities.CoParentingPartnership.filter({ id: partnershipId }, "", 1);
+      const p = matches[0];
+      if (!p || (p.parent_1_email !== u.email && p.parent_2_email !== u.email && p.court_email !== u.email)) {
+        navigate("/co-parent-portal");
+        return;
+      }
       setPartnership(p);
       const msgs = await base44.entities.CoParentingMessage.filter(
         { partnership_id: partnershipId }, "created_date", 500
@@ -90,10 +94,13 @@ export default function CoParentMessaging() {
     const sentAt = new Date().toISOString();
     const hash = await hashBody(txt);
 
+    const recipientEmail = partnership?.parent_1_email === user.email ? partnership?.parent_2_email : partnership?.parent_1_email;
     const msgData = {
       partnership_id: partnershipId,
       sender_email: user.email,
       sender_name: user.full_name,
+      recipient_email: recipientEmail,
+      court_email: partnership?.court_email,
       body: txt,
       topic,
     };
@@ -163,6 +170,7 @@ export default function CoParentMessaging() {
       initiator_name: user.full_name,
       recipient_email: partnership?.parent_1_email === user?.email ? partnership?.parent_2_email : partnership?.parent_1_email,
       recipient_name: partnership?.parent_1_email === user?.email ? partnership?.parent_2_name : partnership?.parent_1_name,
+      court_email: partnership?.court_email,
       start_time: new Date().toISOString(),
       status: "answered",
       child_name: partnership?.child_name,

@@ -44,5 +44,17 @@
     "badge_type",
     "badge_name",
     "badge_emoji"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "parent_email": "{{user.email}}"
+    },
+    "update": {
+      "parent_email": "{{user.email}}"
+    },
+    "delete": {
+      "parent_email": "{{user.email}}"
+    }
+  }
 }

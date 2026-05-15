@@ -6,6 +6,10 @@
       "type": "string",
       "description": "ID of the CaseFile"
     },
+    "case_owner_email": {
+      "type": "string",
+      "description": "Email of the parent/caregiver who owns the case"
+    },
     "author_email": {
       "type": "string",
       "description": "Email of person who created the note"
@@ -52,5 +56,24 @@
     "author_email",
     "note_type",
     "body"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "case_owner_email": "{{user.email}}"
+        },
+        {
+          "author_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "author_email": "{{user.email}}"
+    },
+    "delete": {
+      "author_email": "{{user.email}}"
+    }
+  }
 }

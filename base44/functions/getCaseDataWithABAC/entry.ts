@@ -11,7 +11,7 @@ const ROLE_PERMISSIONS = {
 
 async function canAccessCase(base44, user, caseId) {
   if (!user || !caseId) return false;
-  if (user.role === 'founder' || user.role === 'admin') return true;
+  if (user.role === 'founder') return true;
 
   const caseAccess = await base44.asServiceRole.entities.CaseAccess.filter(
     { case_id: caseId, assigned_email: user.email, is_active: true },
@@ -73,6 +73,12 @@ Deno.serve(async (req) => {
     }
 
     const caseRecord = cases[0];
+    if (caseRecord.parent_email !== user.email && user.role !== 'founder') {
+      const assigned = await base44.asServiceRole.entities.CaseAccess.filter({ case_id, assigned_email: user.email, is_active: true }, undefined, 1);
+      if (!assigned.length) {
+        return Response.json({ error: 'Access denied to this case' }, { status: 403 });
+      }
+    }
 
     // Fetch related data
     const [documents, caseNotes] = await Promise.all([
