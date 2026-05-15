@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
 
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-    await base44.entities.AccessCode.create({
+    await base44.asServiceRole.entities.AccessCode.create({
       code,
       created_by_user_id: user.id,
       created_by_email: user.email,

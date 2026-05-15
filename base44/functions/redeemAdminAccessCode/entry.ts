@@ -43,8 +43,12 @@ Deno.serve(async (req) => {
       used_at: new Date().toISOString(),
     });
 
-    // Update user role to admin
-    await base44.auth.updateMe({ role: 'admin' });
+    // Update user role to admin and unlock the full app immediately
+    await base44.auth.updateMe({
+      role: 'admin',
+      onboarding_completed: true,
+      has_viewed_app: true,
+    });
 
     // Create admin permissions record with default permissions
     await base44.asServiceRole.entities.AdminPermissions.create({

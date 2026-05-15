@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
     let isUnique = false;
     while (!isUnique) {
       code = generateCode();
-      const existing = await base44.entities.AdminAccessCode.filter({ code }, "", 1);
+      const existing = await base44.asServiceRole.entities.AdminAccessCode.filter({ code }, "", 1);
       isUnique = existing.length === 0;
     }
 
@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
     expiresAt.setDate(expiresAt.getDate() + 30);
 
     // Create the access code
-    const accessCode = await base44.entities.AdminAccessCode.create({
+    const accessCode = await base44.asServiceRole.entities.AdminAccessCode.create({
       code,
       created_by: user.email,
       created_for: created_for || null,
@@ -39,6 +39,7 @@ Deno.serve(async (req) => {
     });
 
     return Response.json({ 
+      success: true,
       id: accessCode.id,
       code: accessCode.code,
       expires_at: accessCode.expires_at,

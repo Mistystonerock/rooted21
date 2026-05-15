@@ -31,18 +31,22 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
       return;
     }
 
-    const response = trimmed.length === 8
-      ? await base44.functions.invoke("redeemBetaTesterCode", { code: trimmed })
-      : await base44.functions.invoke("redeemAdminAccessCode", { code: trimmed });
+    try {
+      const response = trimmed.length === 8
+        ? await base44.functions.invoke("redeemBetaTesterCode", { code: trimmed })
+        : await base44.functions.invoke("redeemAdminAccessCode", { code: trimmed });
 
-    if (response.data?.success) {
-      setSuccess(true);
-      setTimeout(() => {
-        onSuccess();
-        window.location.reload();
-      }, 1500);
-    } else {
-      setError(response.data?.error || "Invalid or expired code");
+      if (response.data?.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          onSuccess();
+          window.location.reload();
+        }, 1500);
+      } else {
+        setError(response.data?.error || "Invalid or expired code");
+      }
+    } catch (err) {
+      setError(err?.response?.data?.error || "Invalid or expired code");
     }
     setLoading(false);
   }
