@@ -50,6 +50,8 @@ Deno.serve(async (req) => {
       role: mapRole(betaCode.tester_role),
       beta_access_expires_at: accessExpiresAt.toISOString(),
       beta_tester_role: betaCode.tester_role,
+      onboarding_completed: true,
+      has_viewed_app: true,
     });
 
     return Response.json({

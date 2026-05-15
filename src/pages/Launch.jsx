@@ -252,7 +252,7 @@ export default function Launch() {
                 <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
               </div>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here.</label>
+                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here for full program access.</label>
                 <input type="text" value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta code" maxLength={8} style={{ ...inp, textTransform: "uppercase", letterSpacing: "0.08em" }} />
               </div>
 

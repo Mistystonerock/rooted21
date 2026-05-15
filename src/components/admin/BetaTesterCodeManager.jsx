@@ -53,7 +53,7 @@ export default function BetaTesterCodeManager() {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>Beta Tester Codes</p>
-          <p className="text-xs mt-1 leading-relaxed" style={{ color: C.mutedText }}>Beta Tester Codes — Share these with trusted testers only. Each code can only be used once.</p>
+          <p className="text-xs mt-1 leading-relaxed" style={{ color: C.mutedText }}>Beta Tester Codes — Share these with trusted testers only. Each code can only be used once and unlocks the full program for 30 days.</p>
         </div>
         <button onClick={generateCodes} disabled={generating} className="px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2" style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: generating ? "default" : "pointer", opacity: generating ? 0.7 : 1 }}>
           <RefreshCw size={13} className={generating ? "animate-spin" : ""} /> Generate Beta Tester Codes
