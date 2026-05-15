@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { supabase } from "@/api/supabaseClient";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2 } from "lucide-react";
 import FontSizeControl from "@/components/accessibility/FontSizeControl";
@@ -13,6 +14,8 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteError, setDeleteError] = useState("");
   const [deletingAccount, setDeletingAccount] = useState(false);
 
   useEffect(() => {
@@ -31,14 +34,36 @@ export default function Profile() {
     setTimeout(() => setSaved(false), 2500);
   }
 
+  async function clearLocalData() {
+    localStorage.setItem("account_deleted_message", "Your account has been permanently deleted.");
+    sessionStorage.clear();
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(key => caches.delete(key)));
+    }
+  }
+
   async function handleDeleteAccount() {
+    if (deleteConfirmText !== "DELETE") {
+      setDeleteError("Please type DELETE to confirm.");
+      return;
+    }
+
     setDeletingAccount(true);
+    setDeleteError("");
     try {
-      // Call backend function or API to delete account
-      // For now, we'll just log out and redirect
+      const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+      await base44.functions.invoke("deleteSupabaseAccount", {
+        confirmText: deleteConfirmText,
+        supabaseUserId: supabaseUser?.id || null,
+      });
+      await supabase.auth.signOut();
+      await clearLocalData();
+      localStorage.setItem("account_deleted_message", "Your account has been permanently deleted.");
       await base44.auth.logout("/");
     } catch (error) {
       console.error("Error deleting account:", error);
+      setDeleteError("We couldn't delete your account. Please try again.");
       setDeletingAccount(false);
     }
   }
@@ -200,15 +225,26 @@ export default function Profile() {
             <div className="flex items-start gap-2 mb-3">
               <AlertTriangle size={16} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-bold mb-1" style={{ color: "#B84C2A" }}>Delete Account?</p>
+                <p className="text-xs font-bold mb-1" style={{ color: "#B84C2A" }}>Are you absolutely sure?</p>
                 <p className="text-[11px]" style={{ color: "#B84C2A" }}>
-                  This will permanently delete your account and all associated data including child profiles, journal entries, lessons, goals, and calendar events. This cannot be undone.
+                  This will permanently delete your account and all your data including behavior logs, check-ins, safety plans, child profiles, and messages. This cannot be undone.
                 </p>
               </div>
             </div>
+            <div className="mb-3">
+              <label className="mb-1 block text-[11px] font-bold" style={{ color: "#B84C2A" }}>Type DELETE to confirm</label>
+              <input
+                value={deleteConfirmText}
+                onChange={e => setDeleteConfirmText(e.target.value)}
+                placeholder="DELETE"
+                className="w-full rounded-lg px-3 py-2 text-sm font-bold"
+                style={{ border: "1px solid #F4C9B8", background: "#ffffff", color: "#1a1a1a" }}
+              />
+              {deleteError && <p className="mt-1 text-[11px] font-bold" style={{ color: "#B42318" }}>{deleteError}</p>}
+            </div>
             <div className="flex gap-2">
               <button
-                onClick={() => setShowDeleteConfirm(false)}
+                onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(""); setDeleteError(""); }}
                 className="flex-1 py-2 rounded-lg text-xs font-bold"
                 style={{ background: C.white, color: C.darkGreen, border: `1px solid ${C.cream}`, cursor: "pointer" }}
               >
@@ -216,9 +252,9 @@ export default function Profile() {
               </button>
               <button
                 onClick={handleDeleteAccount}
-                disabled={deletingAccount}
+                disabled={deletingAccount || deleteConfirmText !== "DELETE"}
                 className="flex-1 py-2 rounded-lg text-xs font-bold"
-                style={{ background: "#B84C2A", color: C.white, border: "none", cursor: "pointer", opacity: deletingAccount ? 0.7 : 1 }}
+                style={{ background: "#B84C2A", color: C.white, border: "none", cursor: deleteConfirmText === "DELETE" ? "pointer" : "not-allowed", opacity: deletingAccount || deleteConfirmText !== "DELETE" ? 0.7 : 1 }}
               >
                 {deletingAccount ? "Deleting…" : "Yes, Delete"}
               </button>

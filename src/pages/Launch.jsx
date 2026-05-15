@@ -63,8 +63,14 @@ export default function Launch() {
   const [count, setCount] = useState(null);
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [activeTruth, setActiveTruth] = useState(0);
+  const [deletedMessage, setDeletedMessage] = useState("");
 
   useEffect(() => {
+    const message = localStorage.getItem("account_deleted_message");
+    if (message) {
+      setDeletedMessage(message);
+      localStorage.removeItem("account_deleted_message");
+    }
     base44.entities.WaitlistSignup.list("-created_date", 1000).then(list => setCount(list.length)).catch(() => {});
     const t = setInterval(() => setActiveTruth(n => (n + 1) % TRUTHS.length), 4000);
     return () => clearInterval(t);
@@ -133,6 +139,11 @@ export default function Launch() {
       </div>
 
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px", position: "relative", zIndex: 1 }}>
+        {deletedMessage && (
+          <div style={{ background: "#EAF4EA", border: `1.5px solid ${GREEN}40`, color: TEXT, borderRadius: 14, padding: "12px 14px", margin: "8px 0 14px", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
+            {deletedMessage}
+          </div>
+        )}
 
         {/* ── HERO ── */}
         <div style={{ textAlign: "center", padding: "20px 0 28px" }}>
