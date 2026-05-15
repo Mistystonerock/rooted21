@@ -99,7 +99,7 @@ function App() {
         <ProfessionalGate user={user}>
         <SkipToContentLink />
         {user && (
-          <div className="fixed right-3 top-3 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+          <div className="fixed right-3 top-16 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <LogoutButton />
           </div>
         )}
