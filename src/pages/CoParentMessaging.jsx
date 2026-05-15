@@ -6,6 +6,7 @@ import { ChevronLeft, Send, ShieldCheck, Download, Loader2, ShieldAlert } from "
 import CoParentMessageConsentModal, { hasCoParentMessageConsent } from "@/components/legal/CoParentMessageConsentModal";
 import ConflictLanguageChecker from "@/components/messaging/ConflictLanguageChecker";
 import TensionAlert from "@/components/messaging/TensionAlert";
+import IncomingMessageToneCoach from "@/components/messaging/IncomingMessageToneCoach";
 import VoiceCallButton from "@/components/coparenting/VoiceCallButton";
 import CoParentingCallHistory from "@/components/coparenting/CoParentingCallHistory";
 import CourtReportGenerator from "@/components/coparenting/CourtReportGenerator";
@@ -225,6 +226,7 @@ export default function CoParentMessaging() {
   const coparent = partnership?.parent_1_email === user?.email
     ? partnership?.parent_2_name
     : partnership?.parent_1_name;
+  const latestIncomingMessage = [...messages].reverse().find(msg => msg.sender_email !== user?.email);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
@@ -394,6 +396,13 @@ export default function CoParentMessaging() {
         )}
         <div ref={bottomRef} />
       </div>
+
+      {activeTab === "messages" && latestIncomingMessage && (
+        <IncomingMessageToneCoach
+          message={latestIncomingMessage}
+          onUseSuggestion={(text) => setInput(text)}
+        />
+      )}
 
       {/* Conflict checker modal */}
       {showConflictCheck && (

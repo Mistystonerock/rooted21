@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `You are a trauma-informed communication coach helping parents keep written messages professional, neutral, and court-appropriate.
 
-Analyze the pasted communication thread or draft below. Focus on tone, escalation risk, potential emotional/legal triggers, and how the parent can respond in a factual, calm, child-focused way.
+Analyze the pasted communication thread or draft below. Focus on tone, emotional volatility, escalation risk, potential emotional/legal triggers, and how the parent can respond in a factual, calm, child-focused, collaborative way.
 
 Context: ${context}
 
@@ -30,6 +30,7 @@ ${cleanedText.slice(0, 12000)}
 
 Return only valid JSON with:
 - overall_tone: concise tone label
+- emotional_volatility: low, elevated, or high
 - risk_level: low, medium, or high
 - court_readiness_score: 0-100 where 100 is very professional and court-appropriate
 - summary: 2-3 sentence plain-English summary
@@ -44,6 +45,7 @@ Do not give legal advice. Keep the rewrite factual, brief, child-focused, and no
         type: 'object',
         properties: {
           overall_tone: { type: 'string' },
+          emotional_volatility: { type: 'string' },
           risk_level: { type: 'string' },
           court_readiness_score: { type: 'number' },
           summary: { type: 'string' },
