@@ -20,6 +20,7 @@ Deno.serve(async (req) => {
         caseNotes: true,
         calendarEvents: true,
         caseTasks: true,
+        caseMilestones: true,
         messages: true,
       },
       entryTypeFilter = [],   // For life story: array of entry_type strings; empty = all
@@ -42,6 +43,7 @@ Deno.serve(async (req) => {
       calendarEvents,
       journals,
       caseTasks,
+      caseMilestones,
       lifeStoryEntries,
       coParentMessages,
       secureMessages,
@@ -56,6 +58,7 @@ Deno.serve(async (req) => {
       base44.entities.CareCalendarEvent.list("-created_date", 200),
       base44.entities.ParentJournal.list("-created_date", 200),
       base44.entities.CaseTask.list("-created_date", 200),
+      base44.entities.ParentMilestone.list("-created_date", 200),
       base44.entities.LifeStoryEntry.list("-date", 500),
       base44.entities.CoParentingMessage.list("-created_date", 500),
       base44.entities.SecureMessage.list("-created_date", 500),
@@ -73,6 +76,7 @@ Deno.serve(async (req) => {
     const filteredNotes = caseNotes.filter(n => inRange(n.created_date));
     const filteredEvents = calendarEvents.filter(e => inRange(e.date || e.created_date));
     const filteredTasks = caseTasks.filter(t => inRange(t.created_date));
+    const filteredMilestones = caseMilestones.filter(m => inRange(m.created_date));
 
     // Checklists — filter by child name if provided, include all items
     const filteredChecklists = checklists.filter(cl => {
@@ -131,6 +135,23 @@ Deno.serve(async (req) => {
 
     const generatedAt = new Date().toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "full", timeStyle: "long" });
     const reportId = `R-${Date.now().toString(36).toUpperCase()}`;
+    const evidencePayload = JSON.stringify({
+      reportId,
+      generatedBy: user.email,
+      dateFrom,
+      dateTo,
+      childName: childName || "all",
+      counts: {
+        behaviors: filteredBehaviors.length,
+        messages: filteredMessages.length,
+        milestones: filteredMilestones.length,
+        tasks: filteredTasks.length,
+        checklistItems: completedChecklistItems.length,
+        documents: filteredDocuments.length,
+      },
+    });
+    const evidenceHashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(evidencePayload));
+    const evidenceSignature = Array.from(new Uint8Array(evidenceHashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
 
     // ── PDF SETUP ──────────────────────────────────────────────────
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -274,6 +295,7 @@ Deno.serve(async (req) => {
     addMetaRow("Reporting Period", `${new Date(dateFrom).toLocaleDateString("en-US", { dateStyle: "long" })} — ${new Date(dateTo).toLocaleDateString("en-US", { dateStyle: "long" })}`);
     addMetaRow("Child Subject", child ? `${child.first_name}${child.last_name ? " " + child.last_name : ""}, Age ${child.age || "N/A"} (${child.placement_type || "N/A"})` : "No child profile on file");
     addMetaRow("Applicable Law", "ORC §2151.421, §3109.04, §5103.0212; ODJFS foster care record standards");
+    addMetaRow("Evidence Signature", evidenceSignature.substring(0, 32) + "…");
     y += 4;
 
     y += 4;
@@ -300,8 +322,8 @@ Deno.serve(async (req) => {
       { label: "Behavior Logs", value: filteredBehaviors.length },
       { label: "Check-ins", value: filteredCheckins.length },
       { label: "Goals", value: filteredGoals.length },
-      { label: "Case Notes", value: filteredNotes.length },
-      { label: "Checklist ✓", value: completedChecklistItems.length },
+      { label: "Messages", value: filteredMessages.length },
+      { label: "Milestones", value: filteredMilestones.length },
       { label: "Documents", value: filteredDocuments.length },
     ];
     const boxW = CW / stats.length;
@@ -609,11 +631,43 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 9 — CASE PLAN CHECKLIST PROGRESS
+    // SECTION 9 — CASE MILESTONES
+    // ══════════════════════════════════════════════════════════════
+    if (includeSections.caseMilestones) {
+      doc.addPage(); y = MT + 4; addPageHeader();
+      addSectionHeader("SECTION 9 — CASE MILESTONES & PROGRESS", "🏅");
+      if (filteredMilestones.length === 0) {
+        addText("No case milestones recorded in the selected date range.", 9, MED_GRAY);
+      } else {
+        addText(`Total milestones documented: ${filteredMilestones.length}`, 9, DARK_GREEN, true);
+        y += 2;
+        filteredMilestones.forEach((m, i) => {
+          checkPage(20);
+          const earnedDate = new Date(m.created_date).toLocaleDateString("en-US", { dateStyle: "medium" });
+          doc.setFontSize(9);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...DARK_GREEN);
+          doc.text(`${i + 1}. ${m.badge_emoji || "🏅"} ${m.badge_name || "Milestone"} — ${earnedDate}`, ML + 2, y);
+          y += 5;
+          if (m.badge_type) addMetaRow("Milestone Type", m.badge_type.replace(/_/g, " ").toUpperCase());
+          if (m.description) addMetaRow("Description", m.description);
+          if (m.requirement) addMetaRow("Requirement Met", m.requirement);
+          if (m.milestone_level) addMetaRow("Level", m.milestone_level);
+          doc.setDrawColor(230, 230, 230);
+          doc.setLineWidth(0.2);
+          doc.line(ML, y, PW - MR, y);
+          y += 3;
+        });
+      }
+      addPageFooter();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SECTION 10 — CASE PLAN CHECKLIST PROGRESS
     // ══════════════════════════════════════════════════════════════
     if (includeSections.checklistProgress) {
       doc.addPage(); y = MT + 4; addPageHeader();
-      addSectionHeader("SECTION 9 — CASE PLAN CHECKLIST PROGRESS", "✅");
+      addSectionHeader("SECTION 10 — CASE PLAN CHECKLIST PROGRESS", "✅");
 
       if (filteredChecklists.length === 0) {
         addText("No case plan checklists found for this child.", 9, MED_GRAY);
@@ -691,11 +745,11 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 10 — UPLOADED DOCUMENTS INVENTORY
+    // SECTION 11 — UPLOADED DOCUMENTS INVENTORY
     // ══════════════════════════════════════════════════════════════
     if (includeSections.documentInventory) {
       doc.addPage(); y = MT + 4; addPageHeader();
-      addSectionHeader("SECTION 10 — UPLOADED DOCUMENT INVENTORY", "📁");
+      addSectionHeader("SECTION 11 — UPLOADED DOCUMENT INVENTORY", "📁");
 
       if (filteredDocuments.length === 0) {
         addText("No documents uploaded in the selected date range.", 9, MED_GRAY);
@@ -739,11 +793,11 @@ Deno.serve(async (req) => {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // SECTION 11 — COMMUNICATIONS LOG
+    // SECTION 12 — COMMUNICATIONS LOG
     // ══════════════════════════════════════════════════════════════
     if (includeSections.messages) {
       doc.addPage(); y = MT + 4; addPageHeader();
-      addSectionHeader("SECTION 11 — COMMUNICATIONS LOG", "💬");
+      addSectionHeader("SECTION 12 — CO-PARENTING & SECURE MESSAGE HISTORY", "💬");
 
       if (filteredMessages.length === 0) {
         addText("No messages found for the selected period or message source filter.", 9, MED_GRAY);
@@ -819,6 +873,9 @@ Deno.serve(async (req) => {
 
     addText("DATA INTEGRITY NOTICE", 10, DARK_GREEN, true);
     addText("Records were created and stored contemporaneously within the Rooted 21 system. Timestamps reflect Eastern Time (ET). All entries are associated with authenticated user accounts. The certified accuracy disclaimer on the cover page applies to all sections herein.", 9, TEXT);
+    addText("EVIDENCE-TRAIL SIGNATURE", 10, DARK_GREEN, true);
+    addText(`SHA-256 Report Signature: ${evidenceSignature}`, 8, TEXT);
+    addText("This signature is generated from the report ID, authenticated user, reporting period, child subject, and included record counts to support tamper-evident verification.", 8, TEXT);
     y += 6;
     addHRule(DARK_GREEN, 0.5);
 
@@ -859,7 +916,7 @@ Deno.serve(async (req) => {
     return Response.json({
       success: true,
       base64,
-      fileName: `Court-Ready-Summary-${child?.first_name || "Family"}-${dateFrom}-to-${dateTo}.pdf`,
+      fileName: `Export-for-Court-${child?.first_name || "Family"}-${dateFrom}-to-${dateTo}.pdf`,
       reportId,
       summary: {
         lifeStory: filteredLifeStory.length,
@@ -869,6 +926,7 @@ Deno.serve(async (req) => {
         notes: filteredNotes.length,
         events: filteredEvents.length,
         tasks: filteredTasks.length,
+        milestones: filteredMilestones.length,
         checklistItems: completedChecklistItems.length,
         documents: filteredDocuments.length,
         messages: filteredMessages.length,

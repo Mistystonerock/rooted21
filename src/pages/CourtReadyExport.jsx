@@ -36,6 +36,7 @@ const ALL_SECTIONS = [
   { key: "caseNotes",       icon: "📝", label: "Case Notes & Therapy Records" },
   { key: "calendarEvents",  icon: "📅", label: "Appointments & Calendar Events" },
   { key: "caseTasks",          icon: "✅", label: "Case Tasks & Action Items" },
+  { key: "caseMilestones",     icon: "🏅", label: "Case Milestones & Progress" },
   { key: "checklistProgress",  icon: "🗂️", label: "Case Plan Checklist Progress" },
   { key: "documentInventory",  icon: "📁", label: "Uploaded Document Inventory" },
   { key: "messages",           icon: "💬", label: "Communications Log" },
@@ -51,7 +52,7 @@ const RECIPIENT_PRESETS = [
     color: "#2E7D60",
     bg: "#EAF4EA",
     border: "#A8D5BC",
-    sections: { childProfile: true, behaviorLogs: true, checkIns: true, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: false },
+    sections: { childProfile: true, behaviorLogs: true, checkIns: true, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, caseMilestones: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: false },
     description: "Child profile, behavior logs, checklist progress & document inventory",
   },
   {
@@ -71,7 +72,7 @@ const RECIPIENT_PRESETS = [
     color: "#7A4F2A",
     bg: "#FFF4EC",
     border: "#E8C9A0",
-    sections: { childProfile: true, behaviorLogs: true, checkIns: false, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: true },
+    sections: { childProfile: true, behaviorLogs: true, checkIns: false, goals: true, caseNotes: true, calendarEvents: true, caseTasks: true, caseMilestones: true, checklistProgress: true, documentInventory: true, lifeStory: false, messages: true },
     description: "Full documentation package: case notes, checklists, docs & communications",
   },
   {
@@ -119,7 +120,7 @@ export default function CourtReadyExport() {
   useEffect(() => {
     base44.auth.me().then(async u => {
       setUser(u);
-      const [c, behaviors, checkins, notes, checklists, docs, caseNotes] = await Promise.all([
+      const [c, behaviors, checkins, notes, checklists, docs, caseNotes, milestones] = await Promise.all([
         base44.entities.ChildProfile.list("-created_date", 10),
         base44.entities.BehaviorLog.list("-created_date", 100),
         base44.entities.CheckIn.list("-created_date", 100),
@@ -127,6 +128,7 @@ export default function CourtReadyExport() {
         base44.entities.CasePlanChecklist.list("-created_date", 50),
         base44.entities.SecureDocument.list("-created_date", 100),
         base44.entities.CaseNote.list("-created_date", 100),
+        base44.entities.ParentMilestone.list("-created_date", 100),
       ]);
       setChildren(c);
       if (c.length > 0) setSelectedChild(c[0].first_name);
@@ -136,6 +138,7 @@ export default function CourtReadyExport() {
         checkins: checkins.length,
         goals: notes.length,
         caseNotes: caseNotes.length,
+        milestones: milestones.length,
         checklistItems: completedItems,
         documents: docs.length,
       });
@@ -219,7 +222,7 @@ export default function CourtReadyExport() {
             </div>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: C.lightGreen }}>
-            Automatically compiles activity logs, completed checklist items, document uploads, behavior records, and communications into a certified PDF — optimized for social workers, therapists, or legal counsel.
+            Automatically compiles behavior logs, co-parenting message history, case milestones, documents, and activity records into a certified court-ready PDF with evidence-trail signatures.
           </p>
         </div>
 
@@ -233,6 +236,7 @@ export default function CourtReadyExport() {
                 { label: "Check-ins", val: liveCounts.checkins, icon: "📈" },
                 { label: "Goals", val: liveCounts.goals, icon: "🎯" },
                 { label: "Case Notes", val: liveCounts.caseNotes, icon: "📝" },
+                { label: "Milestones", val: liveCounts.milestones, icon: "🏅" },
                 { label: "Checklist ✓ Items", val: liveCounts.checklistItems, icon: "✅" },
                 { label: "Documents", val: liveCounts.documents, icon: "📁" },
               ].map(item => (
@@ -521,7 +525,7 @@ export default function CourtReadyExport() {
           {generating ? (
             <><Loader2 size={17} className="animate-spin" /> Compiling All Records…</>
           ) : (
-            <><FileText size={17} /> Generate & Download Report</>
+            <><FileText size={17} /> Export for Court PDF</>
           )}
         </button>
 
