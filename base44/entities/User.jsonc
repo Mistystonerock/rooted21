@@ -28,6 +28,11 @@
       "default": false,
       "description": "Whether user has accessed the app"
     },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has completed the required first-login onboarding flow"
+    },
     "last_login": {
       "type": "string",
       "format": "date-time",

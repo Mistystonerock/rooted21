@@ -56,9 +56,11 @@ import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
 import Donate from '@/pages/Donate';
 import LogoutButton from '@/components/auth/LogoutButton';
+import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 
 function App() {
   const [user, setUser] = React.useState(null);
+  const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
     base44.auth.me().then(async u => {
@@ -103,6 +105,9 @@ function App() {
         )}
         <Router>
           <AnimatePresence mode="wait">
+            {needsOnboarding ? (
+              <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
+            ) : (
             <Routes>
               <Route path="/" element={<Launch />} />
               <Route path="/donate" element={<Donate />} />
@@ -234,6 +239,7 @@ function App() {
               <Route path="/accessibility" element={<Suspense fallback={<LoadingFallback />}><AccessibilityStatement /></Suspense>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
+            )}
           </AnimatePresence>
         </Router>
         </ProfessionalGate>
