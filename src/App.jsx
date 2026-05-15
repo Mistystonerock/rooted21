@@ -74,6 +74,8 @@ function App() {
         if (pendingBetaCode) {
           await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
           localStorage.removeItem("pending_beta_code");
+          const refreshedUser = await base44.auth.me();
+          setUser(refreshedUser);
         }
 
         const pendingAdminCode = localStorage.getItem("pending_admin_code");

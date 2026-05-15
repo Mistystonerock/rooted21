@@ -43,9 +43,21 @@ Deno.serve(async (req) => {
       used_at: new Date().toISOString(),
     });
 
-    await base44.auth.updateMe({ role: mapRole(betaCode.tester_role) });
+    const accessExpiresAt = new Date();
+    accessExpiresAt.setDate(accessExpiresAt.getDate() + 30);
 
-    return Response.json({ success: true, role: betaCode.tester_role, message: 'Beta tester access activated' });
+    await base44.auth.updateMe({
+      role: mapRole(betaCode.tester_role),
+      beta_access_expires_at: accessExpiresAt.toISOString(),
+      beta_tester_role: betaCode.tester_role,
+    });
+
+    return Response.json({
+      success: true,
+      role: betaCode.tester_role,
+      beta_access_expires_at: accessExpiresAt.toISOString(),
+      message: 'Beta tester full access activated for 30 days'
+    });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

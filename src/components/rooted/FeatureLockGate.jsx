@@ -8,8 +8,9 @@ export default function FeatureLockGate({ children, user }) {
   const isFounder = user?.role === "founder";
   const isAdmin = user?.role === "admin";
   const isAllowedBeta = user?.email === "fish_hunter15@hotmail.com";
+  const hasActiveBetaAccess = user?.beta_access_expires_at && new Date(user.beta_access_expires_at) >= new Date();
 
-  if (isFounder || isAdmin || isAllowedBeta || isLaunched) {
+  if (isFounder || isAdmin || isAllowedBeta || hasActiveBetaAccess || isLaunched) {
     return children;
   }
 
