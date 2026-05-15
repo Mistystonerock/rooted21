@@ -7,7 +7,7 @@ import DonationPanel from "@/components/launch/DonationPanel";
 import QuickPageSearch from "@/components/launch/QuickPageSearch";
 import { Sparkles, ChevronRight } from "lucide-react";
 
-const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
+const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
 
 function useCountdown() {
   const [time, setTime] = useState(() => getTimeLeft());
@@ -157,7 +157,7 @@ export default function Launch() {
             </div>
             <div style={{ width: 1, height: 40, background: BORDER }} />
             <div style={{ textAlign: "left" }}>
-              <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, margin: 0 }}>Opening June 10, 2026</p>
+              <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, margin: 0 }}>Opening July 10, 2026</p>
               <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
             </div>
           </div>
