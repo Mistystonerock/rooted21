@@ -20,33 +20,31 @@ Deno.serve(async (req) => {
 
     const { child_name } = await req.json();
 
-    // Generate unique code
     let code;
     let isUnique = false;
     while (!isUnique) {
       code = generateCode();
-      const existing = await base44.entities.InvitationCode.filter(
-        { code, used: false }
-      );
+      const existing = await base44.asServiceRole.entities.AccessCode.filter({ code });
       isUnique = existing.length === 0;
     }
 
-    // Create invitation code (expires in 30 days)
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-    const invitation = await base44.entities.InvitationCode.create({
+    await base44.entities.AccessCode.create({
       code,
-      parent_email: user.email,
-      parent_name: user.full_name,
-      child_name: child_name || 'Not specified',
+      created_by_user_id: user.id,
+      created_by_email: user.email,
+      created_by_name: user.full_name || user.email,
+      role_type: 'professional',
+      status: 'active',
       expires_at: expiresAt.toISOString(),
-      used: false
+      child_name: child_name || ''
     });
 
     return Response.json({
       code,
       expiresAt: expiresAt.toISOString(),
-      message: 'Invitation code generated successfully'
+      message: 'Professional access code generated successfully'
     });
   } catch (error) {
     console.error('Error generating code:', error);

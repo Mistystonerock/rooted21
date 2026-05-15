@@ -4,42 +4,71 @@
   "properties": {
     "code": {
       "type": "string",
-      "description": "Unique 6-character alphanumeric access code"
+      "description": "Unique 6-character alphanumeric professional access code"
     },
-    "professional_email": {
+    "created_by_user_id": {
       "type": "string",
-      "description": "Email of the professional who generated this code"
+      "description": "Parent user ID who created this code"
     },
-    "professional_name": {
+    "created_by_email": {
       "type": "string",
-      "description": "Display name of the professional"
+      "description": "Parent email who created this code"
     },
-    "professional_role": {
+    "created_by_name": {
       "type": "string",
-      "description": "Role of the professional"
+      "description": "Parent display name who created this code"
     },
-    "family_name": {
+    "role_type": {
       "type": "string",
-      "description": "Optional label for the intended family"
+      "enum": [
+        "professional"
+      ],
+      "default": "professional",
+      "description": "Type of user this code is intended for"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "used",
+        "expired",
+        "revoked"
+      ],
+      "default": "active",
+      "description": "Current status of this access code"
     },
     "expires_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Expiration timestamp of this code"
+      "description": "Expiration timestamp, 30 days from creation"
     },
-    "used": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether this code has been redeemed"
+    "used_by_user_id": {
+      "type": "string",
+      "description": "Professional user ID who redeemed this code"
     },
     "used_by_email": {
       "type": "string",
-      "description": "Email of the parent who redeemed this code"
+      "description": "Professional email who redeemed this code"
+    },
+    "used_by_name": {
+      "type": "string",
+      "description": "Professional name who redeemed this code"
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this code was redeemed"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Optional child name for context"
     }
   },
   "required": [
     "code",
-    "professional_email",
+    "created_by_user_id",
+    "role_type",
+    "status",
     "expires_at"
   ],
   "rls": {
@@ -47,17 +76,32 @@
     "read": {
       "$or": [
         {
-          "professional_email": "{{user.email}}"
+          "created_by_user_id": "{{user.id}}"
+        },
+        {
+          "created_by_email": "{{user.email}}"
+        },
+        {
+          "used_by_user_id": "{{user.id}}"
         },
         {
           "used_by_email": "{{user.email}}"
+        },
+        {
+          "status": "active"
         }
       ]
     },
     "update": {
       "$or": [
         {
-          "professional_email": "{{user.email}}"
+          "created_by_user_id": "{{user.id}}"
+        },
+        {
+          "created_by_email": "{{user.email}}"
+        },
+        {
+          "used_by_user_id": "{{user.id}}"
         },
         {
           "used_by_email": "{{user.email}}"
@@ -65,7 +109,14 @@
       ]
     },
     "delete": {
-      "professional_email": "{{user.email}}"
+      "$or": [
+        {
+          "created_by_user_id": "{{user.id}}"
+        },
+        {
+          "created_by_email": "{{user.email}}"
+        }
+      ]
     }
   }
 }

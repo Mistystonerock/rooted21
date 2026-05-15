@@ -76,7 +76,7 @@ export default function RedeemInvitationModal({ onClose, onSuccess }) {
 
         <form onSubmit={handleRedeem} className="space-y-3">
           <p className="text-sm" style={{ color: C.mutedText }}>
-            Enter the 6-digit code provided by the parent/family you work with.
+            Enter the 6-character professional access code provided by the parent/family you work with.
           </p>
 
           {error && (

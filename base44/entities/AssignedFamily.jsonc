@@ -2,6 +2,10 @@
   "name": "AssignedFamily",
   "type": "object",
   "properties": {
+    "family_user_id": {
+      "type": "string",
+      "description": "Parent/family user ID"
+    },
     "family_email": {
       "type": "string",
       "description": "Email of the parent/family user"
@@ -14,9 +18,17 @@
       "type": "string",
       "description": "Child's first name"
     },
+    "professional_user_id": {
+      "type": "string",
+      "description": "Professional user ID"
+    },
     "professional_email": {
       "type": "string",
       "description": "Email of the assigned professional"
+    },
+    "professional_name": {
+      "type": "string",
+      "description": "Display name of the assigned professional"
     },
     "professional_role": {
       "type": "string",
@@ -49,5 +61,75 @@
   "required": [
     "family_email",
     "professional_email"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "family_user_id": "{{user.id}}"
+        },
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_user_id": "{{user.id}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "family_user_id": "{{user.id}}"
+        },
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_user_id": "{{user.id}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "family_user_id": "{{user.id}}"
+        },
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
 }
