@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, LayoutGrid, BookOpen, MoreHorizontal } from "lucide-react";
+import { Home, LayoutGrid, BookOpen } from "lucide-react";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 const BG = "#0f1f14";
 const BORDER = "rgba(255,255,255,0.08)";
@@ -68,11 +69,10 @@ export default function BottomNav() {
         <span style={{ fontSize: 10, fontWeight: 700 }}>Lessons</span>
       </Link>
 
-      {/* More */}
-      <Link to="/dashboard" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: MUTED }}>
-        <MoreHorizontal size={20} strokeWidth={1.8} />
-        <span style={{ fontSize: 10, fontWeight: 700 }}>More</span>
-      </Link>
+      {/* Log Out */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", color: "#ff8a80" }}>
+        <LogoutButton variant="menu" style={{ background: "transparent", border: "none", color: "#ff8a80", boxShadow: "none", padding: 0 }} />
+      </div>
     </nav>
   );
 }

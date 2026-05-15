@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2 } from "lucide-react";
 import FontSizeControl from "@/components/accessibility/FontSizeControl";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -182,6 +183,8 @@ export default function Profile() {
         >
           📋 Legal Documents & Consent Forms
         </Link>
+
+        <LogoutButton variant="large" />
 
         {/* DELETE ACCOUNT */}
         {!showDeleteConfirm ? (

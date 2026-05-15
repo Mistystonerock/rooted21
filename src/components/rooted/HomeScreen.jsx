@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { SURFACES, TEXT, CARD_COLORS } from "@/lib/design-system";
 import { Link, useNavigate } from "react-router-dom";
-import { MessageCircle, Bell, Home, LayoutGrid, BookOpen, MoreHorizontal, Sparkles, ChevronRight, Users, BookMarked, CalendarDays, Heart, Library, Shield, Calendar, Package } from "lucide-react";
+import { MessageCircle, Bell, Home, LayoutGrid, BookOpen, Sparkles, ChevronRight, Users, BookMarked, CalendarDays, Heart, Library, Shield, Calendar, Package } from "lucide-react";
 import TreeLogo from "./TreeLogo";
+import LogoutButton from "@/components/auth/LogoutButton";
 import { base44 } from "@/api/base44Client";
 
 const BG = SURFACES.appBg;
@@ -218,15 +219,14 @@ export default function HomeScreen({ onHelp, error, onOpenHistory, onOpenTrends 
           </Link>
         </div>
 
-        {[
-          { to: "/lessons", icon: <BookOpen size={20} />, label: "Lessons" },
-          { to: "/dashboard", icon: <MoreHorizontal size={20} />, label: "More" },
-        ].map(n => (
-          <Link key={n.to + n.label} to={n.to} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: MUTED }}>
-            {n.icon}
-            <span style={{ fontSize: 10, fontWeight: 700 }}>{n.label}</span>
-          </Link>
-        ))}
+        <Link to="/lessons" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: MUTED }}>
+          <BookOpen size={20} />
+          <span style={{ fontSize: 10, fontWeight: 700 }}>Lessons</span>
+        </Link>
+
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", color: "#ff8a80" }}>
+          <LogoutButton variant="menu" style={{ background: "transparent", border: "none", color: "#ff8a80", boxShadow: "none", padding: 0 }} />
+        </div>
       </div>
 
     </div>

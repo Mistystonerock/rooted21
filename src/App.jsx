@@ -55,6 +55,7 @@ import ResourceMatcher from '@/components/resources/ResourceMatcher';
 import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
 import Donate from '@/pages/Donate';
+import LogoutButton from '@/components/auth/LogoutButton';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -95,6 +96,11 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <ProfessionalGate user={user}>
         <SkipToContentLink />
+        {user && (
+          <div className="fixed right-3 top-3 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+            <LogoutButton />
+          </div>
+        )}
         <Router>
           <AnimatePresence mode="wait">
             <Routes>
