@@ -99,7 +99,9 @@
     "paid_by_email"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "paid_by_email": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {

@@ -1,0 +1,112 @@
+{
+  "name": "ProfessionalFamilyAccess",
+  "type": "object",
+  "properties": {
+    "professional_user_id": {
+      "type": "string",
+      "description": "Professional user ID"
+    },
+    "professional_email": {
+      "type": "string",
+      "description": "Professional email"
+    },
+    "professional_name": {
+      "type": "string",
+      "description": "Professional display name"
+    },
+    "professional_role": {
+      "type": "string",
+      "enum": [
+        "Counselor",
+        "Caseworker",
+        "CPS Worker",
+        "Court Staff",
+        "Mentor",
+        "Behavioral Health Worker",
+        "School Staff",
+        "Therapist",
+        "Juvenile Probation",
+        "Other"
+      ],
+      "default": "Other"
+    },
+    "parent_user_id": {
+      "type": "string",
+      "description": "Parent user ID"
+    },
+    "parent_email": {
+      "type": "string",
+      "description": "Parent email"
+    },
+    "parent_name": {
+      "type": "string",
+      "description": "Parent display name"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name for context"
+    },
+    "access_code_id": {
+      "type": "string",
+      "description": "AccessCode record used to create this link"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "revoked"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "professional_user_id",
+    "parent_user_id",
+    "status"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "professional_user_id": "{{user.id}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "parent_user_id": "{{user.id}}"
+        },
+        {
+          "parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "professional_user_id": "{{user.id}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "parent_user_id": "{{user.id}}"
+        },
+        {
+          "parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "parent_user_id": "{{user.id}}"
+        },
+        {
+          "parent_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
+}

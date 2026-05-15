@@ -56,7 +56,9 @@
     "content_hash"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "sender_email": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {

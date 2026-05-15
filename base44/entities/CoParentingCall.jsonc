@@ -105,7 +105,9 @@
     "start_time"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "initiator_email": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {

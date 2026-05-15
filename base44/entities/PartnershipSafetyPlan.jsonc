@@ -118,7 +118,19 @@
     "child_name"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "$or": [
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
     "read": {
       "$or": [
         {

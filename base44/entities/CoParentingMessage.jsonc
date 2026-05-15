@@ -8,11 +8,19 @@
     },
     "sender_email": {
       "type": "string",
-      "description": "Email of the parent who sent the message"
+      "description": "Email of the person who sent the message"
     },
     "sender_name": {
       "type": "string",
-      "description": "Name of the parent who sent the message"
+      "description": "Name of the person who sent the message"
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email of the other parent/recipient allowed to read this message"
+    },
+    "court_email": {
+      "type": "string",
+      "description": "Assigned court staff email allowed to review this message"
     },
     "body": {
       "type": "string",
@@ -41,5 +49,36 @@
     "partnership_id",
     "sender_email",
     "body"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "sender_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "sender_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "sender_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "sender_email": "{{user.email}}"
+    }
+  }
 }
