@@ -34,24 +34,17 @@ export default function FounderAccessPortal() {
   }, []);
 
   async function generateCode() {
-   if (!newCodeFor.trim()) return;
    setGenerating(true);
 
+   const label = newCodeFor.trim() || "Admin user";
    const response = await base44.functions.invoke("createOwnerAccessCode", {
-     professional_name: newCodeFor.trim(),
+     professional_name: label,
      professional_email: `admin-${Date.now()}@rooted21.internal`,
    });
 
    if (response.data?.code) {
-     // Create local code record to display
-     const newCode = {
-       id: `temp-${Date.now()}`,
-       code: response.data.code,
-       created_for: newCodeFor.trim(),
-       created_date: new Date().toISOString(),
-       used: false,
-     };
-     setCodes(prev => [newCode, ...prev]);
+     const refreshedCodes = await base44.entities.AdminAccessCode.list("-created_date", 100);
+     setCodes(refreshedCodes);
      setNewCodeFor("");
    }
    setGenerating(false);
@@ -112,12 +105,12 @@ export default function FounderAccessPortal() {
         {/* Hero */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-bold text-sm" style={{ color: C.cream }}>Create Admin Access Codes</p>
-          <p className="text-xs mt-1" style={{ color: C.lightGreen }}>Generate 30-day codes for team members to become admins</p>
+          <p className="text-xs mt-1" style={{ color: C.lightGreen }}>Type a label, tap Generate New Code, then copy and send the code to your team member.</p>
         </div>
 
         {/* Generate code form */}
         <div className="rounded-2xl p-4 space-y-3" style={{ background: "#fff", border: `1.5px solid ${C.cream}` }}>
-          <label className="text-[10px] font-bold block" style={{ color: C.mutedText }}>NAME OR EMAIL (optional)</label>
+          <label className="text-[10px] font-bold block" style={{ color: C.mutedText }}>WHO IS THIS CODE FOR?</label>
           <input
             type="text"
             placeholder="e.g., Sarah Johnson"

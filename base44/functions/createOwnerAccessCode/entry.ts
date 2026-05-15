@@ -35,14 +35,14 @@ Deno.serve(async (req) => {
     let isUnique = false;
     while (!isUnique) {
       code = generateCode();
-      const existing = await base44.entities.AccessCode.filter(
-        { code, used: false }
+      const existing = await base44.asServiceRole.entities.AdminAccessCode.filter(
+        { code }
       );
       isUnique = existing.length === 0;
     }
 
-    // Create access code with no expiration (owner code)
-    const accessCode = await base44.entities.AdminAccessCode.create({
+    // Create 30-day admin access code
+    const accessCode = await base44.asServiceRole.entities.AdminAccessCode.create({
       code,
       created_by: user.email,
       created_for: professional_name,

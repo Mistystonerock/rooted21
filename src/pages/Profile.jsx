@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { supabase } from "@/api/supabaseClient";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Phone, Bell, BellOff, Check, AlertTriangle, Trash2 } from "lucide-react";
 import FontSizeControl from "@/components/accessibility/FontSizeControl";
@@ -52,12 +51,10 @@ export default function Profile() {
     setDeletingAccount(true);
     setDeleteError("");
     try {
-      const { data: { user: supabaseUser } } = await supabase.auth.getUser();
       await base44.functions.invoke("deleteSupabaseAccount", {
         confirmText: deleteConfirmText,
-        supabaseUserId: supabaseUser?.id || null,
+        supabaseUserId: null,
       });
-      await supabase.auth.signOut();
       await clearLocalData();
       localStorage.setItem("account_deleted_message", "Your account has been permanently deleted.");
       await base44.auth.logout("/");
