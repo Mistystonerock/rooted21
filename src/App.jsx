@@ -59,6 +59,7 @@ import SOS from '@/pages/SOS';
 import LogoutButton from '@/components/auth/LogoutButton';
 import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
+import CopyrightFooter from '@/components/legal/CopyrightFooter';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -247,6 +248,7 @@ function App() {
             </Routes>
             )}
           </AnimatePresence>
+          <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />
           {user && !needsOnboarding && <BottomNav />}
         </Router>
         </ProfessionalGate>
