@@ -1,5 +1,6 @@
 import MobileHeader from "@/components/mobile/MobileHeader";
 import HubCard from "@/components/hubs/HubCard";
+import RealTimeProfessionalSupport from "@/components/support/RealTimeProfessionalSupport";
 import { C } from "@/lib/rooted-constants";
 
 const SUPPORT_ITEMS = [
@@ -23,6 +24,7 @@ export default function SupportHub() {
           <p className="font-serif font-bold text-base" style={{ color: C.cream }}>All Support in One Place</p>
           <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>Find help for right now, prepare for professional conversations, and keep your support team organized.</p>
         </div>
+        <RealTimeProfessionalSupport />
         <div className="space-y-3">{SUPPORT_ITEMS.map(item => <HubCard key={item.title} item={item} />)}</div>
         <div className="pb-8" />
       </div>
