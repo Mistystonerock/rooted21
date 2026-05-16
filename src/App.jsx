@@ -67,7 +67,7 @@ function App() {
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [betaAccess, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
-  const showComingSoon = maintenanceMode && !isFounder && !betaAccess;
+  const showComingSoon = maintenanceMode && !isFounder;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
