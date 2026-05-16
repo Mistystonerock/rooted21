@@ -7,6 +7,7 @@ import ComplianceRiskScore from "@/components/compliance/ComplianceRiskScore";
 import ComplianceRiskCard from "@/components/compliance/ComplianceRiskCard";
 import CorrectiveActionList from "@/components/compliance/CorrectiveActionList";
 import ComplianceSourceStats from "@/components/compliance/ComplianceSourceStats";
+import CommunicationRephraseTips from "@/components/compliance/CommunicationRephraseTips";
 import { AlertTriangle, Brain, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 
 function daysUntil(dateString) {
@@ -42,6 +43,7 @@ export default function ComplianceRiskDashboard() {
   const [coParentMessages, setCoParentMessages] = useState([]);
   const [secureMessages, setSecureMessages] = useState([]);
   const [caseNotes, setCaseNotes] = useState([]);
+  const [behaviorLogs, setBehaviorLogs] = useState([]);
   const [analysis, setAnalysis] = useState(null);
 
   useEffect(() => {
@@ -52,18 +54,20 @@ export default function ComplianceRiskDashboard() {
     setLoading(true);
     const me = await base44.auth.me();
     setUser(me);
-    const [plans, agency, coParent, secure, notes] = await Promise.all([
+    const [plans, agency, coParent, secure, notes, behaviors] = await Promise.all([
       base44.entities.CasePlanChecklist.filter({ parent_email: me.email }, "-created_date", 50),
       base44.entities.AgencyEmailCorrespondence.filter({ owner_email: me.email }, "-correspondence_date", 200),
       base44.entities.CoParentingMessage.list("-created_date", 200),
       base44.entities.SecureMessage.list("-created_date", 200),
       base44.entities.CaseNote.list("-created_date", 200),
+      base44.entities.BehaviorLog.list("-created_date", 200),
     ]);
     setCasePlans(plans);
     setAgencyEmails(agency);
     setCoParentMessages(coParent.filter(m => m.sender_email === me.email || m.recipient_email === me.email));
     setSecureMessages(secure.filter(m => m.sender_email === me.email || m.recipient_email === me.email || m.family_email === me.email));
     setCaseNotes(notes.filter(n => ["meeting_notes", "update", "case_review"].includes(n.note_type)));
+    setBehaviorLogs(behaviors);
     setLoading(false);
   }
 
@@ -77,28 +81,48 @@ export default function ComplianceRiskDashboard() {
     ...caseNotes.map(n => ({ type: "meeting_note", date: n.created_date, title: n.title, body: n.body, author: n.author_name })),
   ].sort((a, b) => new Date(b.date) - new Date(a.date)), [agencyEmails, coParentMessages, secureMessages, caseNotes]);
 
+  const recentBehaviorLogs = useMemo(() => {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    return behaviorLogs
+      .filter(log => new Date(log.entry_date || log.created_date) >= cutoff)
+      .map(log => ({
+        date: log.entry_date || log.created_date,
+        child_name: log.child_name,
+        behavior: log.behavior_description,
+        trigger: log.trigger,
+        response: log.parent_response,
+        outcome: log.outcome,
+        mood: log.child_mood,
+      }));
+  }, [behaviorLogs]);
+
   const stats = {
     openItems: openItems.length,
     timeSensitiveItems: timeSensitiveItems.length,
     auditLogs: communicationAudit.length,
+    behaviorLogs: recentBehaviorLogs.length,
     agencyEmails: agencyEmails.length,
   };
 
   async function runScan() {
     setScanning(true);
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI compliance risk analyst for a parenting/court case management app. Analyze current case plan checklist items and communication audit logs to predict upcoming court-related setbacks before they occur.
+      prompt: `You are an AI compliance risk analyst for a parenting/court case management app. Analyze current case plan checklist items, recent communication threads, and behavior logs to predict high-risk patterns before they escalate.
 
-Today's date: 2026-05-14
+Today's date: ${new Date().toISOString().slice(0, 10)}
 User: ${user?.full_name || user?.email}
 
 Case plan checklist items:
 ${JSON.stringify(checklistItems.slice(0, 120), null, 2)}
 
-Communication audit logs:
+Recent communication threads and audit logs:
 ${JSON.stringify(communicationAudit.slice(0, 120), null, 2)}
 
-Return practical, specific, non-legal-advice risk analytics. Focus on missed deadlines, lack of proof, incomplete services, unanswered agency requests, conflict patterns, missing documentation, upcoming hearing readiness, and corrective action steps. Do not invent facts not supported by the data.`,
+Recent behavior logs from the last 30 days:
+${JSON.stringify(recentBehaviorLogs.slice(0, 120), null, 2)}
+
+Return practical, specific, non-legal-advice risk analytics. Focus on missed deadlines, lack of proof, incomplete services, unanswered agency requests, conflict patterns, emotionally charged language, behavior escalation patterns, missing documentation, upcoming hearing readiness, and corrective action steps. For communication issues, include re-phrasing tips that make messages calmer, factual, child-focused, and aligned with court expectations. Do not invent facts not supported by the data.`,
       response_json_schema: {
         type: "object",
         properties: {
@@ -114,6 +138,29 @@ Return practical, specific, non-legal-advice risk analytics. Focus on missed dea
                 timeline: { type: "string" },
                 reason: { type: "string" },
                 evidence: { type: "array", items: { type: "string" } }
+              }
+            }
+          },
+          behavior_patterns: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                pattern: { type: "string" },
+                risk_level: { type: "string", enum: ["low", "medium", "high"] },
+                suggested_response: { type: "string" }
+              }
+            }
+          },
+          communication_rephrasing_tips: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                original_pattern: { type: "string" },
+                why_it_matters: { type: "string" },
+                court_aligned_rephrase: { type: "string" },
+                tip: { type: "string" }
               }
             }
           },
@@ -183,6 +230,8 @@ Return practical, specific, non-legal-advice risk analytics. Focus on missed dea
                 </button>
 
                 <CorrectiveActionList actions={analysis?.corrective_actions || []} />
+
+                <CommunicationRephraseTips tips={analysis?.communication_rephrasing_tips || []} />
 
                 <Link to="/court-filings" className="flex items-center justify-between rounded-2xl p-4" style={{ background: C.cream, textDecoration: "none" }}>
                   <div>

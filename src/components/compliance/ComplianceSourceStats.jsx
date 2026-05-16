@@ -1,4 +1,4 @@
-import { CheckSquare, MessageSquare, Mail, CalendarClock } from "lucide-react";
+import { CheckSquare, MessageSquare, Mail, CalendarClock, Activity } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 
 export default function ComplianceSourceStats({ stats }) {
@@ -6,11 +6,12 @@ export default function ComplianceSourceStats({ stats }) {
     { label: "Open checklist items", value: stats.openItems, icon: CheckSquare },
     { label: "Due soon / overdue", value: stats.timeSensitiveItems, icon: CalendarClock },
     { label: "Audit log entries", value: stats.auditLogs, icon: MessageSquare },
+    { label: "Behavior logs", value: stats.behaviorLogs || 0, icon: Activity },
     { label: "Agency emails", value: stats.agencyEmails, icon: Mail },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
       {cards.map(card => {
         const Icon = card.icon;
         return (
