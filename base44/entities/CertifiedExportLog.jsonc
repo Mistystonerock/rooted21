@@ -1,0 +1,108 @@
+{
+  "name": "CertifiedExportLog",
+  "type": "object",
+  "properties": {
+    "export_id": {
+      "type": "string",
+      "description": "Unique certified export ID"
+    },
+    "authentication_code": {
+      "type": "string",
+      "description": "16-digit verification code printed on the export"
+    },
+    "export_type": {
+      "type": "string",
+      "enum": [
+        "communication_thread",
+        "case_documents",
+        "combined_packet"
+      ],
+      "default": "combined_packet"
+    },
+    "recipient_type": {
+      "type": "string",
+      "enum": [
+        "attorney",
+        "gal_casa",
+        "caseworker",
+        "court",
+        "ombudsman",
+        "other"
+      ],
+      "default": "attorney"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Reason for export"
+    },
+    "record_count": {
+      "type": "number",
+      "default": 0
+    },
+    "document_count": {
+      "type": "number",
+      "default": 0
+    },
+    "message_count": {
+      "type": "number",
+      "default": 0
+    },
+    "date_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "date_to": {
+      "type": "string",
+      "format": "date"
+    },
+    "thread_label": {
+      "type": "string"
+    },
+    "generated_by_email": {
+      "type": "string"
+    },
+    "generated_by_name": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "packet_hash": {
+      "type": "string",
+      "description": "SHA-256 digest for the certified export manifest"
+    },
+    "hash_chain_root": {
+      "type": "string",
+      "description": "Final hash in the ordered record hash chain"
+    },
+    "certification_standard": {
+      "type": "string",
+      "default": "FRE_902_11_business_record_certification_support"
+    },
+    "legal_notice": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "export_id",
+    "authentication_code",
+    "generated_by_email",
+    "generated_at",
+    "packet_hash"
+  ],
+  "rls": {
+    "create": {
+      "generated_by_email": "{{user.email}}"
+    },
+    "read": {
+      "generated_by_email": "{{user.email}}"
+    },
+    "update": {
+      "generated_by_email": "{{user.email}}"
+    },
+    "delete": {
+      "generated_by_email": "{{user.email}}"
+    }
+  }
+}

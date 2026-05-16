@@ -7,6 +7,7 @@ const ACTIONS = [
   { to: "/visitation-tracker", icon: ShieldCheck, title: "Visitation log", description: "Document visits, cancellations, observations, and patterns." },
   { to: "/legal-calendar", icon: FileText, title: "Court + deadline calendar", description: "Keep hearings, reviews, and document dates together." },
   { to: "/court-report-generator", icon: FileText, title: "Court-ready report", description: "Summarize progress and supporting documentation." },
+  { to: "/certified-legal-export", icon: FileText, title: "Certified legal export", description: "Create tamper-evident thread and document packets for attorney, GAL/CASA, or court review." },
   { to: "/reunification-tracker", icon: ShieldCheck, title: "Reunification milestones", description: "Track progress toward safe return and permanency." },
   { to: "/support-chat", icon: MessageSquare, title: "Ask a mentor", description: "Get support preparing questions for CPS, court, or meetings." },
 ];

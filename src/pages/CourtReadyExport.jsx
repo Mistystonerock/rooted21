@@ -3,7 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import DocumentWorkflowToolkit from "@/components/documents/DocumentWorkflowToolkit";
-import { Download, Loader2, Shield, FileText, AlertTriangle, CheckCircle2, Calendar, Settings2, MessageSquare, BookOpen, Users, Stethoscope, Scale, UserCheck } from "lucide-react";
+import { Download, Loader2, Shield, FileText, AlertTriangle, CheckCircle2, Calendar, Settings2, MessageSquare, BookOpen, Users, Stethoscope, Scale, UserCheck, FileKey } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const LIFE_STORY_ENTRY_TYPES = [
   { value: "placement", label: "Placement" },
@@ -226,6 +227,14 @@ export default function CourtReadyExport() {
             Automatically compiles behavior logs, co-parenting message history, case milestones, documents, and activity records into a certified court-ready PDF with evidence-trail signatures.
           </p>
         </div>
+
+        <Link to="/certified-legal-export" className="flex items-center gap-3 rounded-2xl p-4 no-underline" style={{ background: "#F7F3EA", border: `1.5px solid ${C.gold}` }}>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: C.white }}><FileKey size={18} color={C.gold} /></span>
+          <span className="flex-1">
+            <span className="block text-sm font-black" style={{ color: C.darkGreen }}>Need a thread-based certified legal export?</span>
+            <span className="block text-[11px] leading-relaxed" style={{ color: C.mutedText }}>Generate an authentication-coded packet for attorney, GAL/CASA, court, or agency review.</span>
+          </span>
+        </Link>
 
         <DocumentWorkflowToolkit />
 

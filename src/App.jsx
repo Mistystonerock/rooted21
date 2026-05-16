@@ -130,6 +130,7 @@ function App() {
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
               <Route path="/cps-case-navigation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CPSCaseNavigation /></FeatureLockGate></Suspense>} />
+              <Route path="/certified-legal-export" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CertifiedLegalExport /></FeatureLockGate></Suspense>} />
               <Route path="/ohio-systems-navigator" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.OhioSystemsNavigator /></FeatureLockGate></Suspense>} />
               <Route path="/family-knowledge-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyKnowledgeHub /></FeatureLockGate></Suspense>} />
               <Route path="/cultural-care" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CulturalCare /></FeatureLockGate></Suspense>} />
