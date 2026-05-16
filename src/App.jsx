@@ -60,9 +60,13 @@ import LogoutButton from '@/components/auth/LogoutButton';
 import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 import CopyrightFooter from '@/components/legal/CopyrightFooter';
+import ComingSoon from '@/pages/ComingSoon';
 
 function App() {
   const [user, setUser] = React.useState(null);
+  const [betaAccess, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
+  const isFounder = user?.email === "misty.stonerock88@gmail.com";
+  const showComingSoon = !isFounder && !betaAccess;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
@@ -107,6 +111,9 @@ function App() {
           </div>
         )}
         <Router>
+          {showComingSoon ? (
+            <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
+          ) : (
           <AnimatePresence mode="wait">
             {needsOnboarding ? (
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
@@ -248,8 +255,9 @@ function App() {
             </Routes>
             )}
           </AnimatePresence>
-          <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />
-          {user && !needsOnboarding && <BottomNav />}
+          )}
+          {!showComingSoon && <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />}
+          {!showComingSoon && user && !needsOnboarding && <BottomNav />}
         </Router>
         </ProfessionalGate>
         <Toaster />

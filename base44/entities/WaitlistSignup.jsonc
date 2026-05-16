@@ -2,13 +2,34 @@
   "name": "WaitlistSignup",
   "type": "object",
   "properties": {
+    "first_name": {
+      "type": "string",
+      "description": "First name of the person signing up"
+    },
     "full_name": {
       "type": "string",
-      "description": "Full name of the person signing up"
+      "description": "Full name or legacy name of the person signing up"
     },
     "email": {
       "type": "string",
       "description": "Email address"
+    },
+    "role_type": {
+      "type": "string",
+      "enum": [
+        "Parent",
+        "Foster Parent",
+        "Caseworker",
+        "Therapist",
+        "Court Staff",
+        "Other"
+      ],
+      "description": "How the person identifies for the waitlist"
+    },
+    "signed_up_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time the person joined the waitlist"
     },
     "city": {
       "type": "string",
@@ -23,7 +44,7 @@
         "biological",
         "other"
       ],
-      "description": "Type of family"
+      "description": "Legacy family type"
     },
     "message": {
       "type": "string",
@@ -36,7 +57,6 @@
     }
   },
   "required": [
-    "full_name",
     "email"
   ]
 }
