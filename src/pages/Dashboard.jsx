@@ -80,10 +80,10 @@ export default function Dashboard() {
   const selectedCheckins = filterRecordsForChild(recentCheckins, child);
   const latestCheckin = selectedCheckins[0];
 
-  function handleChildCreated(newChild) {
-    setChildren(prev => [newChild, ...prev]);
+  async function handleChildCreated(newChild) {
     setChild(newChild);
     setChildRefreshKey(prev => prev + 1);
+    await base44.entities.ChildProfile.list("-created_date", 200).then(setChildren);
   }
 
   return (
