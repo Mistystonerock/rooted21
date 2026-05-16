@@ -61,7 +61,10 @@ export default function Dashboard() {
   async function handleRefresh() {
     await Promise.all([
       base44.auth.me().then(setUser),
-      base44.entities.ChildProfile.list("-created_date", 200).then(r => { setChildren(r); setChild(prev => prev || r[0] || null); }),
+      base44.entities.ChildProfile.list("-created_date", 200).then(r => {
+        setChildren(r);
+        setChild(prev => prev ? (r.find(item => item.id === prev.id) || r[0] || null) : (r[0] || null));
+      }),
       base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals),
       base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
@@ -82,8 +85,12 @@ export default function Dashboard() {
 
   async function handleChildCreated(newChild) {
     setChild(newChild);
+    setChildren(prev => [newChild, ...prev.filter(item => item.id !== newChild.id)]);
     setChildRefreshKey(prev => prev + 1);
-    await base44.entities.ChildProfile.list("-created_date", 200).then(setChildren);
+    await base44.entities.ChildProfile.list("-created_date", 200).then(list => {
+      setChildren(list);
+      setChild(list.find(item => item.id === newChild.id) || newChild);
+    });
   }
 
   return (
@@ -248,9 +255,9 @@ export default function Dashboard() {
           {child ? (
             <Link to={`/child-profile?childId=${child.id}`} style={{ display: "block", background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🧒</div>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{getChildAvatar(child)}</div>
                 <div>
-                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>{child.first_name}</p>
+                  <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>{getChildDisplayName(child)}</p>
                   <p style={{ fontSize: 11, color: MUTED }}>Child profile · Tap to edit</p>
                 </div>
               </div>
