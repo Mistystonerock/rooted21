@@ -2,16 +2,18 @@ export const DEFAULT_TUTORIALS = [
   {
     section_id: "dashboard",
     audience: "both",
-    title: "Dashboard",
-    description: "Learn where your core tools live and how to start calmly.",
+    title: "Rooted 21 Guided Start",
+    description: "A short, reassuring voice-guided tour of the most important tools.",
     emoji: "🌿",
     path: "/dashboard",
     steps: [
-      { title: "Your calm home base", narration: "Welcome. The dashboard is your gentle starting point. Everything important is organized into small, clear choices so you do not have to hunt when life feels heavy.", prompt: "Notice the quick action area at the top.", button_label: "Open Dashboard", path: "/dashboard" },
-      { title: "Quick actions", narration: "These buttons help you move quickly.", prompt: "This whole row is here for the moments you need a next step fast.", targetElementId: "quick-actions", button_label: "Show me", path: "/dashboard" },
-      { title: "SOS support", narration: "Tap SOS when you need support right now.", prompt: "Click this button to practice opening immediate support.", targetElementId: "sos-button", requiresClick: true, button_label: "Tap SOS", path: "/chat?crisis=1" },
-      { title: "Daily Check-In", narration: "Tap Check-In to track how you are feeling today.", prompt: "Click Check-In to continue.", targetElementId: "checkin-button", requiresClick: true, button_label: "Tap Check-In", path: "/daily-checkin" },
-      { title: "Behavior tracking", narration: "Tap Log Behavior to track patterns and triggers.", prompt: "Click the Behavior card to continue.", targetElementId: "behavior-log-button", requiresClick: true, button_label: "Tap Behavior", path: "/behavior-hub" },
+      { title: "Your calm home base", narration: "Welcome. This quick tour will gently show you the places families use most: SOS support, check-ins, behavior tools, education guides, resources, and support hubs. You can skip or replay this anytime.", prompt: "Start here when you want a calm overview.", button_label: "Open Dashboard", path: "/dashboard" },
+      { title: "SOS support", narration: "The SOS button is for moments when you need help right now. If anyone is in immediate danger, call 911. If there is a mental health crisis, call or text 988.", prompt: "This button opens immediate support tools.", targetElementId: "sos-button", button_label: "Open SOS", path: "/sos" },
+      { title: "Daily Check-In", narration: "Check-ins help you notice how your child is doing and how you are doing. There is no judgment here. Small notes can reveal patterns over time.", prompt: "Use this when you want to track today’s regulation and calm.", targetElementId: "checkin-button", button_label: "Open Check-In", path: "/daily-checkin" },
+      { title: "Behavior tools", narration: "Behavior tools help you record triggers, responses, and what helped your child return to safety. The goal is understanding, not blame.", prompt: "Use this area to track patterns and supports.", targetElementId: "behavior-log-button", button_label: "Open Behavior Hub", path: "/behavior-hub" },
+      { title: "Education guides", narration: "The Education Hub gives you trauma-informed lessons, guides, worksheets, and classes at your own pace. You can learn in small steps whenever you are ready.", prompt: "Explore guides that support you and your child.", targetElementId: "education-hub-button", button_label: "Open Education Hub", path: "/education-hub" },
+      { title: "Resources", narration: "Resources brings practical help together: housing, medical care, legal support, jobs, benefits, substance support, and local services.", prompt: "Use this when you need real-world help nearby.", targetElementId: "resources-button", button_label: "Open Resources", path: "/resources" },
+      { title: "Support Hub", narration: "The Support Hub is where you can find crisis tools, supportive conversations, and team contacts. You are not expected to carry everything alone.", prompt: "Use this when you want connection, guidance, or next steps.", targetElementId: "support-hub-button", button_label: "Open Support Hub", path: "/support-hub" },
       { title: "Replay anytime", narration: "You can return to these walkthroughs anytime. Support is here when you need a reminder, not only on the first day.", prompt: "Tap replay whenever you want to practice again.", button_label: "Finish", path: "/training-videos" }
     ]
   },
@@ -76,27 +78,27 @@ export const DEFAULT_TUTORIALS = [
     ]
   },
   {
-    section_id: "lessons",
+    section_id: "education-guides",
     audience: "parent",
-    title: "Lessons",
-    description: "Follow the Rooted 21 learning path at your own pace.",
+    title: "Education Guides",
+    description: "Explore trauma-informed guides, lessons, worksheets, and classes.",
     emoji: "📚",
-    path: "/lessons",
+    path: "/education-hub",
     steps: [
-      { title: "Learn gently", narration: "Lessons are designed to support connection-based parenting one step at a time. You can pause, return, and continue whenever you are ready.", prompt: "Tap Lessons.", button_label: "Open Lessons", path: "/lessons" },
-      { title: "Progress counts", narration: "Each completed lesson is progress. This is not about perfection. It is about building tools and confidence.", prompt: "Start with the next available lesson.", button_label: "Continue", path: "/lessons" }
+      { title: "Learn gently", narration: "You’ve entered the Education Hub. Explore essential guides on trauma, attachment, grief and ambiguous loss, caregiver burnout, and more. Each lesson is designed to empower you and your child.", prompt: "Open the Education Hub when you want to learn in small, calm steps.", button_label: "Open Education Hub", path: "/education-hub" },
+      { title: "Progress counts", narration: "Each completed lesson is progress. This is not about perfection. It is about building tools, confidence, and connection over time.", prompt: "Start with the guide that feels most helpful today.", button_label: "Continue", path: "/education-hub" }
     ]
   },
   {
-    section_id: "support-team",
+    section_id: "support-hub",
     audience: "both",
-    title: "Support Team",
-    description: "Know where team contacts and professional support live.",
+    title: "Support Hub",
+    description: "Find crisis tools, support conversations, and team connection options.",
     emoji: "🤝",
-    path: "/my-team",
+    path: "/support-hub",
     steps: [
-      { title: "You are not alone", narration: "The Support Team area helps keep professionals, caseworkers, therapists, and helpers organized in one place.", prompt: "Open My Team.", button_label: "Open Team", path: "/my-team" },
-      { title: "For professionals", narration: "Professionals can use connected tools to understand progress, add notes, and support the family with more context.", prompt: "Review who is connected.", button_label: "Next", path: "/my-team" }
+      { title: "You are not alone", narration: "The Support Hub is here when you need a steady next step. You can find crisis tools, support conversations, team contacts, and guidance without searching through the whole app.", prompt: "Open Support Hub when you need connection or support.", button_label: "Open Support Hub", path: "/support-hub" },
+      { title: "Bring helpers closer", narration: "When your support team is connected, Rooted 21 can help everyone understand patterns, progress, and needs with more context.", prompt: "Review the support options that fit your family.", button_label: "Next", path: "/support-hub" }
     ]
   },
   {

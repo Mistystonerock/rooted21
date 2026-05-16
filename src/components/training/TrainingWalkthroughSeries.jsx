@@ -29,7 +29,11 @@ export default function TrainingWalkthroughSeries({ compact = false }) {
     }
   }
 
-  const visibleTutorials = useMemo(() => compact ? tutorials.slice(0, 3) : tutorials, [compact, tutorials]);
+  const visibleTutorials = useMemo(() => {
+    if (!compact) return tutorials;
+    const starterSections = ["dashboard", "sos", "daily-checkin", "behavior-logs", "education-guides", "resources", "support-hub"];
+    return tutorials.filter(tutorial => starterSections.includes(tutorial.section_id));
+  }, [compact, tutorials]);
   const completed = progress?.completed_section_ids || [];
   const completionPct = tutorials.length ? Math.round((completed.length / tutorials.length) * 100) : 0;
 
