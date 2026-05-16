@@ -47,6 +47,7 @@ export default function MonthlyReport() {
     const monthName = new Date(year, monthNum - 1).toLocaleString("default", { month: "long" });
 
     const reportCheckins = reportMode === "all" ? checkins : filterRecordsForChild(checkins, child);
+    const reportLessons = reportMode === "all" ? lessons : filterRecordsForChild(lessons, child);
     const reportGoals = reportMode === "all" ? goals : filterRecordsForChild(goals, child);
 
     // Filter data by month
@@ -55,7 +56,7 @@ export default function MonthlyReport() {
       return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
     });
 
-    const monthLessons = lessons.filter((l) => {
+    const monthLessons = reportLessons.filter((l) => {
       const d = new Date(l.created_date);
       return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
     });
@@ -216,6 +217,10 @@ export default function MonthlyReport() {
     setGenerating(false);
   }
 
+  const previewCheckins = reportMode === "all" ? checkins : filterRecordsForChild(checkins, child);
+  const previewLessons = reportMode === "all" ? lessons : filterRecordsForChild(lessons, child);
+  const previewGoals = reportMode === "all" ? goals : filterRecordsForChild(goals, child);
+
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader
@@ -270,7 +275,7 @@ export default function MonthlyReport() {
                   <p className="text-[10px]" style={{ color: C.mutedText }}>Regulation trends & patterns</p>
                 </div>
                 <p className="text-lg font-bold" style={{ color: C.midGreen }}>
-                  {checkins.filter((c) => {
+                  {previewCheckins.filter((c) => {
                     const [year, monthStr] = month.split("-");
                     const d = new Date(c.created_date);
                     return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === parseInt(monthStr);
@@ -284,7 +289,7 @@ export default function MonthlyReport() {
                   <p className="text-[10px]" style={{ color: C.mutedText }}>Curriculum progress</p>
                 </div>
                 <p className="text-lg font-bold" style={{ color: C.brown }}>
-                  {lessons.filter((l) => {
+                  {previewLessons.filter((l) => {
                     const [year, monthStr] = month.split("-");
                     const d = new Date(l.created_date);
                     return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === parseInt(monthStr);
@@ -298,7 +303,7 @@ export default function MonthlyReport() {
                   <p className="text-[10px]" style={{ color: C.mutedText }}>Family milestone achievements</p>
                 </div>
                 <p className="text-lg font-bold" style={{ color: C.gold }}>
-                  {goals
+                  {previewGoals
                     .filter((g) => {
                       const [year, monthStr] = month.split("-");
                       const d = new Date(g.created_date);

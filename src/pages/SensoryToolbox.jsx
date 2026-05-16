@@ -2,6 +2,7 @@ import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Timer, RefreshCw, CheckCircle2 } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import ChildSelector from "@/components/children/ChildSelector";
 
 const AROUSAL_STATES = [
   {
@@ -462,6 +463,7 @@ function ActivityCard({ activity, stateColor, stateBg }) {
 
 export default function SensoryToolbox() {
   const [selected, setSelected] = useState(null);
+  const [selectedChild, setSelectedChild] = useState(null);
 
   const state = AROUSAL_STATES.find(s => s.id === selected);
   const activities = selected ? ACTIVITIES[selected] : [];
@@ -476,6 +478,7 @@ export default function SensoryToolbox() {
       />
 
       <div className="max-w-[520px] mx-auto px-4 py-4 space-y-4">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {!selected ? (
           <>

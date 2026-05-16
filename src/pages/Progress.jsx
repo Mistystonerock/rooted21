@@ -5,6 +5,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft } from "lucide-react";
 import RegulationChart from "@/components/progress/RegulationChart";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild } from "@/lib/child-selection";
 
 function fmt(d) {
   const dt = new Date(d);
@@ -16,6 +18,7 @@ export default function Progress() {
   const [checkins, setCheckins] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const touchStartY = useRef(0);
 
@@ -55,7 +58,10 @@ export default function Progress() {
     handleRefresh();
   }, []);
 
-  const completedGoals = goals.filter(g => g.progress === "completed").length;
+  const filteredCheckins = filterRecordsForChild(checkins, selectedChild);
+  const filteredLessons = filterRecordsForChild(lessons, selectedChild);
+  const filteredGoals = filterRecordsForChild(goals, selectedChild);
+  const completedGoals = filteredGoals.filter(g => g.progress === "completed").length;
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -65,13 +71,14 @@ export default function Progress() {
       </div>
 
       <div className="max-w-[520px] mx-auto px-4 py-4 space-y-4">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {/* Summary stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Lessons Done", value: lessons.length, sub: "of 21", emoji: "📚" },
-            { label: "Goals Met", value: completedGoals, sub: `of ${goals.length}`, emoji: "🎯" },
-            { label: "Check-ins", value: checkins.length, sub: "total", emoji: "✅" },
+            { label: "Lessons Done", value: filteredLessons.length, sub: "of 21", emoji: "📚" },
+            { label: "Goals Met", value: completedGoals, sub: `of ${filteredGoals.length}`, emoji: "🎯" },
+            { label: "Check-ins", value: filteredCheckins.length, sub: "total", emoji: "✅" },
           ].map(s => (
             <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
               <p className="text-lg mb-0.5">{s.emoji}</p>
@@ -83,7 +90,7 @@ export default function Progress() {
         </div>
 
         {/* ── REGULATION CHART MODULE ── */}
-        {checkins.length === 0 ? (
+        {filteredCheckins.length === 0 ? (
           <div className="text-center py-10 rounded-2xl" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
             <p className="text-3xl mb-2">🌱</p>
             <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>No check-ins yet</p>
@@ -91,15 +98,15 @@ export default function Progress() {
           </div>
         ) : (
           <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-            <RegulationChart checkins={checkins} />
+            <RegulationChart checkins={filteredCheckins} />
           </div>
         )}
 
         {/* Reflections */}
-        {checkins.filter(c => c.note).length > 0 && (
+        {filteredCheckins.filter(c => c.note).length > 0 && (
           <div>
             <p className="font-serif font-bold text-sm mb-2" style={{ color: C.darkGreen }}>Recent Reflections</p>
-            {checkins.filter(c => c.note).slice(-5).reverse().map(c => (
+            {filteredCheckins.filter(c => c.note).slice(-5).reverse().map(c => (
               <div key={c.id} className="rounded-xl px-3.5 py-2.5 mb-2" style={{ background: C.cream, borderLeft: `3px solid ${C.brown}` }}>
                 <p className="text-xs italic leading-relaxed" style={{ color: C.darkGreen }}>"{c.note}"</p>
                 <p className="text-[10px] mt-1" style={{ color: C.mutedText }}>{fmt(c.created_date)}</p>

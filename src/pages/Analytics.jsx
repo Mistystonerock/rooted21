@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild } from "@/lib/child-selection";
 import { TrendingUp, TrendingDown, Minus, Star, Lightbulb, Heart, Smile, Sun, AlertTriangle, Target, BookOpen } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -102,6 +104,7 @@ export default function Analytics() {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState(30);
+  const [selectedChild, setSelectedChild] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -116,13 +119,17 @@ export default function Analytics() {
     });
   }, []);
 
+  const childCheckins = useMemo(() => filterRecordsForChild(checkins, selectedChild), [checkins, selectedChild]);
+  const childLessons = useMemo(() => filterRecordsForChild(lessons, selectedChild), [lessons, selectedChild]);
+  const childGoals = useMemo(() => filterRecordsForChild(goals, selectedChild), [goals, selectedChild]);
+
   const filteredCheckins = useMemo(() => {
-    const sorted = [...checkins].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
+    const sorted = [...childCheckins].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
     if (!range) return sorted;
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - range);
     return sorted.filter(c => new Date(c.created_date) >= cutoff);
-  }, [checkins, range]);
+  }, [childCheckins, range]);
 
   const chartData = useMemo(() =>
     filteredCheckins.map(c => ({
@@ -160,10 +167,10 @@ export default function Analytics() {
 
   // Goal stats
   const goalStats = useMemo(() => ({
-    total: goals.length,
-    done: goals.filter(g => g.progress === "completed").length,
-    active: goals.filter(g => g.progress === "in_progress").length,
-  }), [goals]);
+    total: childGoals.length,
+    done: childGoals.filter(g => g.progress === "completed").length,
+    active: childGoals.filter(g => g.progress === "in_progress").length,
+  }), [childGoals]);
 
   // Plain-language insights
   const insights = useMemo(() => {
@@ -227,6 +234,7 @@ export default function Analytics() {
       />
 
       <div className="max-w-[560px] mx-auto px-4 py-5 space-y-5">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {/* ── WHAT IS THIS PAGE? ── */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
@@ -262,7 +270,7 @@ export default function Analytics() {
             <p className="text-[10px]" style={{ color: C.mutedText }}>days logged</p>
           </div>
           <div className="rounded-2xl p-3 text-center" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
-            <p className="text-2xl font-extrabold" style={{ color: C.brown }}>{lessons.length}</p>
+            <p className="text-2xl font-extrabold" style={{ color: C.brown }}>{childLessons.length}</p>
             <p className="text-[11px] font-bold mt-0.5" style={{ color: C.darkGreen }}>Lessons</p>
             <p className="text-[10px]" style={{ color: C.mutedText }}>out of 21 done</p>
           </div>
@@ -367,18 +375,18 @@ export default function Analytics() {
         )}
 
         {/* ── GOAL & LESSON PROGRESS ── */}
-        {(goalStats.total > 0 || lessons.length > 0) && (
+        {(goalStats.total > 0 || childLessons.length > 0) && (
           <div className="rounded-2xl p-4 space-y-4" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
             <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>🎯 Your Learning & Goals</p>
 
-            {lessons.length > 0 && (
+            {childLessons.length > 0 && (
               <div>
                 <div className="flex justify-between mb-1">
                   <p className="text-xs font-bold" style={{ color: C.darkGreen }}>📖 Lessons Completed</p>
-                  <p className="text-xs font-bold" style={{ color: C.midGreen }}>{lessons.length} of 21</p>
+                  <p className="text-xs font-bold" style={{ color: C.midGreen }}>{childLessons.length} of 21</p>
                 </div>
                 <div className="h-3 rounded-full overflow-hidden" style={{ background: C.cream }}>
-                  <div className="h-full rounded-full" style={{ width: `${(lessons.length / 21) * 100}%`, background: C.midGreen }} />
+                  <div className="h-full rounded-full" style={{ width: `${(childLessons.length / 21) * 100}%`, background: C.midGreen }} />
                 </div>
                 <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>
                   Every lesson you finish adds new tools to your parenting toolbox.
@@ -425,7 +433,7 @@ export default function Analytics() {
         )}
 
         {/* ── EMPTY STATE ── */}
-        {!hasCheckins && lessons.length === 0 && (
+        {!hasCheckins && childLessons.length === 0 && (
           <div className="rounded-2xl p-8 text-center" style={{ background: "#fff", border: `1.5px dashed ${C.cream}` }}>
             <p className="text-3xl mb-3">🌱</p>
             <p className="font-serif font-bold text-base mb-2" style={{ color: C.darkGreen }}>Nothing to show yet</p>

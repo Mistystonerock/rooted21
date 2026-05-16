@@ -5,6 +5,8 @@ import { ChevronLeft, CheckCircle2, Circle, FileText, Plus, Key, MessageCircle }
 import GenerateCodeModal from "./GenerateCodeModal";
 import SecureMessageThread from "@/components/messaging/SecureMessageThread";
 import FamilyCalendar from "@/components/family/FamilyCalendar";
+import ChildDataSelector from "@/components/children/ChildDataSelector";
+import { filterRecordsForChild } from "@/lib/child-selection";
 import { LESSONS } from "@/lib/lessons-data";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -24,6 +26,16 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
   const [saving, setSaving] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [calendarLoaded, setCalendarLoaded] = useState(false);
+  const childOptions = Array.from(new Map([
+    ...checkins.map(r => [r.child_id || r.child_name, { id: r.child_id || r.child_name, name: r.child_name || family.child_name || "Child", first_name: r.child_name || family.child_name || "Child", child_name: r.child_name || family.child_name || "Child" }]),
+    ...lessons.map(r => [r.child_id || r.child_name, { id: r.child_id || r.child_name, name: r.child_name || family.child_name || "Child", first_name: r.child_name || family.child_name || "Child", child_name: r.child_name || family.child_name || "Child" }]),
+    ...goals.map(r => [r.child_id || r.child_name, { id: r.child_id || r.child_name, name: r.child_name || family.child_name || "Child", first_name: r.child_name || family.child_name || "Child", child_name: r.child_name || family.child_name || "Child" }]),
+    ...(family.child_name ? [[family.child_name, { id: family.child_name, name: family.child_name, first_name: family.child_name, child_name: family.child_name }]] : []),
+  ].filter(([id]) => id)).values());
+  const [selectedChild, setSelectedChild] = useState(childOptions[0] || null);
+  const visibleCheckins = filterRecordsForChild(checkins, selectedChild);
+  const visibleLessons = filterRecordsForChild(lessons, selectedChild);
+  const visibleGoals = filterRecordsForChild(goals, selectedChild);
 
   async function loadCalendar() {
     if (calendarLoaded) return;
@@ -32,21 +44,21 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
     setCalendarLoaded(true);
   }
 
-  const completedLessons = lessons.filter(l => l.completed).length;
+  const completedLessons = visibleLessons.filter(l => l.completed).length;
   const progressPct = Math.round((completedLessons / 21) * 100);
-  const completedGoals = goals.filter(g => g.progress === "completed").length;
+  const completedGoals = visibleGoals.filter(g => g.progress === "completed").length;
 
-  const chartData = checkins.slice(-20).map(c => ({
+  const chartData = visibleCheckins.slice(-20).map(c => ({ 
     date: fmt(c.created_date),
     "Child Reg.": c.child_regulation,
     "Parent Calm": c.parent_calm,
   }));
 
-  const avgReg = checkins.length
-    ? (checkins.reduce((a, c) => a + (c.child_regulation || 0), 0) / checkins.length).toFixed(1)
+  const avgReg = visibleCheckins.length
+    ? (visibleCheckins.reduce((a, c) => a + (c.child_regulation || 0), 0) / visibleCheckins.length).toFixed(1)
     : "–";
-  const avgCalm = checkins.length
-    ? (checkins.reduce((a, c) => a + (c.parent_calm || 0), 0) / checkins.length).toFixed(1)
+  const avgCalm = visibleCheckins.length
+    ? (visibleCheckins.reduce((a, c) => a + (c.parent_calm || 0), 0) / visibleCheckins.length).toFixed(1)
     : "–";
 
   async function handleAddNote() {
@@ -123,6 +135,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 max-w-[600px] mx-auto w-full">
+        <ChildDataSelector children={childOptions} selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {/* ── OVERVIEW TAB ── */}
         {tab === "overview" && (
@@ -131,9 +144,9 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
             <div className="grid grid-cols-2 gap-3">
               {[
                 { label: "Lessons Done", value: `${completedLessons}/21`, sub: `${progressPct}% complete`, color: C.midGreen },
-                { label: "Goals Completed", value: `${completedGoals}/${goals.length}`, sub: "total goals", color: C.brown },
+                { label: "Goals Completed", value: `${completedGoals}/${visibleGoals.length}`, sub: "total goals", color: C.brown },
                 { label: "Avg Child Reg.", value: avgReg, sub: "out of 5", color: avgReg >= 3.5 ? C.midGreen : avgReg >= 2.5 ? C.gold : "#B84C2A" },
-                { label: "Avg Parent Calm", value: avgCalm, sub: `${checkins.length} check-ins`, color: C.gold },
+                { label: "Avg Parent Calm", value: avgCalm, sub: `${visibleCheckins.length} check-ins`, color: C.gold },
               ].map(s => (
                 <div key={s.label} className="rounded-xl p-3.5" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                   <p className="text-2xl font-extrabold leading-none" style={{ color: s.color }}>{s.value}</p>
@@ -155,10 +168,10 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
             </div>
 
             {/* Active goals */}
-            {goals.filter(g => g.progress === "in_progress").length > 0 && (
+            {visibleGoals.filter(g => g.progress === "in_progress").length > 0 && (
               <div className="rounded-xl p-3.5" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                 <p className="text-xs font-bold mb-2" style={{ color: C.darkGreen }}>Active Goals</p>
-                {goals.filter(g => g.progress === "in_progress").map(g => (
+                {visibleGoals.filter(g => g.progress === "in_progress").map(g => (
                   <div key={g.id} className="flex items-start gap-2 py-1.5 border-b last:border-b-0" style={{ borderColor: C.cream }}>
                     <Circle size={12} color={C.gold} className="mt-0.5 flex-shrink-0" />
                     <div>
@@ -171,10 +184,10 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
             )}
 
             {/* Latest reflections */}
-            {checkins.filter(c => c.note).length > 0 && (
+            {visibleCheckins.filter(c => c.note).length > 0 && (
               <div className="rounded-xl p-3.5" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                 <p className="text-xs font-bold mb-2" style={{ color: C.darkGreen }}>Recent Reflections</p>
-                {checkins.filter(c => c.note).slice(0, 3).map(c => (
+                {visibleCheckins.filter(c => c.note).slice(0, 3).map(c => (
                   <div key={c.id} className="rounded-lg px-3 py-2 mb-1.5" style={{ background: C.cream, borderLeft: `3px solid ${C.brown}` }}>
                     <p className="text-xs italic" style={{ color: C.darkGreen }}>"{c.note}"</p>
                     <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>{fmt(c.created_date)}</p>
@@ -188,7 +201,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
         {/* ── TRENDS TAB ── */}
         {tab === "trends" && (
           <>
-            {checkins.length < 2 ? (
+            {visibleCheckins.length < 2 ? (
               <div className="rounded-2xl p-8 text-center" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                 <p className="text-2xl mb-2">🌱</p>
                 <p className="font-serif font-bold text-sm" style={{ color: C.darkGreen }}>No check-in data yet</p>
@@ -197,7 +210,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
             ) : (
               <>
                 <div className="rounded-2xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
-                  <p className="font-serif font-bold text-sm mb-3" style={{ color: C.darkGreen }}>Regulation Trends ({checkins.length} sessions)</p>
+                  <p className="font-serif font-bold text-sm mb-3" style={{ color: C.darkGreen }}>Regulation Trends ({visibleCheckins.length} sessions)</p>
                   <ResponsiveContainer width="100%" height={200}>
                     <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke={C.cream} />
@@ -215,7 +228,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
                 <div className="rounded-xl p-3.5" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                   <p className="text-xs font-bold mb-2" style={{ color: C.darkGreen }}>All Check-Ins</p>
                   <div className="space-y-1.5 max-h-60 overflow-y-auto">
-                    {checkins.map(c => (
+                    {visibleCheckins.map(c => (
                       <div key={c.id} className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ background: C.offWhite }}>
                         <span className="text-[10px]" style={{ color: C.mutedText }}>{fmt(c.created_date)}</span>
                         <span className="text-xs font-bold" style={{ color: C.midGreen }}>🧒 {c.child_regulation}/5</span>
@@ -234,7 +247,7 @@ export default function FamilyDetail({ family, checkins, lessons, goals, notes: 
         {tab === "lessons" && (
           <div className="space-y-1.5">
             {LESSONS.map(lesson => {
-              const done = lessons.find(l => l.lesson_id === lesson.id && l.completed);
+              const done = visibleLessons.find(l => l.lesson_id === lesson.id && l.completed);
               return (
                 <div key={lesson.id} className="flex items-center gap-3 rounded-xl px-3.5 py-2.5"
                   style={{ background: done ? "#F0F6F0" : C.white, border: `1px solid ${done ? C.midGreen : C.cream}` }}>
