@@ -81,6 +81,47 @@ export default function LocalMedical() {
         For life threatening emergencies call 911 immediately.<br />For mental health crisis call or text 988.<br />Poison Control: 1-800-222-1222
       </div>
 
+      <div className="px-3 py-3" style={{ background: "#FFF7ED", borderBottom: "2px solid #FDBA74" }}>
+        <div className="mx-auto grid max-w-[640px] grid-cols-2 gap-2 sm:grid-cols-4">
+          <a
+            href={`https://www.google.com/maps/search/emergency+room+near+${encodeURIComponent(zip || "me")}`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-2xl px-2 py-4 text-center text-sm font-black leading-tight no-underline shadow-lg"
+            style={{ background: "#DC2626", color: "#fff" }}
+          >
+            <span className="mb-1 block text-2xl">🚨</span>
+            Nearest ER
+          </a>
+          <a
+            href={`https://www.google.com/maps/search/urgent+care+near+${encodeURIComponent(zip || "me")}`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-2xl px-2 py-4 text-center text-sm font-black leading-tight no-underline shadow-lg"
+            style={{ background: "#F97316", color: "#fff" }}
+          >
+            <span className="mb-1 block text-2xl">🏥</span>
+            Urgent Care Now
+          </a>
+          <a
+            href="tel:911"
+            className="rounded-2xl px-2 py-4 text-center text-sm font-black leading-tight no-underline shadow-lg"
+            style={{ background: "#991B1B", color: "#fff" }}
+          >
+            <span className="mb-1 block text-2xl">📞</span>
+            Call 911
+          </a>
+          <a
+            href="tel:988"
+            className="rounded-2xl px-2 py-4 text-center text-sm font-black leading-tight no-underline shadow-lg"
+            style={{ background: "#2563EB", color: "#fff" }}
+          >
+            <span className="mb-1 block text-2xl">💙</span>
+            Mental Health Crisis
+          </a>
+        </div>
+      </div>
+
       <div className="sticky top-0 z-20 px-4 py-3" style={{ background: C.darkGreen, paddingTop: "max(12px, env(safe-area-inset-top))" }}>
         <div className="mx-auto flex max-w-[640px] items-center gap-3">
           <Link to="/resource-library" className="rounded-xl p-2" style={{ background: "#ffffff18" }} aria-label="Back to Resource Library">
