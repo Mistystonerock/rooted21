@@ -73,6 +73,10 @@
     "local_medical_zip": {
       "type": "string",
       "description": "Saved zip code for Local Medical Directory searches"
+    },
+    "housing_resources_zip": {
+      "type": "string",
+      "description": "Saved zip code for Housing Resources searches"
     }
   },
   "required": []

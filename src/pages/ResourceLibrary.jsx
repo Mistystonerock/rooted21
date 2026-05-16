@@ -212,6 +212,22 @@ function LibraryContent() {
           </div>
         )}
 
+        {/* Housing featured section */}
+        {tab === "browse" && (
+          <div className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+            <div className="flex items-start gap-3">
+              <span className="text-3xl">🏠</span>
+              <div className="flex-1">
+                <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Find Housing Near You</p>
+                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>Rentals, assistance, emergency shelter, and housing resources</p>
+                <Link to="/housing-resources" className="mt-3 inline-flex rounded-xl px-4 py-2.5 text-sm font-bold no-underline" style={{ background: C.darkGreen, color: "#fff" }}>
+                  Find Housing
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Search */}
         <div className="relative">
           <Search size={14} color={C.mutedText} className="absolute left-3 top-1/2 -translate-y-1/2" />

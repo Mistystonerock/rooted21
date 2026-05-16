@@ -53,6 +53,7 @@ const routes = {
   MyReflections: lazy(() => import("@/pages/MyReflections")),
   LocalResourceFinder: lazy(() => import("@/pages/LocalResourceFinder")),
   LocalMedical: lazy(() => import("@/pages/LocalMedical")),
+  HousingResources: lazy(() => import("@/pages/HousingResources")),
   WeeklyHabits: lazy(() => import("@/pages/WeeklyHabits")),
   ProfessionalDirectory: lazy(() => import("@/pages/ProfessionalDirectory")),
   AppGuide: lazy(() => import("@/pages/AppGuide")),
