@@ -155,8 +155,8 @@ export default function ChildProfiles() {
           <ChildProfileCard
             key={child.id}
             child={child}
-            onEdit={openEdit}
-            onDelete={setDeleteConfirm}
+            onEdit={() => openEdit(child)}
+            onDelete={() => setDeleteConfirm(child)}
           />
         ))}
 

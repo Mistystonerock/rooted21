@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Save } from "lucide-react";
+import { SELECTED_CHILD_KEY } from "@/lib/child-selection";
 
 const FIELDS = [
   { key: "first_name", label: "Child's First Name", required: true, type: "input" },
@@ -22,10 +23,14 @@ export default function ChildProfile() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    base44.entities.ChildProfile.list("-created_date", 1).then(r => {
-      if (r[0]) {
-        setForm(r[0]);
-        setProfileId(r[0].id);
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedChildId = urlParams.get("childId") || localStorage.getItem(SELECTED_CHILD_KEY);
+
+    base44.entities.ChildProfile.list("-created_date", 100).then(children => {
+      const selectedChild = children.find(child => child.id === requestedChildId || child.child_uid === requestedChildId) || children[0];
+      if (selectedChild) {
+        setForm(selectedChild);
+        setProfileId(selectedChild.id);
       }
     });
   }, []);

@@ -146,7 +146,7 @@ export default function Dashboard() {
                 const childCheckins = filterRecordsForChild(recentCheckins, item);
                 const latest = childCheckins[0];
                 return (
-                  <div key={item.id} className="flex items-center gap-3 rounded-2xl p-3" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <Link key={item.id} to={`/child-profile?childId=${item.id}`} className="flex items-center gap-3 rounded-2xl p-3" style={{ background: CARD, border: `1px solid ${BORDER}`, textDecoration: "none" }}>
                     {item.photo_url ? <img src={item.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" /> : <span className="flex h-10 w-10 items-center justify-center rounded-full text-lg" style={{ background: `${GREEN}20` }}>{getChildAvatar(item)}</span>}
                     <div className="flex-1">
                       <p className="text-sm font-bold" style={{ color: TEXT }}>{getChildDisplayName(item)}</p>
@@ -156,7 +156,7 @@ export default function Dashboard() {
                       <p className="text-lg font-black" style={{ color: latest ? GREEN : MUTED }}>{latest?.child_regulation || "—"}</p>
                       <p className="text-[9px]" style={{ color: MUTED }}>Regulation</p>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -246,7 +246,7 @@ export default function Dashboard() {
 
           {/* Child profile */}
           {child ? (
-            <Link to="/child-profile" style={{ display: "block", background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
+            <Link to={`/child-profile?childId=${child.id}`} style={{ display: "block", background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 16, padding: 14, textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${GREEN}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🧒</div>
                 <div>
