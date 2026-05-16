@@ -48,6 +48,7 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import AccessibilityStatement from '@/pages/AccessibilityStatement';
 import SkipToContentLink from '@/components/accessibility/SkipToContentLink';
+import AccessibilityToolbar from '@/components/accessibility/AccessibilityToolbar';
 import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
@@ -107,6 +108,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <ProfessionalGate user={user}>
         <SkipToContentLink />
+        <AccessibilityToolbar />
         {user && (
           <div className="fixed right-3 top-16 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <LogoutButton />

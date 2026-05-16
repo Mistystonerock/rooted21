@@ -261,6 +261,43 @@ input, textarea, select {
   text-shadow: none !important;
 }
 
+/* Accessibility enhancements */
+:focus-visible {
+  outline: 3px solid #c9973a !important;
+  outline-offset: 3px !important;
+}
+.rooted-high-contrast {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+.rooted-high-contrast * {
+  text-shadow: none !important;
+}
+.rooted-high-contrast a,
+.rooted-high-contrast button {
+  border-color: #000000 !important;
+}
+.rooted-high-contrast p,
+.rooted-high-contrast span,
+.rooted-high-contrast h1,
+.rooted-high-contrast h2,
+.rooted-high-contrast h3,
+.rooted-high-contrast h4,
+.rooted-high-contrast h5,
+.rooted-high-contrast h6,
+.rooted-high-contrast label,
+.rooted-high-contrast li {
+  color: #000000 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Remove tap highlight on mobile */
 * {
   -webkit-tap-highlight-color: transparent;

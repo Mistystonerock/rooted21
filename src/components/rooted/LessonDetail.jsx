@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import { CheckCircle2, ChevronLeft, Download, BookOpen, Zap, BookMarked } from "lucide-react";
+import LessonAudioTranscriptPanel from "@/components/accessibility/LessonAudioTranscriptPanel";
 import LessonActivities from "./LessonActivities";
 import ReflectionForm from "./ReflectionForm";
 import LessonQuiz from "./LessonQuiz";
@@ -105,6 +106,7 @@ export default function LessonDetail({ lesson, isCompleted, onMarkComplete, onBa
         {/* ── LESSON TAB ── */}
         {tab === "lesson" && (
           <>
+            <LessonAudioTranscriptPanel lesson={lesson} />
             <div className="rounded-2xl p-5" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
               {lesson.content.split("\n").map((line, i) => {
                 if (!line.trim()) return <div key={i} className="h-2" />;
