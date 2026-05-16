@@ -100,6 +100,12 @@ const routes = {
   SupportChat: lazy(() => import("@/pages/SupportChat")),
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
+  WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
+  FamilyKnowledgeHub: lazy(() => import("@/pages/FamilyKnowledgeHub")),
+  CulturalCare: lazy(() => import("@/pages/CulturalCare")),
+  YouthZone: lazy(() => import("@/pages/YouthZone")),
+  FamilyVoiceChoice: lazy(() => import("@/pages/FamilyVoiceChoice")),
+  WellBeingToolkit: lazy(() => import("@/pages/WellBeingToolkit")),
 };
 
 export default routes;

@@ -297,6 +297,15 @@ input, textarea, select {
     transition-duration: 0.01ms !important;
   }
 }
+.rooted-calm-mode,
+.rooted-calm-mode * {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+  box-shadow: none !important;
+}
+.rooted-calm-mode {
+  filter: saturate(0.78) contrast(0.96);
+}
 
 /* Remove tap highlight on mobile */
 * {

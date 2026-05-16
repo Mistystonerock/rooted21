@@ -128,6 +128,12 @@ function App() {
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
+              <Route path="/family-knowledge-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyKnowledgeHub /></FeatureLockGate></Suspense>} />
+              <Route path="/cultural-care" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CulturalCare /></FeatureLockGate></Suspense>} />
+              <Route path="/youth-zone" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.YouthZone /></FeatureLockGate></Suspense>} />
+              <Route path="/family-voice-choice" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyVoiceChoice /></FeatureLockGate></Suspense>} />
+              <Route path="/well-being-toolkit" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WellBeingToolkit /></FeatureLockGate></Suspense>} />
               <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Chat /></FeatureLockGate></Suspense>} />
               <Route path="/lessons" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Lessons /></FeatureLockGate></Suspense>} />
               <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Goals /></FeatureLockGate></Suspense>} />
