@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     });
 
     // Update user role to admin and unlock the full app immediately
-    await base44.auth.updateMe({
+    await base44.asServiceRole.entities.User.update(user.id, {
       role: 'admin',
       onboarding_completed: true,
       has_viewed_app: true,

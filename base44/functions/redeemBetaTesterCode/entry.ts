@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
     const accessExpiresAt = new Date();
     accessExpiresAt.setDate(accessExpiresAt.getDate() + 30);
 
-    await base44.auth.updateMe({
+    await base44.asServiceRole.entities.User.update(user.id, {
       role: mapRole(betaCode.tester_role),
       beta_access_expires_at: accessExpiresAt.toISOString(),
       beta_tester_role: betaCode.tester_role,
