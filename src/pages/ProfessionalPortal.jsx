@@ -5,6 +5,7 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Shield, Users, Plus, Search, RefreshCw } from "lucide-react";
 import FamilyCard from "@/components/professional/FamilyCard";
 import FamilyDetail from "@/components/professional/FamilyDetail";
+import ProfessionalDashboardOverview from "@/components/professional/ProfessionalDashboardOverview";
 
 const ROLES = ["Counselor", "Caseworker", "CPS Worker", "Court Staff", "Mentor", "Behavioral Health Worker", "School Staff", "Therapist", "Juvenile Probation", "Other"];
 
@@ -14,6 +15,7 @@ export default function ProfessionalPortal() {
   const [families, setFamilies] = useState([]);
   const [familyData, setFamilyData] = useState({}); // { [family_email]: { checkins, lessons, goals, notes } }
   const [selectedFamily, setSelectedFamily] = useState(null);
+  const [initialDetailTab, setInitialDetailTab] = useState("overview");
   const [search, setSearch] = useState("");
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [assignForm, setAssignForm] = useState({ family_email: "", family_name: "", child_name: "", professional_role: "Counselor" });
@@ -37,13 +39,14 @@ export default function ProfessionalPortal() {
     const dataMap = {};
     await Promise.all(assigned.map(async fam => {
       const email = fam.family_email;
-      const [checkins, lessons, goals, notes] = await Promise.all([
+      const [checkins, lessons, goals, notes, behaviorLogs] = await Promise.all([
         base44.entities.CheckIn.filter({ created_by: email }, "-created_date", 60).catch(() => []),
         base44.entities.LessonProgress.filter({ created_by: email }).catch(() => []),
         base44.entities.Goal.filter({ created_by: email }).catch(() => []),
         base44.entities.ProfessionalNote.filter({ family_email: email }, "-created_date", 20).catch(() => []),
+        base44.entities.BehaviorLog.filter({ created_by: email }, "-created_date", 60).catch(() => []),
       ]);
-      dataMap[email] = { checkins, lessons, goals, notes };
+      dataMap[email] = { checkins, lessons, goals, notes, behaviorLogs };
     }));
     setFamilyData(dataMap);
   }
@@ -57,7 +60,7 @@ export default function ProfessionalPortal() {
       status: "active",
     });
     setFamilies(prev => [f, ...prev]);
-    setFamilyData(prev => ({ ...prev, [f.family_email]: { checkins: [], lessons: [], goals: [], notes: [] } }));
+    setFamilyData(prev => ({ ...prev, [f.family_email]: { checkins: [], lessons: [], goals: [], notes: [], behaviorLogs: [] } }));
     setAssignForm({ family_email: "", family_name: "", child_name: "", professional_role: "Counselor" });
     setShowAssignForm(false);
     setSaving(false);
@@ -86,7 +89,8 @@ export default function ProfessionalPortal() {
         goals={data.goals || []}
         notes={data.notes || []}
         user={user}
-        onBack={() => setSelectedFamily(null)}
+        initialTab={initialDetailTab}
+        onBack={() => { setSelectedFamily(null); setInitialDetailTab("overview"); }}
         onNoteSaved={() => {
           // refresh notes for this family
           base44.entities.ProfessionalNote.filter({ family_email: selectedFamily.family_email }, "-created_date", 20)
@@ -198,6 +202,15 @@ export default function ProfessionalPortal() {
               </div>
             )}
 
+            {families.length > 0 && (
+              <ProfessionalDashboardOverview
+                families={families}
+                familyData={familyData}
+                onOpenFamily={(family) => { setInitialDetailTab("overview"); setSelectedFamily(family); }}
+                onMessageFamily={(family) => { setInitialDetailTab("messages"); setSelectedFamily(family); }}
+              />
+            )}
+
             {/* Summary bar */}
             {families.length > 0 && (
               <div className="grid grid-cols-3 gap-2">
@@ -251,7 +264,7 @@ export default function ProfessionalPortal() {
                     family={fam}
                     checkins={data.checkins || []}
                     lessons={data.lessons || []}
-                    onClick={() => setSelectedFamily(fam)}
+                    onClick={() => { setInitialDetailTab("overview"); setSelectedFamily(fam); }}
                   />
                 );
               })}

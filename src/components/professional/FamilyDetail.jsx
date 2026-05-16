@@ -17,8 +17,8 @@ function fmt(d) {
   return `${dt.getMonth() + 1}/${dt.getDate()}`;
 }
 
-export default function FamilyDetail({ family, checkins, lessons, goals, notes: initialNotes, onBack, onNoteSaved, user }) {
-  const [tab, setTab] = useState("overview");
+export default function FamilyDetail({ family, checkins, lessons, goals, notes: initialNotes, onBack, onNoteSaved, user, initialTab = "overview" }) {
+  const [tab, setTab] = useState(initialTab);
   const [showNoteForm, setShowNoteForm] = useState(false);
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [noteForm, setNoteForm] = useState({ note: "", recommendation: "" });
