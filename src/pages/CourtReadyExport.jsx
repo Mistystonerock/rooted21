@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import DocumentWorkflowToolkit from "@/components/documents/DocumentWorkflowToolkit";
 import { Download, Loader2, Shield, FileText, AlertTriangle, CheckCircle2, Calendar, Settings2, MessageSquare, BookOpen, Users, Stethoscope, Scale, UserCheck } from "lucide-react";
 
 const LIFE_STORY_ENTRY_TYPES = [
@@ -225,6 +226,8 @@ export default function CourtReadyExport() {
             Automatically compiles behavior logs, co-parenting message history, case milestones, documents, and activity records into a certified court-ready PDF with evidence-trail signatures.
           </p>
         </div>
+
+        <DocumentWorkflowToolkit />
 
         {/* Live record counts */}
         {liveCounts && (

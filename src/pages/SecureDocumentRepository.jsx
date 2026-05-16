@@ -8,6 +8,7 @@ import DocumentUploadModal from "@/components/documents/DocumentUploadModal";
 import DocumentSearchFilter from "@/components/documents/DocumentSearchFilter";
 import DocumentCard from "@/components/documents/DocumentCard";
 import DocumentShareModal from "@/components/documents/DocumentShareModal";
+import DocumentWorkflowToolkit from "@/components/documents/DocumentWorkflowToolkit";
 
 export default function SecureDocumentRepository() {
   const [user, setUser] = useState(null);
@@ -120,6 +121,8 @@ export default function SecureDocumentRepository() {
             <ScanLine size={16} /> Scan
           </Link>
         </div>
+
+        <DocumentWorkflowToolkit />
 
         {/* Search */}
         <div className="relative">
