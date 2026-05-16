@@ -101,6 +101,7 @@ const routes = {
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
   WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
+  CPSCaseNavigation: lazy(() => import("@/pages/CPSCaseNavigation")),
   FamilyKnowledgeHub: lazy(() => import("@/pages/FamilyKnowledgeHub")),
   CulturalCare: lazy(() => import("@/pages/CulturalCare")),
   YouthZone: lazy(() => import("@/pages/YouthZone")),

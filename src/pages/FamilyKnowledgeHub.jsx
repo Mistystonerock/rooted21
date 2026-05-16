@@ -4,6 +4,7 @@ import SupportFeatureGrid from "@/components/wraparound/SupportFeatureGrid";
 import { C } from "@/lib/rooted-constants";
 
 const LESSONS = [
+  { emoji: "🧭", title: "CPS case navigation", description: "Ohio timelines, case snapshot, case-plan tools, visitation records, and escalation contacts.", to: "/cps-case-navigation" },
   { emoji: "🧠", title: "Mental-health literacy", description: "Understand trauma responses, stress cycles, regulation, grief, and when to ask for help.", to: "/education-hub" },
   { emoji: "🌱", title: "Parenting strategies", description: "Connection-based routines, behavior supports, sensory tools, and de-escalation steps.", to: "/behavior-hub" },
   { emoji: "⚖️", title: "Legal rights", description: "Plain-language court, CPS, documentation, and advocacy guides.", to: "/court-rights-education" },

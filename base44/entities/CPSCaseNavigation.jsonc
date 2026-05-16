@@ -1,0 +1,82 @@
+{
+  "name": "CPSCaseNavigation",
+  "type": "object",
+  "properties": {
+    "case_number": {
+      "type": "string",
+      "description": "Optional juvenile court or agency case number"
+    },
+    "county": {
+      "type": "string",
+      "description": "Ohio county connected to the case"
+    },
+    "case_stage": {
+      "type": "string",
+      "enum": [
+        "removal_day",
+        "shelter_care",
+        "adjudication",
+        "disposition",
+        "case_review",
+        "reunification",
+        "permanency",
+        "closed"
+      ],
+      "default": "case_review",
+      "description": "Current child welfare or court stage"
+    },
+    "filing_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the complaint or case was filed"
+    },
+    "removal_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of removal or emergency custody, if applicable"
+    },
+    "next_hearing_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Next court hearing date"
+    },
+    "caseworker_name": {
+      "type": "string"
+    },
+    "caseworker_phone": {
+      "type": "string"
+    },
+    "attorney_name": {
+      "type": "string"
+    },
+    "gal_casa_name": {
+      "type": "string"
+    },
+    "main_goals": {
+      "type": "string",
+      "description": "Parent's plain-language goals and priorities"
+    },
+    "urgent_next_steps": {
+      "type": "string",
+      "description": "Immediate next steps to remember"
+    },
+    "share_with_team": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether caregiver intends to share this snapshot with their team"
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
