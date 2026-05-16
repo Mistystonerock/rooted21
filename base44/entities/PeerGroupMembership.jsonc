@@ -1,0 +1,64 @@
+{
+  "name": "PeerGroupMembership",
+  "type": "object",
+  "properties": {
+    "group_key": {
+      "type": "string",
+      "enum": [
+        "reunification",
+        "guardianship",
+        "kinship",
+        "foster_care",
+        "adoption",
+        "substance_recovery",
+        "court_support",
+        "school_advocacy",
+        "caregiver_wellbeing",
+        "teen_parenting"
+      ],
+      "description": "Moderated discussion group key"
+    },
+    "group_label": {
+      "type": "string",
+      "description": "Human readable group name"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "paused"
+      ],
+      "default": "approved"
+    },
+    "joined_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "moderation_note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "group_key",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_email": "{{user.email}}"
+    },
+    "read": true,
+    "update": {
+      "user_email": "{{user.email}}"
+    },
+    "delete": {
+      "user_email": "{{user.email}}"
+    }
+  }
+}

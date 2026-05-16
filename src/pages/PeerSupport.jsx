@@ -5,7 +5,8 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import PostCard from "@/components/community/PostCard";
 import NewPostForm from "@/components/community/NewPostForm";
 import PeerMatchPanel from "@/components/community/PeerMatchPanel";
-import { Plus, Users, Sparkles, Flame, MessageCircle } from "lucide-react";
+import PeerConnectionModule from "@/components/community/PeerConnectionModule";
+import { Plus, Users, Sparkles, Flame, MessageCircle, HeartHandshake } from "lucide-react";
 
 const DAILY_PROMPTS = [
   "What's one thing your child did this week that surprised you in a good way? 💚",
@@ -39,7 +40,7 @@ export default function PeerSupport() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [activeTopic, setActiveTopic] = useState("all");
-  const [activeTab, setActiveTab] = useState("feed"); // feed | match
+  const [activeTab, setActiveTab] = useState("feed"); // feed | match | connections
   const [showNewPost, setShowNewPost] = useState(false);
   const [loading, setLoading] = useState(true);
   const [promptDismissed, setPromptDismissed] = useState(false);
@@ -110,6 +111,7 @@ export default function PeerSupport() {
           {[
             { id: "feed", label: "Community Feed", icon: <Users size={14} /> },
             { id: "match", label: "Find a Peer", icon: <Sparkles size={14} /> },
+            { id: "connections", label: "Peer Connections", icon: <HeartHandshake size={14} /> },
           ].map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className="flex items-center gap-1.5 pb-2.5 px-4 text-xs font-bold border-b-2 transition-all"
@@ -232,6 +234,10 @@ export default function PeerSupport() {
 
         {activeTab === "match" && user && (
           <PeerMatchPanel user={user} />
+        )}
+
+        {activeTab === "connections" && user && (
+          <PeerConnectionModule user={user} />
         )}
 
         <div className="pb-8" />

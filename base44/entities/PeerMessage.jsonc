@@ -1,0 +1,81 @@
+{
+  "name": "PeerMessage",
+  "type": "object",
+  "properties": {
+    "sender_email": {
+      "type": "string"
+    },
+    "sender_display_name": {
+      "type": "string"
+    },
+    "recipient_email": {
+      "type": "string"
+    },
+    "recipient_display_name": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string",
+      "description": "Safe peer message body"
+    },
+    "thread_key": {
+      "type": "string",
+      "description": "Stable key for the two-family message thread"
+    },
+    "is_connection_request": {
+      "type": "boolean",
+      "default": false
+    },
+    "safety_acknowledged": {
+      "type": "boolean",
+      "default": true
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    },
+    "moderation_status": {
+      "type": "string",
+      "enum": [
+        "visible",
+        "flagged",
+        "hidden"
+      ],
+      "default": "visible"
+    }
+  },
+  "required": [
+    "sender_email",
+    "recipient_email",
+    "body",
+    "thread_key"
+  ],
+  "rls": {
+    "create": {
+      "sender_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "sender_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "sender_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "sender_email": "{{user.email}}"
+    }
+  }
+}

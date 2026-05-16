@@ -1,0 +1,105 @@
+{
+  "name": "PeerConnectionProfile",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Owner email for this peer profile"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Owner full name, private reference"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Public display name or anonymous nickname"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Short opt-in peer support introduction"
+    },
+    "family_type": {
+      "type": "string",
+      "enum": [
+        "reunification",
+        "guardianship",
+        "kinship",
+        "foster",
+        "adoptive",
+        "biological",
+        "relative_caregiver",
+        "substance_recovery",
+        "court_involved",
+        "school_advocacy",
+        "other"
+      ],
+      "default": "reunification"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Experience and support tags used for matching",
+      "items": {
+        "type": "string"
+      }
+    },
+    "group_interests": {
+      "type": "array",
+      "description": "Moderated discussion groups this parent wants to join",
+      "items": {
+        "type": "string"
+      }
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "Optional ZIP code for nearby matching"
+    },
+    "messaging_opt_in": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this parent allows opt-in peer messages"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "moderation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "paused"
+      ],
+      "default": "approved"
+    },
+    "safety_agreement_accepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "preferred_contact_style": {
+      "type": "string",
+      "enum": [
+        "messages",
+        "group_only",
+        "resources_only"
+      ],
+      "default": "messages"
+    }
+  },
+  "required": [
+    "user_email",
+    "display_name",
+    "family_type"
+  ],
+  "rls": {
+    "create": {
+      "user_email": "{{user.email}}"
+    },
+    "read": true,
+    "update": {
+      "user_email": "{{user.email}}"
+    },
+    "delete": {
+      "user_email": "{{user.email}}"
+    }
+  }
+}
