@@ -82,6 +82,16 @@
       "type": "boolean",
       "default": false,
       "description": "Whether the user has visited the Housing Resources page"
+    },
+    "dashboard_focus": {
+      "type": "string",
+      "enum": [
+        "caregiver",
+        "child_teen",
+        "professional",
+        "administrator"
+      ],
+      "description": "Preferred dashboard focus for personalized suggestions"
     }
   },
   "required": []

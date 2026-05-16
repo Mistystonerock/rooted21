@@ -21,6 +21,7 @@ import ProgressRing from "@/components/rooted/ProgressRing";
 import TrainingVideoSeries from "@/components/training/TrainingVideoSeries";
 import ChildSelector from "@/components/children/ChildSelector";
 import QuickAddChildCard from "@/components/children/QuickAddChildCard";
+import DashboardPersonalizationCard from "@/components/dashboard/DashboardPersonalizationCard";
 import { filterRecordsForChild, getChildAvatar, getChildDisplayName } from "@/lib/child-selection";
 
 const BG = "#faf6f1";
@@ -144,6 +145,8 @@ export default function Dashboard() {
           </motion.div>
 
           <ChildSelector selectedChild={child} refreshKey={childRefreshKey} onChange={(selected, list) => { setChild(selected); if (list) setChildren(list); }} />
+
+          {user && <DashboardPersonalizationCard user={user} onUpdated={setUser} />}
 
           <QuickAddChildCard onCreated={handleChildCreated} />
 
