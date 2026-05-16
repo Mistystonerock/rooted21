@@ -147,6 +147,18 @@ export default function Dashboard() {
 
           <QuickAddChildCard onCreated={handleChildCreated} />
 
+          {user && !user.housing_resources_zip && user.has_viewed_housing_resources !== true && (
+            <Link to="/housing-resources" className="block rounded-2xl p-4 no-underline" style={{ background: CARD, border: `1.5px solid ${GOLD}55`, boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full text-2xl" style={{ background: `${GOLD}18` }}>🏠</span>
+                <div>
+                  <p className="font-serif text-base font-bold" style={{ color: TEXT }}>Find Housing Near You</p>
+                  <p className="mt-1 text-xs leading-relaxed" style={{ color: MUTED }}>Tap to find rentals and housing assistance in your area.</p>
+                </div>
+              </div>
+            </Link>
+          )}
+
           {children.length > 0 && (
             <div className="grid gap-2">
               {children.map(item => {

@@ -77,6 +77,11 @@
     "housing_resources_zip": {
       "type": "string",
       "description": "Saved zip code for Housing Resources searches"
+    },
+    "has_viewed_housing_resources": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has visited the Housing Resources page"
     }
   },
   "required": []

@@ -20,9 +20,12 @@ export default function HousingResources() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then((me) => {
+    base44.auth.me().then(async (me) => {
       setUser(me);
       setZip(me?.housing_resources_zip || "");
+      if (me?.has_viewed_housing_resources !== true) {
+        await base44.auth.updateMe({ has_viewed_housing_resources: true });
+      }
     });
   }, []);
 
