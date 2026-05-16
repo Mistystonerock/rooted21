@@ -1,5 +1,6 @@
 import MobileHeader from "@/components/mobile/MobileHeader";
 import HubCard from "@/components/hubs/HubCard";
+import DynamicBehaviorInsights from "@/components/behavior/DynamicBehaviorInsights";
 import { C } from "@/lib/rooted-constants";
 
 const BEHAVIOR_ITEMS = [
@@ -24,6 +25,7 @@ export default function BehaviorHub() {
           <p className="font-serif font-bold text-base" style={{ color: C.cream }}>All Behavior Tools</p>
           <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>Track what is happening, spot patterns, and find calming supports faster.</p>
         </div>
+        <DynamicBehaviorInsights />
         <div className="space-y-3">{BEHAVIOR_ITEMS.map(item => <HubCard key={item.title} item={item} />)}</div>
         <div className="pb-8" />
       </div>
