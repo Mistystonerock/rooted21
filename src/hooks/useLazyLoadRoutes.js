@@ -26,6 +26,7 @@ const routes = {
   RespiteCare: lazy(() => import("@/pages/RespiteCare")),
   ResourceLibrary: lazy(() => import("@/pages/ResourceLibrary")),
   Profile: lazy(() => import("@/pages/Profile")),
+  PrivacyCenter: lazy(() => import("@/pages/PrivacyCenter")),
   Analytics: lazy(() => import("@/pages/Analytics")),
   ScheduleCreator: lazy(() => import("@/pages/ScheduleCreator")),
   SafetyPlan: lazy(() => import("@/pages/SafetyPlan")),

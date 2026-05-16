@@ -92,6 +92,56 @@
         "administrator"
       ],
       "description": "Preferred dashboard focus for personalized suggestions"
+    },
+    "behavior_log_visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "connected_professionals",
+        "care_team"
+      ],
+      "default": "private",
+      "description": "Who the user allows to view behavior logs when sharing is available"
+    },
+    "notes_visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "connected_professionals",
+        "care_team"
+      ],
+      "default": "private",
+      "description": "Who the user allows to view notes and reflections when sharing is available"
+    },
+    "legal_data_visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "connected_professionals",
+        "court_team"
+      ],
+      "default": "private",
+      "description": "Who the user allows to view legal or court-related records when sharing is available"
+    },
+    "profile_comment_permission": {
+      "type": "string",
+      "enum": [
+        "nobody",
+        "connected_professionals",
+        "care_team"
+      ],
+      "default": "connected_professionals",
+      "description": "Who can comment on family or child profiles when commenting is available"
+    },
+    "allow_profile_comments": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether comments on user profiles are allowed"
+    },
+    "privacy_updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When privacy preferences were last updated"
     }
   },
   "required": []

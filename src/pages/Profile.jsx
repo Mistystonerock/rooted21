@@ -200,6 +200,13 @@ export default function Profile() {
         {/* PRIVACY & LEGAL LINKS */}
         <div className="space-y-2">
           <Link
+            to="/privacy-center"
+            className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
+            style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}
+          >
+            🛡️ Privacy & Consent Center
+          </Link>
+          <Link
             to="/privacy-policy"
             className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
             style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}

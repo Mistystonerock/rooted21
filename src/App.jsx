@@ -133,6 +133,7 @@ function App() {
               <Route path="/goals" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Goals /></FeatureLockGate></Suspense>} />
               <Route path="/progress" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Progress /></FeatureLockGate></Suspense>} />
               <Route path="/profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Profile /></FeatureLockGate></Suspense>} />
+              <Route path="/privacy-center" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.PrivacyCenter /></FeatureLockGate></Suspense>} />
               <Route path="/help" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Help /></FeatureLockGate></Suspense>} />
               <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfile /></FeatureLockGate></Suspense>} />
               <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalPortal /></FeatureLockGate></Suspense>} />
