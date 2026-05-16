@@ -1,6 +1,8 @@
+import { useState } from "react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import HubCard from "@/components/hubs/HubCard";
 import ZipResourceNotice from "@/components/hubs/ZipResourceNotice";
+import HousingResourcesTab from "@/components/resources/HousingResourcesTab";
 import { C } from "@/lib/rooted-constants";
 
 const RESOURCE_SECTIONS = [
@@ -40,22 +42,47 @@ const RESOURCE_SECTIONS = [
 ];
 
 export default function Resources() {
+  const [activeTab, setActiveTab] = useState("all");
+
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader title="Resource Hub" subtitle="Local, legal, work, and community help" backTo="/dashboard" />
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-5">
-        <div className="rounded-2xl p-5" style={{ background: C.darkGreen }}>
-          <p className="text-3xl mb-2">🗂️</p>
-          <p className="font-serif font-bold text-base" style={{ color: C.cream }}>All Resources in One Place</p>
-          <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>Start with your ZIP code, then jump to local help, court paperwork, jobs, benefits, and substance-use support.</p>
+        <div className="flex rounded-2xl p-1" style={{ background: C.cream }}>
+          {[
+            { id: "all", label: "All Resources" },
+            { id: "housing", label: "Housing" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className="flex-1 rounded-xl px-3 py-3 text-sm font-black"
+              style={{ background: activeTab === tab.id ? C.darkGreen : "transparent", color: activeTab === tab.id ? "#fff" : C.darkGreen, border: "none" }}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
-        <ZipResourceNotice />
-        {RESOURCE_SECTIONS.map(section => (
-          <div key={section.title} className="space-y-2">
-            <p className="text-[11px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>{section.title}</p>
-            <div className="space-y-3">{section.items.map(item => <HubCard key={item.title} item={item} />)}</div>
-          </div>
-        ))}
+
+        {activeTab === "housing" ? (
+          <HousingResourcesTab />
+        ) : (
+          <>
+            <div className="rounded-2xl p-5" style={{ background: C.darkGreen }}>
+              <p className="text-3xl mb-2">🗂️</p>
+              <p className="font-serif font-bold text-base" style={{ color: C.cream }}>All Resources in One Place</p>
+              <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>Start with your ZIP code, then jump to local help, court paperwork, jobs, benefits, and substance-use support.</p>
+            </div>
+            <ZipResourceNotice />
+            {RESOURCE_SECTIONS.map(section => (
+              <div key={section.title} className="space-y-2">
+                <p className="text-[11px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>{section.title}</p>
+                <div className="space-y-3">{section.items.map(item => <HubCard key={item.title} item={item} />)}</div>
+              </div>
+            ))}
+          </>
+        )}
         <div className="rounded-2xl p-4" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
           <p className="text-xs font-bold" style={{ color: "#B84C2A" }}>In crisis?</p>
           <p className="text-[11px] mt-1 leading-relaxed" style={{ color: "#B84C2A" }}>Call or text 988. If there is immediate danger, call 911.</p>
