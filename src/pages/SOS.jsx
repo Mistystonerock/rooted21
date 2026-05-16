@@ -1,9 +1,47 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, HeartPulse, Phone } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 
 export default function SOS() {
   const navigate = useNavigate();
+  const [sendingAlert, setSendingAlert] = useState(false);
+  const [alertStatus, setAlertStatus] = useState("");
+
+  function getCurrentLocation() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        resolve("Location unavailable");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          resolve(`https://maps.google.com/?q=${latitude},${longitude}`);
+        },
+        () => resolve("Location unavailable"),
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+  }
+
+  async function handleSupportTeamAlert() {
+    setSendingAlert(true);
+    setAlertStatus("Getting your location…");
+    const location = await getCurrentLocation();
+
+    setAlertStatus("Sending alert to your support team…");
+    const response = await base44.functions.invoke("sendEmergencyAlert", {
+      situation: "SOS emergency alert triggered from Rooted 21. Please contact me immediately.",
+      location,
+    });
+
+    const count = response.data?.smsCount || 0;
+    setAlertStatus(count > 0 ? `Alert sent to ${count} support contact${count === 1 ? "" : "s"}.` : "No support contacts with phone numbers were found.");
+    setSendingAlert(false);
+  }
 
   return (
     <div className="min-h-screen pb-28" style={{ background: "#FEF3EE" }}>
@@ -26,6 +64,25 @@ export default function SOS() {
       </div>
 
       <main className="mx-auto max-w-[520px] space-y-4 px-4 py-5">
+        <section className="rounded-3xl p-5 text-center shadow-lg" style={{ background: "#fff", border: "2px solid #F4C9B8" }}>
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: "#B42318" }}>
+            <Send size={30} color="#fff" />
+          </div>
+          <h2 className="font-serif text-2xl font-black" style={{ color: "#B42318" }}>Alert my support team</h2>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: "#5A2B22" }}>Sends an SMS to your saved support team contacts with your current location and a request for immediate help.</p>
+          <button
+            type="button"
+            onClick={handleSupportTeamAlert}
+            disabled={sendingAlert}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-lg font-black shadow-lg"
+            style={{ background: sendingAlert ? "#FCA5A5" : "#B42318", color: "#fff", border: "none", cursor: sendingAlert ? "default" : "pointer" }}
+          >
+            <Send size={22} /> {sendingAlert ? "Sending Alert…" : "Send SOS Alert"}
+          </button>
+          {alertStatus && <p className="mt-3 text-xs font-bold" style={{ color: "#B42318" }}>{alertStatus}</p>}
+          <Link to="/my-team" className="mt-3 inline-flex text-xs font-bold underline" style={{ color: C.darkGreen }}>Manage support team contacts</Link>
+        </section>
+
         <section className="rounded-3xl p-5 text-center shadow-lg" style={{ background: "#fff", border: "2px solid #F4C9B8" }}>
           <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: "#DC2626" }}>
             <AlertTriangle size={32} color="#fff" />

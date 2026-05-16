@@ -42,7 +42,7 @@ export default function BottomNav() {
       {/* SOS center button */}
       <div style={{ flex: 1, display: "flex", justifyContent: "center", paddingBottom: 4 }}>
         <Link
-          to="/crisis-support"
+          to="/sos"
           style={{
             width: 54,
             height: 54,

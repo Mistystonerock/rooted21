@@ -18,9 +18,7 @@ Deno.serve(async (req) => {
     const allContacts = await base44.asServiceRole.entities.TeamContact.filter({
       parent_email: user.email,
     });
-    const smsTargets = allContacts.filter(
-      (c) => c.phone && ["attorney", "caseworker", "casa", "gal", "supervisor", "therapist"].includes(c.role)
-    );
+    const smsTargets = allContacts.filter((c) => c.phone);
 
     // 2. Build the SMS message
     const childRef = childName || caseName || "their child";
