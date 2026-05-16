@@ -48,8 +48,10 @@ export default function ChildProfiles() {
     loadChildren();
   }
 
-  function openEdit(child) {
-    setEditing(child);
+  function openEdit(childId) {
+    const selectedChild = children.find(child => child.id === childId);
+    if (!selectedChild) return;
+    setEditing(selectedChild);
     setShowForm(true);
   }
 
@@ -155,7 +157,7 @@ export default function ChildProfiles() {
           <ChildProfileCard
             key={child.id}
             child={child}
-            onEdit={() => openEdit(child)}
+            onEdit={() => openEdit(child.id)}
             onDelete={() => setDeleteConfirm(child)}
           />
         ))}
