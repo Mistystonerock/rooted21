@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { getChildAvatar, getChildDisplayName, rememberSelectedChild, selectInitialChild } from "@/lib/child-selection";
 
-export default function ChildSelector({ selectedChild, onChange, compact = false }) {
+export default function ChildSelector({ selectedChild, onChange, compact = false, refreshKey = 0 }) {
   const [children, setChildren] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -20,7 +20,7 @@ export default function ChildSelector({ selectedChild, onChange, compact = false
         onChange?.(selectedChild, list);
       }
     });
-  }, []);
+  }, [refreshKey]);
 
   function choose(child) {
     rememberSelectedChild(child);

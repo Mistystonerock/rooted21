@@ -20,6 +20,7 @@ import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
 import TrainingVideoSeries from "@/components/training/TrainingVideoSeries";
 import ChildSelector from "@/components/children/ChildSelector";
+import QuickAddChildCard from "@/components/children/QuickAddChildCard";
 import { filterRecordsForChild, getChildAvatar, getChildDisplayName } from "@/lib/child-selection";
 
 const BG = "#faf6f1";
@@ -54,6 +55,7 @@ export default function Dashboard() {
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
   const [showTour, setShowTour] = useState(false);
+  const [childRefreshKey, setChildRefreshKey] = useState(0);
 
   async function handleRefresh() {
     await Promise.all([
@@ -76,6 +78,12 @@ export default function Dashboard() {
   const progressPct = Math.round((completedLessons / 21) * 100);
   const selectedCheckins = filterRecordsForChild(recentCheckins, child);
   const latestCheckin = selectedCheckins[0];
+
+  function handleChildCreated(newChild) {
+    setChildren(prev => [newChild, ...prev]);
+    setChild(newChild);
+    setChildRefreshKey(prev => prev + 1);
+  }
 
   return (
     <div className="min-h-screen" style={{ background: BG, color: TEXT, fontFamily: "var(--font-sans)" }}>
@@ -127,7 +135,9 @@ export default function Dashboard() {
             </Link>
           </motion.div>
 
-          <ChildSelector selectedChild={child} onChange={(selected, list) => { setChild(selected); if (list) setChildren(list); }} />
+          <ChildSelector selectedChild={child} refreshKey={childRefreshKey} onChange={(selected, list) => { setChild(selected); if (list) setChildren(list); }} />
+
+          <QuickAddChildCard onCreated={handleChildCreated} />
 
           {children.length > 0 && (
             <div className="grid gap-2">
