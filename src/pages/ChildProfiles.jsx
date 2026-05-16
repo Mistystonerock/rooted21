@@ -7,6 +7,8 @@ import ChildProfileCard from "@/components/children/ChildProfileCard";
 import ChildProfileForm from "@/components/children/ChildProfileForm";
 import ChildDataConsentModal, { hasChildDataConsent } from "@/components/legal/ChildDataConsentModal";
 
+const MAX_CHILDREN = 10;
+
 export default function ChildProfiles() {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,7 @@ export default function ChildProfiles() {
   }
 
   async function handleSave(data) {
+    if (!editing && children.length >= MAX_CHILDREN) return;
     setSaving(true);
     if (editing) {
       await base44.entities.ChildProfile.update(editing.id, data);
@@ -54,6 +57,7 @@ export default function ChildProfiles() {
   }
 
   function openNew() {
+    if (children.length >= MAX_CHILDREN) return;
     setEditing(null);
     setShowForm(true);
   }
@@ -85,7 +89,7 @@ export default function ChildProfiles() {
         subtitle="Personalize AI insights for each child"
         backTo="/dashboard"
         rightSlot={
-          !showForm && (
+          !showForm && children.length < MAX_CHILDREN && (
             <button
               onClick={openNew}
               className="w-11 h-11 rounded-xl flex items-center justify-center"
@@ -98,6 +102,10 @@ export default function ChildProfiles() {
       />
 
       <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
+
+        <div className="rounded-xl p-3.5" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
+          <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{children.length}/{MAX_CHILDREN} child profiles added</p>
+        </div>
 
         {/* Form panel */}
         {showForm && (
@@ -157,7 +165,7 @@ export default function ChildProfiles() {
         ))}
 
         {/* Add another button */}
-        {!showForm && children.length > 0 && (
+        {!showForm && children.length > 0 && children.length < MAX_CHILDREN && (
           <button
             onClick={openNew}
             className="w-full py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2"
@@ -165,6 +173,12 @@ export default function ChildProfiles() {
           >
             <Plus size={16} color={C.midGreen} /> Add Another Child
           </button>
+        )}
+
+        {!showForm && children.length >= MAX_CHILDREN && (
+          <div className="rounded-xl p-3.5 text-center" style={{ background: C.cream, border: `1px solid ${C.midGreen}30` }}>
+            <p className="text-xs font-bold" style={{ color: C.darkGreen }}>You’ve reached the 10-child profile limit.</p>
+          </div>
         )}
 
         <div className="pb-8" />

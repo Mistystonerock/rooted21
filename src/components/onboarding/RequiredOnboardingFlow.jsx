@@ -45,23 +45,60 @@ export default function RequiredOnboardingFlow({ user, onComplete }) {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [child, setChild] = useState({ first_name: "", age: "", strengths: "", concerns: "" });
+  const [children, setChildren] = useState([]);
   const [checkIn, setCheckIn] = useState({ child_regulation: 3, parent_calm: 3, note: "" });
   const [error, setError] = useState("");
+  const MAX_CHILDREN = 10;
 
-  async function saveChildAndContinue() {
-    if (!child.first_name.trim() || !child.age) {
-      setError("Please enter your child's name and age before continuing.");
+  function isBlankChild(childData) {
+    return !childData.first_name.trim() && !childData.age && !childData.strengths.trim() && !childData.concerns.trim();
+  }
+
+  function validateChild(childData) {
+    return childData.first_name.trim() && childData.age;
+  }
+
+  function addChildToList() {
+    if (children.length >= MAX_CHILDREN) {
+      setError("You can add up to 10 children.");
+      return false;
+    }
+    if (!validateChild(child)) {
+      setError("Please enter your child's name and age before adding them.");
+      return false;
+    }
+    setChildren(prev => [...prev, { ...child, id: Date.now() }]);
+    setChild({ first_name: "", age: "", strengths: "", concerns: "" });
+    setError("");
+    return true;
+  }
+
+  async function saveChildrenAndContinue() {
+    let childrenToSave = [...children];
+    if (!isBlankChild(child)) {
+      if (!validateChild(child)) {
+        setError("Please enter your child's name and age before continuing.");
+        return;
+      }
+      if (childrenToSave.length >= MAX_CHILDREN) {
+        setError("You can add up to 10 children.");
+        return;
+      }
+      childrenToSave = [...childrenToSave, { ...child, id: Date.now() }];
+    }
+    if (childrenToSave.length === 0) {
+      setError("Please add at least one child before continuing.");
       return;
     }
     setSaving(true);
     setError("");
-    await base44.entities.ChildProfile.create({
-      first_name: child.first_name.trim(),
-      age: Number(child.age),
-      strengths: child.strengths.trim(),
-      concerns: child.concerns.trim(),
+    await Promise.all(childrenToSave.map(childData => base44.entities.ChildProfile.create({
+      first_name: childData.first_name.trim(),
+      age: Number(childData.age),
+      strengths: childData.strengths.trim(),
+      concerns: childData.concerns.trim(),
       photo_emoji: "🌱",
-    });
+    })));
     setSaving(false);
     setStep(3);
   }
@@ -114,17 +151,51 @@ export default function RequiredOnboardingFlow({ user, onComplete }) {
         {step === 2 && (
           <div className="space-y-4">
             <div>
-              <h1 className="font-serif text-2xl font-bold" style={{ color: DARK }}>Tell us about your child</h1>
-              <p className="mt-2 text-sm" style={{ color: MUTED }}>This helps Rooted 21 personalize support for your family.</p>
+              <h1 className="font-serif text-2xl font-bold" style={{ color: DARK }}>Tell us about your children</h1>
+              <p className="mt-2 text-sm" style={{ color: MUTED }}>Add up to 10 children so Rooted 21 can personalize support for your family.</p>
+              <p className="mt-2 text-xs font-bold" style={{ color: GREEN }}>{children.length}/10 children added</p>
             </div>
-            <Input placeholder="Child's first name" value={child.first_name} onChange={e => setChild({ ...child, first_name: e.target.value })} />
-            <Input type="number" min="0" placeholder="Child's age" value={child.age} onChange={e => setChild({ ...child, age: e.target.value })} />
-            <Textarea placeholder="Strengths, gifts, or things they love" value={child.strengths} onChange={e => setChild({ ...child, strengths: e.target.value })} />
-            <Textarea placeholder="Relevant needs, supports, or concerns" value={child.concerns} onChange={e => setChild({ ...child, concerns: e.target.value })} />
+
+            {children.length > 0 && (
+              <div className="space-y-2 rounded-2xl p-3" style={{ background: CREAM }}>
+                {children.map(childData => (
+                  <div key={childData.id} className="flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2">
+                    <div>
+                      <p className="text-sm font-bold" style={{ color: DARK }}>{childData.first_name}</p>
+                      <p className="text-xs" style={{ color: MUTED }}>Age {childData.age}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setChildren(prev => prev.filter(item => item.id !== childData.id))}
+                      className="rounded-lg px-2 text-xs font-bold"
+                      style={{ background: "#FEF3F2", color: "#B42318", border: "none" }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {children.length < MAX_CHILDREN && (
+              <>
+                <Input placeholder="Child's first name" value={child.first_name} onChange={e => setChild({ ...child, first_name: e.target.value })} />
+                <Input type="number" min="0" placeholder="Child's age" value={child.age} onChange={e => setChild({ ...child, age: e.target.value })} />
+                <Textarea placeholder="Strengths, gifts, or things they love" value={child.strengths} onChange={e => setChild({ ...child, strengths: e.target.value })} />
+                <Textarea placeholder="Relevant needs, supports, or concerns" value={child.concerns} onChange={e => setChild({ ...child, concerns: e.target.value })} />
+              </>
+            )}
+
             {error && <p className="text-sm font-bold" style={{ color: "#B42318" }}>{error}</p>}
-            <Button onClick={saveChildAndContinue} disabled={saving} className="w-full rounded-2xl py-6 text-base font-bold" style={{ background: GREEN }}>
-              {saving ? "Saving…" : "Continue"}
-            </Button>
+
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Button type="button" variant="outline" onClick={addChildToList} disabled={saving || children.length >= MAX_CHILDREN} className="rounded-2xl py-5 font-bold">
+                Add Another Child
+              </Button>
+              <Button onClick={saveChildrenAndContinue} disabled={saving} className="rounded-2xl py-5 font-bold" style={{ background: GREEN }}>
+                {saving ? "Saving…" : "Continue"}
+              </Button>
+            </div>
           </div>
         )}
 
