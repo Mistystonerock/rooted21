@@ -2,6 +2,14 @@
   "name": "CheckIn",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this check-in belongs to"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name snapshot for display and legacy records"
+    },
     "session_id": {
       "type": "string",
       "description": "ID of the linked CrisisSession"
@@ -22,5 +30,17 @@
   "required": [
     "child_regulation",
     "parent_calm"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
 }

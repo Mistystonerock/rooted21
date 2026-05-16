@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, Plus, Target, CheckCircle2, Circle, Clock } from "lucide-react";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, withChildLink } from "@/lib/child-selection";
 
 const STATUS_CONFIG = {
   not_started: { label: "Not Started", color: C.mutedText, bg: C.cream, icon: Circle },
@@ -11,20 +13,26 @@ const STATUS_CONFIG = {
 };
 
 export default function Goals() {
+  const [allGoals, setAllGoals] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", who_is_helping: "" });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.entities.Goal.list("-created_date", 50).then(setGoals);
+    base44.entities.Goal.list("-created_date", 200).then(setAllGoals);
   }, []);
+
+  useEffect(() => {
+    setGoals(filterRecordsForChild(allGoals, selectedChild));
+  }, [allGoals, selectedChild]);
 
   async function handleAdd() {
     if (!form.title.trim()) return;
     setSaving(true);
-    const g = await base44.entities.Goal.create({ ...form, progress: "not_started" });
-    setGoals(prev => [g, ...prev]);
+    const g = await base44.entities.Goal.create(withChildLink({ ...form, progress: "not_started" }, selectedChild));
+    setAllGoals(prev => [g, ...prev]);
     setForm({ title: "", description: "", who_is_helping: "" });
     setShowForm(false);
     setSaving(false);
@@ -32,12 +40,12 @@ export default function Goals() {
 
   async function handleStatusChange(goal, progress) {
     await base44.entities.Goal.update(goal.id, { progress });
-    setGoals(prev => prev.map(g => g.id === goal.id ? { ...g, progress } : g));
+    setAllGoals(prev => prev.map(g => g.id === goal.id ? { ...g, progress } : g));
   }
 
   async function handleDelete(id) {
     await base44.entities.Goal.delete(id);
-    setGoals(prev => prev.filter(g => g.id !== id));
+    setAllGoals(prev => prev.filter(g => g.id !== id));
   }
 
   const active = goals.filter(g => g.progress !== "completed");
@@ -58,6 +66,8 @@ export default function Goals() {
       </div>
 
       <div className="max-w-[520px] mx-auto px-4 py-4 space-y-3">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+
         {showForm && (
           <div className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.midGreen}` }}>
             <p className="font-serif font-bold text-sm mb-3" style={{ color: C.darkGreen }}>New Goal</p>

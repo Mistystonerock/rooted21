@@ -26,18 +26,27 @@ const SUGGESTED_GOALS = [
 ];
 
 const BLANK = {
+  child_uid: "",
   first_name: "",
   last_name: "",
   age: "",
+  date_of_birth: "",
+  gender: "",
   placement_type: "",
   photo_emoji: "🧒",
+  photo_url: "",
+  diagnosis_needs: "",
   care_goals: [],
   strengths: "",
   concerns: "",
   triggers: "",
   coping_tools: "",
   behavior_patterns: "",
+  school_name: "",
   school_notes: "",
+  therapist_name: "",
+  caseworker_name: "",
+  notes: "",
 };
 
 export default function ChildProfileForm({ initial, onSave, onCancel, saving }) {
@@ -70,7 +79,11 @@ export default function ChildProfileForm({ initial, onSave, onCancel, saving }) 
   function handleSubmit(e) {
     e.preventDefault();
     if (!form.first_name.trim()) return;
-    onSave({ ...form, age: form.age ? Number(form.age) : undefined });
+    onSave({
+      ...form,
+      child_uid: form.child_uid || `child_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      age: form.age ? Number(form.age) : undefined,
+    });
   }
 
   return (
@@ -137,6 +150,30 @@ export default function ChildProfileForm({ initial, onSave, onCancel, saving }) 
           />
         </div>
         <div>
+          <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>Date of Birth</label>
+          <input
+            type="date"
+            value={form.date_of_birth}
+            onChange={e => set("date_of_birth", e.target.value)}
+            className="w-full rounded-xl px-3 py-2.5 text-sm"
+            style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>Gender</label>
+          <select value={form.gender} onChange={e => set("gender", e.target.value)} className="w-full rounded-xl px-3 py-2.5 text-sm" style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }}>
+            <option value="">Select…</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="nonbinary">Nonbinary</option>
+            <option value="prefer_not_to_say">Prefer not to say</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
           <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>Placement Type</label>
           <select
             value={form.placement_type}
@@ -150,6 +187,16 @@ export default function ChildProfileForm({ initial, onSave, onCancel, saving }) 
             ))}
           </select>
         </div>
+      </div>
+
+      <div>
+        <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>Photo URL</label>
+        <input value={form.photo_url} onChange={e => set("photo_url", e.target.value)} placeholder="Optional photo link" className="w-full rounded-xl px-3 py-2.5 text-sm" style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }} />
+      </div>
+
+      <div>
+        <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>Diagnosis or Needs</label>
+        <textarea value={form.diagnosis_needs} onChange={e => set("diagnosis_needs", e.target.value)} placeholder="Optional diagnosis, sensory needs, medical needs, or support needs" rows={2} className="w-full rounded-xl px-3 py-2.5 text-xs resize-none" style={{ border: `1.5px solid ${C.cream}`, background: C.offWhite }} />
       </div>
 
       {/* Care Goals */}
@@ -220,7 +267,11 @@ export default function ChildProfileForm({ initial, onSave, onCancel, saving }) 
         { field: "triggers",         label: "⚡ Known Triggers",     placeholder: "What tends to dysregulate them?" },
         { field: "coping_tools",     label: "🛠️ Coping Tools",      placeholder: "Strategies that help calm them…" },
         { field: "behavior_patterns",label: "📊 Behavior Patterns",  placeholder: "Patterns you've noticed…" },
+        { field: "school_name",      label: "🏫 School Name",        placeholder: "School name…" },
         { field: "school_notes",     label: "🏫 School Notes",       placeholder: "IEP, accommodations, teacher notes…" },
+        { field: "therapist_name",   label: "🧑‍⚕️ Therapist Name",   placeholder: "Therapist name…" },
+        { field: "caseworker_name",  label: "🤝 Caseworker Name",    placeholder: "Caseworker name…" },
+        { field: "notes",            label: "📝 Notes",              placeholder: "Anything else you want to remember…" },
       ].map(({ field, label, placeholder }) => (
         <div key={field}>
           <label className="text-[11px] font-bold block mb-1" style={{ color: C.darkGreen }}>{label}</label>

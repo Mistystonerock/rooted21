@@ -2,6 +2,26 @@
   "name": "DailySchedule",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this routine belongs to when not shared"
+    },
+    "child_ids": {
+      "type": "array",
+      "description": "IDs of children this routine applies to",
+      "items": {
+        "type": "string"
+      }
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child this schedule is for"
+    },
+    "applies_to_all_children": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this routine is shared across all children"
+    },
     "name": {
       "type": "string",
       "description": "Schedule name (e.g. Morning Routine)"
@@ -44,10 +64,6 @@
           }
         }
       }
-    },
-    "child_name": {
-      "type": "string",
-      "description": "Name of the child this schedule is for"
     },
     "is_active": {
       "type": "boolean",

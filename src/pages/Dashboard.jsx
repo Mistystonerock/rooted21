@@ -19,6 +19,8 @@ import MobileRefresh from "@/components/mobile/MobileRefresh";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
 import TrainingVideoSeries from "@/components/training/TrainingVideoSeries";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, getChildAvatar, getChildDisplayName } from "@/lib/child-selection";
 
 const BG = "#faf6f1";
 const CARD = "#ffffff";
@@ -45,6 +47,7 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [child, setChild] = useState(null);
+  const [children, setChildren] = useState([]);
   const [goals, setGoals] = useState([]);
   const [lessonProgress, setLessonProgress] = useState([]);
   const [recentCheckins, setRecentCheckins] = useState([]);
@@ -55,7 +58,7 @@ export default function Dashboard() {
   async function handleRefresh() {
     await Promise.all([
       base44.auth.me().then(setUser),
-      base44.entities.ChildProfile.list("-created_date", 1).then(r => setChild(r[0] || null)),
+      base44.entities.ChildProfile.list("-created_date", 200).then(r => { setChildren(r); setChild(prev => prev || r[0] || null); }),
       base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals),
       base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
@@ -71,7 +74,8 @@ export default function Dashboard() {
 
   const completedLessons = lessonProgress.length;
   const progressPct = Math.round((completedLessons / 21) * 100);
-  const latestCheckin = recentCheckins[0];
+  const selectedCheckins = filterRecordsForChild(recentCheckins, child);
+  const latestCheckin = selectedCheckins[0];
 
   return (
     <div className="min-h-screen" style={{ background: BG, color: TEXT, fontFamily: "var(--font-sans)" }}>
@@ -122,6 +126,30 @@ export default function Dashboard() {
               <span style={{ fontSize: 12, fontWeight: 800, color: "#ffffff", whiteSpace: "nowrap" }}>AI Coach</span>
             </Link>
           </motion.div>
+
+          <ChildSelector selectedChild={child} onChange={(selected, list) => { setChild(selected); if (list) setChildren(list); }} />
+
+          {children.length > 0 && (
+            <div className="grid gap-2">
+              {children.map(item => {
+                const childCheckins = filterRecordsForChild(recentCheckins, item);
+                const latest = childCheckins[0];
+                return (
+                  <div key={item.id} className="flex items-center gap-3 rounded-2xl p-3" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                    {item.photo_url ? <img src={item.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" /> : <span className="flex h-10 w-10 items-center justify-center rounded-full text-lg" style={{ background: `${GREEN}20` }}>{getChildAvatar(item)}</span>}
+                    <div className="flex-1">
+                      <p className="text-sm font-bold" style={{ color: TEXT }}>{getChildDisplayName(item)}</p>
+                      <p className="text-[11px]" style={{ color: MUTED }}>{item.age ? `Age ${item.age}` : "Age not set"}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-black" style={{ color: latest ? GREEN : MUTED }}>{latest?.child_regulation || "—"}</p>
+                      <p className="text-[9px]" style={{ color: MUTED }}>Regulation</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           <TrainingVideoSeries compact />
 

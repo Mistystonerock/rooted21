@@ -2,6 +2,14 @@
   "name": "LessonProgress",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this lesson progress belongs to"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name snapshot for display and legacy records"
+    },
     "lesson_id": {
       "type": "number"
     },

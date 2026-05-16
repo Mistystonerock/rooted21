@@ -4,12 +4,15 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Download, Loader, Calendar } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, getChildDisplayName } from "@/lib/child-selection";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 export default function MonthlyReport() {
   const [user, setUser] = useState(null);
   const [child, setChild] = useState(null);
+  const [reportMode, setReportMode] = useState("child");
   const [checkins, setCheckins] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [goals, setGoals] = useState([]);
@@ -43,8 +46,11 @@ export default function MonthlyReport() {
     const monthNum = parseInt(monthStr);
     const monthName = new Date(year, monthNum - 1).toLocaleString("default", { month: "long" });
 
+    const reportCheckins = reportMode === "all" ? checkins : filterRecordsForChild(checkins, child);
+    const reportGoals = reportMode === "all" ? goals : filterRecordsForChild(goals, child);
+
     // Filter data by month
-    const monthCheckins = checkins.filter((c) => {
+    const monthCheckins = reportCheckins.filter((c) => {
       const d = new Date(c.created_date);
       return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
     });
@@ -54,7 +60,7 @@ export default function MonthlyReport() {
       return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
     });
 
-    const monthCompletedGoals = goals.filter(
+    const monthCompletedGoals = reportGoals.filter(
       (g) =>
         g.progress === "completed" &&
         new Date(g.created_date).getFullYear() === parseInt(year) &&
@@ -91,7 +97,7 @@ export default function MonthlyReport() {
           <div class="section-title">📊 Overview</div>
           <p style="margin-top: 0; font-size: 12px;">
             Family: <span class="highlight">${user?.full_name || "Family"}</span>
-            ${child ? ` • Child: <span class="highlight">${child.first_name}</span>` : ""}
+            ${reportMode === "all" ? ` • Children: <span class="highlight">All children</span>` : child ? ` • Child: <span class="highlight">${getChildDisplayName(child)}</span>` : ""}
           </p>
           <div style="margin-top: 15px;">
             <div class="stat-box">
@@ -219,6 +225,13 @@ export default function MonthlyReport() {
       />
 
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-4">
+        <ChildSelector selectedChild={child} onChange={setChild} />
+
+        <div className="grid grid-cols-2 gap-2">
+          <button onClick={() => setReportMode("child")} className="rounded-xl py-2.5 text-xs font-bold" style={{ background: reportMode === "child" ? C.darkGreen : C.white, color: reportMode === "child" ? C.cream : C.darkGreen, border: `1px solid ${C.cream}` }}>Selected Child</button>
+          <button onClick={() => setReportMode("all")} className="rounded-xl py-2.5 text-xs font-bold" style={{ background: reportMode === "all" ? C.darkGreen : C.white, color: reportMode === "all" ? C.cream : C.darkGreen, border: `1px solid ${C.cream}` }}>All Children</button>
+        </div>
+
         {/* INFO BANNER */}
         <div className="rounded-xl p-4 flex gap-3" style={{ background: `${C.midGreen}12`, border: `1px solid ${C.midGreen}30` }}>
           <Calendar size={16} color={C.midGreen} className="flex-shrink-0 mt-0.5" />

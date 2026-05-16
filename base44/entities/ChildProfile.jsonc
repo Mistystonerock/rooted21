@@ -2,6 +2,10 @@
   "name": "ChildProfile",
   "type": "object",
   "properties": {
+    "child_uid": {
+      "type": "string",
+      "description": "Stable unique child identifier for linking records"
+    },
     "first_name": {
       "type": "string",
       "description": "Child's first name"
@@ -14,6 +18,22 @@
       "type": "number",
       "description": "Child's age"
     },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "Child's date of birth"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        "nonbinary",
+        "prefer_not_to_say",
+        "other"
+      ],
+      "description": "Child's gender"
+    },
     "placement_type": {
       "type": "string",
       "enum": [
@@ -24,6 +44,18 @@
         "other"
       ],
       "description": "Type of placement/relationship"
+    },
+    "photo_emoji": {
+      "type": "string",
+      "description": "Emoji avatar for this child"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Uploaded child photo URL"
+    },
+    "diagnosis_needs": {
+      "type": "string",
+      "description": "Diagnosis, disabilities, medical needs, sensory needs, or support needs"
     },
     "care_goals": {
       "type": "array",
@@ -52,16 +84,40 @@
       "type": "string",
       "description": "Observed behavior patterns"
     },
+    "school_name": {
+      "type": "string",
+      "description": "Child's school name"
+    },
     "school_notes": {
       "type": "string",
       "description": "School-related notes (IEP, accommodations, etc.)"
     },
-    "photo_emoji": {
+    "therapist_name": {
       "type": "string",
-      "description": "Emoji avatar for this child"
+      "description": "Child's therapist name"
+    },
+    "caseworker_name": {
+      "type": "string",
+      "description": "Child's caseworker name"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about this child"
     }
   },
   "required": [
     "first_name"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
 }

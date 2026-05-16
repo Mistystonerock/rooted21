@@ -2,6 +2,14 @@
   "name": "Goal",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this goal belongs to"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name snapshot for display and legacy records"
+    },
     "title": {
       "type": "string"
     },

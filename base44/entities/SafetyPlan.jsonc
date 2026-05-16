@@ -2,6 +2,10 @@
   "name": "SafetyPlan",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this safety plan belongs to"
+    },
     "child_name": {
       "type": "string",
       "description": "Child's name"
@@ -104,5 +108,17 @@
   },
   "required": [
     "child_name"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
 }

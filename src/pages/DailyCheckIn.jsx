@@ -6,6 +6,8 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft, CheckCircle2, Mic, MicOff, TrendingUp } from "lucide-react";
 import PrivacyBadge from "@/components/rooted/PrivacyBadge";
 import WinCelebration from "@/components/rooted/WinCelebration";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, withChildLink } from "@/lib/child-selection";
 
 const EMOJIS = { 1: "😟", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 const LABELS = { 1: "Very Dysregulated", 2: "Somewhat Struggling", 3: "Neutral", 4: "Calm", 5: "Very Calm & Regulated" };
@@ -41,7 +43,9 @@ export default function DailyCheckIn() {
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [allCheckins, setAllCheckins] = useState([]);
   const [recentCheckins, setRecentCheckins] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(null);
   const [celebrate, setCelebrate] = useState(false);
   const [celebrateMsg, setCelebrateMsg] = useState("");
   const [listening, setListening] = useState(false);
@@ -51,10 +55,15 @@ export default function DailyCheckIn() {
   useEffect(() => {
     base44.auth.me().then(async (u) => {
       setUser(u);
-      const checkins = await base44.entities.CheckIn.list("-created_date", 30);
+      const checkins = await base44.entities.CheckIn.list("-created_date", 200);
+      setAllCheckins(checkins);
       setRecentCheckins(checkins);
     });
   }, []);
+
+  useEffect(() => {
+    setRecentCheckins(filterRecordsForChild(allCheckins, selectedChild).slice(0, 30));
+  }, [allCheckins, selectedChild]);
 
   function toggleListening() {
     if (listening) {
@@ -85,15 +94,15 @@ export default function DailyCheckIn() {
   async function handleSave() {
     if (!user) return;
     setSaving(true);
-    const optimistic = { id: `opt-${Date.now()}`, child_regulation: childRegulation, parent_calm: parentCalm, note: note || null, created_date: new Date().toISOString() };
-    setRecentCheckins(prev => [optimistic, ...prev].slice(0, 30));
+    const optimistic = withChildLink({ id: `opt-${Date.now()}`, child_regulation: childRegulation, parent_calm: parentCalm, note: note || null, created_date: new Date().toISOString() }, selectedChild);
+    setAllCheckins(prev => [optimistic, ...prev].slice(0, 200));
     setSaved(true);
     setNote("");
     setTimeout(() => setSaved(false), 2500);
 
-    await base44.entities.CheckIn.create({ child_regulation: childRegulation, parent_calm: parentCalm, note: optimistic.note });
-    const updated = await base44.entities.CheckIn.list("-created_date", 30);
-    setRecentCheckins(updated);
+    await base44.entities.CheckIn.create(withChildLink({ child_regulation: childRegulation, parent_calm: parentCalm, note: optimistic.note }, selectedChild));
+    const updated = await base44.entities.CheckIn.list("-created_date", 200);
+    setAllCheckins(updated);
     setSaving(false);
 
     // Check streaks
@@ -126,6 +135,8 @@ export default function DailyCheckIn() {
       </div>
 
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-5">
+
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {/* Privacy badge */}
         <PrivacyBadge />

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Plus, Edit2, Trash2, ChevronDown } from "lucide-react";
+import { ChevronLeft, Plus, Edit2, Trash2 } from "lucide-react";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, getChildDisplayName, withChildLink } from "@/lib/child-selection";
 
 const ROUTINE_TYPES = ["morning", "after_school", "bedtime", "weekend"];
 const EMOJIS = ["🛏️", "🍳", "🚿", "🎒", "📚", "🎮", "🍽️", "🧸", "🌙", "⏰"];
@@ -10,6 +12,7 @@ const EMOJIS = ["🛏️", "🍳", "🚿", "🎒", "📚", "🎮", "🍽️", "�
 export default function HouseholdRoutine() {
   const [user, setUser] = useState(null);
   const [child, setChild] = useState(null);
+  const [allRoutines, setAllRoutines] = useState([]);
   const [routines, setRoutines] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -17,6 +20,7 @@ export default function HouseholdRoutine() {
     name: "",
     routine_type: "morning",
     tasks: [],
+    applies_to_all_children: false,
   });
   const [newTask, setNewTask] = useState({ label: "", emoji: "🛏️", duration_min: 15 });
   const [loading, setLoading] = useState(true);
@@ -24,16 +28,17 @@ export default function HouseholdRoutine() {
   useEffect(() => {
     base44.auth.me().then(async (u) => {
       setUser(u);
-      const child = await base44.entities.ChildProfile.list("-created_date", 1).then(r => r[0]);
-      setChild(child);
-
-      const myRoutines = await base44.entities.DailySchedule.filter({}, "-created_date", 50).then(all =>
-        all.filter(r => r.created_by === u.email)
-      );
+      const myRoutines = await base44.entities.DailySchedule.list("-created_date", 200);
+      setAllRoutines(myRoutines);
       setRoutines(myRoutines);
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    const filtered = formData.applies_to_all_children ? allRoutines : filterRecordsForChild(allRoutines, child).filter(r => r.applies_to_all_children || !r.child_id || r.child_id === child?.id);
+    setRoutines(child ? filtered : allRoutines);
+  }, [allRoutines, child]);
 
   const handleAddTask = () => {
     if (newTask.label.trim()) {
@@ -60,30 +65,32 @@ export default function HouseholdRoutine() {
         name: formData.name,
         routine_type: formData.routine_type,
         tasks: formData.tasks,
-        child_name: child?.first_name || "Child",
+        ...withChildLink({}, formData.applies_to_all_children ? null : child),
+        child_name: formData.applies_to_all_children ? "All children" : getChildDisplayName(child),
+        applies_to_all_children: formData.applies_to_all_children,
       });
     } else {
       await base44.entities.DailySchedule.create({
         name: formData.name,
         routine_type: formData.routine_type,
         tasks: formData.tasks,
-        child_name: child?.first_name || "Child",
+        ...withChildLink({}, formData.applies_to_all_children ? null : child),
+        child_name: formData.applies_to_all_children ? "All children" : getChildDisplayName(child),
+        applies_to_all_children: formData.applies_to_all_children,
         is_active: true,
       });
     }
 
-    const myRoutines = await base44.entities.DailySchedule.filter({}, "-created_date", 50).then(all =>
-      all.filter(r => r.created_by === user.email)
-    );
-    setRoutines(myRoutines);
+    const myRoutines = await base44.entities.DailySchedule.list("-created_date", 200);
+    setAllRoutines(myRoutines);
     setShowForm(false);
     setEditingId(null);
-    setFormData({ name: "", routine_type: "morning", tasks: [] });
+    setFormData({ name: "", routine_type: "morning", tasks: [], applies_to_all_children: false });
   };
 
   const handleDelete = async (id) => {
     await base44.entities.DailySchedule.delete(id);
-    setRoutines(routines.filter(r => r.id !== id));
+    setAllRoutines(prev => prev.filter(r => r.id !== id));
   };
 
   const handleEdit = (routine) => {
@@ -91,6 +98,7 @@ export default function HouseholdRoutine() {
       name: routine.name,
       routine_type: routine.routine_type,
       tasks: routine.tasks || [],
+      applies_to_all_children: !!routine.applies_to_all_children,
     });
     setEditingId(routine.id);
     setShowForm(true);
@@ -118,6 +126,8 @@ export default function HouseholdRoutine() {
       </div>
 
       <div className="max-w-[540px] mx-auto px-4 py-4 space-y-4">
+        <ChildSelector selectedChild={child} onChange={setChild} />
+
         {/* Form */}
         {showForm && (
           <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
@@ -144,6 +154,11 @@ export default function HouseholdRoutine() {
                 {ROUTINE_TYPES.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
               </select>
             </div>
+
+            <label className="flex items-center gap-2 rounded-xl p-3 text-xs font-bold" style={{ background: C.offWhite, color: C.darkGreen }}>
+              <input type="checkbox" checked={formData.applies_to_all_children} onChange={e => setFormData({ ...formData, applies_to_all_children: e.target.checked })} />
+              Apply this routine to all children
+            </label>
 
             {/* Tasks */}
             <div>
@@ -208,7 +223,7 @@ export default function HouseholdRoutine() {
                 onClick={() => {
                   setShowForm(false);
                   setEditingId(null);
-                  setFormData({ name: "", routine_type: "morning", tasks: [] });
+                  setFormData({ name: "", routine_type: "morning", tasks: [], applies_to_all_children: false });
                 }}
                 className="flex-1 py-2.5 rounded-lg text-xs font-bold"
                 style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}

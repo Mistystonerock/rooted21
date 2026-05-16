@@ -7,6 +7,8 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell, Legend
 } from "recharts";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild } from "@/lib/child-selection";
 
 function fmt(d) {
   const dt = new Date(d);
@@ -71,8 +73,11 @@ const METRICS = [
 ];
 
 export default function BehavioralTrends() {
-  const [checkins, setCheckins] = useState([]);
-  const [behaviorLogs, setBehaviorLogs] = useState([]);
+  const [allCheckins, setAllCheckins] = useState([]);
+  const [allBehaviorLogs, setAllBehaviorLogs] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(null);
+  const checkins = useMemo(() => filterRecordsForChild(allCheckins, selectedChild), [allCheckins, selectedChild]);
+  const behaviorLogs = useMemo(() => filterRecordsForChild(allBehaviorLogs, selectedChild), [allBehaviorLogs, selectedChild]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState(30);
   const [activeMetric, setActiveMetric] = useState("both");
@@ -82,8 +87,8 @@ export default function BehavioralTrends() {
       base44.entities.CheckIn.list("-created_date", 300),
       base44.entities.BehaviorLog.list("-created_date", 300),
     ]).then(([c, b]) => {
-      setCheckins(c);
-      setBehaviorLogs(b);
+      setAllCheckins(c);
+      setAllBehaviorLogs(b);
       setLoading(false);
     });
   }, []);
@@ -225,6 +230,7 @@ export default function BehavioralTrends() {
       />
 
       <div className="max-w-[560px] mx-auto px-4 py-5 space-y-5">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
 
         {/* Hero summary */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>

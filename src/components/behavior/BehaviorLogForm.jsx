@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { C } from '@/lib/rooted-constants';
 import { X, Loader2 } from 'lucide-react';
+import { withChildLink } from '@/lib/child-selection';
 
 const MOODS = [
   { label: 'Calm', value: 'calm', emoji: '😊' },
@@ -11,7 +12,7 @@ const MOODS = [
   { label: 'Dysregulated', value: 'dysregulated', emoji: '🌪️' },
 ];
 
-export default function BehaviorLogForm({ onClose, onSuccess }) {
+export default function BehaviorLogForm({ onClose, onSuccess, selectedChild }) {
   const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
     entry_date: today,
@@ -30,7 +31,7 @@ export default function BehaviorLogForm({ onClose, onSuccess }) {
 
     setLoading(true);
     try {
-      const created = await base44.entities.BehaviorLog.create(formData);
+      const created = await base44.entities.BehaviorLog.create(withChildLink(formData, selectedChild));
       onSuccess?.(created);
     } catch (error) {
       console.error('Error saving behavior log:', error);

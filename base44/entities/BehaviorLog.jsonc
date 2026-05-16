@@ -2,6 +2,14 @@
   "name": "BehaviorLog",
   "type": "object",
   "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "ID of the child this behavior log belongs to"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name snapshot for display and legacy records"
+    },
     "entry_date": {
       "type": "string",
       "format": "date",
@@ -42,5 +50,17 @@
   "required": [
     "entry_date",
     "behavior_description"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
 }

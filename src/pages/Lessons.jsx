@@ -6,6 +6,8 @@ import { LESSONS } from "@/lib/lessons-data";
 import { CheckCircle2, ChevronLeft, Award, Download } from "lucide-react";
 import LessonDetail from "@/components/rooted/LessonDetail";
 import CompletionCertificate from "@/components/rooted/CompletionCertificate";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, withChildLink } from "@/lib/child-selection";
 
 function downloadAllLessons() {
   const lines = [
@@ -44,23 +46,30 @@ function downloadAllLessons() {
 }
 
 export default function Lessons() {
+  const [allProgress, setAllProgress] = useState([]);
   const [completed, setCompleted] = useState(new Set());
+  const [selectedChild, setSelectedChild] = useState(null);
   const [selected, setSelected] = useState(null);
   const [showCertificate, setShowCertificate] = useState(false);
 
   useEffect(() => {
-    base44.entities.LessonProgress.list().then((rows) => {
-      const done = new Set(rows.filter(r => r.completed).map(r => r.lesson_id));
-      setCompleted(done);
-    });
+    base44.entities.LessonProgress.list().then(setAllProgress);
   }, []);
 
+  useEffect(() => {
+    const rows = filterRecordsForChild(allProgress, selectedChild);
+    const done = new Set(rows.filter(r => r.completed).map(r => r.lesson_id));
+    setCompleted(done);
+  }, [allProgress, selectedChild]);
+
   async function handleMarkComplete(lessonId) {
-    const existing = await base44.entities.LessonProgress.filter({ lesson_id: lessonId });
+    const existing = filterRecordsForChild(await base44.entities.LessonProgress.filter({ lesson_id: lessonId }), selectedChild);
     if (existing.length > 0) {
-      await base44.entities.LessonProgress.update(existing[0].id, { completed: true });
+      const updated = await base44.entities.LessonProgress.update(existing[0].id, { completed: true });
+      setAllProgress(prev => prev.map(item => item.id === updated.id ? updated : item));
     } else {
-      await base44.entities.LessonProgress.create({ lesson_id: lessonId, completed: true });
+      const created = await base44.entities.LessonProgress.create(withChildLink({ lesson_id: lessonId, completed: true }, selectedChild));
+      setAllProgress(prev => [created, ...prev]);
     }
     setCompleted(prev => new Set([...prev, lessonId]));
   }
@@ -111,7 +120,8 @@ export default function Lessons() {
         />
       </div>
 
-      <div className="max-w-[520px] mx-auto px-4 py-4">
+      <div className="max-w-[520px] mx-auto px-4 py-4 space-y-4">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
         {Array.from({ length: 10 }, (_, i) => i + 1).map(week => {
           const weekLessons = LESSONS.filter(l => l.lesson_week === week || l.week === week);
           if (!weekLessons.length) return null;

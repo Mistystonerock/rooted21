@@ -9,6 +9,8 @@ import {
   CheckCircle2, AlertCircle
 } from "lucide-react";
 import SafetyPlanTemplate from "@/components/safety-plan/SafetyPlanTemplate";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, getChildDisplayName, withChildLink } from "@/lib/child-selection";
 
 let idCounter = 1;
 function uid() { return `item_${Date.now()}_${idCounter++}`; }
@@ -34,6 +36,8 @@ export default function SafetyPlan() {
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
+  const [selectedChild, setSelectedChild] = useState(null);
+  const [allPlans, setAllPlans] = useState([]);
 
   // Form sections visibility
   const [showContactForm, setShowContactForm] = useState(false);
@@ -47,7 +51,8 @@ export default function SafetyPlan() {
 
   useEffect(() => {
     base44.auth.me().then(async (user) => {
-      const existing = await base44.entities.SafetyPlan.list("-created_date", 1);
+      const existing = await base44.entities.SafetyPlan.list("-created_date", 200);
+      setAllPlans(existing);
       if (existing.length > 0) {
         setExistingPlan(existing[0]);
         setPlan(existing[0]);
@@ -56,14 +61,24 @@ export default function SafetyPlan() {
     });
   }, []);
 
+  useEffect(() => {
+    if (!selectedChild) return;
+    const childPlans = filterRecordsForChild(allPlans, selectedChild);
+    const existing = childPlans.find(p => p.child_id || p.child_name) || null;
+    setExistingPlan(existing);
+    setPlan(existing || { ...DEFAULT_PLAN, child_id: selectedChild.id, child_name: getChildDisplayName(selectedChild), child_age: selectedChild.age || "" });
+  }, [selectedChild, allPlans]);
+
   // ── SAVE PLAN ──
   async function handleSave() {
     if (!plan.child_name.trim()) return;
     setSaving(true);
-    const data = {
+    const data = withChildLink({
       ...plan,
+      child_name: plan.child_name || getChildDisplayName(selectedChild),
+      child_age: plan.child_age || selectedChild?.age || "",
       created_date: new Date().toISOString().split("T")[0],
-    };
+    }, selectedChild);
     let result;
     if (existingPlan?.id) {
       result = await base44.entities.SafetyPlan.update(existingPlan.id, data);
@@ -72,6 +87,7 @@ export default function SafetyPlan() {
       setExistingPlan(result);
     }
     setPlan(result);
+    setAllPlans(prev => [result, ...prev.filter(item => item.id !== result.id)]);
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -267,6 +283,8 @@ export default function SafetyPlan() {
       </div>
 
       <div className="max-w-[540px] mx-auto px-4 py-5 space-y-4">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+
         {/* BASIC INFO */}
         <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
           <p className="text-[10px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>CHILD & FAMILY INFO</p>

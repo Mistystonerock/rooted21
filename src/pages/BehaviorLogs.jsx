@@ -6,8 +6,11 @@ import { ChevronLeft, Plus, Calendar } from "lucide-react";
 import BehaviorLogForm from "@/components/behavior/BehaviorLogForm";
 import BehaviorLogCard from "@/components/behavior/BehaviorLogCard";
 import BehaviorResourceRecommendations from "@/components/behavior/BehaviorResourceRecommendations";
+import ChildSelector from "@/components/children/ChildSelector";
+import { filterRecordsForChild, getChildDisplayName } from "@/lib/child-selection";
 
 export default function BehaviorLogs() {
+  const [allLogs, setAllLogs] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -18,15 +21,15 @@ export default function BehaviorLogs() {
     loadLogs();
   }, [selectedDate]);
 
+  useEffect(() => {
+    setLogs(filterRecordsForChild(allLogs, selectedChild));
+  }, [allLogs, selectedChild]);
+
   async function loadLogs() {
     setLoading(true);
-    const allLogs = await base44.entities.BehaviorLog.list("-created_date", 100);
-    setLogs(allLogs);
-    // Auto-select first child if available
-    if (allLogs.length > 0 && !selectedChild) {
-      const firstChild = allLogs[0].child_name;
-      setSelectedChild(firstChild);
-    }
+    const allLogs = await base44.entities.BehaviorLog.list("-created_date", 200);
+    setAllLogs(allLogs);
+    setLogs(filterRecordsForChild(allLogs, selectedChild));
     setLoading(false);
   }
 
@@ -60,15 +63,18 @@ export default function BehaviorLogs() {
       </div>
 
       <div className="max-w-[540px] mx-auto px-4 py-4 space-y-4">
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+
         {/* Form */}
         {showForm && (
           <BehaviorLogForm
             onClose={() => setShowForm(false)}
+            selectedChild={selectedChild}
             onSuccess={(newLog) => {
               setShowForm(false);
               // Optimistic update — prepend immediately, then reconcile
               if (newLog) {
-                setLogs(prev => [{ ...newLog, id: newLog.id || `optimistic-${Date.now()}` }, ...prev]);
+                setAllLogs(prev => [{ ...newLog, id: newLog.id || `optimistic-${Date.now()}` }, ...prev]);
               }
               loadLogs();
             }}
@@ -110,7 +116,7 @@ export default function BehaviorLogs() {
         {/* Resource recommendations based on current logs */}
         {logs.length > 0 && selectedChild && (
           <BehaviorResourceRecommendations 
-            childName={selectedChild} 
+            childName={getChildDisplayName(selectedChild)} 
             logs={logs}
           />
         )}
