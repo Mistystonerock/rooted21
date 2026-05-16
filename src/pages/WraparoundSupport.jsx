@@ -5,6 +5,7 @@ import CalmModeCard from "@/components/wraparound/CalmModeCard";
 import { C } from "@/lib/rooted-constants";
 
 const MODULES = [
+  { emoji: "🗺️", title: "Ohio Systems Navigator", description: "A single map for CPS, juvenile court, education, housing, benefits, legal aid, recovery, and state escalation pathways.", to: "/ohio-systems-navigator", tag: "Blueprint" },
   { emoji: "🧭", title: "CPS Case Navigation", description: "Track where you are in the Ohio CPS process, case-plan tasks, hearings, visitation, and escalation supports.", to: "/cps-case-navigation", tag: "Ohio MVP" },
   { emoji: "📚", title: "Family Knowledge Hub", description: "Trauma-informed lessons, legal rights, school advocacy, checklists, videos, and mentor support.", to: "/family-knowledge-hub", tag: "Training" },
   { emoji: "🤝", title: "Team Coordination", description: "Consent-based sharing, secure messages, document tools, court reports, and one shared calendar.", to: "/documents", tag: "HIPAA/FERPA aware" },

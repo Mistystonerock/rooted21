@@ -102,6 +102,7 @@ const routes = {
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
   WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
   CPSCaseNavigation: lazy(() => import("@/pages/CPSCaseNavigation")),
+  OhioSystemsNavigator: lazy(() => import("@/pages/OhioSystemsNavigator")),
   FamilyKnowledgeHub: lazy(() => import("@/pages/FamilyKnowledgeHub")),
   CulturalCare: lazy(() => import("@/pages/CulturalCare")),
   YouthZone: lazy(() => import("@/pages/YouthZone")),
