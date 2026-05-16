@@ -69,6 +69,10 @@
     "beta_tester_role": {
       "type": "string",
       "description": "Beta tester role assigned from access code"
+    },
+    "local_medical_zip": {
+      "type": "string",
+      "description": "Saved zip code for Local Medical Directory searches"
     }
   },
   "required": []
