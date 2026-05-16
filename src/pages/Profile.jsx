@@ -197,14 +197,23 @@ export default function Profile() {
         <p className="text-[11px] text-center" style={{ color: C.mutedText }}>
           Reminders are sent at 9am the day before each calendar event.
         </p>
-        {/* LEGAL LINK */}
-        <Link
-          to="/legal"
-          className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
-          style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}
-        >
-          📋 Legal Documents & Consent Forms
-        </Link>
+        {/* PRIVACY & LEGAL LINKS */}
+        <div className="space-y-2">
+          <Link
+            to="/privacy-policy"
+            className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
+            style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}
+          >
+            🔐 Privacy Policy
+          </Link>
+          <Link
+            to="/legal"
+            className="block rounded-xl p-3.5 text-xs font-bold transition-all hover:shadow-sm"
+            style={{ background: "#ffffff", border: "1.5px solid rgba(120,85,60,0.2)", boxShadow: "0 8px 24px rgba(61,40,23,0.08)", textDecoration: "none", color: C.darkGreen }}
+          >
+            📋 Legal Documents & Consent Forms
+          </Link>
+        </div>
 
         <LogoutButton variant="large" />
 

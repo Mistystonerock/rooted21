@@ -1,4 +1,5 @@
 import { C } from "@/lib/rooted-constants";
+import { base44 } from "@/api/base44Client";
 import { Lock, Calendar } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-06-10T09:00:00-04:00");
@@ -9,6 +10,32 @@ export default function FeatureLockGate({ children, user }) {
   const isAdmin = user?.role === "admin";
   const isAllowedBeta = user?.email === "fish_hunter15@hotmail.com";
   const hasActiveBetaAccess = user?.beta_access_expires_at && new Date(user.beta_access_expires_at) >= new Date();
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: C.offWhite }}>
+        <div className="max-w-[380px] text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto" style={{ background: C.cream }}>
+            <Lock size={28} color={C.brown} />
+          </div>
+          <div>
+            <h1 className="font-serif font-bold text-2xl mb-2" style={{ color: C.darkGreen }}>Sign in required</h1>
+            <p className="text-sm leading-relaxed" style={{ color: "#3a3028" }}>
+              Please sign in to view family, child, or legal information.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
+            className="w-full rounded-xl px-4 py-3 text-sm font-bold"
+            style={{ background: C.darkGreen, color: C.white, border: "none", cursor: "pointer" }}
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isFounder || isAdmin || isAllowedBeta || hasActiveBetaAccess || isLaunched) {
     return children;
