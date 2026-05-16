@@ -28,33 +28,38 @@ export default function TermsOfService() {
       content: "You agree NOT to:\n\n✗ Create false or fraudulent entries (behavioral logs, medications, documents)\n✗ Share login credentials or allow unauthorized access\n✗ Use the app to evade court orders or hide information from professionals\n✗ Post abusive, threatening, or harassing content\n✗ Violate anyone's privacy or consent\n✗ Attempt to access unauthorized data\n✗ Use the app for illegal purposes\n✗ Interfere with app functionality or security\n✗ Reverse-engineer or copy proprietary code\n✗ Use bots or automation (except authorized integrations)\n\nViolations may result in account suspension or termination.",
     },
     {
+      id: "intellectual-property",
+      title: "4. Intellectual Property",
+      content: "All content, curriculum, features, tools, materials, text, images, and technology within the Rooted 21 platform are the exclusive property of Rooted 21 Parenting Network LLC. Users may not copy, reproduce, distribute, modify, or create derivative works from any part of this platform without prior written permission from Rooted 21 Parenting Network LLC. Rooted 21 is a trademark pending registration with the United States Patent and Trademark Office.",
+    },
+    {
       id: "liability",
-      title: "4. Liability Limitations",
+      title: "5. Liability Limitations",
       content: "ROOTED 21 IS PROVIDED \"AS IS\" — WE ARE NOT LIABLE FOR:\n\n✗ Decisions or actions based on app guidance\n✗ Data loss (maintain your own backups)\n✗ Service interruptions or downtime\n✗ Third-party service failures (Stripe, Supabase, etc.)\n✗ Court deadlines missed due to app issues\n✗ Outcomes of parenting strategies suggested by the app\n✗ Failures of AI analysis or recommendations\n✗ Security breaches despite our best efforts\n\nYou use Rooted 21 at your own risk. Always consult professionals for critical decisions.",
     },
     {
       id: "warranty",
-      title: "5. No Warranty",
+      title: "6. No Warranty",
       content: "Rooted 21 makes NO warranties, express or implied:\n\n• Not guaranteed to be error-free\n• Not guaranteed to meet your specific needs\n• Not guaranteed to be continuously available\n• AI recommendations are informational only\n• App features may change or be discontinued\n\nWe do not warrant that:\n• Information is accurate or complete\n• The app will solve your family's challenges\n• Strategies will work for your child\n• Court documents will be accepted\n\nProfessionals: Always verify app recommendations with clinical judgment and professional expertise.",
     },
     {
       id: "termination",
-      title: "6. Termination & Suspension",
+      title: "7. Termination & Suspension",
       content: "We may suspend or terminate your account if:\n\n• You violate these terms\n• You engage in fraud or illegal activity\n• You violate someone's privacy or safety\n• You fail to pay subscription fees\n• You create multiple accounts to evade restrictions\n• We are required by law\n\nUpon termination:\n✓ You lose access immediately\n✓ Your data is retained per our Data Retention Policy\n✓ You may request a data export\n✓ Court-ordered data remains accessible to authorities\n\nYou may request account deletion anytime (email: legal@rooted21.app).",
     },
     {
       id: "dispute",
-      title: "7. Dispute Resolution",
+      title: "8. Dispute Resolution",
       content: "If you have a dispute with Rooted 21:\n\n1. FIRST: Email legal@rooted21.app with details\n   (We respond within 30 days)\n\n2. MEDIATION: If unresolved, we may propose mediation\n   (Both parties can agree to binding arbitration)\n\n3. ARBITRATION: If mediation fails, disputes are resolved through binding arbitration in Ohio under Ohio law\n   • Costs split between parties\n   • Binding and final\n   • No class action lawsuits\n\n4. COURT: You may pursue legal action in Ohio courts if arbitration fails\n   • Only option if court injunction applies\n   • Subject to Ohio jurisdiction",
     },
     {
       id: "modifications",
-      title: "8. Changes to Terms",
+      title: "9. Changes to Terms",
       content: "We may update these Terms of Service at any time.\n\nWhen we make changes:\n✓ We post updates on this page\n✓ Major changes trigger email notification\n✓ You have 30 days to review\n✓ Continued use = acceptance of new terms\n\nIf you disagree with updated terms:\n• Stop using the app\n• Request account deletion\n• Your data will be handled per our Data Retention Policy",
     },
     {
       id: "contact",
-      title: "9. Contact Us",
+      title: "10. Contact Us",
       content: "For questions about these Terms:\n\n📧 Email: legal@rooted21.app\n⏰ Response: Within 30 days\n\nFor urgent legal matters:\n🏛️ Contact our legal team\n\nLast Updated: May 2026",
     },
   ];
