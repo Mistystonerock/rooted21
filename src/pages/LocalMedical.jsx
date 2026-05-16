@@ -120,7 +120,7 @@ export default function LocalMedical() {
       <div className="px-3 py-3" style={{ background: "#FFF7ED", borderBottom: "2px solid #FDBA74" }}>
         <div className="mx-auto grid max-w-[720px] grid-cols-2 gap-2 sm:grid-cols-4">
           <a href="tel:911" className="rounded-2xl px-2 py-4 text-center text-sm font-black no-underline shadow-lg" style={{ background: "#DC2626", color: "#fff" }}><span className="mb-1 block text-2xl">🚨</span>Call 911</a>
-          <a href="tel:988" className="rounded-2xl px-2 py-4 text-center text-sm font-black no-underline shadow-lg" style={{ background: "#2563EB", color: "#fff" }}><span className="mb-1 block text-2xl">💙</span>Crisis Line 988</a>
+          <a href="tel:988" className="rounded-2xl px-2 py-4 text-center text-sm font-black no-underline shadow-lg" style={{ background: "#2563EB", color: "#fff" }}><span className="mb-1 block text-2xl">💙</span>Call 988</a>
           <a href="tel:211" className="rounded-2xl px-2 py-4 text-center text-sm font-black no-underline shadow-lg" style={{ background: "#16A34A", color: "#fff" }}><span className="mb-1 block text-2xl">📞</span>Call 211</a>
           <a href={`https://www.google.com/maps/search/urgent+care+near+${encodeURIComponent(zip || "me")}`} target="_blank" rel="noreferrer" className="rounded-2xl px-2 py-4 text-center text-sm font-black no-underline shadow-lg" style={{ background: "#F97316", color: "#fff" }}><span className="mb-1 block text-2xl">🏥</span>Find Urgent Care</a>
         </div>

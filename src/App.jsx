@@ -55,7 +55,9 @@ import ResourceMatcher from '@/components/resources/ResourceMatcher';
 import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
 import Donate from '@/pages/Donate';
+import SOS from '@/pages/SOS';
 import LogoutButton from '@/components/auth/LogoutButton';
+import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 
 function App() {
@@ -111,6 +113,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Launch />} />
               <Route path="/donate" element={<Donate />} />
+              <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Chat /></FeatureLockGate></Suspense>} />
@@ -243,6 +246,7 @@ function App() {
             </Routes>
             )}
           </AnimatePresence>
+          {user && !needsOnboarding && <BottomNav />}
         </Router>
         </ProfessionalGate>
         <Toaster />

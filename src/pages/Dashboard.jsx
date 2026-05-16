@@ -10,7 +10,7 @@ import {
   ChevronRight, Sparkles,
 } from "lucide-react";
 import TreeLogo from "@/components/rooted/TreeLogo";
-import BottomNav from "@/components/rooted/BottomNav";
+
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
@@ -176,7 +176,7 @@ export default function Dashboard() {
             <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: GREEN, marginBottom: 10 }}>QUICK ACTIONS</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
               {[
-                { id: "sos-button", to: "/chat?crisis=1", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
+                { id: "sos-button", to: "/sos", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
                 { id: "checkin-button", to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: CARD, border: GREEN, textColor: GREEN },
                 { id: "safety-plan-button", to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: CARD, border: GOLD, textColor: GOLD },
               ].map((a, i) => (
@@ -308,8 +308,6 @@ export default function Dashboard() {
           <div className="pb-16" />
         </div>
       </MobileRefresh>
-
-      <BottomNav />
 
       {showTour && (
         <OnboardingTour onComplete={() => { setShowTour(false); localStorage.setItem("rooted21_tour_seen", "true"); }} />
