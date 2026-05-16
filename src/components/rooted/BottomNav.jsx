@@ -72,7 +72,7 @@ export default function BottomNav() {
       {/* Local Medical */}
       <Link to="/local-medical" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/local-medical") ? GREEN : MUTED }}>
         <Stethoscope size={20} strokeWidth={isActive("/local-medical") ? 2.5 : 1.8} />
-        <span style={{ fontSize: 10, fontWeight: 700 }}>Medical</span>
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Local Medical</span>
       </Link>
 
       {/* Log Out */}

@@ -198,16 +198,18 @@ function LibraryContent() {
 
         {/* Local Medical featured section */}
         {tab === "browse" && (
-          <Link to="/local-medical" className="block rounded-2xl p-4 no-underline" style={{ background: C.darkGreen, border: `1.5px solid ${C.midGreen}` }}>
-            <div className="flex items-center gap-3">
+          <div className="rounded-2xl p-4" style={{ background: C.darkGreen, border: `1.5px solid ${C.midGreen}` }}>
+            <div className="flex items-start gap-3">
               <span className="text-3xl">🏥</span>
               <div className="flex-1">
-                <p className="font-serif text-base font-bold" style={{ color: C.cream }}>Local Medical Directory</p>
-                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Find doctors, dentists, eye doctors, urgent care, emergency services, and insurance help near you.</p>
+                <p className="font-serif text-base font-bold" style={{ color: C.cream }}>Find Local Medical Care</p>
+                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Doctors, dentists, urgent care, and emergency services near you</p>
+                <Link to="/local-medical" className="mt-3 inline-flex rounded-xl px-4 py-2.5 text-sm font-bold no-underline" style={{ background: C.gold, color: C.darkGreen }}>
+                  Find Care Now
+                </Link>
               </div>
-              <ChevronLeft size={18} color={C.gold} style={{ transform: "rotate(180deg)" }} />
             </div>
-          </Link>
+          </div>
         )}
 
         {/* Search */}
