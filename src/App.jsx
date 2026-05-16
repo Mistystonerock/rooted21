@@ -158,6 +158,7 @@ function App() {
               <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtGenerateReport /></FeatureLockGate></Suspense>} />
               <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyReflections /></FeatureLockGate></Suspense>} />
               <Route path="/local-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalResourceFinder /></FeatureLockGate></Suspense>} />
+              <Route path="/local-medical" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalMedical /></FeatureLockGate></Suspense>} />
               <Route path="/weekly-habits" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WeeklyHabits /></FeatureLockGate></Suspense>} />
               <Route path="/professional-directory" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalDirectory /></FeatureLockGate></Suspense>} />
               <Route path="/app-guide" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AppGuide /></FeatureLockGate></Suspense>} />

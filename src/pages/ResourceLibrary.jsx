@@ -196,6 +196,20 @@ function LibraryContent() {
         {/* Add Resource (admin only) */}
         {tab === "browse" && <AddResourcePanel userRole={user?.role} onAdd={handleAddResource} />}
 
+        {/* Local Medical featured section */}
+        {tab === "browse" && (
+          <Link to="/local-medical" className="block rounded-2xl p-4 no-underline" style={{ background: C.darkGreen, border: `1.5px solid ${C.midGreen}` }}>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🏥</span>
+              <div className="flex-1">
+                <p className="font-serif text-base font-bold" style={{ color: C.cream }}>Local Medical Directory</p>
+                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Find doctors, dentists, eye doctors, urgent care, emergency services, and insurance help near you.</p>
+              </div>
+              <ChevronLeft size={18} color={C.gold} style={{ transform: "rotate(180deg)" }} />
+            </div>
+          </Link>
+        )}
+
         {/* Search */}
         <div className="relative">
           <Search size={14} color={C.mutedText} className="absolute left-3 top-1/2 -translate-y-1/2" />

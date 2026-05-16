@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, LayoutGrid, BookOpen } from "lucide-react";
+import { Home, LayoutGrid, BookOpen, Stethoscope } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 
 const BG = "#0f1f14";
@@ -67,6 +67,12 @@ export default function BottomNav() {
       <Link to="/lessons" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/lessons") ? GREEN : MUTED }}>
         <BookOpen size={20} strokeWidth={isActive("/lessons") ? 2.5 : 1.8} />
         <span style={{ fontSize: 10, fontWeight: 700 }}>Lessons</span>
+      </Link>
+
+      {/* Local Medical */}
+      <Link to="/local-medical" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/local-medical") ? GREEN : MUTED }}>
+        <Stethoscope size={20} strokeWidth={isActive("/local-medical") ? 2.5 : 1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Medical</span>
       </Link>
 
       {/* Log Out */}
