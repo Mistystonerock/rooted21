@@ -96,6 +96,7 @@ const routes = {
   ACEsGuide: lazy(() => import("@/pages/ACEsGuide")),
   SupportChat: lazy(() => import("@/pages/SupportChat")),
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
+  ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
 };
 
 export default routes;
