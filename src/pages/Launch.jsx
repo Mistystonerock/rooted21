@@ -89,7 +89,7 @@ export default function Launch() {
         base44.auth.redirectToLogin("/home");
         return;
       } catch {
-        setError("This code is not valid. Please contact Misty at rooted21parenting.com for access.");
+        setError("This code is not valid. Please contact Misty at rooted21parenting.org for access.");
         setLoading(false);
         return;
       }

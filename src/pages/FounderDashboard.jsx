@@ -37,6 +37,7 @@ export default function FounderDashboard() {
   const [openSections, setOpenSections] = useState(() => Object.fromEntries(sectionList.map((s, i) => [s, i < 3])));
   const [allUsers, setAllUsers] = useState([]);
   const [waitlist, setWaitlist] = useState([]);
+  const [maintenanceMode, setMaintenanceMode] = useState(true);
   const [surveys, setSurveys] = useState([]);
   const [betaCodes, setBetaCodes] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -73,7 +74,7 @@ export default function FounderDashboard() {
   }
 
   async function loadFounderData() {
-    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList] = await Promise.all([
+    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, maintenanceRes] = await Promise.all([
       base44.entities.User.list("-created_date", 10000),
       base44.entities.WaitlistSignup.list("-created_date", 10000),
       base44.entities.Survey.list("-created_date", 10000),
@@ -83,6 +84,7 @@ export default function FounderDashboard() {
       base44.entities.ContentItem.list("-updated_date", 1000),
       base44.entities.GrantDonation.list("-record_date", 1000),
       base44.entities.Announcement.list("-created_date", 500),
+      base44.functions.invoke("getMaintenanceMode", {}),
     ]);
     setAllUsers(users);
     setWaitlist(wl);
@@ -93,6 +95,12 @@ export default function FounderDashboard() {
     setContentItems(contentList);
     setFunding(fundingList);
     setAnnouncements(announcementList);
+    setMaintenanceMode(maintenanceRes.data.enabled !== false);
+  }
+
+  async function toggleMaintenanceMode(enabled) {
+    const res = await base44.functions.invoke("setMaintenanceMode", { enabled });
+    setMaintenanceMode(res.data.enabled);
   }
 
   const stats = useMemo(() => {
@@ -191,6 +199,15 @@ export default function FounderDashboard() {
         </div>
 
         <FounderSection title="Platform Analytics" subtitle="Real-time user counts, activity totals, and usage stats" icon={BarChart3} open={openSections.analytics} onToggle={() => toggle("analytics")}>
+          <div className="mb-4 flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between" style={{ background: "#faf6f1", borderColor: "#d7c7aa" }}>
+            <div>
+              <p className="font-bold">Maintenance Mode — Coming Soon Page Active</p>
+              <p className="text-xs mt-1" style={{ color: MUTED }}>{maintenanceMode ? "Everyone except the founder sees the coming soon page." : "The full app is live for everyone."}</p>
+            </div>
+            <button onClick={() => toggleMaintenanceMode(!maintenanceMode)} className="relative h-9 w-16 rounded-full transition-colors" style={{ background: maintenanceMode ? GREEN : "#c7b89a", border: "none" }} aria-label="Toggle maintenance mode">
+              <span className="absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all" style={{ left: maintenanceMode ? 34 : 4 }} />
+            </button>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <FounderMetric label="Users" value={allUsers.length} detail="Registered accounts" />
             <FounderMetric label="Active" value={stats.activeUsers} detail="Not deactivated" />

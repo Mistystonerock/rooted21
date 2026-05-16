@@ -64,12 +64,14 @@ import ComingSoon from '@/pages/ComingSoon';
 
 function App() {
   const [user, setUser] = React.useState(null);
+  const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [betaAccess, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
-  const showComingSoon = !isFounder && !betaAccess;
+  const showComingSoon = maintenanceMode && !isFounder && !betaAccess;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
+    base44.functions.invoke("getMaintenanceMode", {}).then(res => setMaintenanceMode(res.data.enabled !== false)).catch(() => setMaintenanceMode(true));
     base44.auth.me().then(async u => {
       setUser(u);
       // Initialize founder role if this is the founder account

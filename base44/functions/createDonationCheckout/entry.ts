@@ -55,8 +55,8 @@ Deno.serve(async (req) => {
       ...(isMonthly
         ? { subscription_data: { metadata: donationMetadata } }
         : { payment_intent_data: { receipt_email: donorEmail || undefined, metadata: donationMetadata } }),
-      success_url: successUrl || 'https://rooted21.app/donate?donation=success',
-      cancel_url: cancelUrl || 'https://rooted21.app/donate?donation=cancelled',
+      success_url: successUrl || 'https://rooted21parenting.org/donate?donation=success',
+      cancel_url: cancelUrl || 'https://rooted21parenting.org/donate?donation=cancelled',
     });
 
     return Response.json({ url: session.url });

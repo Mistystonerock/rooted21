@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import TreeLogo from "@/components/rooted/TreeLogo";
+import { Facebook, Instagram, Music2 } from "lucide-react";
 
 const FOUNDER_EMAIL = "misty.stonerock88@gmail.com";
 const LAUNCH_DATE = new Date("2026-07-10T00:00:00-04:00").getTime();
@@ -117,6 +118,16 @@ export default function ComingSoon({ onBetaAccess }) {
             {betaError && <p className="mt-2 text-xs font-bold" style={{ color: "#ffb4a8" }}>{betaError}</p>}
           </div>
         </div>
+
+        <section className="mt-6 rounded-3xl border p-5 text-center" style={{ background: "rgba(13,40,24,0.72)", borderColor: "rgba(247,232,198,0.18)" }}>
+          <p className="font-serif text-lg font-bold">Follow us for updates and parenting support content.</p>
+          <div className="mt-4 flex justify-center gap-3">
+            <a href="#" aria-label="Facebook" className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.1)", color: "#F7E8C6" }}><Facebook size={19} /></a>
+            <a href="#" aria-label="Instagram" className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.1)", color: "#F7E8C6" }}><Instagram size={19} /></a>
+            <a href="#" aria-label="TikTok" className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.1)", color: "#F7E8C6" }}><Music2 size={19} /></a>
+          </div>
+          <p className="mt-5 text-sm" style={{ color: "#E6D8B8" }}>Questions? Email us at <a href="mailto:misty.stonerock88@gmail.com" className="underline" style={{ color: "#c9973a" }}>misty.stonerock88@gmail.com</a></p>
+        </section>
 
         <footer className="mt-6 text-center text-[11px] leading-6" style={{ color: "rgba(247,232,198,0.72)" }}>
           <p>© 2026 Rooted 21 Parenting Network LLC. All rights reserved.</p>

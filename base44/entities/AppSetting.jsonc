@@ -1,0 +1,44 @@
+{
+  "name": "AppSetting",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Unique setting key"
+    },
+    "value": {
+      "type": "string",
+      "description": "Setting value stored as a string"
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Email of the user who last updated this setting"
+    }
+  },
+  "required": [
+    "key",
+    "value"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}
