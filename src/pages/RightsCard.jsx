@@ -2,6 +2,7 @@ import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Share2, Copy, Check, Download } from "lucide-react";
+import LegalRightsInformationPanel from "@/components/legal/LegalRightsInformationPanel";
 
 const RIGHTS = [
   {
@@ -187,6 +188,8 @@ export default function RightsCard() {
             </div>
           </div>
         </div>
+
+        <LegalRightsInformationPanel />
 
         {/* General reminder */}
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>

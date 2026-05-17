@@ -11,7 +11,11 @@
       "enum": [
         "message",
         "appointment",
-        "system"
+        "system",
+        "progress",
+        "encouragement",
+        "policy",
+        "legal"
       ],
       "description": "Type of notification"
     },

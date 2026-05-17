@@ -16,7 +16,10 @@ const MODULE_LABELS = {
   "/medication-manager": "Medication Manager",
   "/family-safety-crisis-plan": "Safety Plan",
   "/peer-support": "Peer Support",
-  "/housing-resources": "Housing & Benefits"
+  "/housing-resources": "Housing & Benefits",
+  "/court-rights-education": "Legal Rights",
+  "/legal-knowledge-base": "Legal Rights",
+  "/legal": "Legal Rights"
 };
 
 function currentModuleLabel(pathname) {
@@ -31,6 +34,7 @@ function openingPrompt(label) {
   if (label === "Medication Manager") return "I can help you note doses, side effects, or mood changes.";
   if (label === "Safety Plan") return "I can help you make a calm safety plan.";
   if (label === "Housing & Benefits") return "I can help screen benefits, track recertification dates, or find local housing help.";
+  if (label === "Legal Rights") return "I can help explain rights, find legal aid, or organize mandated-report notes.";
   return "Hi, I’m Moxie. I can help you find your next step.";
 }
 

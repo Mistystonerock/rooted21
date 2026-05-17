@@ -1,0 +1,64 @@
+{
+  "name": "LegalRightsLog",
+  "type": "object",
+  "properties": {
+    "log_type": {
+      "type": "string",
+      "enum": [
+        "resource_family_info_received",
+        "resource_family_info_missing",
+        "mandated_report_note",
+        "legal_aid_question",
+        "clinic_search"
+      ],
+      "default": "resource_family_info_received"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short label for this rights or reporting note"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Optional child name connected to this note"
+    },
+    "agency_or_contact": {
+      "type": "string",
+      "description": "Agency, worker, school, clinic, or person involved"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the information was received, missing, or report was made"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Plain-language notes, facts, questions, or next steps"
+    },
+    "hotline_called": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the Ohio child abuse hotline was called"
+    },
+    "follow_up_needed": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this note needs follow-up"
+    }
+  },
+  "required": [
+    "log_type",
+    "title"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

@@ -19,7 +19,9 @@ const MODULE_GUIDANCE = {
   '/medication-manager': 'Medication tracking: appointments, doses, side effects, symptoms, and mood patterns.',
   '/family-safety-crisis-plan': 'Safety planning: warning signs, coping tools, safe contacts, local crisis support, and 988.',
   '/peer-support': 'Peer support: parent-partner encouragement, Ohio START peer mentors, OhioKAN navigators, and safe connection.',
-  '/housing-resources': 'Housing, benefits, and financial help: Section 8 inspections, recertification reminders, SNAP, WIC, TANF, Medicaid, childcare subsidies, fair-housing scripts, shelters, rapid rehousing, and zip-code based local help.'
+  '/housing-resources': 'Housing, benefits, and financial help: Section 8 inspections, recertification reminders, SNAP, WIC, TANF, Medicaid, childcare subsidies, fair-housing scripts, shelters, rapid rehousing, and zip-code based local help.',
+  '/rights-card': 'Legal and rights education: Ohio Resource Family Bill of Rights, missing child information tracking, mandated-reporter hotline 1-855-OH-CHILD, and Ohio Legal Help self-help forms and clinics.',
+  '/court-rights-education': 'Legal aid and self-help: Ohio Legal Help, court forms, custody modification education, protection-order information, legal clinics, and rights documentation.'
 };
 
 function getModuleContext(path = '') {

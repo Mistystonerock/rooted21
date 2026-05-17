@@ -2,6 +2,7 @@ import { useState } from "react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import HubCard from "@/components/hubs/HubCard";
 import { C } from "@/lib/rooted-constants";
+import LegalRightsInformationPanel from "@/components/legal/LegalRightsInformationPanel";
 
 const STATES = [
   { code: "OH", name: "Ohio", court: "https://www.supremecourt.ohio.gov/forms/all-forms/", legal: "https://www.ohiolegalhelp.org/", rights: "https://education.ohio.gov/Topics/Special-Education/A-Guide-to-Parent-Rights-in-Special-Education", child: "https://jfs.ohio.gov/" },
@@ -46,6 +47,8 @@ export default function CourtRightsEducation() {
         </div>
 
         <div className="space-y-3">{items.map(item => <HubCard key={item.title} item={item} />)}</div>
+
+        <LegalRightsInformationPanel />
 
         <div className="rounded-2xl p-4" style={{ background: "#FFFBEE", border: "1px solid #F4DFA0" }}>
           <p className="text-xs font-bold" style={{ color: "#7A5200" }}>Important</p>

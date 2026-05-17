@@ -37,9 +37,19 @@ const KNOWLEDGE_BASE = [
     category: "Child Welfare & CPS",
     items: [
       { title: "If CPS Gets Involved", summary: "Your rights during child protective services investigations" },
+      { title: "Ohio Resource Family Bill of Rights", summary: "12 foster and kinship caregiver rights, including timely child information and team participation" },
+      { title: "Mandated Reporter Hotline", summary: "If you suspect abuse or neglect in Ohio, call 1-855-OH-CHILD and document facts" },
       { title: "Removal & Placement", summary: "What happens if your child is removed from your home" },
       { title: "Reunification Services", summary: "Services to help you regain custody" },
       { title: "Permanency Planning", summary: "Understanding permanent placement options" },
+    ]
+  },
+  {
+    category: "Legal Aid & Self-Help",
+    items: [
+      { title: "Ohio Legal Help", summary: "Find plain-language forms, free clinics, custody help, and protection-order information" },
+      { title: "Custody Modification Forms", summary: "Learn when and how to ask the court to change custody or parenting-time orders" },
+      { title: "Protection Orders", summary: "Learn about civil protection orders and where to get urgent legal help" },
     ]
   },
   {

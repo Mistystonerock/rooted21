@@ -1,0 +1,49 @@
+{
+  "name": "CaregiverRightLog",
+  "type": "object",
+  "properties": {
+    "right_title": {
+      "type": "string",
+      "description": "Ohio Resource Family Bill of Rights item being tracked"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Optional child name connected to this note"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the information was requested, received, or missing"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "received",
+        "missing",
+        "requested",
+        "concern_raised"
+      ],
+      "default": "requested"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Plain-language note about what happened"
+    }
+  },
+  "required": [
+    "right_title",
+    "event_date"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "MandatedReportNote",
+  "type": "object",
+  "properties": {
+    "concern_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the concern or observation"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child name or initials"
+    },
+    "concern_summary": {
+      "type": "string",
+      "description": "Facts observed, heard, or disclosed"
+    },
+    "reporter_role": {
+      "type": "string",
+      "enum": [
+        "caregiver",
+        "teacher",
+        "clinician",
+        "caseworker",
+        "other"
+      ],
+      "default": "caregiver"
+    },
+    "hotline_called": {
+      "type": "boolean",
+      "default": false
+    },
+    "hotline_call_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reference_number": {
+      "type": "string",
+      "description": "Optional hotline or agency reference number"
+    },
+    "next_steps": {
+      "type": "string",
+      "description": "Follow-up notes or documents needed"
+    }
+  },
+  "required": [
+    "concern_date",
+    "concern_summary"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

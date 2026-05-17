@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, MessageSquare, Calendar, Bell, Check } from "lucide-react";
+import { ChevronLeft, MessageSquare, Calendar, Bell, Check, Heart, Megaphone, Scale, TrendingUp } from "lucide-react";
+import NotificationSupportPanel from "@/components/notifications/NotificationSupportPanel";
 
 export default function Notifications() {
   const [user, setUser] = useState(null);
@@ -58,6 +59,14 @@ export default function Notifications() {
         return <MessageSquare size={16} color={C.darkGreen} />;
       case "appointment":
         return <Calendar size={16} color={C.brown} />;
+      case "progress":
+        return <TrendingUp size={16} color={C.midGreen} />;
+      case "encouragement":
+        return <Heart size={16} color="#B84C2A" />;
+      case "policy":
+        return <Megaphone size={16} color={C.brown} />;
+      case "legal":
+        return <Scale size={16} color={C.darkGreen} />;
       default:
         return <Bell size={16} color={C.midGreen} />;
     }
@@ -69,6 +78,14 @@ export default function Notifications() {
         return C.midGreen;
       case "appointment":
         return C.brown;
+      case "progress":
+        return C.midGreen;
+      case "encouragement":
+        return "#B84C2A";
+      case "policy":
+        return C.brown;
+      case "legal":
+        return C.darkGreen;
       default:
         return C.gold;
     }
@@ -108,6 +125,8 @@ export default function Notifications() {
       </div>
 
       <div className="max-w-[540px] mx-auto px-4 py-4">
+        <NotificationSupportPanel />
+
         {notifications.length === 0 ? (
           <div className="rounded-2xl p-8 text-center mt-8" style={{ background: C.white, border: `1.5px dashed ${C.cream}` }}>
             <Bell size={32} color={C.mutedText} className="mx-auto mb-3" />
