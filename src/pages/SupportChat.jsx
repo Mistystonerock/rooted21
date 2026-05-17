@@ -79,18 +79,18 @@ export default function SupportChat() {
               <MessageCircle size={26} color={C.darkGreen} />
             </div>
             <p className="font-serif font-bold text-base" style={{ color: C.darkGreen }}>
-              Hi! How can I help you?
+              Hi, I’m Moxie. How can I help today?
             </p>
             <p className="text-xs" style={{ color: C.mutedText }}>
-              Ask me anything about using Rooted 21.
+              I can help with check-ins, documents, court prep, visitation logs, and crisis resources.
             </p>
             {/* Quick prompts */}
             <div className="flex flex-col gap-2 mt-4 max-w-[280px] mx-auto">
               {[
-                "How do I log a behavior?",
-                "Where do I upload documents?",
-                "How do daily check-ins work?",
-                "How do I invite a co-parent?",
+                "Help me log today’s behavior or mood",
+                "What should I bring to my case-plan task?",
+                "Help me document a visitation",
+                "Show me crisis and safety resources",
               ].map(q => (
                 <button
                   key={q}

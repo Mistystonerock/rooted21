@@ -92,9 +92,7 @@
     "packet_hash"
   ],
   "rls": {
-    "create": {
-      "generated_by_email": "{{user.email}}"
-    },
+    "create": true,
     "read": {
       "generated_by_email": "{{user.email}}"
     },

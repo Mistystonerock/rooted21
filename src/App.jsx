@@ -62,6 +62,7 @@ import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
+import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -271,6 +272,7 @@ function App() {
           </AnimatePresence>
           )}
           {!showComingSoon && <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />}
+          {!showComingSoon && user && !needsOnboarding && <MoxieChatWidget />}
           {!showComingSoon && user && !needsOnboarding && <BottomNav />}
         </Router>
         </ProfessionalGate>
