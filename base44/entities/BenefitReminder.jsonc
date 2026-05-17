@@ -1,0 +1,63 @@
+{
+  "name": "BenefitReminder",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Reminder title"
+    },
+    "benefit_type": {
+      "type": "string",
+      "enum": [
+        "snap",
+        "wic",
+        "tanf",
+        "medicaid",
+        "childcare",
+        "section_8",
+        "housing_inspection",
+        "fair_housing",
+        "other"
+      ],
+      "default": "other"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Due date for recertification, inspection, paperwork, or appointment"
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "ZIP code used for local resources"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Documents to gather or next steps"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "done"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "title",
+    "benefit_type",
+    "due_date"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

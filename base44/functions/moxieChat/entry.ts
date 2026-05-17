@@ -18,7 +18,8 @@ const MODULE_GUIDANCE = {
   '/education-hub': 'Education support: IEP/504 meeting prep, special education questions, and document organization.',
   '/medication-manager': 'Medication tracking: appointments, doses, side effects, symptoms, and mood patterns.',
   '/family-safety-crisis-plan': 'Safety planning: warning signs, coping tools, safe contacts, local crisis support, and 988.',
-  '/peer-support': 'Peer support: parent-partner encouragement, Ohio START peer mentors, OhioKAN navigators, and safe connection.'
+  '/peer-support': 'Peer support: parent-partner encouragement, Ohio START peer mentors, OhioKAN navigators, and safe connection.',
+  '/housing-resources': 'Housing, benefits, and financial help: Section 8 inspections, recertification reminders, SNAP, WIC, TANF, Medicaid, childcare subsidies, fair-housing scripts, shelters, rapid rehousing, and zip-code based local help.'
 };
 
 function getModuleContext(path = '') {
@@ -45,6 +46,7 @@ Deno.serve(async (req) => {
     const modulePath = String(payload.modulePath || '');
     const moduleLabel = String(payload.moduleLabel || 'this part of the app');
     const history = Array.isArray(payload.history) ? payload.history.slice(-6) : [];
+    const userZip = user?.housing_resources_zip || user?.zip_code || '';
 
     if (!message) {
       return Response.json({ error: 'Message is required' }, { status: 400 });
@@ -59,7 +61,7 @@ Deno.serve(async (req) => {
     }
 
     const moduleContext = getModuleContext(modulePath);
-    const prompt = `You are Moxie, the AI helper inside Rooted 21.\n\nPersona rules:\n- Trauma-informed, warm, calm, and nonjudgmental.\n- Write at about a 6th-grade reading level. Use short sentences.\n- Be culturally responsive and respectful of family voice, kinship care, foster care, recovery, and court stress.\n- Do not give legal, medical, or mental-health diagnosis advice. Encourage users to contact their attorney, doctor, therapist, caseworker, or emergency services when needed.\n- If danger, abuse, self-harm, overdose, violence, or immediate safety risk appears, tell the user to call 911 or call/text 988 first.\n- Give practical next steps inside Rooted 21.\n- Mention privacy gently when helpful: logs are time-stamped and can support documentation.\n- Keep replies under 180 words unless the user asks for more.\n\nCurrent module: ${moduleLabel}\nModule context: ${moduleContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie. End with 2 short suggested next actions.`;
+    const prompt = `You are Moxie, the AI helper inside Rooted 21.\n\nPersona rules:\n- Trauma-informed, warm, calm, and nonjudgmental.\n- Write at about a 6th-grade reading level. Use short sentences.\n- Be culturally responsive and respectful of family voice, kinship care, foster care, recovery, and court stress.\n- Do not give legal, medical, or mental-health diagnosis advice. Encourage users to contact their attorney, doctor, therapist, caseworker, or emergency services when needed.\n- If danger, abuse, self-harm, overdose, violence, or immediate safety risk appears, tell the user to call 911 or call/text 988 first.\n- Give practical next steps inside Rooted 21.\n- Mention privacy gently when helpful: logs are time-stamped and can support documentation.\n- Keep replies under 180 words unless the user asks for more.\n\nCurrent module: ${moduleLabel}\nModule context: ${moduleContext}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP when local resources are needed'}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie. End with 2 short suggested next actions.`;
 
     const reply = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,

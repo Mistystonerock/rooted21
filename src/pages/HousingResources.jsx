@@ -5,6 +5,8 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import HousingZipSearch from "@/components/housing/HousingZipSearch";
 import HousingResourceCard from "@/components/housing/HousingResourceCard";
+import BenefitsScreener from "@/components/housing/BenefitsScreener";
+import BenefitReminderPanel from "@/components/housing/BenefitReminderPanel";
 
 const CATEGORIES = ["All", "Rentals", "Emergency Shelter", "Rental Assistance", "Section 8", "Low Income Housing", "Transitional Housing", "Domestic Violence Housing", "Utilities Help"];
 const ROSS_AREA_ZIPS = ["45601", "45612", "45617", "45628", "45644", "45647", "45673", "45681", "45690"];
@@ -119,6 +121,18 @@ export default function HousingResources() {
         </section>
 
         <HousingZipSearch zip={zip} onSave={saveZip} saving={saving} />
+
+        <BenefitsScreener zip={zip} onSaveZip={saveZip} />
+
+        <BenefitReminderPanel zip={zip} />
+
+        <section className="rounded-3xl p-4" style={{ background: "#FFF7ED", border: "1.5px solid #FDBA74" }}>
+          <p className="text-sm font-black" style={{ color: "#9A3412" }}>Fair-housing script</p>
+          <p className="mt-2 text-xs leading-relaxed" style={{ color: "#9A3412" }}>
+            “I believe I may have been treated unfairly because of my family status, disability, race, religion, sex, national origin, or another protected reason. I would like help filing a fair-housing complaint and understanding my rights.”
+          </p>
+          <a href="tel:18882787101" className="mt-3 inline-flex rounded-xl px-4 py-2 text-xs font-black no-underline" style={{ background: "#9A3412", color: "#fff" }}>Call Ohio Civil Rights Commission</a>
+        </section>
 
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
           {CATEGORIES.map((category) => (
