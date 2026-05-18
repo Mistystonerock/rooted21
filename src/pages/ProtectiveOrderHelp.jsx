@@ -48,7 +48,7 @@ const TOPICS = [
   {
     icon: Scale,
     title: "Legal aid contacts",
-    text: "Free or reduced-cost legal help may be available depending on income, county, and case type. Support is available, and you can choose what feels right for your situation."
+    text: "Free or reduced-cost legal help may be available depending on income, county, and case type. Support is available, and you can choose what feels right for your situation.",
     links: [
       { label: "Ohio Domestic Violence Network Legal Services", href: "https://www.odvn.org/legal-services/" },
       { label: "Ohio Legal Help: Find Legal Help", href: "https://www.ohiolegalhelp.org/" },
