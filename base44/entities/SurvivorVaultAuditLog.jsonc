@@ -1,0 +1,47 @@
+{
+  "name": "SurvivorVaultAuditLog",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "vault_opened",
+        "pin_set",
+        "upload_created",
+        "note_created",
+        "secure_export",
+        "signed_download_created"
+      ],
+      "default": "vault_opened"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "owner_email",
+    "action",
+    "summary",
+    "occurred_at"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": false,
+    "delete": false
+  }
+}

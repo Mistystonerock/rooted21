@@ -66,6 +66,7 @@ import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
+import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
 import QuickExitButton from '@/components/privacy/QuickExitButton';
 
 function App() {
@@ -134,6 +135,7 @@ function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
+              <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
@@ -159,7 +161,6 @@ function App() {
               <Route path="/behavior-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorHub /></FeatureLockGate></Suspense>} />
               <Route path="/substance-abuse-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SubstanceAbuseResources /></FeatureLockGate></Suspense>} />
               <Route path="/court-rights-education" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtRightsEducation /></FeatureLockGate></Suspense>} />
-              <Route path="/protective-order-help" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProtectiveOrderHelp /></FeatureLockGate></Suspense>} />
               <Route path="/training-videos" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TrainingVideos /></FeatureLockGate></Suspense>} />
               <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
               <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />
