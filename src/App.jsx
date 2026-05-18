@@ -106,6 +106,8 @@ function App() {
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
+    if (isPublicLandingPath) return;
+
     let timer;
     const resetSecureTimer = () => {
       clearTimeout(timer);
@@ -121,6 +123,11 @@ function App() {
   }, []);
 
   React.useEffect(() => {
+    if (isPublicLandingPath) {
+      setBootLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     async function bootApp() {
@@ -172,6 +179,19 @@ function App() {
     return () => { mounted = false; };
   }, []);
 
+  if (isPublicLandingPath) {
+    return (
+      <ClientErrorBoundary>
+        <ThemeProvider>
+          <Router>
+            <PublicLandingPage />
+            <Toaster />
+          </Router>
+        </ThemeProvider>
+      </ClientErrorBoundary>
+    );
+  }
+
   return (
     <ClientErrorBoundary>
     <ThemeProvider>
@@ -188,9 +208,7 @@ function App() {
           </div>
         )}
         <Router>
-          {isPublicLandingPath ? (
-            <PublicLandingPage />
-          ) : bootLoading ? (
+          {bootLoading ? (
             <LoadingFallback />
           ) : bootFailed ? (
             <StartupErrorScreen onRetry={() => window.location.reload()} />
