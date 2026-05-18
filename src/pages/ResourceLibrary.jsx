@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
@@ -9,7 +9,6 @@ import AddResourcePanel from "@/components/resources/AddResourcePanel";
 import LocalResources from "@/components/resources/LocalResources";
 import FillableWorksheets from "@/components/resources/FillableWorksheets";
 import CommunityResourcesSection from "@/components/resources/CommunityResourcesSection";
-import { useEffect } from "react";
 
 const CATEGORIES = [
   { id: "all",        label: "All",                 emoji: "📚" },
@@ -27,7 +26,7 @@ const SEED_RESOURCES = [
   // ── TRAUMA BASICS ───────────────────────────────────────────────
   { id: 1, category: "trauma", type: "article", title: "What Is Childhood Trauma?", author: "National Child Traumatic Stress Network", desc: "A foundational overview of how trauma affects children's development, behavior, and relationships.", url: "https://www.nctsn.org/what-is-child-trauma/about-child-trauma", free: true, featured: true },
   { id: 2, category: "trauma", type: "article", title: "How Trauma Affects the Brain", author: "Child Welfare Information Gateway", desc: "Plain-language explanation of the neuroscience behind trauma responses — the survival brain, triggers, and the 3 R's.", url: "https://www.childwelfare.gov/topics/can/impact/", free: true },
-  { id: 3, category: "trauma", type: "pdf",     title: "TBRI® Overview for Caregivers", author: "TCU Karyn Purvis Institute", desc: "A printable one-page summary of Trust-Based Relational Intervention principles for parents and caregivers.", url: "https://child.tcu.edu/about-us/tbri/", free: true, featured: true },
+  { id: 3, category: "trauma", type: "pdf",     title: "Trauma-Informed Parenting Overview", author: "Rooted 21 Resource Library", desc: "A printable-style summary of connection-based parenting, felt safety, regulation support, and caregiver-child connection.", url: "https://www.nctsn.org/trauma-informed-care", free: true, featured: true },
   { id: 4, category: "trauma", type: "book",    title: "The Body Keeps the Score", author: "Bessel van der Kolk, MD", desc: "Landmark book on how trauma lives in the body and what can heal it. Essential reading for any trauma-informed caregiver.", url: "https://www.besselvanderkolk.com/resources/the-body-keeps-the-score", free: false },
   { id: 5, category: "trauma", type: "video",   title: "Understanding ACEs: Adverse Childhood Experiences", author: "CDC", desc: "Short explainer video on adverse childhood experiences and their lifelong impact on health and behavior.", url: "https://www.cdc.gov/aces/index.html", free: true },
   // ── SENSORY REGULATION ──────────────────────────────────────────
@@ -46,7 +45,7 @@ const SEED_RESOURCES = [
   { id: 16, category: "attachment", type: "video",   title: "The Still Face Experiment", author: "Dr. Edward Tronick", desc: "Famous developmental psychology video demonstrating the critical importance of attunement and responsiveness in early attachment.", url: "https://www.youtube.com/watch?v=apzXGEbZht0", free: true },
   { id: 17, category: "attachment", type: "article", title: "PACE: Playfulness, Acceptance, Curiosity, Empathy", author: "Dan Hughes / DDP Network", desc: "The full PACE framework for creating healing relationships with children from hard places.", url: "https://ddpnetwork.org/about-ddp/meant-pace/", free: true },
   // ── BEHAVIOR TOOLS ──────────────────────────────────────────────
-  { id: 18, category: "behavior", type: "article", title: "The IDEAL Response: TBRI® Correcting Strategies", author: "TCU Karyn Purvis Institute", desc: "A guide to the TBRI® IDEAL correcting response — Immediate, Direct, Efficient, Action-based, Leveled.", url: "https://child.tcu.edu/about-us/tbri/", free: true, featured: true },
+  { id: 18, category: "behavior", type: "article", title: "Calm Correcting Strategies", author: "Rooted 21 Resource Library", desc: "A guide to immediate, direct, efficient, action-based responses that stay focused on behavior while preserving caregiver-child connection.", url: "https://www.nctsn.org/trauma-informed-care", free: true, featured: true },
   { id: 19, category: "behavior", type: "pdf",     title: "Behavior as Communication: A Parent Cheat Sheet", author: "Rooted 21 Program", desc: "One-page printable guide for decoding what common challenging behaviors are communicating underneath.", url: "https://mistystonerock.github.io/Rooted-Parenting-Support/index.html", free: true },
   { id: 20, category: "behavior", type: "article", title: "Why Consequences Don't Work for Traumatized Children", author: "Empowered to Connect", desc: "Explains why traditional punishment-based discipline backfires with children from hard places, and what to do instead.", url: "https://empoweredtoconnect.org/", free: true },
   { id: 21, category: "behavior", type: "book",    title: "Beyond Consequences, Logic & Control", author: "Heather Forbes & Bryan Post", desc: "A must-read for caregivers of children whose behaviors defy conventional parenting strategies.", url: "https://beyondconsequences.com/", free: false },

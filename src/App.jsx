@@ -35,7 +35,6 @@ import CasePlanChecklist from '@/pages/CasePlanChecklist';
 import ExpenseSplit from '@/pages/ExpenseSplit';
 import ExpenseTracker from '@/pages/ExpenseTracker';
 import DocumentScanner from '@/pages/DocumentScanner';
-import LegalCalendar from '@/pages/LegalCalendar';
 import CoParentingHealthDashboard from '@/pages/CoParentingHealthDashboard';
 import ProfessionalPresentation from '@/pages/ProfessionalPresentation';
 import ComprehensiveCaseReport from '@/pages/ComprehensiveCaseReport';
@@ -85,7 +84,7 @@ function App() {
   const [user, setUser] = React.useState(null);
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [bootLoading, setBootLoading] = React.useState(true);
-  const [betaAccess, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
+  const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const showComingSoon = maintenanceMode && !isFounder;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;

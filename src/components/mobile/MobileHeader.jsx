@@ -6,8 +6,8 @@ const TEXT = "#f5e6c8";
 const MUTED = "rgba(245,230,200,0.65)";
 
 export default function MobileHeader({
-  title,
-  subtitle,
+  title = "Rooted 21",
+  subtitle = "",
   backTo,
   onBack,
   rightSlot,

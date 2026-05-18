@@ -4,15 +4,8 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import ResourceEditor from "@/components/resources-admin/ResourceEditor";
 import ResourceFilters from "@/components/resources-admin/ResourceFilters";
 import ResourceListingCard from "@/components/resources-admin/ResourceListingCard";
-import { emptyResource } from "@/components/resources-admin/resourceAdminUtils";
+import { emptyResource, resourceSortScore } from "@/components/resources-admin/resourceAdminUtils";
 import { Database, Plus, RefreshCw } from "lucide-react";
-
-function resourceSortScore(resource) {
-  const date = resource.verified_at || resource.updated_date || resource.created_date;
-  const age = date ? Math.floor((Date.now() - new Date(date).getTime()) / 86400000) : 9999;
-  const statusWeight = { needs_review: 0, outdated: 1, verified: 2, archived: 3, closed: 4 }[resource.verification_status] ?? 5;
-  return statusWeight * 10000 + (Number.isNaN(age) ? 9999 : age);
-}
 
 export default function ResourceManagement() {
   const [user, setUser] = useState(null);

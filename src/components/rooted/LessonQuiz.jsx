@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
-import { ChevronRight, CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { ChevronRight, CheckCircle2, Eye } from "lucide-react";
 
 export default function LessonQuiz({ questions }) {
   const [currentIndex, setCurrentIndex] = useState(0);

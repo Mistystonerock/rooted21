@@ -96,7 +96,7 @@ AVOID: Holding therapy, rebirthing therapy, coercive restraint-based "attachment
 Finding help:
 • Psychology Today's therapist finder (filter by "attachment" and "trauma")
 • Your state's Foster Parent Association often has vetted referrals
-• TBRI Practitioners: child.tcu.edu/tbri-practitioners
+• Attachment-informed and trauma-informed clinicians through local referral networks
 • DDP practitioners: ddpnetwork.org`
   },
 ];

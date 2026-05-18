@@ -10,7 +10,7 @@ export const LESSONS = [
     pillar: "Foundation",
     title: "Children from Hard Places",
     emoji: "🌍",
-    content: `Children who have experienced abuse, neglect, prenatal stress, or trauma are sometimes called "children from hard places." Their early experiences have shaped their brains, bodies, and nervous systems in ways that traditional parenting rarely accounts for.\n\nTrauma-informed parenting and TBRI® were built specifically for these children — children who have often lost trust in adults and learned that the world is not safe.\n\n**What "hard places" include:**\n- Prenatal stress, alcohol, or drug exposure\n- Neglect or abuse in early childhood\n- Multiple foster placements\n- Loss of birth parents\n- Chronic instability in the home\n- Medical trauma\n\n**The key insight:**\nBehavior that looks like defiance, manipulation, or rage is most often a survival response — the nervous system doing exactly what it learned to do to stay safe.\n\nYour child is not broken. They are responding to a world that hurt them. This approach says: *every child deserves to be seen, safe, soothed, and secure.*`,
+    content: `Children who have experienced abuse, neglect, prenatal stress, or trauma are sometimes called "children from hard places." Their early experiences have shaped their brains, bodies, and nervous systems in ways that traditional parenting rarely accounts for.\n\nTrauma-informed parenting and connection-based parenting were built specifically for these children — children who have often lost trust in adults and learned that the world is not safe.\n\n**What "hard places" include:**\n- Prenatal stress, alcohol, or drug exposure\n- Neglect or abuse in early childhood\n- Multiple foster placements\n- Loss of birth parents\n- Chronic instability in the home\n- Medical trauma\n\n**The key insight:**\nBehavior that looks like defiance, manipulation, or rage is most often a survival response — the nervous system doing exactly what it learned to do to stay safe.\n\nYour child is not broken. They are responding to a world that hurt them. This approach says: *every child deserves to be seen, safe, soothed, and secure.*`,
     tip: "This week, choose one behavior that frustrates you and ask: 'What might this child be trying to communicate?'",
     worksheet: "Write down what you know about your child's history. What hard places have they come from? What do you still not know?",
     questions: [
@@ -60,7 +60,7 @@ export const LESSONS = [
          answer: "The four stages are: 1) Trigger (something that reminds the brain of danger), 2) Activation (fight, flight, or freeze), 3) Reaction (the behavior you see), and 4) Recovery (the window where healing happens)."
        },
        {
-         question: "What does the 3 R's principle in TBRI® stand for?",
+         question: "What do the 3 R's in connection-based parenting stand for?",
          answer: "Regulate, Relate, and Reason. You cannot reason with a dysregulated brain, so you first help the child regulate, then relate (connect), and finally reason with them."
              },
              {
@@ -149,7 +149,7 @@ export const LESSONS = [
      ],
     readingMaterial: [
       "The Boy Who Harnessed the Wind by William Kamkwamba",
-      "Safe Refuge by Karen Purvis",
+      "Felt Safety and Connection-Based Caregiver Support",
       "Connection-Based Parenting: A Practical Handbook"
     ]
   },
@@ -573,7 +573,7 @@ export const LESSONS = [
     title: "Building a Support Network",
     emoji: "🤝",
     content: `Parenting a child from a hard place can feel profoundly isolating. Traditional support networks often don't understand. Friends and family offer well-meaning but misguided advice. The unique challenges you face require a unique kind of support.\n\n**Building your support circle:**\n\n**Professional support:**\n- A trauma-aware therapist (for your child and/or you)\n- A knowledgeable caseworker or CASA advocate\n- A trauma-informed pediatrician\n- A trauma-informed teacher or school counselor\n\n**Community support:**\n- Other foster/adoptive families who understand\n- A mentor or faith community member with appropriate boundaries\n- Respite care providers who understand trauma\n\n**Personal support:**\n- A close friend or family member who listens without judgment\n- A partner or co-parent who shares your parenting values\n\n**Insight:**\nAsking for help is not failure. It is wisdom. The most effective caregivers are not the ones going it alone — they are the ones who have built a network around their family.\n\nNo family is an island. Healing happens in community.`,
-    tip: "Identify one gap in your support network and take one step this week to fill it — a call, an email, a search for a TBRI® therapist.",
+    tip: "Identify one gap in your support network and take one step this week to fill it — a call, an email, a search for a trauma-informed therapist.",
     worksheet: "Draw your support circle. Where are the gaps? Who do you wish you could add? What is stopping you?",
     questions: [
        {

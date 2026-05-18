@@ -212,7 +212,7 @@ const SECTIONS = [
               "\"Are you trained in trauma-informed care for children? Which modalities do you use — TF-CBT, EMDR, CPP, or others?\"",
               "\"Do you have experience with foster care, adoption, or kinship children specifically?\"",
               "\"How do you involve the caregiver in treatment? I want to be an active part of this process.\"",
-              "\"Have you heard of TBRI® (Trust-Based Relational Intervention)? Are your approaches compatible with it?\"",
+              "\"Are your approaches connection-based, attachment-informed, and focused on felt safety and regulation support?\"",
               "\"How do you handle disclosures of abuse during sessions?\"",
             ].map((q, i) => (
               <div key={i} className="rounded-lg p-2.5" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
@@ -230,7 +230,7 @@ const SECTIONS = [
               { name: "EMDR (Eye Movement Desensitization)", desc: "Processes traumatic memories stored in the brain through guided bilateral stimulation." },
               { name: "CPP (Child-Parent Psychotherapy)", desc: "For ages 0–5. Focuses on the caregiver-child relationship as the vehicle for healing." },
               { name: "Play Therapy", desc: "Children process trauma through play — especially effective for young children who can't verbalize their experiences." },
-              { name: "TBRI® Therapy", desc: "Trust-Based Relational Intervention — grounded in attachment science, designed specifically for children from hard places." },
+              { name: "Connection-Based Parenting Support", desc: "Attachment-informed and trauma-aware support focused on felt safety, regulation, and caregiver-child connection." },
             ].map((t, i) => (
               <div key={i} className="rounded-xl p-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
                 <p className="text-xs font-bold mb-0.5" style={{ color: "#7B5EA7" }}>{t.name}</p>
@@ -268,7 +268,7 @@ const SECTIONS = [
           {
             emoji: "🔁",
             title: "Regulate, Relate, Reason (in that order)",
-            body: "From TBRI®: never try to reason with a dysregulated child. First help them calm their body, then reconnect emotionally, then — only then — address the behavior.",
+            body: "Never try to reason with a dysregulated child. First help them calm their body, then reconnect emotionally, then — only then — address the behavior.",
           },
           {
             emoji: "🗣️",
@@ -320,9 +320,9 @@ const SECTIONS = [
             url: "https://developingchild.harvard.edu",
           },
           {
-            name: "TBRI® Institute at TCU",
-            desc: "The home of Trust-Based Relational Intervention — the gold-standard approach for children from hard places.",
-            url: "https://child.tcu.edu/tbri",
+            name: "National Child Traumatic Stress Network",
+            desc: "Family and professional resources for trauma-informed care, felt safety, and regulation support.",
+            url: "https://www.nctsn.org",
           },
           {
             name: "The Body Keeps the Score (Book)",
