@@ -73,6 +73,7 @@ import QuickExitButton from '@/components/privacy/QuickExitButton';
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 import AdminRouteGate from '@/components/security/AdminRouteGate';
 import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
+import WelcomeToRooted21 from '@/pages/WelcomeToRooted21';
 
 function withStartupTimeout(promise, ms = 8000) {
   return Promise.race([
@@ -98,11 +99,13 @@ function App() {
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [bootLoading, setBootLoading] = React.useState(true);
   const [bootFailed, setBootFailed] = React.useState(false);
+  const [welcomeSeen, setWelcomeSeen] = React.useState(() => localStorage.getItem("rooted21_welcome_seen") === "true");
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
   const isPublicLandingPath = publicLandingPaths.includes(window.location.pathname);
   const showComingSoon = maintenanceMode && !user && !isFounder && !isPublicLandingPath;
+  const needsWelcome = user && !welcomeSeen && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
@@ -216,7 +219,9 @@ function App() {
             <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
           ) : (
           <AnimatePresence mode="wait">
-            {needsOnboarding ? (
+            {needsWelcome ? (
+              <WelcomeToRooted21 user={user} onContinue={() => { localStorage.setItem("rooted21_welcome_seen", "true"); setWelcomeSeen(true); }} />
+            ) : needsOnboarding ? (
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
             <Routes>
@@ -228,6 +233,7 @@ function App() {
               <Route path="/home" element={<PublicLandingPage />} />
               <Route path="/welcome" element={<PublicLandingPage />} />
               <Route path="/coming-soon" element={<PublicLandingPage />} />
+              <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={() => { localStorage.setItem("rooted21_welcome_seen", "true"); setWelcomeSeen(true); }} />} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
               <Route path="/cps-case-navigation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CPSCaseNavigation /></FeatureLockGate></Suspense>} />
