@@ -102,7 +102,7 @@ function App() {
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
   const isPublicLandingPath = publicLandingPaths.includes(window.location.pathname);
-  const showComingSoon = maintenanceMode && !isFounder && !isPublicLandingPath;
+  const showComingSoon = maintenanceMode && !user && !isFounder && !isPublicLandingPath;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {

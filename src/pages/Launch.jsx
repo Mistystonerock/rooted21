@@ -86,7 +86,7 @@ export default function Launch() {
       try {
         await base44.functions.invoke("validateBetaTesterCode", { code: betaCode });
         localStorage.setItem("pending_beta_code", betaCode);
-        base44.auth.redirectToLogin("/home");
+        base44.auth.redirectToLogin("/dashboard");
         return;
       } catch {
         setError("This code is not valid. Please contact Misty at rooted21parenting.org for access.");
@@ -131,7 +131,7 @@ export default function Launch() {
           </div>
         </div>
         <button
-          onClick={() => base44.auth.redirectToLogin("/home")}
+          onClick={() => base44.auth.redirectToLogin("/dashboard")}
           style={{ background: CARD, border: `1.5px solid ${GREEN}`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
         >
           Sign In
@@ -272,7 +272,7 @@ export default function Launch() {
         {/* ── FOOTER ACTIONS ── */}
         <div id="footer-actions" style={{ background: CARD, borderRadius: 16, overflow: "hidden", marginBottom: 16, border: `1px solid ${BORDER}`, scrollMarginTop: 90 }}>
           {[
-            { label: "Sign In", action: () => base44.auth.redirectToLogin("/home") },
+            { label: "Sign In", action: () => base44.auth.redirectToLogin("/dashboard") },
             { label: "Redeem Access Code", action: () => setShowCodeModal(true) },
             { label: "Admin Access", href: "/founder-access" },
           ].map((btn, i) => (
