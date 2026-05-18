@@ -5,7 +5,7 @@ import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
 import DonationPanel from "@/components/launch/DonationPanel";
 import QuickPageSearch from "@/components/launch/QuickPageSearch";
-import { Sparkles, ChevronRight, PlayCircle } from "lucide-react";
+import { Sparkles, ChevronRight } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
 
@@ -184,21 +184,6 @@ export default function Launch() {
           {count !== null && count > 0 && (
            <p style={{ fontSize: 12, color: TEXT, marginTop: 10 }}>🌱 {count} families already on the list</p>
           )}
-        </section>
-
-        {/* ── TOUR VIDEO ── */}
-        <section id="tour-video" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "20px 18px", marginBottom: 28, scrollMarginTop: 90 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>Tour Video</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 10, lineHeight: 1.25 }}>
-            Take a Tour of Rooted 21
-          </h2>
-          <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, textAlign: "center", marginBottom: 16 }}>
-            This video will walk families through the app, support tools, resources, and the mission behind Rooted 21.
-          </p>
-          <div style={{ minHeight: 190, borderRadius: 16, border: `1.5px dashed ${GREEN}70`, background: CARD2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 18 }}>
-            <PlayCircle size={42} color={GREEN} />
-            <p style={{ fontWeight: 900, color: TEXT, marginTop: 10 }}>Tour video coming soon.</p>
-          </div>
         </section>
 
         {/* ── DONATIONS ── */}
