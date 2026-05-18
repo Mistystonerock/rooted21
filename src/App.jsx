@@ -125,9 +125,18 @@ function App() {
       if (mounted) setBootFailed(false);
       try {
         const maintenanceResult = await withStartupTimeout(base44.functions.invoke("getMaintenanceMode", {}), 6000);
-        if (mounted) setMaintenanceMode(maintenanceResult.data.enabled !== false);
+        const maintenanceEnabled = maintenanceResult.data.enabled !== false;
+        if (mounted) setMaintenanceMode(maintenanceEnabled);
+        if (maintenanceEnabled && !window.location.pathname.startsWith("/founder")) {
+          if (mounted) setBootLoading(false);
+          return;
+        }
       } catch {
         if (mounted) setMaintenanceMode(true);
+        if (!window.location.pathname.startsWith("/founder")) {
+          if (mounted) setBootLoading(false);
+          return;
+        }
       }
 
       try {
