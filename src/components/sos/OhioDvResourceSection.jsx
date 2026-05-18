@@ -24,7 +24,7 @@ const RESOURCES = [
     county: "Statewide",
     phone: "1-800-934-9840",
     website: "https://www.odvn.org/",
-    description: "Ohio-focused DV support, local shelter referrals, advocacy options, and survivor resources."
+    description: "Ohio-focused DV support, local shelter referrals, advocacy options, and survivor resources.",
     emergency: true,
     childFriendly: true,
     petFriendly: true,
@@ -148,7 +148,7 @@ const RESOURCES = [
     phone: "1-888-373-7888",
     text: "Text 233733",
     website: "https://humantraffickinghotline.org/",
-    description: "24/7 confidential trafficking support, safety planning options, and service referrals."
+    description: "24/7 confidential trafficking support, safety planning options, and service referrals.",
     emergency: true,
     childFriendly: true,
     petFriendly: false,

@@ -230,16 +230,16 @@ export default function Launch() {
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your name</label>
-                <input type="text" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="First and last name" style={inp} />
+                <label htmlFor="waitlist-full-name" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your name</label>
+                <input id="waitlist-full-name" name="full_name" type="text" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="First and last name" style={inp} />
               </div>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Email address</label>
-                <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@email.com" style={inp} />
+                <label htmlFor="waitlist-email" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Email address</label>
+                <input id="waitlist-email" name="email" type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@email.com" style={inp} />
               </div>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your family (optional)</label>
-                <select value={form.family_type} onChange={e => setForm(f => ({ ...f, family_type: e.target.value }))} style={{ ...inp, color: "#fff" }}>
+                <label htmlFor="waitlist-family-type" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your family (optional)</label>
+                <select id="waitlist-family-type" name="family_type" value={form.family_type} onChange={e => setForm(f => ({ ...f, family_type: e.target.value }))} style={{ ...inp, color: "#fff" }}>
                   <option value="foster" style={{ color: "#000" }}>Foster Parent</option>
                   <option value="adoptive" style={{ color: "#000" }}>Adoptive Parent</option>
                   <option value="kinship" style={{ color: "#000" }}>Kinship Caregiver</option>
@@ -248,12 +248,12 @@ export default function Launch() {
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Anything you want us to know? (optional)</label>
-                <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
+                <label htmlFor="waitlist-message" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Anything you want us to know? (optional)</label>
+                <textarea id="waitlist-message" name="message" value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
               </div>
               <div>
-                <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here for full program access.</label>
-                <input type="text" value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta code" maxLength={8} style={{ ...inp, textTransform: "uppercase", letterSpacing: "0.08em" }} />
+                <label htmlFor="waitlist-beta-code" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here for full program access.</label>
+                <input id="waitlist-beta-code" name="beta_code" type="text" value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta code" maxLength={8} style={{ ...inp, textTransform: "uppercase", letterSpacing: "0.08em" }} />
               </div>
 
               {error && <p style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.25)", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#c85a3a" }}>{error}</p>}

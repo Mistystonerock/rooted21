@@ -79,6 +79,9 @@ export default function QuickPageSearch() {
             </div>
 
             <input
+              id="launch-page-search"
+              name="launch_page_search"
+              aria-label="Search this page"
               autoFocus
               value={query}
               onChange={e => setQuery(e.target.value)}

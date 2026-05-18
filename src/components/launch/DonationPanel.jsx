@@ -70,6 +70,9 @@ export default function DonationPanel() {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 10 }}>
         <input
+          id="donation-custom-amount"
+          name="custom_amount"
+          aria-label="Custom donation amount"
           type="number"
           min="1"
           value={customAmount}
@@ -78,6 +81,9 @@ export default function DonationPanel() {
           style={{ width: "100%", border: `1.5px solid ${BORDER}`, borderRadius: 12, padding: "12px 14px", fontSize: 13, boxSizing: "border-box" }}
         />
         <input
+          id="donation-email"
+          name="donor_email"
+          aria-label="Email for donation receipt"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
