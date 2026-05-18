@@ -62,6 +62,7 @@ import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
+import PublicLandingPage from '@/pages/PublicLandingPage';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
 import BehavioralHealthRecords from '@/pages/BehavioralHealthRecords';
@@ -99,7 +100,9 @@ function App() {
   const [bootFailed, setBootFailed] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
-  const showComingSoon = maintenanceMode && !isFounder;
+  const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
+  const isPublicLandingPath = publicLandingPaths.includes(window.location.pathname);
+  const showComingSoon = maintenanceMode && !isFounder && !isPublicLandingPath;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
@@ -185,7 +188,9 @@ function App() {
           </div>
         )}
         <Router>
-          {bootLoading ? (
+          {isPublicLandingPath ? (
+            <PublicLandingPage />
+          ) : bootLoading ? (
             <LoadingFallback />
           ) : bootFailed ? (
             <StartupErrorScreen onRetry={() => window.location.reload()} />
@@ -197,12 +202,14 @@ function App() {
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
             <Routes>
-              <Route path="/" element={<Launch />} />
+              <Route path="/" element={<PublicLandingPage />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
-              <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
+              <Route path="/home" element={<PublicLandingPage />} />
+              <Route path="/welcome" element={<PublicLandingPage />} />
+              <Route path="/coming-soon" element={<PublicLandingPage />} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
               <Route path="/cps-case-navigation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CPSCaseNavigation /></FeatureLockGate></Suspense>} />

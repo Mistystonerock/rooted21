@@ -5,7 +5,7 @@ import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
 import DonationPanel from "@/components/launch/DonationPanel";
 import QuickPageSearch from "@/components/launch/QuickPageSearch";
-import { Sparkles, ChevronRight } from "lucide-react";
+import { Sparkles, ChevronRight, PlayCircle } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
 
@@ -159,29 +159,47 @@ export default function Launch() {
           <p style={{ fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
             Rooted 21 is a calm, private place for foster, adoptive, kinship, and biological parents navigating hard systems.
           </p>
-
-          {/* Countdown */}
-          <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 14, padding: "14px 20px", display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontWeight: 900, fontSize: 34, color: GREEN, lineHeight: 1, margin: 0 }}>{time.days}</p>
-              <p style={{ fontSize: 10, color: MUTED, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 3 }}>days</p>
-            </div>
-            <div style={{ width: 1, height: 40, background: BORDER }} />
-            <div style={{ textAlign: "left" }}>
-              <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, margin: 0 }}>Opening July 10, 2026</p>
-              <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
-            </div>
-          </div>
-
-          {count !== null && count > 0 && (
-           <p style={{ fontSize: 12, color: TEXT, marginTop: 8 }}>🌱 {count} families already on the list</p>
-          )}
         </div>
 
         {/* ── FOUNDER'S NOTE ── */}
         <div id="founders-note" style={{ scrollMarginTop: 90 }}>
           <FoundersNote />
         </div>
+
+        {/* ── COMING SOON ── */}
+        <section id="coming-soon" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "22px 18px", marginBottom: 28, textAlign: "center", scrollMarginTop: 90 }}>
+          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 8 }}>Coming Soon</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 10, lineHeight: 1.2 }}>Rooted 21 is currently being finalized.</h2>
+          <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 14 }}>
+            The platform is in development and testing while we add more tools, resources, and support for families and professionals. Beta access may be available by invitation.
+          </p>
+          <div style={{ background: CARD2, borderRadius: 14, padding: "14px 12px" }}>
+            <div style={{ textAlign: "center" }}>
+              <p style={{ fontWeight: 900, fontSize: 34, color: GREEN, lineHeight: 1, margin: 0 }}>{time.days}</p>
+              <p style={{ fontSize: 10, color: MUTED, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 3 }}>days until opening</p>
+            </div>
+            <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, marginTop: 8 }}>Opening July 10, 2026</p>
+            <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
+          </div>
+          {count !== null && count > 0 && (
+           <p style={{ fontSize: 12, color: TEXT, marginTop: 10 }}>🌱 {count} families already on the list</p>
+          )}
+        </section>
+
+        {/* ── TOUR VIDEO ── */}
+        <section id="tour-video" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "20px 18px", marginBottom: 28, scrollMarginTop: 90 }}>
+          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>Tour Video</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 10, lineHeight: 1.25 }}>
+            Take a Tour of Rooted 21
+          </h2>
+          <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, textAlign: "center", marginBottom: 16 }}>
+            This video will walk families through the app, support tools, resources, and the mission behind Rooted 21.
+          </p>
+          <div style={{ minHeight: 190, borderRadius: 16, border: `1.5px dashed ${GREEN}70`, background: CARD2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 18 }}>
+            <PlayCircle size={42} color={GREEN} />
+            <p style={{ fontWeight: 900, color: TEXT, marginTop: 10 }}>Tour video coming soon.</p>
+          </div>
+        </section>
 
         {/* ── DONATIONS ── */}
         <div id="donations" style={{ scrollMarginTop: 90 }}>
