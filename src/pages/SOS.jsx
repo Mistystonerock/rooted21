@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
-import SurvivorModeControls from "@/components/sos/SurvivorModeControls";
-import OhioDvResourceSection from "@/components/sos/OhioDvResourceSection";
+import SurvivorModeSettings from "@/components/safety-plan/SurvivorModeSettings";
+import { isDvSectionHidden } from "@/lib/survivorMode";
 
 export default function SOS() {
   const navigate = useNavigate();
   const [sendingAlert, setSendingAlert] = useState(false);
   const [alertStatus, setAlertStatus] = useState("");
-  const [hideDvSection, setHideDvSection] = useState(localStorage.getItem("rooted_hide_dv_section") === "true");
+  const [hideDvSection, setHideDvSection] = useState(() => isDvSectionHidden());
 
   function getCurrentLocation() {
     return new Promise((resolve) => {
@@ -30,6 +30,16 @@ export default function SOS() {
       );
     });
   }
+
+  useEffect(() => {
+    const refresh = () => setHideDvSection(isDvSectionHidden());
+    window.addEventListener("storage", refresh);
+    window.addEventListener("rooted21-survivor-settings-changed", refresh);
+    return () => {
+      window.removeEventListener("storage", refresh);
+      window.removeEventListener("rooted21-survivor-settings-changed", refresh);
+    };
+  }, []);
 
   async function handleSupportTeamAlert() {
     setSendingAlert(true);
@@ -109,9 +119,8 @@ export default function SOS() {
           </a>
         </section>
 
+        <SurvivorModeSettings />
         {!hideDvSection && <DomesticViolenceSupportSection />}
-        {!hideDvSection && <OhioDvResourceSection />}
-        <SurvivorModeControls onHideChange={setHideDvSection} />
 
         <Link to="/chat?crisis=1" className="flex w-full items-center justify-center rounded-2xl py-4 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>
           Open Rooted 21 crisis coaching

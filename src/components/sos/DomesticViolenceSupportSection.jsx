@@ -1,4 +1,5 @@
-import { DoorOpen, EyeOff, FileText, HeartHandshake, Home, MessageCircle, Phone, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
+import { DoorOpen, EyeOff, FileText, HeartHandshake, Home, MessageCircle, Phone, Scale, Shield } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import { activateQuickExit } from "@/lib/survivorMode";
 
@@ -87,6 +88,13 @@ export default function DomesticViolenceSupportSection() {
         >
           <MessageCircle size={18} /> Text START to 88788
         </a>
+        <Link
+          to="/protective-order-help"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-black no-underline"
+          style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}
+        >
+          <Scale size={18} /> Protective order help
+        </Link>
         <button
           type="button"
           onClick={quickExit}

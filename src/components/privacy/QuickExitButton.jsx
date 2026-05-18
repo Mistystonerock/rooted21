@@ -2,6 +2,8 @@ import { DoorOpen } from "lucide-react";
 import { activateQuickExit } from "@/lib/survivorMode";
 
 export default function QuickExitButton() {
+  if (window.location.pathname === "/safe-screen") return null;
+
   return (
     <button
       type="button"

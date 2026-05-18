@@ -159,6 +159,7 @@ function App() {
               <Route path="/behavior-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorHub /></FeatureLockGate></Suspense>} />
               <Route path="/substance-abuse-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SubstanceAbuseResources /></FeatureLockGate></Suspense>} />
               <Route path="/court-rights-education" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtRightsEducation /></FeatureLockGate></Suspense>} />
+              <Route path="/protective-order-help" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProtectiveOrderHelp /></FeatureLockGate></Suspense>} />
               <Route path="/training-videos" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TrainingVideos /></FeatureLockGate></Suspense>} />
               <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
               <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />

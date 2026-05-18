@@ -23,6 +23,7 @@ export function isDvSectionHidden() {
 
 export function setDvSectionHidden(value) {
   localStorage.setItem(HIDE_DV_KEY, value ? "true" : "false");
+  window.dispatchEvent(new Event("rooted21-survivor-settings-changed"));
 }
 
 export function getSurvivorPin() {
