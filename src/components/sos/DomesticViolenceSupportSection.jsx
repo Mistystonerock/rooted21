@@ -1,5 +1,28 @@
-import { DoorOpen, MessageCircle, Phone, Shield } from "lucide-react";
+import { DoorOpen, EyeOff, FileText, HeartHandshake, Home, MessageCircle, Phone, Shield } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
+
+const SAFETY_TOOLS = [
+  {
+    icon: EyeOff,
+    title: "If you are being monitored",
+    text: "Use a safer device, private browser, library computer, or trusted person’s phone when possible. Clear history only if it is safe to do so."
+  },
+  {
+    icon: Home,
+    title: "Planning to leave safely",
+    text: "Think through documents, medication, keys, transportation, children’s essentials, pets, cash, and one trusted contact before taking action."
+  },
+  {
+    icon: FileText,
+    title: "Quiet documentation",
+    text: "If safe, keep factual notes, photos, dates, screenshots, threats, police reports, medical visits, and custody-related incidents somewhere private."
+  },
+  {
+    icon: HeartHandshake,
+    title: "You are not the problem",
+    text: "Emotional abuse, stalking, coercive control, financial control, intimidation, and isolation are real safety concerns. Support is available."
+  }
+];
 
 export default function DomesticViolenceSupportSection() {
   const quickExit = () => {
@@ -13,12 +36,12 @@ export default function DomesticViolenceSupportSection() {
           <Shield size={28} color="#fff" />
         </div>
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: C.midGreen }}>Private safety support</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: C.midGreen }}>Hidden survival toolkit</p>
           <h2 className="mt-1 font-serif text-xl font-black leading-tight" style={{ color: C.darkGreen }}>
             SOS: Domestic Violence & Safety Support
           </h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: C.mutedText }}>
-            If something feels unsafe at home or in a relationship, you deserve support without judgment. You can move at your own pace.
+            For survivors of domestic violence, coercive control, emotional abuse, stalking, or parents trying to leave safely. No judgment. No pressure. Just safety-first support.
           </p>
         </div>
       </div>
@@ -27,6 +50,25 @@ export default function DomesticViolenceSupportSection() {
         <p className="text-xs font-bold leading-relaxed" style={{ color: C.darkGreen }}>
           If someone may be monitoring your phone or browser, use a safer device if possible. The quick exit button opens a weather search, but browser history may still show activity.
         </p>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {SAFETY_TOOLS.map((tool) => {
+          const Icon = tool.icon;
+          return (
+            <div key={tool.title} className="rounded-2xl p-4" style={{ background: "#FAF6F1", border: `1px solid ${C.cream}` }}>
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ background: `${C.midGreen}22` }}>
+                  <Icon size={18} color={C.darkGreen} />
+                </div>
+                <div>
+                  <p className="text-sm font-black" style={{ color: C.darkGreen }}>{tool.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>{tool.text}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-4 grid gap-3">
