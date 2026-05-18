@@ -74,6 +74,13 @@ import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled
 import AdminRouteGate from '@/components/security/AdminRouteGate';
 import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
 
+function withStartupTimeout(promise, ms = 8000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Startup timed out')), ms))
+  ]);
+}
+
 function App() {
   const [user, setUser] = React.useState(null);
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
@@ -103,35 +110,35 @@ function App() {
 
     async function bootApp() {
       try {
-        const maintenanceResult = await base44.functions.invoke("getMaintenanceMode", {});
+        const maintenanceResult = await withStartupTimeout(base44.functions.invoke("getMaintenanceMode", {}), 6000);
         if (mounted) setMaintenanceMode(maintenanceResult.data.enabled !== false);
       } catch {
         if (mounted) setMaintenanceMode(true);
       }
 
       try {
-        const u = await base44.auth.me();
+        const u = await withStartupTimeout(base44.auth.me(), 8000);
         if (mounted) setUser(u);
         if (u?.email) {
           try {
-            await base44.functions.invoke("initializeFounder", {});
+            await withStartupTimeout(base44.functions.invoke("initializeFounder", {}), 6000);
           } catch {
             // Keep app boot stable even if founder initialization is unavailable.
           }
 
           const pendingBetaCode = localStorage.getItem("pending_beta_code");
           if (pendingBetaCode) {
-            await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
+            await withStartupTimeout(base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode }), 8000);
             localStorage.removeItem("pending_beta_code");
-            const refreshedUser = await base44.auth.me();
+            const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
             if (mounted) setUser(refreshedUser);
           }
 
           const pendingAdminCode = localStorage.getItem("pending_admin_code");
           if (pendingAdminCode) {
-            await base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode });
+            await withStartupTimeout(base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode }), 8000);
             localStorage.removeItem("pending_admin_code");
-            const refreshedUser = await base44.auth.me();
+            const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
             if (mounted) setUser(refreshedUser);
           }
         }
