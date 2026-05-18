@@ -1,0 +1,43 @@
+{
+  "name": "PrivacyVaultSetting",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "survivor_mode_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "fake_screen_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "pin_hash": {
+      "type": "string"
+    },
+    "pin_set_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_unlocked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_email": "{{user.email}}"
+    },
+    "read": {
+      "user_email": "{{user.email}}"
+    },
+    "update": {
+      "user_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}

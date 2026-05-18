@@ -1,0 +1,62 @@
+{
+  "name": "AccountDeletionRequest",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "completed",
+        "cancelled"
+      ],
+      "default": "submitted"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "safe_contact_method": {
+      "type": "string",
+      "enum": [
+        "in_app",
+        "email",
+        "no_outbound_contact"
+      ],
+      "default": "in_app"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "status",
+    "requested_at"
+  ],
+  "rls": {
+    "create": {
+      "user_email": "{{user.email}}"
+    },
+    "read": {
+      "user_email": "{{user.email}}"
+    },
+    "update": {
+      "user_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}
