@@ -12,38 +12,75 @@
     },
     "permissions": {
       "type": "array",
-      "description": "List of permissions granted to this admin",
+      "description": "Permissions granted to this admin",
       "items": {
         "type": "string",
         "enum": [
-          "view_all_data",
-          "view_signups",
-          "view_activity",
-          "view_users",
-          "manage_admins",
-          "manage_codes",
-          "view_dashboard"
+          "manage_local_resources",
+          "update_verified_services",
+          "moderate_community",
+          "assist_users",
+          "manage_assigned_county_resources",
+          "view_admin_dashboard"
         ]
       },
       "default": []
     },
+    "assigned_counties": {
+      "type": "array",
+      "description": "Ohio counties this admin may manage",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Organization this admin may manage"
+    },
+    "organization_name": {
+      "type": "string"
+    },
     "created_by": {
       "type": "string",
-      "description": "Email of founder who created this admin"
+      "description": "Founder who granted this access"
     },
     "notes": {
-      "type": "string",
-      "description": "Notes about this admin's access level"
+      "type": "string"
     },
     "is_active": {
       "type": "boolean",
-      "default": true,
-      "description": "Whether this admin account is active"
+      "default": true
     }
   },
   "required": [
     "admin_email",
     "admin_name",
     "created_by"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "admin_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": false
+  }
 }

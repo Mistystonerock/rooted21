@@ -4,39 +4,79 @@
   "properties": {
     "code": {
       "type": "string",
-      "description": "Unique admin access code (6 characters)"
+      "description": "Unique admin invitation code"
     },
     "created_by": {
       "type": "string",
-      "description": "Email of founder who created this code"
+      "description": "Founder who created this code"
     },
     "created_for": {
-      "type": "string",
-      "description": "Name or email this code is intended for (optional)"
+      "type": "string"
+    },
+    "assigned_counties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "organization_id": {
+      "type": "string"
+    },
+    "organization_name": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "manage_local_resources",
+        "update_verified_services",
+        "moderate_community",
+        "assist_users",
+        "manage_assigned_county_resources",
+        "view_admin_dashboard"
+      ]
     },
     "used": {
       "type": "boolean",
-      "default": false,
-      "description": "Whether this code has been revoked or used"
+      "default": false
     },
     "used_by": {
-      "type": "string",
-      "description": "Email of person who redeemed this code"
+      "type": "string"
     },
     "used_at": {
       "type": "string",
-      "format": "date-time",
-      "description": "When the code was redeemed"
+      "format": "date-time"
     },
     "expires_at": {
       "type": "string",
-      "format": "date-time",
-      "description": "When this code expires (30 days from creation)"
+      "format": "date-time"
     }
   },
   "required": [
     "code",
     "created_by",
     "expires_at"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": false
+  }
 }

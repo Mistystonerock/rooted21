@@ -1,0 +1,76 @@
+{
+  "name": "Organization",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "organization_type": {
+      "type": "string",
+      "enum": [
+        "agency",
+        "behavioral_health",
+        "school",
+        "court",
+        "community_partner",
+        "other"
+      ],
+      "default": "agency"
+    },
+    "county": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "default": "OH"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "suspended",
+        "archived"
+      ],
+      "default": "pending"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "organization_type"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": false
+  }
+}

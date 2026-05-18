@@ -23,7 +23,13 @@
         "data_access",
         "data_export",
         "account_deletion_request",
-        "system_job"
+        "system_job",
+        "admin_invitation_created",
+        "admin_promoted",
+        "admin_removed",
+        "organization_approved",
+        "moderation_action",
+        "verification_action"
       ],
       "default": "system_job"
     },
@@ -46,8 +52,7 @@
       "type": "string"
     },
     "metadata_json": {
-      "type": "string",
-      "description": "Small JSON string with non-sensitive context only"
+      "type": "string"
     },
     "ip_hash": {
       "type": "string"

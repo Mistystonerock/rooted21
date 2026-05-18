@@ -5,58 +5,49 @@
     "role": {
       "type": "string",
       "enum": [
-        "user",
         "parent",
         "youth",
         "kinship_caregiver",
         "foster_parent",
         "peer_mentor",
-        "professional",
         "behavioral_health_worker",
         "casa_gal",
         "school_staff",
         "attorney",
-        "court_staff",
         "admin",
-        "founder"
+        "founder",
+        "user"
       ],
-      "default": "parent",
-      "description": "Rooted 21 role used for role-based access controls"
+      "default": "parent"
     },
-    "account_security_status": {
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "preferred_language": {
       "type": "string",
       "enum": [
-        "active",
-        "verification_needed",
-        "mfa_recommended",
-        "locked",
-        "suspended"
+        "en",
+        "es",
+        "so"
       ],
-      "default": "active"
+      "default": "en"
     },
-    "mfa_enabled": {
-      "type": "boolean",
-      "default": false
+    "county": {
+      "type": "string"
     },
-    "biometric_login_enabled": {
-      "type": "boolean",
-      "default": false
-    },
-    "session_timeout_minutes": {
-      "type": "number",
-      "default": 30
-    },
-    "founder_reauth_required_after_minutes": {
-      "type": "number",
-      "default": 10
-    },
-    "last_sensitive_reauth_at": {
+    "organization_id": {
       "type": "string",
-      "format": "date-time"
+      "description": "Organization or agency this user belongs to"
     },
-    "last_security_review_at": {
-      "type": "string",
-      "format": "date-time"
+    "organization_name": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "housing_resources_zip": {
+      "type": "string"
     },
     "survivor_mode_enabled": {
       "type": "boolean",
@@ -64,31 +55,33 @@
     },
     "quick_exit_url": {
       "type": "string",
-      "default": "https://www.weather.gov/"
+      "default": "https://weather.com"
     },
-    "onboarding_completed": {
+    "vault_pin_enabled": {
       "type": "boolean",
       "default": false
     },
-    "is_active": {
-      "type": "boolean",
-      "default": true
-    },
-    "deactivated_at": {
+    "sensitive_action_reauth_at": {
       "type": "string",
       "format": "date-time"
     },
-    "county": {
-      "type": "string"
+    "admin_session_valid_until": {
+      "type": "string",
+      "format": "date-time"
     },
-    "sms_reminders": {
-      "type": "boolean",
-      "default": false
+    "founder_reauth_required_after_minutes": {
+      "type": "number",
+      "default": 10
     },
-    "two_factor_enabled": {
-      "type": "boolean",
-      "default": false
+    "account_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "locked",
+        "pending_review",
+        "deletion_requested"
+      ],
+      "default": "active"
     }
-  },
-  "required": []
+  }
 }
