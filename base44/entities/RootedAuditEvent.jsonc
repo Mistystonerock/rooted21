@@ -1,0 +1,81 @@
+{
+  "name": "RootedAuditEvent",
+  "type": "object",
+  "properties": {
+    "actor_email": {
+      "type": "string"
+    },
+    "actor_role": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "record_create",
+        "record_update",
+        "record_delete_attempt",
+        "document_upload",
+        "document_export",
+        "resource_review",
+        "role_change",
+        "security_alert",
+        "consent_change",
+        "data_access",
+        "data_export",
+        "account_deletion_request",
+        "system_job"
+      ],
+      "default": "system_job"
+    },
+    "entity_name": {
+      "type": "string"
+    },
+    "entity_id": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "info",
+        "warning",
+        "critical"
+      ],
+      "default": "info"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "metadata_json": {
+      "type": "string",
+      "description": "Small JSON string with non-sensitive context only"
+    },
+    "ip_hash": {
+      "type": "string"
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "event_type",
+    "summary",
+    "occurred_at"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "update": false,
+    "delete": false
+  }
+}

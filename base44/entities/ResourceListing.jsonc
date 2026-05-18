@@ -1,0 +1,125 @@
+{
+  "name": "ResourceListing",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "housing",
+        "food",
+        "mental_health",
+        "recovery",
+        "domestic_violence",
+        "legal_aid",
+        "parenting",
+        "childcare",
+        "education",
+        "transportation",
+        "utilities",
+        "shelter",
+        "medicaid",
+        "snap_wic",
+        "ohiokan",
+        "ohiorise",
+        "fcfc",
+        "casa",
+        "other"
+      ],
+      "default": "other"
+    },
+    "county": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "default": "OH"
+    },
+    "crisis_priority": {
+      "type": "boolean",
+      "default": false
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "description_en": {
+      "type": "string"
+    },
+    "description_es": {
+      "type": "string"
+    },
+    "description_so": {
+      "type": "string"
+    },
+    "eligibility_notes": {
+      "type": "string"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "needs_review",
+        "outdated",
+        "archived"
+      ],
+      "default": "needs_review"
+    },
+    "last_review_reminder_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "archived_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "admin_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "read": true,
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}

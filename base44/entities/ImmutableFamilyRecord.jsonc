@@ -1,0 +1,97 @@
+{
+  "name": "ImmutableFamilyRecord",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "child_id": {
+      "type": "string"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "message",
+        "visitation",
+        "behavior",
+        "medication",
+        "safety_plan",
+        "case_plan",
+        "court_note",
+        "document_manifest",
+        "resource_referral",
+        "other"
+      ],
+      "default": "other"
+    },
+    "source_entity": {
+      "type": "string"
+    },
+    "source_entity_id": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "record_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": "string"
+    },
+    "verification_id": {
+      "type": "string"
+    },
+    "gps_latitude": {
+      "type": "number"
+    },
+    "gps_longitude": {
+      "type": "number"
+    },
+    "sealed": {
+      "type": "boolean",
+      "default": true
+    },
+    "part2_segmented": {
+      "type": "boolean",
+      "default": false
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use",
+        "legal",
+        "education",
+        "medical"
+      ],
+      "default": "general"
+    }
+  },
+  "required": [
+    "owner_email",
+    "record_type",
+    "submitted_at",
+    "summary",
+    "verification_id"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": false,
+    "delete": false
+  }
+}

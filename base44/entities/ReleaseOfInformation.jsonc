@@ -1,0 +1,86 @@
+{
+  "name": "ReleaseOfInformation",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "recipient_role": {
+      "type": "string",
+      "enum": [
+        "attorney",
+        "court",
+        "caseworker",
+        "behavioral_health",
+        "school",
+        "casa_gal",
+        "peer_mentor",
+        "agency",
+        "other"
+      ],
+      "default": "other"
+    },
+    "recipient_contact": {
+      "type": "string"
+    },
+    "allowed_segments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "starts_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "signature_name": {
+      "type": "string"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "owner_email",
+    "recipient_name",
+    "purpose",
+    "starts_at",
+    "expires_at"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}
