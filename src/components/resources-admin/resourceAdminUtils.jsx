@@ -41,6 +41,15 @@ export function isVerifiedRecently(resource) {
   return resource.verification_status === "verified" && daysSinceVerified(resource) < 60;
 }
 
+export function resourceSortScore(resource) {
+  if (resource.verification_status === "verified") return 0;
+  if (resource.verification_status === "emergency_only") return 1;
+  if (resource.verification_status === "needs_review") return 2;
+  if (resource.verification_status === "outdated") return 3;
+  if (resource.verification_status === "closed") return 4;
+  return 5;
+}
+
 export function emptyResource(adminEmail = "", adminPermissions = null) {
   return {
     name: "",
