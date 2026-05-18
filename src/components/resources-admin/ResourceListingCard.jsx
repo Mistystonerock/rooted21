@@ -1,7 +1,7 @@
 import { AlertTriangle, Archive, CheckCircle2, Edit3, ShieldAlert } from "lucide-react";
 import { daysSinceVerified, isVerifiedRecently, STATUS_LABELS } from "./resourceAdminUtils";
 
-export default function ResourceListingCard({ resource, onEdit, onVerify, onArchive }) {
+export default function ResourceListingCard({ resource, onEdit, onVerify, onArchive, canManage = true }) {
   const days = daysSinceVerified(resource);
   const recent = isVerifiedRecently(resource);
 
@@ -19,11 +19,13 @@ export default function ResourceListingCard({ resource, onEdit, onVerify, onArch
           <p className="mt-2 text-sm text-stone-700">{resource.description_en || "No English description yet."}</p>
           <div className="mt-2 text-xs text-stone-500">Verified {resource.verified_at ? new Date(resource.verified_at).toLocaleDateString() : "never"} · {days} days since review</div>
         </div>
-        <div className="flex flex-wrap gap-2 md:justify-end">
-          <button onClick={() => onVerify(resource)} className="rounded-xl bg-green-800 px-3 py-2 text-xs font-bold text-white"><CheckCircle2 className="mr-1 h-4 w-4" /> Approve</button>
-          <button onClick={() => onEdit(resource)} className="rounded-xl border px-3 py-2 text-xs font-bold"><Edit3 className="mr-1 h-4 w-4" /> Update</button>
-          {resource.verification_status !== "archived" && <button onClick={() => onArchive(resource)} className="rounded-xl bg-stone-100 px-3 py-2 text-xs font-bold text-stone-700"><Archive className="mr-1 h-4 w-4" /> Archive</button>}
-        </div>
+        {canManage && (
+          <div className="flex flex-wrap gap-2 md:justify-end">
+            <button onClick={() => onVerify(resource)} className="rounded-xl bg-green-800 px-3 py-2 text-xs font-bold text-white"><CheckCircle2 className="mr-1 h-4 w-4" /> Approve</button>
+            <button onClick={() => onEdit(resource)} className="rounded-xl border px-3 py-2 text-xs font-bold"><Edit3 className="mr-1 h-4 w-4" /> Update</button>
+            {resource.verification_status !== "archived" && <button onClick={() => onArchive(resource)} className="rounded-xl bg-stone-100 px-3 py-2 text-xs font-bold text-stone-700"><Archive className="mr-1 h-4 w-4" /> Archive</button>}
+          </div>
+        )}
       </div>
     </article>
   );

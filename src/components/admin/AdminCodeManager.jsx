@@ -3,10 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Copy, Trash2, CheckCircle2, Clock, AlertCircle, Plus } from "lucide-react";
 
-const generateCode = () => {
-  return Math.random().toString(36).substring(2, 8).toUpperCase();
-};
-
 export default function AdminCodeManager() {
   const [codes, setCodes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,20 +27,12 @@ export default function AdminCodeManager() {
   async function handleGenerateCode(e) {
     e.preventDefault();
     if (!user?.email) return;
-    
-    setGenerating(true);
-    const code = generateCode();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 30);
 
+    setGenerating(true);
     try {
-      await base44.entities.AdminAccessCode.create({
-        code,
-        created_by: user.email,
+      await base44.functions.invoke("generateAdminAccessCode", {
         created_for: formData.created_for || undefined,
-        expires_at: expiresAt.toISOString(),
       });
-      
       setFormData({ created_for: "" });
       setShowForm(false);
       await loadCodes();
@@ -58,7 +46,7 @@ export default function AdminCodeManager() {
     if (!confirm("Revoke this access code? This action cannot be undone.")) return;
     
     try {
-      await base44.entities.AdminAccessCode.update(codeId, { used: true });
+      await base44.functions.invoke("revokeAdminAccessCode", { codeId });
       await loadCodes();
     } catch (err) {
       console.error("Failed to revoke code:", err);

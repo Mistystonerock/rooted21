@@ -47,6 +47,7 @@ export default function FounderDashboard() {
   const [funding, setFunding] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [resourceListings, setResourceListings] = useState([]);
+  const [resourceReports, setResourceReports] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [classForm, setClassForm] = useState({ title: "", abbr: "MSOYW", date: "", time: "", description: "", max_capacity: 30, is_published: true });
@@ -76,7 +77,7 @@ export default function FounderDashboard() {
   }
 
   async function loadFounderData() {
-    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, resourceList, maintenanceRes] = await Promise.all([
+    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, resourceList, reportList, maintenanceRes] = await Promise.all([
       base44.entities.User.list("-created_date", 10000),
       base44.entities.WaitlistSignup.list("-created_date", 10000),
       base44.entities.Survey.list("-created_date", 10000),
@@ -87,6 +88,7 @@ export default function FounderDashboard() {
       base44.entities.GrantDonation.list("-record_date", 1000),
       base44.entities.Announcement.list("-created_date", 500),
       base44.entities.ResourceListing.list("-updated_date", 1000),
+      base44.entities.ResourceReport.list("-reported_at", 500),
       base44.functions.invoke("getMaintenanceMode", {}),
     ]);
     setAllUsers(users);
@@ -99,6 +101,7 @@ export default function FounderDashboard() {
     setFunding(fundingList);
     setAnnouncements(announcementList);
     setResourceListings(resourceList);
+    setResourceReports(reportList);
     setMaintenanceMode(maintenanceRes.data.enabled !== false);
   }
 
@@ -237,9 +240,13 @@ export default function FounderDashboard() {
         <FounderSection title="Resource Verification Queue" subtitle="Outdated statewide resources, crisis-priority listings, and admin review workflow" icon={Database} open={openSections.resources} onToggle={() => toggle("resources")}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
             <FounderMetric label="Resources" value={resourceListings.length} detail="Statewide listings" />
-            <FounderMetric label="Need review" value={resourceListings.filter(r => ["needs_review", "outdated"].includes(r.verification_status)).length} detail="Review queue" />
-            <FounderMetric label="Crisis priority" value={resourceListings.filter(r => r.crisis_priority).length} detail="Review first" />
-            <FounderMetric label="Archived" value={resourceListings.filter(r => r.verification_status === "archived").length} detail="Hidden/outdated" />
+            <FounderMetric label="Verified" value={resourceListings.filter(r => r.verification_status === "verified").length} detail="Trusted badge active" />
+            <FounderMetric label="Need review" value={resourceListings.filter(r => r.verification_status === "needs_review").length} detail="60+ day queue" />
+            <FounderMetric label="Outdated" value={resourceListings.filter(r => r.verification_status === "outdated").length} detail="90+ day queue" />
+            <FounderMetric label="Closed" value={resourceListings.filter(r => r.verification_status === "closed").length} detail="Not active" />
+            <FounderMetric label="Pending reports" value={resourceReports.filter(r => r.status === "pending").length} detail="Private community reports" />
+            <FounderMetric label="Counties" value={new Set(resourceListings.map(r => r.county).filter(Boolean)).size} detail="Resource coverage" />
+            <FounderMetric label="Categories" value={new Set(resourceListings.map(r => r.category).filter(Boolean)).size} detail="Service types" />
           </div>
           <a href="/resource-management" className="inline-flex rounded-xl px-4 py-2 text-sm font-bold no-underline" style={{ background: DARK, color: "#fff" }}>Open Resource Management</a>
         </FounderSection>

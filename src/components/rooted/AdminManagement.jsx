@@ -5,13 +5,12 @@ import { Shield, Trash2, Edit2, Plus, CheckCircle2, AlertCircle, Copy, XCircle }
 import CertificateGenerator from "@/components/admin/CertificateGenerator";
 
 const PERMISSION_OPTIONS = [
-  { value: "view_all_data", label: "View All Data" },
-  { value: "view_signups", label: "View Signups & Waitlist" },
-  { value: "view_activity", label: "View User Activity" },
-  { value: "view_users", label: "View User Accounts" },
-  { value: "manage_admins", label: "Manage Other Admins" },
-  { value: "manage_codes", label: "Create Access Codes" },
-  { value: "view_dashboard", label: "Access Admin Dashboard" },
+  { value: "manage_local_resources", label: "Manage Local Resources" },
+  { value: "update_verified_services", label: "Update Verified Services" },
+  { value: "moderate_community", label: "Moderate Community Content" },
+  { value: "assist_users", label: "Assist Users" },
+  { value: "manage_assigned_county_resources", label: "Manage Assigned County Resources" },
+  { value: "view_admin_dashboard", label: "Access Admin Dashboard" },
 ];
 
 export default function AdminManagement() {
@@ -38,8 +37,14 @@ export default function AdminManagement() {
 
   async function handleSavePermissions(adminId, newPermissions) {
     const admin = admins.find(a => a.id === adminId);
-    await base44.entities.AdminPermissions.update(adminId, {
-      permissions: newPermissions
+    await base44.functions.invoke("manageAdminPermissions", {
+      action: "update_permissions",
+      adminPermissionId: adminId,
+      permissions: newPermissions,
+      assigned_counties: admin.assigned_counties || [],
+      organization_id: admin.organization_id || "",
+      organization_name: admin.organization_name || "",
+      is_active: admin.is_active !== false,
     });
     setAdmins(prev => prev.map(a => a.id === adminId ? { ...a, permissions: newPermissions } : a));
     setEditing(null);
@@ -47,7 +52,10 @@ export default function AdminManagement() {
 
   async function handleDeleteAdmin(adminId) {
     if (!confirm("Remove this admin? They'll lose all access.")) return;
-    await base44.entities.AdminPermissions.update(adminId, { is_active: false });
+    await base44.functions.invoke("manageAdminPermissions", {
+      action: "remove_admin",
+      adminPermissionId: adminId,
+    });
     setAdmins(prev => prev.filter(a => a.id !== adminId));
   }
 
@@ -58,7 +66,7 @@ export default function AdminManagement() {
       const response = await base44.functions.invoke('generateAdminAccessCode', {
         created_for: newCodeName.trim() || null,
       });
-      setAccessCodes(prev => [response, ...prev]);
+      setAccessCodes(prev => [response.data, ...prev]);
       setNewCodeName("");
       setShowCodeForm(false);
     } catch (err) {

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Heart, Phone, Globe, MapPin, ChevronDown, ChevronUp, Plus, Clock } from "lucide-react";
+import { Heart, Phone, Globe, MapPin, ChevronDown, ChevronUp, Plus, Clock, Flag } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ResourceIssueReportForm from "@/components/resources/ResourceIssueReportForm";
 
 const GREEN = "#3db870";
 const GOLD = "#c9973a";
@@ -24,6 +25,7 @@ const METHOD_OPTIONS = ["called", "visited", "emailed", "left_voicemail", "other
 export default function CommunityResourceCard({ resource, saved, onSave, onUnsave, onContactLogged }) {
   const [expanded, setExpanded] = useState(false);
   const [showLogForm, setShowLogForm] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
   const [logForm, setLogForm] = useState({ date: new Date().toISOString().split("T")[0], method: "called", outcome: "", notes: "", follow_up_date: "" });
   const [saving, setSaving] = useState(false);
 
@@ -101,6 +103,10 @@ export default function CommunityResourceCard({ resource, saved, onSave, onUnsav
               <span style={{ fontSize: 11, fontWeight: 700, color: GOLD }}>Log Contact</span>
             </button>
           )}
+          <button onClick={() => setShowReportForm(v => !v)} style={{ display: "flex", alignItems: "center", gap: 5, background: "rgba(255,255,255,0.05)", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "6px 10px", cursor: "pointer" }}>
+            <Flag size={11} color={MUTED} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: MUTED }}>Report issue</span>
+          </button>
           {contactLog.length > 0 && (
             <button onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "center", gap: 4, background: "rgba(255,255,255,0.05)", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "6px 10px", cursor: "pointer" }}>
               <Clock size={11} color={MUTED} />
@@ -110,6 +116,14 @@ export default function CommunityResourceCard({ resource, saved, onSave, onUnsav
           )}
         </div>
       </div>
+
+      {showReportForm && (
+        <ResourceIssueReportForm
+          resource={resource}
+          colors={{ panel: "rgba(255,255,255,0.04)", border: BORDER, accent: GOLD, button: GOLD, buttonText: "#0b1f12", muted: MUTED }}
+          onClose={() => setShowReportForm(false)}
+        />
+      )}
 
       {showLogForm && (
         <div style={{ background: "rgba(201,151,58,0.06)", borderTop: `1px solid ${GOLD}25`, padding: "14px" }}>

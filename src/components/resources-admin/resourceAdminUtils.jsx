@@ -39,11 +39,11 @@ export function isVerifiedRecently(resource) {
   return resource.verification_status === "verified" && daysSinceVerified(resource) < 60;
 }
 
-export function emptyResource(adminEmail = "") {
+export function emptyResource(adminEmail = "", adminPermissions = null) {
   return {
     name: "",
     category: "housing",
-    county: "",
+    county: adminPermissions?.assigned_counties?.[0] || "",
     state: "OH",
     crisis_priority: false,
     phone: "",
@@ -56,6 +56,8 @@ export function emptyResource(adminEmail = "") {
     source_url: "",
     admin_notes: "",
     verification_status: "needs_review",
+    organization_id: adminPermissions?.organization_id || "",
+    organization_name: adminPermissions?.organization_name || "",
     verified_by: adminEmail
   };
 }

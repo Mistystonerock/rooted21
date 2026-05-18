@@ -37,9 +37,14 @@
       "type": "string",
       "default": "OH"
     },
-    "crisis_priority": {
-      "type": "boolean",
-      "default": false
+    "organization_id": {
+      "type": "string"
+    },
+    "organization_name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
     },
     "phone": {
       "type": "string"
@@ -47,8 +52,40 @@
     "website": {
       "type": "string"
     },
-    "address": {
+    "hours_of_operation": {
       "type": "string"
+    },
+    "emergency_availability": {
+      "type": "boolean",
+      "default": false
+    },
+    "eligibility_notes": {
+      "type": "string"
+    },
+    "referral_instructions": {
+      "type": "string"
+    },
+    "languages_offered": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "accessibility_notes": {
+      "type": "string"
+    },
+    "child_friendly": {
+      "type": "boolean",
+      "default": false
+    },
+    "pet_friendly": {
+      "type": "boolean",
+      "default": false
+    },
+    "crisis_priority": {
+      "type": "boolean",
+      "default": false
     },
     "description_en": {
       "type": "string"
@@ -57,9 +94,6 @@
       "type": "string"
     },
     "description_so": {
-      "type": "string"
-    },
-    "eligibility_notes": {
       "type": "string"
     },
     "verified_at": {
@@ -75,9 +109,20 @@
         "verified",
         "needs_review",
         "outdated",
+        "closed",
+        "emergency_only",
         "archived"
       ],
       "default": "needs_review"
+    },
+    "verification_notes": {
+      "type": "string"
+    },
+    "supporting_document_url": {
+      "type": "string"
+    },
+    "assigned_admin_email": {
+      "type": "string"
     },
     "last_review_reminder_at": {
       "type": "string",
@@ -101,19 +146,13 @@
   "rls": {
     "create": {
       "user_condition": {
-        "role": [
-          "admin",
-          "founder"
-        ]
+        "role": "founder"
       }
     },
     "read": true,
     "update": {
       "user_condition": {
-        "role": [
-          "admin",
-          "founder"
-        ]
+        "role": "founder"
       }
     },
     "delete": {

@@ -20,6 +20,7 @@ import AppSurvey from '@/pages/AppSurvey';
 import LegalPolicy from '@/pages/LegalPolicy';
 import ProfessionalGate from '@/components/rooted/ProfessionalGate';
 import SecureDocumentRepository from '@/pages/SecureDocumentRepository';
+import ResourceManagement from '@/pages/ResourceManagement';
 import CaseDetail from '@/pages/CaseDetail';
 import CaseStatusReport from '@/pages/CaseStatusReport';
 import ScheduleFamilyMeeting from '@/pages/ScheduleFamilyMeeting';
@@ -68,6 +69,7 @@ import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
 import QuickExitButton from '@/components/privacy/QuickExitButton';
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
+import AdminRouteGate from '@/components/security/AdminRouteGate';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -279,7 +281,8 @@ function App() {
               <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
               <Route path="/support-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportChat /></FeatureLockGate></Suspense>} />
               <Route path="/agency-outcomes" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AgencyOutcomeReports /></FeatureLockGate></Suspense>} />
-              <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><FounderDashboard /></Suspense>} />
+              <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate founderOnly><FounderDashboard /></AdminRouteGate></Suspense>} />
+              <Route path="/resource-management" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
               <Route path="/founder-admin-management" element={<Suspense fallback={<LoadingFallback />}><FounderAdminManagement /></Suspense>} />

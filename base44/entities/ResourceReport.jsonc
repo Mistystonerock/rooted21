@@ -1,0 +1,88 @@
+{
+  "name": "ResourceReport",
+  "type": "object",
+  "properties": {
+    "resource_id": {
+      "type": "string"
+    },
+    "resource_name": {
+      "type": "string"
+    },
+    "resource_county": {
+      "type": "string"
+    },
+    "resource_category": {
+      "type": "string"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "disconnected_phone",
+        "wrong_address",
+        "closed_agency",
+        "unsafe_experience",
+        "not_accepting_clients",
+        "long_waitlist",
+        "incorrect_eligibility",
+        "other_concern"
+      ],
+      "default": "other_concern"
+    },
+    "details": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "resolved",
+        "dismissed"
+      ],
+      "default": "pending"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "admin_notes": {
+      "type": "string"
+    },
+    "anonymous_reporter_hash": {
+      "type": "string"
+    },
+    "reported_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "resource_name",
+    "report_type",
+    "status",
+    "reported_at"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "delete": false
+  }
+}

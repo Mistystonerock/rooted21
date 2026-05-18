@@ -23,6 +23,8 @@ export default function ResourceFilters({ filters, counties, onChange }) {
           <option value="verified">Verified</option>
           <option value="needs_review">Needs review</option>
           <option value="outdated">Outdated</option>
+          <option value="closed">Closed</option>
+          <option value="emergency_only">Emergency only</option>
           <option value="archived">Archived</option>
           <option value="crisis">Crisis priority</option>
         </select>
