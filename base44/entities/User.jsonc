@@ -15,32 +15,45 @@
         "school_staff",
         "attorney",
         "admin",
-        "founder",
-        "user"
+        "founder"
       ],
-      "default": "parent"
+      "default": "parent",
+      "description": "Rooted 21 role used for role-based access controls"
     },
-    "onboarding_completed": {
+    "account_security_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "verification_needed",
+        "mfa_recommended",
+        "locked",
+        "suspended"
+      ],
+      "default": "active"
+    },
+    "mfa_enabled": {
       "type": "boolean",
       "default": false
     },
-    "preferred_language": {
+    "biometric_login_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "session_timeout_minutes": {
+      "type": "number",
+      "default": 30
+    },
+    "founder_reauth_required_after_minutes": {
+      "type": "number",
+      "default": 10
+    },
+    "last_sensitive_reauth_at": {
       "type": "string",
-      "enum": [
-        "en",
-        "es",
-        "so"
-      ],
-      "default": "en"
+      "format": "date-time"
     },
-    "county": {
-      "type": "string"
-    },
-    "zip_code": {
-      "type": "string"
-    },
-    "housing_resources_zip": {
-      "type": "string"
+    "last_security_review_at": {
+      "type": "string",
+      "format": "date-time"
     },
     "survivor_mode_enabled": {
       "type": "boolean",
@@ -48,25 +61,11 @@
     },
     "quick_exit_url": {
       "type": "string",
-      "default": "https://weather.com"
+      "default": "https://www.weather.gov/"
     },
-    "vault_pin_enabled": {
+    "onboarding_completed": {
       "type": "boolean",
       "default": false
-    },
-    "sensitive_action_reauth_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "account_status": {
-      "type": "string",
-      "enum": [
-        "active",
-        "locked",
-        "pending_review",
-        "deletion_requested"
-      ],
-      "default": "active"
     }
   }
 }

@@ -9,6 +9,12 @@ export default function DocumentCard({ doc, onShare, onDelete }) {
       court_order: "⚖️",
       iep: "🎓",
       medical: "🏥",
+      behavioral_health: "🧠",
+      substance_use: "🔒",
+      safety_plan: "🛡️",
+      case_plan: "🧭",
+      visitation: "🤝",
+      resource_referral: "🌿",
       legal: "📋",
       school: "🏫",
       therapy: "🧠",
@@ -23,6 +29,12 @@ export default function DocumentCard({ doc, onShare, onDelete }) {
       court_order: "Court Order",
       iep: "IEP",
       medical: "Medical",
+      behavioral_health: "Behavioral Health",
+      substance_use: "Part 2 Protected",
+      safety_plan: "Safety Plan",
+      case_plan: "Case Plan",
+      visitation: "Visitation",
+      resource_referral: "Resource Referral",
       legal: "Legal",
       school: "School",
       therapy: "Therapy",
@@ -77,23 +89,44 @@ export default function DocumentCard({ doc, onShare, onDelete }) {
           )}
 
           {/* File info */}
-          <p className="text-[9px] mt-2" style={{ color: C.mutedText }}>
-            {(doc.file_size / 1024).toFixed(0)} KB
-          </p>
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            <span className="text-[9px]" style={{ color: C.mutedText }}>
+              {(doc.file_size / 1024).toFixed(0)} KB
+            </span>
+            <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold" style={{ background: "#EAF4EA", color: C.darkGreen }}>
+              Private vault
+            </span>
+            {doc.part2_segmented && (
+              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold" style={{ background: "#FEF3EE", color: "#9A3412" }}>
+                Part 2 segmented
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex gap-1.5 mt-2 pt-2" style={{ borderTop: `1px solid ${C.cream}` }}>
-        <a
-          href={doc.file_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
-          style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer", textDecoration: "none" }}
-        >
-          <Eye size={12} /> View
-        </a>
+        {doc.file_url ? (
+          <a
+            href={doc.file_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+            style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer", textDecoration: "none" }}
+          >
+            <Eye size={12} /> View
+          </a>
+        ) : (
+          <button
+            type="button"
+            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+            style={{ background: C.cream, color: C.darkGreen, border: "none" }}
+            title="Private vault files require signed access"
+          >
+            <Eye size={12} /> Vaulted
+          </button>
+        )}
         <button
           onClick={onShare}
           className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"

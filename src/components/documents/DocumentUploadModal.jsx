@@ -4,14 +4,20 @@ import { C } from "@/lib/rooted-constants";
 import { X, Upload, Loader2, AlertCircle, CheckCircle2, Plus } from "lucide-react";
 
 const CATEGORIES = [
-  { value: "court_order", label: "Court Order" },
-  { value: "iep", label: "IEP (School Plan)" },
-  { value: "medical", label: "Medical Record" },
-  { value: "legal", label: "Legal Document" },
-  { value: "school", label: "School Document" },
-  { value: "therapy", label: "Therapy Record" },
-  { value: "financial", label: "Financial" },
-  { value: "other", label: "Other" },
+  { value: "court_order", label: "Court Order", segment: "legal" },
+  { value: "iep", label: "IEP / 504 School Plan", segment: "education" },
+  { value: "medical", label: "Medical Record", segment: "medical" },
+  { value: "behavioral_health", label: "Behavioral Health Record", segment: "behavioral_health" },
+  { value: "substance_use", label: "Substance Use / 42 CFR Part 2", segment: "substance_use", part2: true },
+  { value: "safety_plan", label: "Safety Plan", segment: "safety" },
+  { value: "case_plan", label: "Case Plan", segment: "legal" },
+  { value: "visitation", label: "Visitation Log", segment: "general" },
+  { value: "resource_referral", label: "Resource Referral", segment: "general" },
+  { value: "legal", label: "Legal Document", segment: "legal" },
+  { value: "school", label: "School Document", segment: "education" },
+  { value: "therapy", label: "Therapy Record", segment: "behavioral_health" },
+  { value: "financial", label: "Financial", segment: "general" },
+  { value: "other", label: "Other", segment: "general" },
 ];
 
 export default function DocumentUploadModal({ user, onDocumentUploaded, onClose }) {
@@ -129,27 +135,34 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
       reader.onload = async (e) => {
         const base64 = e.target.result.split(",")[1];
         
-        // Upload to storage
-        const uploadResponse = await base44.integrations.Core.UploadFile({
+        // Upload to private encrypted vault storage
+        const uploadResponse = await base44.integrations.Core.UploadPrivateFile({
           file: base64,
         });
 
-        if (!uploadResponse.file_url) {
+        if (!uploadResponse.file_uri) {
           throw new Error("Upload failed");
         }
 
-        // Create document record
+        const selectedCategory = CATEGORIES.find(cat => cat.value === form.category) || CATEGORIES[CATEGORIES.length - 1];
+
+        // Create secure document record with segmented permission metadata
         const newDoc = await base44.entities.SecureDocument.create({
           owner_email: user?.email,
           title: form.title.trim(),
           description: form.description.trim(),
           category: form.category,
+          permission_segment: selectedCategory.segment,
+          part2_segmented: !!selectedCategory.part2,
           tags: form.tags,
-          file_url: uploadResponse.file_url,
+          private_file_uri: uploadResponse.file_uri,
+          storage_class: "private_vault",
+          encryption_standard: "AES-256 at rest; TLS in transit",
           file_name: file.name,
           file_size: file.size,
           child_name: form.child_name.trim(),
           is_private: true,
+          uploaded_at: new Date().toISOString(),
           version: 1,
         });
 
@@ -270,6 +283,11 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
               ))}
             </select>
+            {form.category === "substance_use" && (
+              <p className="text-[10px] mt-2 leading-relaxed" style={{ color: "#9A3412" }}>
+                This will be marked for segmented 42 CFR Part 2 permission handling.
+              </p>
+            )}
           </div>
 
           {/* Child name */}

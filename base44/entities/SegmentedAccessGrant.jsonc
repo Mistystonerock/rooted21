@@ -1,0 +1,116 @@
+{
+  "name": "SegmentedAccessGrant",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "recipient_email": {
+      "type": "string"
+    },
+    "recipient_role": {
+      "type": "string",
+      "enum": [
+        "parent",
+        "youth",
+        "kinship_caregiver",
+        "foster_parent",
+        "peer_mentor",
+        "behavioral_health_worker",
+        "casa_gal",
+        "school_staff",
+        "attorney",
+        "admin",
+        "founder",
+        "other"
+      ],
+      "default": "other"
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use",
+        "legal",
+        "education",
+        "medical",
+        "safety"
+      ],
+      "default": "general"
+    },
+    "allowed_entity": {
+      "type": "string"
+    },
+    "allowed_record_id": {
+      "type": "string"
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "view",
+        "comment",
+        "download",
+        "export"
+      ],
+      "default": "view"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "starts_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "part2_consent_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "signed_release_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_email",
+    "recipient_email",
+    "permission_segment",
+    "access_level",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "owner_email": "{{user.email}}"
+        },
+        {
+          "recipient_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}

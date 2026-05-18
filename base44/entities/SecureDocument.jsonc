@@ -24,9 +24,34 @@
         "school",
         "therapy",
         "financial",
+        "behavioral_health",
+        "substance_use",
+        "safety_plan",
+        "case_plan",
+        "visitation",
+        "resource_referral",
         "other"
       ],
       "description": "Document category"
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use",
+        "legal",
+        "education",
+        "medical",
+        "safety"
+      ],
+      "default": "general",
+      "description": "Permission segment for privacy and 42 CFR Part 2 controls"
+    },
+    "part2_segmented": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this record requires substance-use segmented consent controls"
     },
     "tags": {
       "type": "array",
@@ -37,7 +62,27 @@
     },
     "file_url": {
       "type": "string",
-      "description": "URL of the uploaded file"
+      "description": "Public file URL for legacy documents only"
+    },
+    "private_file_uri": {
+      "type": "string",
+      "description": "Private encrypted storage URI for secure vault files"
+    },
+    "storage_class": {
+      "type": "string",
+      "enum": [
+        "private_vault",
+        "legacy_public_url"
+      ],
+      "default": "private_vault"
+    },
+    "encryption_standard": {
+      "type": "string",
+      "default": "AES-256 at rest; TLS in transit"
+    },
+    "file_hash": {
+      "type": "string",
+      "description": "Optional content hash for integrity verification"
     },
     "file_name": {
       "type": "string",
@@ -65,7 +110,11 @@
     "is_private": {
       "type": "boolean",
       "default": true,
-      "description": "Whether document is private (only owner) or shared"
+      "description": "Whether document is private or shared"
+    },
+    "uploaded_at": {
+      "type": "string",
+      "format": "date-time"
     },
     "expiry_date": {
       "type": "string",
@@ -111,8 +160,7 @@
   "required": [
     "owner_email",
     "title",
-    "category",
-    "file_url"
+    "category"
   ],
   "rls": {
     "create": true,

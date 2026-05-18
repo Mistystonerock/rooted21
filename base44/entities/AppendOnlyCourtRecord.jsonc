@@ -1,0 +1,99 @@
+{
+  "name": "AppendOnlyCourtRecord",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "child_id": {
+      "type": "string"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "case_plan",
+        "court_record",
+        "iep_504",
+        "visitation_log",
+        "behavioral_health",
+        "medication",
+        "safety_plan",
+        "resource_referral",
+        "message",
+        "document_upload",
+        "other"
+      ],
+      "default": "other"
+    },
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "source_entity": {
+      "type": "string"
+    },
+    "source_entity_id": {
+      "type": "string"
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use",
+        "legal",
+        "education",
+        "medical",
+        "safety"
+      ],
+      "default": "general"
+    },
+    "part2_segmented": {
+      "type": "boolean",
+      "default": false
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "record_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": "string"
+    },
+    "verification_id": {
+      "type": "string"
+    },
+    "sealed": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "owner_email",
+    "record_type",
+    "title",
+    "submitted_at",
+    "verification_id"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": false,
+    "delete": false
+  }
+}
