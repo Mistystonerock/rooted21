@@ -8,7 +8,7 @@ export default function QuickExitButton() {
     <button
       type="button"
       onClick={activateQuickExit}
-      className="fixed right-3 bottom-28 z-[60] rounded-full px-3 py-2 text-xs font-black shadow-lg"
+      className="fixed left-3 bottom-28 z-[60] rounded-full px-3 py-2 text-xs font-black shadow-lg"
       style={{ background: "#6b9d6e", color: "#fff", border: "none", paddingBottom: "max(8px, env(safe-area-inset-bottom))" }}
       aria-label="Quick exit"
     >
