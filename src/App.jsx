@@ -65,6 +65,7 @@ import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
+import BehavioralHealthRecords from '@/pages/BehavioralHealthRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
 import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
@@ -261,6 +262,7 @@ function App() {
               <Route path="/expense-tracker" element={<FeatureLockGate user={user}><ExpenseTracker /></FeatureLockGate>} />
               <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.VisitationTracker /></FeatureLockGate></Suspense>} />
               <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><MedicationManager /></FeatureLockGate></Suspense>} />
+              <Route path="/behavioral-health-records" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><BehavioralHealthRecords /></FeatureLockGate></Suspense>} />
               <Route path="/form-helper" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><FormHelper /></FeatureLockGate></Suspense>} />
               <Route path="/community-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CommunityResourceMap /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-summary" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CourtReadySummary /></FeatureLockGate></Suspense>} />
