@@ -72,10 +72,12 @@ import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
 import QuickExitButton from '@/components/privacy/QuickExitButton';
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 import AdminRouteGate from '@/components/security/AdminRouteGate';
+import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
 
 function App() {
   const [user, setUser] = React.useState(null);
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
+  const [bootLoading, setBootLoading] = React.useState(true);
   const [betaAccess, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const showComingSoon = maintenanceMode && !isFounder;
@@ -97,34 +99,51 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    base44.functions.invoke("getMaintenanceMode", {}).then(res => setMaintenanceMode(res.data.enabled !== false)).catch(() => setMaintenanceMode(true));
-    base44.auth.me().then(async u => {
-      setUser(u);
-      // Initialize founder role if this is the founder account
-      if (u?.email) {
-        try {
-          await base44.functions.invoke("initializeFounder", {});
-        } catch (e) {
-          // Silently fail if function doesn't exist yet
-        }
+    let mounted = true;
 
-        const pendingBetaCode = localStorage.getItem("pending_beta_code");
-        if (pendingBetaCode) {
-          await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
-          localStorage.removeItem("pending_beta_code");
-          const refreshedUser = await base44.auth.me();
-          setUser(refreshedUser);
-        }
-
-        const pendingAdminCode = localStorage.getItem("pending_admin_code");
-        if (pendingAdminCode) {
-          await base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode });
-          localStorage.removeItem("pending_admin_code");
-          const refreshedUser = await base44.auth.me();
-          setUser(refreshedUser);
-        }
+    async function bootApp() {
+      try {
+        const maintenanceResult = await base44.functions.invoke("getMaintenanceMode", {});
+        if (mounted) setMaintenanceMode(maintenanceResult.data.enabled !== false);
+      } catch {
+        if (mounted) setMaintenanceMode(true);
       }
-    }).catch(() => setUser(null));
+
+      try {
+        const u = await base44.auth.me();
+        if (mounted) setUser(u);
+        if (u?.email) {
+          try {
+            await base44.functions.invoke("initializeFounder", {});
+          } catch {
+            // Keep app boot stable even if founder initialization is unavailable.
+          }
+
+          const pendingBetaCode = localStorage.getItem("pending_beta_code");
+          if (pendingBetaCode) {
+            await base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode });
+            localStorage.removeItem("pending_beta_code");
+            const refreshedUser = await base44.auth.me();
+            if (mounted) setUser(refreshedUser);
+          }
+
+          const pendingAdminCode = localStorage.getItem("pending_admin_code");
+          if (pendingAdminCode) {
+            await base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode });
+            localStorage.removeItem("pending_admin_code");
+            const refreshedUser = await base44.auth.me();
+            if (mounted) setUser(refreshedUser);
+          }
+        }
+      } catch {
+        if (mounted) setUser(null);
+      } finally {
+        if (mounted) setBootLoading(false);
+      }
+    }
+
+    bootApp();
+    return () => { mounted = false; };
   }, []);
 
   return (
@@ -134,6 +153,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <ProfessionalGate user={user}>
         <SkipToContentLink />
+        <OfflineStatusBanner />
         <AccessibilityToolbar />
         {user && !showComingSoon && <QuickExitButton />}
         {user && (
@@ -142,7 +162,9 @@ function App() {
           </div>
         )}
         <Router>
-          {showComingSoon ? (
+          {bootLoading ? (
+            <LoadingFallback />
+          ) : showComingSoon ? (
             <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
           ) : (
           <AnimatePresence mode="wait">

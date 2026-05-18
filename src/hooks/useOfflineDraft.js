@@ -1,15 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
 
-export default function useOfflineDraft(key, initialValue = {}) {
-  const storageKey = useMemo(() => `rooted_draft_${key}`, [key]);
-  const [draft, setDraft] = useState(() => {
+function readDraft(storageKey, initialValue) {
+  try {
     const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : initialValue;
-  });
+  } catch {
+    return initialValue;
+  }
+}
+
+export default function useOfflineDraft(key, initialValue = {}) {
+  const storageKey = useMemo(() => `rooted_draft_${key}`, [key]);
+  const [draft, setDraft] = useState(() => readDraft(storageKey, initialValue));
+  const [saveError, setSaveError] = useState(false);
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
 
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(draft));
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(draft));
+        setSaveError(false);
+      } catch {
+        setSaveError(true);
+      }
+    }, 250);
+    return () => clearTimeout(timer);
   }, [draft, storageKey]);
 
   useEffect(() => {
@@ -26,9 +41,12 @@ export default function useOfflineDraft(key, initialValue = {}) {
     draft,
     setDraft,
     isOnline,
+    saveError,
+    hasDraft: JSON.stringify(draft) !== JSON.stringify(initialValue),
     clearDraft: () => {
       localStorage.removeItem(storageKey);
       setDraft(initialValue);
+      setSaveError(false);
     }
   };
 }
