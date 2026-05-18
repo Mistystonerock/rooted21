@@ -99,7 +99,8 @@ function App() {
   const [bootFailed, setBootFailed] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
-  const showComingSoon = maintenanceMode && !isFounder;
+  const isFounderRoute = window.location.pathname.startsWith("/founder");
+  const showComingSoon = maintenanceMode && !isFounder && !isFounderRoute;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
