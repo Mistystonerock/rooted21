@@ -94,7 +94,7 @@ export default function MoxieChatWidget() {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-black" style={{ color: C.cream }}>Moxie</p>
-          <p className="truncate text-[11px]" style={{ color: C.cream }}>Helping with {moduleLabel}</p>
+          <p className="truncate text-[11px]" style={{ color: C.cream }}>Calm support, not legal or clinical advice</p>
         </div>
         <button onClick={() => setOpen(false)} className="rounded-xl" style={{ color: C.cream, background: "transparent", border: "none" }} aria-label="Close Moxie chat">
           <X size={18} />
@@ -103,7 +103,7 @@ export default function MoxieChatWidget() {
 
       <div className="max-h-[420px] space-y-3 overflow-y-auto p-3" style={{ background: C.offWhite }}>
         <a href="tel:988" className="flex items-center gap-2 rounded-2xl p-3 text-xs font-bold no-underline" style={{ background: "#FEF3EE", color: "#9A3412", border: "1px solid #F4C9B8" }}>
-          <LifeBuoy size={15} /> If anyone is unsafe, call 911. For crisis support, call or text 988.
+          <LifeBuoy size={15} /> If you are in immediate danger call 911 or emergency services. For crisis support, call or text 988.
         </a>
 
         {messages.map((message, index) => (

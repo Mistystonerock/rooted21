@@ -12,14 +12,19 @@ const DEFAULTS = {
   welcome_emails: true,
   password_reset_emails: true,
   verification_emails: true,
-  resource_update_reminders: true,
+  resource_updates: true,
   court_reminders: true,
   appointment_reminders: true,
   case_plan_reminders: true,
-  crisis_alerts: true,
+  visitation_reminders: true,
+  benefits_recertification_reminders: true,
+  iep_meeting_reminders: true,
+  medication_reminders: true,
   safety_plan_reminders: true,
-  admin_alerts: true,
+  resource_verification_reminders: true,
   beta_updates: true,
+  mute_sensitive_notifications: false,
+  hide_notification_previews: true,
   trauma_informed_tone: true,
   quiet_hours_start: "21:00",
   quiet_hours_end: "08:00",
@@ -37,15 +42,20 @@ const reminderOptions = [
   ["welcome_emails", "Welcome emails", "Warm onboarding notes when someone joins."],
   ["password_reset_emails", "Password reset emails", "Account-access emails stay available for safety."],
   ["verification_emails", "Verification emails", "Confirm important account or resource changes."],
-  ["resource_update_reminders", "Resource update reminders", "Know when saved or statewide resources need review."],
-  ["court_reminders", "Court reminders", "Hearing and deadline reminders in calm wording."],
+  ["court_reminders", "Court reminders", "Example: Reminder: You have a hearing tomorrow."],
+  ["case_plan_reminders", "Case-plan reminders", "Gentle next-step support: You’re making progress."],
+  ["visitation_reminders", "Visitation reminders", "Calm visit reminders without pressure."],
+  ["benefits_recertification_reminders", "Benefits recertification reminders", "SNAP, WIC, Medicaid, housing, and childcare paperwork reminders."],
+  ["iep_meeting_reminders", "IEP meeting reminders", "School meeting reminders with supportive wording."],
+  ["medication_reminders", "Medication reminders", "Medication refill and care routine reminders."],
+  ["resource_verification_reminders", "Resource verification reminders", "Prompts to review trusted community resources."],
   ["appointment_reminders", "Appointment reminders", "Upcoming care, school, and service appointments."],
-  ["case_plan_reminders", "Case-plan reminders", "Gentle next-step support for case-plan tasks."],
-  ["crisis_alerts", "Crisis alerts", "Urgent safety-related notifications."],
   ["safety_plan_reminders", "Safety plan reminders", "Prompts to review plans before they are needed."],
-  ["admin_alerts", "Admin alerts", "Important administrative notices."],
+  ["resource_updates", "Resource updates", "Know when saved or statewide resources need review."],
   ["beta_updates", "Beta tester updates", "Product changes and beta feedback notices."],
-  ["trauma_informed_tone", "Trauma-informed wording", "Use supportive, non-shaming language whenever possible."]
+  ["trauma_informed_tone", "Trauma-informed wording", "Use supportive, non-shaming language whenever possible."],
+  ["mute_sensitive_notifications", "Mute sensitive notifications", "Pause court, visitation, medication, IEP, benefits, and safety reminders."],
+  ["hide_notification_previews", "Hide sensitive previews", "Show a private placeholder instead of sensitive details."]
 ];
 
 export default function NotificationPreferences() {
@@ -92,7 +102,7 @@ export default function NotificationPreferences() {
         <section className="rounded-3xl bg-green-900 p-5 text-white">
           <p className="text-xs font-bold uppercase tracking-wide text-amber-100">Trauma-informed notification engine</p>
           <h1 className="mt-2 text-2xl font-black">Stay informed, without overwhelm.</h1>
-          <p className="mt-2 text-sm text-white/80">Reminders use calm, supportive wording and respect your preferred channels.</p>
+          <p className="mt-2 text-sm text-white/80">Reminders use calm phrases like “Reminder: You have a hearing tomorrow,” “You’re making progress,” and “One step at a time.”</p>
           <p className="mt-3 text-xs text-white/70">Active channels: {channelSummary || "None selected"}</p>
         </section>
 

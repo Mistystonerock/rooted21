@@ -6,29 +6,17 @@
       "type": "string"
     },
     "notification_type": {
-      "type": "string",
-      "enum": [
-        "welcome",
-        "password_reset",
-        "resource_update",
-        "court_reminder",
-        "appointment_reminder",
-        "case_plan_reminder",
-        "crisis_alert",
-        "safety_plan_reminder",
-        "verification",
-        "admin_alert",
-        "beta_update"
-      ]
+      "type": "string"
     },
     "channel": {
       "type": "string",
       "enum": [
+        "in_app",
         "email",
         "sms",
-        "push",
-        "in_app"
-      ]
+        "push"
+      ],
+      "default": "in_app"
     },
     "status": {
       "type": "string",
@@ -38,7 +26,7 @@
         "skipped",
         "failed"
       ],
-      "default": "queued"
+      "default": "sent"
     },
     "subject": {
       "type": "string"
@@ -52,48 +40,27 @@
     "related_id": {
       "type": "string"
     },
-    "error_message": {
+    "metadata_json": {
       "type": "string"
     },
     "sent_at": {
       "type": "string",
       "format": "date-time"
-    },
-    "metadata_json": {
-      "type": "string"
     }
   },
   "required": [
     "user_email",
     "notification_type",
     "channel",
-    "status"
+    "status",
+    "sent_at"
   ],
   "rls": {
     "create": true,
     "read": {
-      "$or": [
-        {
-          "user_email": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": [
-              "admin",
-              "founder"
-            ]
-          }
-        }
-      ]
+      "user_email": "{{user.email}}"
     },
-    "update": {
-      "user_condition": {
-        "role": [
-          "admin",
-          "founder"
-        ]
-      }
-    },
+    "update": false,
     "delete": false
   }
 }

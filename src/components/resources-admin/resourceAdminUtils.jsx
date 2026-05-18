@@ -39,6 +39,17 @@ export function isVerifiedRecently(resource) {
   return resource.verification_status === "verified" && daysSinceVerified(resource) < 60;
 }
 
+export function resourceSortScore(resource) {
+  const statusWeight = {
+    outdated: 0,
+    needs_review: 1,
+    verified: 2,
+    archived: 3
+  };
+  const crisisBoost = resource.crisis_priority ? -1 : 0;
+  return (statusWeight[resource.verification_status] ?? 2) + crisisBoost + Math.min(daysSinceVerified(resource), 365) / 1000;
+}
+
 export function emptyResource(adminEmail = "", adminPermissions = null) {
   return {
     name: "",

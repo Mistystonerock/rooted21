@@ -2,23 +2,24 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, MessageSquare, Calendar, Bell, Check, Heart, Megaphone, Scale, TrendingUp } from "lucide-react";
+import { ChevronLeft, MessageSquare, Calendar, Bell, Check, Heart, Megaphone, Scale, TrendingUp, Pill, ClipboardCheck, Users, ShieldCheck } from "lucide-react";
 import NotificationSupportPanel from "@/components/notifications/NotificationSupportPanel";
 
 export default function Notifications() {
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [prefs, setPrefs] = useState({ hide_notification_previews: true });
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
       setUser(u);
-      const notifs = await base44.entities.Notification.filter(
-        { user_email: u.email },
-        "-created_date",
-        100
-      );
+      const [notifs, prefRows] = await Promise.all([
+        base44.entities.Notification.filter({ user_email: u.email }, "-created_date", 100),
+        base44.entities.NotificationPreference.filter({ user_email: u.email }, "-updated_date", 1)
+      ]);
       setNotifications(notifs);
+      if (prefRows[0]) setPrefs(prev => ({ ...prev, ...prefRows[0] }));
       setLoading(false);
     });
 
@@ -66,7 +67,16 @@ export default function Notifications() {
       case "policy":
         return <Megaphone size={16} color={C.brown} />;
       case "legal":
+      case "court_reminder":
         return <Scale size={16} color={C.darkGreen} />;
+      case "case_plan_reminder":
+        return <ClipboardCheck size={16} color={C.midGreen} />;
+      case "visitation_reminder":
+        return <Users size={16} color={C.brown} />;
+      case "medication_reminder":
+        return <Pill size={16} color={C.midGreen} />;
+      case "resource_verification_reminder":
+        return <ShieldCheck size={16} color={C.darkGreen} />;
       default:
         return <Bell size={16} color={C.midGreen} />;
     }
@@ -108,7 +118,7 @@ export default function Notifications() {
         </Link>
         <Bell size={16} color={C.gold} />
         <div className="flex-1">
-          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Notifications</p>
+          <p className="font-serif font-bold text-sm" style={{ color: C.cream }}>Gentle reminders</p>
           <p className="text-[10px]" style={{ color: C.lightGreen }}>
             {unreadCount > 0 ? `${unreadCount} new` : "All caught up"}
           </p>
@@ -132,7 +142,7 @@ export default function Notifications() {
             <Bell size={32} color={C.mutedText} className="mx-auto mb-3" />
             <p className="text-sm font-bold" style={{ color: C.darkGreen }}>No notifications yet</p>
             <p className="text-xs mt-1" style={{ color: C.mutedText }}>
-              You'll see updates here when messages or appointments arrive
+              You’ll see calm reminders here when something needs attention.
             </p>
           </div>
         ) : (
@@ -168,7 +178,7 @@ export default function Notifications() {
                       )}
                     </div>
                     <p className="text-xs" style={{ color: C.mutedText }}>
-                      {notif.body}
+                      {prefs.hide_notification_previews && notif.sensitive ? "Sensitive reminder hidden. Open when you feel ready." : notif.body}
                     </p>
                     <p className="text-[9px] mt-1" style={{ color: C.mutedText }}>
                       {new Date(notif.created_date).toLocaleDateString()} at{" "}

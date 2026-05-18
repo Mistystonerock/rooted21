@@ -22,38 +22,55 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    const [courtAppointments, careEvents, caseTasks, safetyPlans, staleResources] = await Promise.all([
-      base44.asServiceRole.entities.CourtAppointment.list('-appointment_date', 200),
+    const [courtAppointments, careEvents, caseTasks, visitationLogs, benefitReminders, medicationRecords, staleResources] = await Promise.all([
+      base44.asServiceRole.entities.CourtAppointment.list('-date', 200),
       base44.asServiceRole.entities.CareCalendarEvent.list('-start_date', 200),
       base44.asServiceRole.entities.CaseTask.list('-due_date', 200),
-      base44.asServiceRole.entities.SafetyPlan.list('-updated_date', 200),
+      base44.asServiceRole.entities.VisitationLog.list('-visit_date', 200),
+      base44.asServiceRole.entities.BenefitReminder.list('-due_date', 200),
+      base44.asServiceRole.entities.MedicationRecord.list('-refill_date', 200),
       base44.asServiceRole.entities.ResourceListing.filter({ verification_status: 'needs_review' }, '-updated_date', 200)
     ]);
 
     let sent = 0;
 
-    for (const item of courtAppointments.filter(a => dueSoon(a.appointment_date || a.hearing_date || a.date))) {
-      await send(base44, { to: item.created_by, type: 'court_reminder', title: 'Gentle court reminder', body: `You have a court-related date coming up soon: ${item.title || 'court appointment'}. Take one small preparation step today.`, related_entity: 'CourtAppointment', related_id: item.id, related_link: '/court-dashboard' });
+    for (const item of courtAppointments.filter(a => dueSoon(a.date || a.court_date || a.appointment_date || a.hearing_date, 1))) {
+      const recipients = [item.parent_1_email, item.parent_2_email, item.parent_email, item.created_by].filter(Boolean);
+      for (const email of [...new Set(recipients)]) {
+        await send(base44, { to: email, type: 'court_reminder', title: 'Reminder: You have a hearing tomorrow.', body: `${item.title || 'Your hearing'} is coming up. Take one small preparation step today.`, related_entity: 'CourtAppointment', related_id: item.id, related_link: '/court-dashboard', sensitive: true });
+        sent++;
+      }
+    }
+
+    for (const item of caseTasks.filter(t => dueSoon(t.due_date, 3) && !['completed', 'cancelled'].includes(t.status))) {
+      await send(base44, { to: item.assigned_to_email || item.created_by, type: 'case_plan_reminder', title: "You're making progress.", body: `${item.title || 'A case-plan step'} is coming due soon. One step at a time.`, related_entity: 'CaseTask', related_id: item.id, related_link: '/case-management', sensitive: true });
       sent++;
     }
 
-    for (const item of careEvents.filter(e => dueSoon(e.start_date || e.event_date || e.date))) {
-      await send(base44, { to: item.created_by, type: 'appointment_reminder', title: 'Upcoming appointment reminder', body: `An appointment is coming up soon: ${item.title || 'care calendar event'}.`, related_entity: 'CareCalendarEvent', related_id: item.id, related_link: '/care-calendar' });
+    for (const item of visitationLogs.filter(v => dueSoon(v.visit_date, 1))) {
+      await send(base44, { to: item.parent_email || item.created_by, type: 'visitation_reminder', title: 'Gentle visitation reminder', body: `${item.child_name || 'Your child'} has a visit coming up${item.visit_time ? ` at ${item.visit_time}` : ''}.`, related_entity: 'VisitationLog', related_id: item.id, related_link: '/visitation-tracker', sensitive: true });
       sent++;
     }
 
-    for (const item of caseTasks.filter(t => dueSoon(t.due_date))) {
-      await send(base44, { to: item.created_by, type: 'case_plan_reminder', title: 'Case-plan next step', body: `A case-plan task is coming due: ${item.title || 'case-plan item'}. You can take it one step at a time.`, related_entity: 'CaseTask', related_id: item.id, related_link: '/case-management' });
+    for (const item of benefitReminders.filter(b => b.status !== 'done' && dueSoon(b.due_date, 7))) {
+      await send(base44, { to: item.created_by, type: 'benefits_reminder', title: 'Benefits recertification reminder', body: `${item.title || 'A benefit recertification'} is coming up. Gathering one document today can help.`, related_entity: 'BenefitReminder', related_id: item.id, related_link: '/housing-resources', sensitive: true });
       sent++;
     }
 
-    for (const item of safetyPlans.filter(p => dueSoon(p.review_date || p.next_review_date, 7))) {
-      await send(base44, { to: item.created_by, type: 'safety_plan_reminder', title: 'Safety plan review reminder', body: 'It may be a good time to gently review your safety plan before it is needed.', related_entity: 'SafetyPlan', related_id: item.id, related_link: '/safety-plan' });
+    for (const item of careEvents.filter(e => dueSoon(e.start_date || e.event_date || e.date, 3))) {
+      const title = `${item.title || ''}`.toLowerCase().includes('iep') ? 'IEP meeting reminder' : 'Upcoming appointment reminder';
+      const type = title.includes('IEP') ? 'iep_meeting_reminder' : 'appointment_reminder';
+      await send(base44, { to: item.created_by, type, title, body: `${item.title || 'An appointment'} is coming up soon. You can prepare one question or note today.`, related_entity: 'CareCalendarEvent', related_id: item.id, related_link: '/care-calendar', sensitive: type === 'iep_meeting_reminder' });
+      sent++;
+    }
+
+    for (const item of medicationRecords.filter(m => m.is_active !== false && dueSoon(m.refill_date, 5))) {
+      await send(base44, { to: item.parent_email || item.created_by, type: 'medication_reminder', title: 'Medication refill reminder', body: `${item.medication_name || 'A medication'} may need attention soon. One step at a time.`, related_entity: 'MedicationRecord', related_id: item.id, related_link: '/medication-manager', sensitive: true });
       sent++;
     }
 
     if (staleResources.length > 0) {
-      await send(base44, { to: user.email, type: 'resource_update', title: 'Resource listings need review', body: `${staleResources.length} resource listing(s) are ready for verification review.`, related_entity: 'ResourceListing', related_link: '/founder-dashboard' });
+      await send(base44, { to: user.email, type: 'resource_verification_reminder', title: 'Resource verification reminder', body: `${staleResources.length} resource listing(s) are ready for a calm verification review.`, related_entity: 'ResourceListing', related_link: '/resource-management', sensitive: false });
       sent++;
     }
 
@@ -63,7 +80,7 @@ Deno.serve(async (req) => {
       event_type: 'system_job',
       entity_name: 'Notification',
       severity: 'info',
-      summary: `Notification reminder job completed. ${sent} reminders queued or sent.`,
+      summary: `Trauma-informed notification reminder job completed. ${sent} reminders queued or sent.`,
       occurred_at: new Date().toISOString()
     });
 

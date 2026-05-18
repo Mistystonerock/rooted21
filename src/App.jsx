@@ -16,7 +16,6 @@ import FounderDashboard from '@/pages/FounderDashboard.jsx';
 import AppDocs from '@/pages/AppDocs';
 import FounderAccessPortal from '@/pages/FounderAccessPortal';
 import FounderAdminManagement from '@/pages/FounderAdminManagement';
-import ResourceManagement from '@/pages/ResourceManagement';
 import AppSurvey from '@/pages/AppSurvey';
 import LegalPolicy from '@/pages/LegalPolicy';
 import ProfessionalGate from '@/components/rooted/ProfessionalGate';
@@ -44,6 +43,7 @@ import CourtReadySummary from '@/pages/CourtReadySummary';
 import MedicationManager from '@/pages/MedicationManager';
 import FormHelper from '@/pages/FormHelper';
 import CommunityResourceMap from '@/pages/CommunityResourceMap';
+import ResourceManagement from '@/pages/ResourceManagement';
 import LegalAndDisclaimers from '@/pages/LegalAndDisclaimers';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
@@ -67,6 +67,7 @@ import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
+import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
 import QuickExitButton from '@/components/privacy/QuickExitButton';
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 import AdminRouteGate from '@/components/security/AdminRouteGate';
@@ -152,6 +153,7 @@ function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
+              <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
