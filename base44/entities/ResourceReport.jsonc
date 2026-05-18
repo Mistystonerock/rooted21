@@ -11,22 +11,18 @@
     "resource_county": {
       "type": "string"
     },
-    "resource_category": {
-      "type": "string"
-    },
     "report_type": {
       "type": "string",
       "enum": [
-        "disconnected_phone",
-        "wrong_address",
-        "closed_agency",
-        "unsafe_experience",
-        "not_accepting_clients",
-        "long_waitlist",
-        "incorrect_eligibility",
-        "other_concern"
+        "incorrect_information",
+        "closed_or_unavailable",
+        "phone_not_working",
+        "website_not_working",
+        "eligibility_changed",
+        "safety_concern",
+        "other"
       ],
-      "default": "other_concern"
+      "default": "other"
     },
     "details": {
       "type": "string"
@@ -41,20 +37,17 @@
       ],
       "default": "pending"
     },
+    "reported_by": {
+      "type": "string"
+    },
+    "reported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
     "reviewed_by": {
       "type": "string"
     },
     "reviewed_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "admin_notes": {
-      "type": "string"
-    },
-    "anonymous_reporter_hash": {
-      "type": "string"
-    },
-    "reported_at": {
       "type": "string",
       "format": "date-time"
     }
@@ -62,8 +55,7 @@
   "required": [
     "resource_name",
     "report_type",
-    "status",
-    "reported_at"
+    "status"
   ],
   "rls": {
     "create": true,

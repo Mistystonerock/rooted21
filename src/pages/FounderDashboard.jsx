@@ -72,8 +72,11 @@ export default function FounderDashboard() {
       return;
     }
 
-    await loadFounderData();
-    setLoading(false);
+    try {
+      await loadFounderData();
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function loadFounderData() {
