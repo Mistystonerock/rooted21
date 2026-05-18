@@ -13,6 +13,11 @@ export default function TermsOfService() {
 
   const sections = [
     {
+      id: "safety-first",
+      title: "Safety, Privacy, and Trust",
+      content: "Rooted 21 is designed to feel emotionally safe. You agree to use the platform in ways that respect privacy, consent, and family safety.\n\nAvailable trust features may include survivor mode, quick exit, fake screen redirect, PIN-protected vault tools, privacy controls, data export, account deletion requests, consent tracking, and release-of-information tracking.\n\nThese tools support privacy and documentation, but they do not replace emergency services, legal advice, medical care, or professional safety planning.",
+    },
+    {
       id: "acceptance",
       title: "1. Acceptance of Terms",
       content: "By accessing or using Rooted 21, you agree to be bound by these Terms of Service.\n\nIf you do not agree to these terms:\n• Do not create an account\n• Do not use the app\n• Contact us for questions: legal@rooted21.app\n\nThese terms apply to all users: parents, professionals, admins, and founders.",
@@ -71,7 +76,7 @@ export default function TermsOfService() {
       <div style={{ maxWidth: 520, margin: "0 auto", padding: "16px" }}>
         <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 16, marginBottom: 20 }}>
           <p style={{ fontSize: 13, lineHeight: 1.65, color: MUTED }}>
-            These Terms outline how you can use Rooted 21 responsibly and what we expect from all users.
+            These Terms explain how Rooted 21 should be used safely, respectfully, and with privacy, consent, and trauma-informed care in mind.
           </p>
         </div>
 

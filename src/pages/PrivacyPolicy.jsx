@@ -13,6 +13,11 @@ export default function PrivacyPolicy() {
 
   const sections = [
     {
+      id: "trust",
+      title: "Our Privacy Promise",
+      content: "Rooted 21 is built for emotionally safe support.\n\n✓ We do not sell your data\n✓ We use encrypted systems for sensitive information\n✓ You can download your data\n✓ You can request account deletion\n✓ You control consent and release-of-information choices\n✓ Survivor mode and quick-exit tools are available in the Privacy Center\n\nWe use plain language because families deserve to understand exactly what is happening with their information.",
+    },
+    {
       id: "collection",
       title: "1. Information We Collect",
       content: "Rooted 21 collects:\n\n• Account info: Name, email, phone, role\n• Family data: Child profiles, behavioral logs, medical records, case documents\n• Communication: Messages, journal entries, notes\n• Usage: Pages visited, features used, timestamps\n• Device: Browser type, OS, IP address (for security)\n\nWe collect only what you provide or what's necessary to deliver the service.",
@@ -71,7 +76,7 @@ export default function PrivacyPolicy() {
       <div style={{ maxWidth: 520, margin: "0 auto", padding: "16px" }}>
         <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 16, marginBottom: 20 }}>
           <p style={{ fontSize: 13, lineHeight: 1.65, color: MUTED }}>
-            At Rooted 21, your privacy is fundamental. We only collect data necessary to serve families, and we never sell or misuse it.
+            At Rooted 21, your privacy is fundamental. We only collect what is needed, never sell family data, and provide survivor-aware privacy controls in plain language.
           </p>
         </div>
 
