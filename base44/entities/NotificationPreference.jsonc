@@ -17,11 +17,27 @@
       "type": "boolean",
       "default": false
     },
-    "court_reminders": {
+    "in_app_enabled": {
       "type": "boolean",
       "default": true
     },
-    "case_plan_reminders": {
+    "welcome_emails": {
+      "type": "boolean",
+      "default": true
+    },
+    "password_reset_emails": {
+      "type": "boolean",
+      "default": true
+    },
+    "verification_emails": {
+      "type": "boolean",
+      "default": true
+    },
+    "resource_update_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "court_reminders": {
       "type": "boolean",
       "default": true
     },
@@ -29,11 +45,19 @@
       "type": "boolean",
       "default": true
     },
+    "case_plan_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "crisis_alerts": {
+      "type": "boolean",
+      "default": true
+    },
     "safety_plan_reminders": {
       "type": "boolean",
       "default": true
     },
-    "resource_updates": {
+    "admin_alerts": {
       "type": "boolean",
       "default": true
     },
@@ -61,6 +85,14 @@
         "so"
       ],
       "default": "en"
+    },
+    "sms_phone_last4": {
+      "type": "string",
+      "description": "Last four digits only; do not store full phone numbers here"
+    },
+    "push_device_label": {
+      "type": "string",
+      "description": "Device label for future push notification registration"
     }
   },
   "required": [

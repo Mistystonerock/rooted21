@@ -40,22 +40,21 @@ Deno.serve(async (req) => {
 
     const admins = await base44.asServiceRole.entities.User.list('', 500);
     const adminRecipients = admins.filter(user => ['admin', 'founder'].includes(user.role) && user.email);
-    const founder = adminRecipients.find(user => user.role === 'founder') || adminRecipients[0];
 
-    if (staleResources.length > 0 && founder?.email) {
-      await base44.asServiceRole.integrations.Core.SendEmail({
-        to: founder.email,
+    if (staleResources.length > 0 && adminRecipients.length > 0) {
+      await Promise.all(adminRecipients.map(admin => base44.asServiceRole.integrations.Core.SendEmail({
+        to: admin.email,
         subject: `Rooted 21 resource verification needed: ${staleResources.length} listings`,
-        body: `Rooted 21 found ${staleResources.length} resource listing(s) that have not been verified in 60+ days.\n\nPlease review the Founder Dashboard resource verification queue. Crisis-priority resources should be reviewed first.\n\nThis helps families see accurate, trusted support options.`
-      });
+        body: `Rooted 21 found ${staleResources.length} resource listing(s) that have not been verified in 60+ days.\n\nPlease review the Resource Management queue at /resource-management. Crisis-priority resources should be reviewed first.\n\nThis helps families see accurate, trusted support options.`
+      })));
 
-      await base44.asServiceRole.entities.Notification.create({
-        user_email: founder.email,
+      await Promise.all(adminRecipients.map(admin => base44.asServiceRole.entities.Notification.create({
+        user_email: admin.email,
         type: 'system',
         title: 'Resource verification needed',
         body: `${staleResources.length} resource listing(s) are outdated and need admin review.`,
-        related_link: '/founder-dashboard'
-      });
+        related_link: '/resource-management'
+      })));
     }
 
     await base44.asServiceRole.entities.RootedAuditEvent.create({

@@ -149,7 +149,6 @@ function App() {
               <Route path="/child-profile" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildProfile /></FeatureLockGate></Suspense>} />
               <Route path="/professional" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalPortal /></FeatureLockGate></Suspense>} />
               <Route path="/resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Resources /></FeatureLockGate></Suspense>} />
-              <Route path="/resource-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ResourceManagement /></FeatureLockGate></Suspense>} />
               <Route path="/support-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportHub /></FeatureLockGate></Suspense>} />
               <Route path="/behavior-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorHub /></FeatureLockGate></Suspense>} />
               <Route path="/substance-abuse-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SubstanceAbuseResources /></FeatureLockGate></Suspense>} />
@@ -182,6 +181,7 @@ function App() {
               <Route path="/household-routine" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.HouseholdRoutine /></FeatureLockGate></Suspense>} />
               <Route path="/daily-checkin" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.DailyCheckIn /></FeatureLockGate></Suspense>} />
               <Route path="/notifications" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Notifications /></FeatureLockGate></Suspense>} />
+              <Route path="/notification-preferences" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.NotificationPreferences /></FeatureLockGate></Suspense>} />
               <Route path="/partnership-safety-plan/:partnershipId" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.PartnershipSafetyPlan /></FeatureLockGate></Suspense>} />
               <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtGenerateReport /></FeatureLockGate></Suspense>} />
               <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyReflections /></FeatureLockGate></Suspense>} />

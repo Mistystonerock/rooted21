@@ -1,0 +1,99 @@
+{
+  "name": "NotificationDeliveryLog",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "notification_type": {
+      "type": "string",
+      "enum": [
+        "welcome",
+        "password_reset",
+        "resource_update",
+        "court_reminder",
+        "appointment_reminder",
+        "case_plan_reminder",
+        "crisis_alert",
+        "safety_plan_reminder",
+        "verification",
+        "admin_alert",
+        "beta_update"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "email",
+        "sms",
+        "push",
+        "in_app"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "queued",
+        "skipped",
+        "failed"
+      ],
+      "default": "queued"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "message_preview": {
+      "type": "string"
+    },
+    "related_entity": {
+      "type": "string"
+    },
+    "related_id": {
+      "type": "string"
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata_json": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "notification_type",
+    "channel",
+    "status"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": [
+              "admin",
+              "founder"
+            ]
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "delete": false
+  }
+}

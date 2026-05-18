@@ -3,6 +3,10 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { AlertTriangle, Check, Download, Eye, MessageCircle, Shield, Trash2 } from "lucide-react";
+import SurvivorSafetyPanel from "@/components/privacy/SurvivorSafetyPanel";
+import TrustIndicatorGrid from "@/components/privacy/TrustIndicatorGrid";
+import ConsentManagementPanel from "@/components/privacy/ConsentManagementPanel";
+import ReleaseInfoTracker from "@/components/privacy/ReleaseInfoTracker";
 
 const DATA_ENTITIES = [
   "ChildProfile", "BehaviorLog", "CheckIn", "Goal", "LessonProgress", "SafetyPlan", "DailySchedule",
@@ -68,9 +72,10 @@ export default function PrivacyCenter() {
   const [deleteText, setDeleteText] = useState("");
   const [deleteError, setDeleteError] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [vault, setVault] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(me => {
+    base44.auth.me().then(async me => {
       setUser(me);
       setSettings(prev => ({
         ...prev,
@@ -80,6 +85,8 @@ export default function PrivacyCenter() {
         profile_comment_permission: me?.profile_comment_permission || "connected_professionals",
         allow_profile_comments: me?.allow_profile_comments !== false,
       }));
+      const vaultRows = await base44.entities.PrivacyVaultSetting.filter({ user_email: me.email }, "-updated_date", 1);
+      setVault(vaultRows[0] || null);
     });
   }, []);
 
@@ -129,10 +136,15 @@ export default function PrivacyCenter() {
     setDeleting(true);
     setDeleteError("");
     try {
-      await base44.functions.invoke("deleteSupabaseAccount", { confirmText: deleteText, supabaseUserId: null });
-      await clearLocalData();
-      localStorage.setItem("account_deleted_message", "Your account has been permanently deleted.");
-      await base44.auth.logout("/");
+      await base44.entities.AccountDeletionRequest.create({
+        user_email: user.email,
+        status: "submitted",
+        reason: "User requested account deletion from Privacy Center",
+        safe_contact_method: "in_app",
+        requested_at: new Date().toISOString()
+      });
+      setDeleteError("Your deletion request was submitted. We’ll handle it carefully and keep you updated in-app.");
+      setDeleting(false);
     } catch (error) {
       setDeleteError("We couldn't delete your account. Please try again.");
       setDeleting(false);
@@ -146,8 +158,13 @@ export default function PrivacyCenter() {
         <section className="rounded-2xl p-5" style={{ background: C.darkGreen }}>
           <Shield size={24} color={C.gold} />
           <p className="mt-3 font-serif text-lg font-bold" style={{ color: C.cream }}>You control your sensitive data.</p>
-          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Choose who can view shared logs and notes, manage profile comments, and download or delete your data.</p>
+          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Plain-language controls for consent, sharing, survivor safety, data export, and deletion requests.</p>
         </section>
+
+        <TrustIndicatorGrid />
+        {user && <SurvivorSafetyPanel user={user} vault={vault} onVaultChange={setVault} />}
+        {user && <ConsentManagementPanel user={user} />}
+        {user && <ReleaseInfoTracker user={user} />}
 
         <SelectRow icon={Eye} label="Behavior logs visibility" value={settings.behavior_log_visibility} options={OPTIONS.behavior_log_visibility} onChange={value => setSettings(prev => ({ ...prev, behavior_log_visibility: value }))} />
         <SelectRow icon={Eye} label="Notes and reflections visibility" value={settings.notes_visibility} options={OPTIONS.notes_visibility} onChange={value => setSettings(prev => ({ ...prev, notes_visibility: value }))} />

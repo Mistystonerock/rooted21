@@ -5,11 +5,10 @@ import FounderMetric from "@/components/admin/founder/FounderMetric";
 import AdminCodeManager from "@/components/admin/AdminCodeManager";
 import BetaTesterCodeManager from "@/components/admin/BetaTesterCodeManager";
 import AdminManagement from "@/components/rooted/AdminManagement";
-import EnterpriseOpsPanel from "@/components/admin/founder/EnterpriseOpsPanel";
 import {
-  Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, DollarSign,
+  Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, Database, DollarSign,
   GraduationCap, KeyRound, Library, LockKeyhole, MailPlus, Search, Settings,
-  Shield, Star, UserCog, Users, Server, ShieldAlert
+  Shield, Star, UserCog, Users
 } from "lucide-react";
 
 const DARK = "#5a3d28";
@@ -20,7 +19,7 @@ const CARD = "#ffffff";
 const MUTED = "#8b6f54";
 
 const sectionList = [
-  "analytics", "enterprise", "users", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
+  "analytics", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
 ];
 
 function smallButton(label, onClick, tone = "green") {
@@ -46,11 +45,7 @@ export default function FounderDashboard() {
   const [contentItems, setContentItems] = useState([]);
   const [funding, setFunding] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
-  const [resources, setResources] = useState([]);
-  const [securityEvents, setSecurityEvents] = useState([]);
-  const [auditEvents, setAuditEvents] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [casePlans, setCasePlans] = useState([]);
+  const [resourceListings, setResourceListings] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [classForm, setClassForm] = useState({ title: "", abbr: "MSOYW", date: "", time: "", description: "", max_capacity: 30, is_published: true });
@@ -80,7 +75,7 @@ export default function FounderDashboard() {
   }
 
   async function loadFounderData() {
-    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, resourceList, securityList, auditList, notificationList, casePlanList, maintenanceRes] = await Promise.all([
+    const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, resourceList, maintenanceRes] = await Promise.all([
       base44.entities.User.list("-created_date", 10000),
       base44.entities.WaitlistSignup.list("-created_date", 10000),
       base44.entities.Survey.list("-created_date", 10000),
@@ -90,11 +85,7 @@ export default function FounderDashboard() {
       base44.entities.ContentItem.list("-updated_date", 1000),
       base44.entities.GrantDonation.list("-record_date", 1000),
       base44.entities.Announcement.list("-created_date", 500),
-      base44.entities.ResourceListing.list("-updated_date", 10000),
-      base44.entities.SecurityEvent.list("-created_date", 500),
-      base44.entities.RootedAuditEvent.list("-occurred_at", 500),
-      base44.entities.Notification.list("-created_date", 1000),
-      base44.entities.CasePlanChecklist.list("-updated_date", 1000),
+      base44.entities.ResourceListing.list("-updated_date", 1000),
       base44.functions.invoke("getMaintenanceMode", {}),
     ]);
     setAllUsers(users);
@@ -106,11 +97,7 @@ export default function FounderDashboard() {
     setContentItems(contentList);
     setFunding(fundingList);
     setAnnouncements(announcementList);
-    setResources(resourceList);
-    setSecurityEvents(securityList);
-    setAuditEvents(auditList);
-    setNotifications(notificationList);
-    setCasePlans(casePlanList);
+    setResourceListings(resourceList);
     setMaintenanceMode(maintenanceRes.data.enabled !== false);
   }
 
@@ -124,28 +111,10 @@ export default function FounderDashboard() {
     const completedEnrollments = enrollments.filter(e => e.status === "completed").length;
     const totalFunding = funding.reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const avgRating = surveys.length ? (surveys.reduce((sum, s) => sum + Number(s.app_overall || 0), 0) / surveys.length).toFixed(1) : "—";
-    const staleResources = resources.filter(r => r.verification_status === "outdated" || r.verification_status === "needs_review").length;
-    const failedLogins = securityEvents.filter(e => e.event_type === "failed_login").length;
-    const criticalAlerts = securityEvents.filter(e => e.severity === "critical").length;
-    const databaseRecords = allUsers.length + waitlist.length + surveys.length + betaCodes.length + classes.length + enrollments.length + contentItems.length + funding.length + announcements.length + resources.length + securityEvents.length + auditEvents.length + notifications.length + casePlans.length;
-    const casePlanEngagement = casePlans.length ? Math.round((casePlans.filter(plan => plan.status === "completed" || plan.completed_items > 0 || plan.items?.some?.(item => item.completed)).length / casePlans.length) * 100) : 0;
-    return { activeUsers, completedEnrollments, totalFunding, avgRating, staleResources, failedLogins, criticalAlerts, databaseRecords, casePlanEngagement };
-  }, [allUsers, enrollments, funding, surveys, resources, securityEvents, waitlist, betaCodes, classes, contentItems, announcements, auditEvents, notifications, casePlans]);
+    return { activeUsers, completedEnrollments, totalFunding, avgRating };
+  }, [allUsers, enrollments, funding, surveys]);
 
   const filteredUsers = allUsers.filter(u => !search || `${u.full_name || ""} ${u.email || ""} ${u.role || ""}`.toLowerCase().includes(search.toLowerCase()));
-
-  const countyRows = useMemo(() => {
-    const map = new Map();
-    allUsers.forEach(u => {
-      const county = u.county || u.county_name || u.location_county;
-      if (county) map.set(county, { county, users: (map.get(county)?.users || 0) + 1, resources: map.get(county)?.resources || 0 });
-    });
-    resources.forEach(r => {
-      const county = r.county || "Statewide";
-      map.set(county, { county, users: map.get(county)?.users || 0, resources: (map.get(county)?.resources || 0) + 1 });
-    });
-    return Array.from(map.values()).map(row => ({ ...row, total: row.users + row.resources })).sort((a, b) => b.total - a.total);
-  }, [allUsers, resources]);
 
   function toggle(id) {
     setOpenSections(prev => ({ ...prev, [id]: !prev[id] }));
@@ -226,10 +195,10 @@ export default function FounderDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <FounderMetric label="Total users" value={allUsers.length} detail={`${stats.activeUsers} active accounts`} />
-          <FounderMetric label="Resource review" value={stats.staleResources} detail={`${resources.length} statewide listings`} />
-          <FounderMetric label="Security alerts" value={stats.criticalAlerts} detail={`${stats.failedLogins} failed login events`} />
-          <FounderMetric label="Case-plan engagement" value={`${stats.casePlanEngagement}%`} detail={`${casePlans.length} tracked plans`} />
+          <FounderMetric label="Active users" value={stats.activeUsers} detail={`${allUsers.length} total accounts`} />
+          <FounderMetric label="Waitlist" value={waitlist.length} detail={`${waitlist.filter(w => w.notified_at_launch).length} invited`} />
+          <FounderMetric label="Survey rating" value={stats.avgRating} detail={`${surveys.length} responses`} />
+          <FounderMetric label="Funding logged" value={`$${stats.totalFunding.toLocaleString()}`} detail={`${funding.length} records`} />
         </div>
 
         <FounderSection title="Platform Analytics" subtitle="Real-time user counts, activity totals, and usage stats" icon={BarChart3} open={openSections.analytics} onToggle={() => toggle("analytics")}>
@@ -254,14 +223,20 @@ export default function FounderDashboard() {
           </div>
         </FounderSection>
 
-        <FounderSection title="Enterprise Operations Center" subtitle="App health, server status, database usage, security alerts, county heatmaps, resources, notifications, and audit logs" icon={Server} open={openSections.enterprise} onToggle={() => toggle("enterprise")}>
-          <EnterpriseOpsPanel stats={stats} countyRows={countyRows} resources={resources} securityEvents={securityEvents} auditEvents={auditEvents} notifications={notifications} />
-        </FounderSection>
-
-        <FounderSection title="User Role Management" subtitle="Search users, view profiles, change roles, and deactivate accounts" icon={UserCog} open={openSections.users} onToggle={() => toggle("users")}>
+        <FounderSection title="User Management" subtitle="Search users, view profiles, change roles, and deactivate accounts" icon={UserCog} open={openSections.users} onToggle={() => toggle("users")}>
           <div className="relative"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" color={MUTED} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name, email, or role" className="w-full rounded-2xl border pl-9 pr-3 py-3 text-sm" style={{ borderColor: "#d7c7aa" }} /></div>
           <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-sm"><thead><tr className="text-left text-[10px] uppercase tracking-widest" style={{ color: MUTED }}><th className="py-2">User</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>{filteredUsers.map(u => <tr key={u.id} className="border-t" style={{ borderColor: "#eee2cc" }}><td className="py-3"><strong>{u.full_name || "—"}</strong><p className="text-xs" style={{ color: MUTED }}>{u.email}</p></td><td><select value={u.role || "user"} onChange={e => updateUser(u.id, { role: e.target.value })} className="rounded-xl border px-2 py-2 text-xs"><option value="user">user</option><option value="professional">professional</option><option value="admin">admin</option><option value="court_staff">court_staff</option><option value="founder">founder</option></select></td><td><span className="rounded-full px-2 py-1 text-[10px] font-bold" style={{ background: u.is_active === false ? "#FDECEC" : "#EAF4EA", color: u.is_active === false ? "#B42318" : "#2F7D32" }}>{u.is_active === false ? "Inactive" : "Active"}</span></td><td className="text-xs" style={{ color: MUTED }}>{u.created_date ? new Date(u.created_date).toLocaleDateString() : "—"}</td><td className="flex gap-2 py-3">{smallButton("View", () => setSelectedProfile(u))}{u.is_active === false ? smallButton("Reactivate", () => updateUser(u.id, { is_active: true, deactivated_at: null })) : smallButton("Deactivate", () => updateUser(u.id, { is_active: false, deactivated_at: new Date().toISOString() }), "danger")}</td></tr>)}</tbody></table></div>
           {selectedProfile && <div className="rounded-2xl p-4" style={{ background: "#faf6f1", border: "1px solid #d7c7aa" }}><div className="flex justify-between gap-3"><div><p className="font-serif font-bold text-lg">{selectedProfile.full_name || "User profile"}</p><p className="text-sm" style={{ color: MUTED }}>{selectedProfile.email}</p></div>{smallButton("Close", () => setSelectedProfile(null))}</div><div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4 text-xs"><p><strong>Role:</strong> {selectedProfile.role || "user"}</p><p><strong>Phone:</strong> {selectedProfile.phone || "—"}</p><p><strong>SMS:</strong> {selectedProfile.sms_reminders ? "On" : "Off"}</p><p><strong>Viewed app:</strong> {selectedProfile.has_viewed_app ? "Yes" : "No"}</p></div></div>}
+        </FounderSection>
+
+        <FounderSection title="Resource Verification Queue" subtitle="Outdated statewide resources, crisis-priority listings, and admin review workflow" icon={Database} open={openSections.resources} onToggle={() => toggle("resources")}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <FounderMetric label="Resources" value={resourceListings.length} detail="Statewide listings" />
+            <FounderMetric label="Need review" value={resourceListings.filter(r => ["needs_review", "outdated"].includes(r.verification_status)).length} detail="Review queue" />
+            <FounderMetric label="Crisis priority" value={resourceListings.filter(r => r.crisis_priority).length} detail="Review first" />
+            <FounderMetric label="Archived" value={resourceListings.filter(r => r.verification_status === "archived").length} detail="Hidden/outdated" />
+          </div>
+          <a href="/resource-management" className="inline-flex rounded-xl px-4 py-2 text-sm font-bold no-underline" style={{ background: DARK, color: "#fff" }}>Open Resource Management</a>
         </FounderSection>
 
         <FounderSection title="Access Code Management" subtitle="Generate beta/admin codes, review status, and revoke access" icon={KeyRound} open={openSections.codes} onToggle={() => toggle("codes")}>
