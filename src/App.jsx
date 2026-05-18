@@ -63,6 +63,7 @@ import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFl
 import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
+import UnalterableRecords from '@/pages/UnalterableRecords';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -222,6 +223,7 @@ function App() {
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><EmergencyToolbox /></FeatureLockGate></Suspense>} />
               <Route path="/anger-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><AngerManagementHub /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-export" element={<FeatureLockGate user={user}><CourtReadyExport /></FeatureLockGate>} />
+              <Route path="/unalterable-records" element={<FeatureLockGate user={user}><UnalterableRecords /></FeatureLockGate>} />
               <Route path="/court-report-generator" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildCourtReportGenerator /></FeatureLockGate></Suspense>} />
               <Route path="/court-preparation-checklist" element={<FeatureLockGate user={user}><CourtPreparationChecklist /></FeatureLockGate>} />
               <Route path="/case-prep-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CasePrepDashboard /></FeatureLockGate></Suspense>} />

@@ -1,0 +1,132 @@
+{
+  "name": "CourtGradeRecord",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "case_number": {
+      "type": "string"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "message",
+        "visitation_attendance",
+        "gps_checkin",
+        "case_plan_completion",
+        "court_hearing",
+        "shelter_care_72_hour",
+        "adjudication_30_day",
+        "review_90_day",
+        "reunification_milestone",
+        "summary_note"
+      ],
+      "default": "summary_note"
+    },
+    "title": {
+      "type": "string"
+    },
+    "details": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verification_id": {
+      "type": "string"
+    },
+    "record_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": "string"
+    },
+    "attendance_status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "attended",
+        "missed",
+        "cancelled",
+        "not_applicable"
+      ],
+      "default": "not_applicable"
+    },
+    "gps_latitude": {
+      "type": "number"
+    },
+    "gps_longitude": {
+      "type": "number"
+    },
+    "gps_accuracy_meters": {
+      "type": "number"
+    },
+    "hearing_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadline_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "case_plan_item": {
+      "type": "string"
+    },
+    "completion_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed",
+        "blocked",
+        "not_applicable"
+      ],
+      "default": "not_applicable"
+    },
+    "milestone_name": {
+      "type": "string"
+    },
+    "milestone_status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "in_progress",
+        "completed",
+        "delayed",
+        "not_applicable"
+      ],
+      "default": "not_applicable"
+    },
+    "immutable_notice": {
+      "type": "string",
+      "default": "Submitted records are append-only and cannot be edited or deleted in the app."
+    }
+  },
+  "required": [
+    "owner_email",
+    "record_type",
+    "title",
+    "submitted_at",
+    "verification_id",
+    "record_hash"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": false,
+    "delete": false
+  }
+}

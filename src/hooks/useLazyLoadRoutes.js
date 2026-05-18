@@ -50,6 +50,7 @@ const routes = {
   Notifications: lazy(() => import("@/pages/Notifications")),
   PartnershipSafetyPlan: lazy(() => import("@/pages/PartnershipSafetyPlan")),
   CourtGenerateReport: lazy(() => import("@/pages/CourtGenerateReport")),
+  CourtGradeDocumentation: lazy(() => import("@/pages/CourtGradeDocumentation")),
   Help: lazy(() => import("@/pages/Help")),
   MyReflections: lazy(() => import("@/pages/MyReflections")),
   LocalResourceFinder: lazy(() => import("@/pages/LocalResourceFinder")),

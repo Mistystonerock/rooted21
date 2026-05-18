@@ -58,9 +58,7 @@
     "last_seen_at"
   ],
   "rls": {
-    "create": {
-      "user_email": "{{user.email}}"
-    },
+    "create": true,
     "read": {
       "user_email": "{{user.email}}"
     },
