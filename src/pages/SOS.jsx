@@ -5,6 +5,7 @@ import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-reac
 import { C } from "@/lib/rooted-constants";
 import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
 import SurvivorModeSettings from "@/components/safety-plan/SurvivorModeSettings";
+import PrivacySecuritySection from "@/components/privacy/PrivacySecuritySection";
 import { isDvSectionHidden } from "@/lib/survivorMode";
 
 export default function SOS() {
@@ -120,6 +121,7 @@ export default function SOS() {
         </section>
 
         <SurvivorModeSettings />
+        <PrivacySecuritySection />
         {!hideDvSection && <DomesticViolenceSupportSection />}
 
         <Link to="/chat?crisis=1" className="flex w-full items-center justify-center rounded-2xl py-4 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>

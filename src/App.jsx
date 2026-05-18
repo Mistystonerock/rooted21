@@ -66,8 +66,8 @@ import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
-import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
 import QuickExitButton from '@/components/privacy/QuickExitButton';
+import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -76,6 +76,21 @@ function App() {
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const showComingSoon = maintenanceMode && !isFounder;
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
+
+  React.useEffect(() => {
+    let timer;
+    const resetSecureTimer = () => {
+      clearTimeout(timer);
+      if (!isPrivateModeEnabled()) return;
+      timer = setTimeout(() => activateQuickExit(), getSecureSessionTimeoutMinutes() * 60 * 1000);
+    };
+    ["click", "keydown", "touchstart", "mousemove", "rooted21-session-timeout-changed"].forEach(event => window.addEventListener(event, resetSecureTimer));
+    resetSecureTimer();
+    return () => {
+      clearTimeout(timer);
+      ["click", "keydown", "touchstart", "mousemove", "rooted21-session-timeout-changed"].forEach(event => window.removeEventListener(event, resetSecureTimer));
+    };
+  }, []);
 
   React.useEffect(() => {
     base44.functions.invoke("getMaintenanceMode", {}).then(res => setMaintenanceMode(res.data.enabled !== false)).catch(() => setMaintenanceMode(true));
@@ -135,7 +150,6 @@ function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
-              <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
@@ -161,6 +175,7 @@ function App() {
               <Route path="/behavior-hub" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.BehaviorHub /></FeatureLockGate></Suspense>} />
               <Route path="/substance-abuse-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SubstanceAbuseResources /></FeatureLockGate></Suspense>} />
               <Route path="/court-rights-education" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtRightsEducation /></FeatureLockGate></Suspense>} />
+              <Route path="/protective-order-help" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProtectiveOrderHelp /></FeatureLockGate></Suspense>} />
               <Route path="/training-videos" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TrainingVideos /></FeatureLockGate></Suspense>} />
               <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
               <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />

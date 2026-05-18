@@ -29,9 +29,9 @@ export default function VaultPinGate({ pin, onSetPin, onUnlock }) {
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full" style={{ background: C.cream }}>
           {hasPin ? <Lock color={C.darkGreen} /> : <ShieldCheck color={C.darkGreen} />}
         </div>
-        <h1 className="font-serif text-2xl font-black" style={{ color: C.darkGreen }}>{hasPin ? "Vault locked" : "Create vault PIN"}</h1>
+        <h1 className="font-serif text-2xl font-black" style={{ color: C.darkGreen }}>{hasPin ? "Vault protected" : "Create vault PIN"}</h1>
         <p className="mt-2 text-sm leading-relaxed" style={{ color: C.mutedText }}>
-          {hasPin ? "Enter your PIN to open the hidden document vault." : "Choose a private PIN for this device before storing survivor documents."}
+          {hasPin ? "Enter your PIN when you feel ready to open your private safety vault." : "Choose a private PIN for this device so your safety documents can stay protected."}
         </p>
         <input value={value} onChange={e => setValue(e.target.value.replace(/\D/g, "").slice(0, 8))} type="password" inputMode="numeric" placeholder="PIN" className="mt-5 w-full rounded-xl px-3 py-3 text-center text-lg font-black" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
         {!hasPin && <input value={confirm} onChange={e => setConfirm(e.target.value.replace(/\D/g, "").slice(0, 8))} type="password" inputMode="numeric" placeholder="Confirm PIN" className="mt-3 w-full rounded-xl px-3 py-3 text-center text-lg font-black" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />}

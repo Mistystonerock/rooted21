@@ -3,7 +3,7 @@ import { C } from "@/lib/rooted-constants";
 
 export default function ProtectiveOrderInfoCard({ icon: Icon, title, text, bullets = [], links = [] }) {
   return (
-    <section className="rounded-3xl p-5 shadow-sm" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+    <section className="rounded-3xl p-5 shadow-sm" style={{ background: "#fff", border: `1px solid ${C.cream}` }}>
       <div className="flex items-start gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: `${C.midGreen}22` }}>
           <Icon size={21} color={C.darkGreen} />

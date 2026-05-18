@@ -7,7 +7,7 @@ const categories = [
   ["screenshot", "Screenshot"],
   ["photo", "Photo"],
   ["police_report", "Police report"],
-  ["threatening_message", "Threatening message"],
+  ["threatening_message", "Concerning message"],
   ["custody_paperwork", "Custody paperwork"],
   ["journal", "Journal"],
   ["medical_document", "Medical document"],
@@ -62,7 +62,7 @@ export default function VaultUploadForm({ user, onCreated }) {
     <form onSubmit={submit} className="rounded-3xl p-4 shadow-sm" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
       <div className="mb-4 flex items-center gap-2">
         <FilePlus size={18} color={C.darkGreen} />
-        <h2 className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Add vault item</h2>
+        <h2 className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Add something safely</h2>
       </div>
       <div className="grid gap-3">
         <input required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Private title" className="rounded-xl px-3 py-2 text-sm" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
@@ -72,9 +72,9 @@ export default function VaultUploadForm({ user, onCreated }) {
         </select>
         <input type="date" value={form.incident_date} onChange={e => setForm({ ...form, incident_date: e.target.value })} className="rounded-xl px-3 py-2 text-sm" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
         <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Short description" className="min-h-20 rounded-xl px-3 py-2 text-sm" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
-        <textarea value={form.timeline_notes} onChange={e => setForm({ ...form, timeline_notes: e.target.value })} placeholder="Evidence timeline notes or journal entry" className="min-h-24 rounded-xl px-3 py-2 text-sm" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
+        <textarea value={form.timeline_notes} onChange={e => setForm({ ...form, timeline_notes: e.target.value })} placeholder="Timeline notes or journal entry, at your own pace" className="min-h-24 rounded-xl px-3 py-2 text-sm" style={{ border: `1px solid ${C.cream}`, background: C.offWhite }} />
         <label className="rounded-xl p-3 text-sm font-bold" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
-          <Upload size={16} className="mr-2" /> Private encrypted file upload
+          <Upload size={16} className="mr-2" /> Private protected file upload
           <input type="file" onChange={e => setFile(e.target.files?.[0] || null)} className="mt-2 block w-full text-xs" />
         </label>
         <button disabled={saving} className="rounded-xl py-3 text-sm font-black" style={{ background: C.darkGreen, color: "#fff", border: "none", opacity: saving ? 0.7 : 1 }}>{saving ? "Saving..." : "Save to vault"}</button>

@@ -10,7 +10,7 @@ const RESOURCES = [
     phone: "1-800-799-7233",
     text: "Text START to 88788",
     website: "https://www.thehotline.org/",
-    description: "24/7 confidential support, safety planning, shelter referrals, and chat support.",
+    description: "24/7 confidential support, safety planning options, shelter referrals, and chat support.",
     emergency: true,
     childFriendly: true,
     petFriendly: false,
@@ -24,7 +24,7 @@ const RESOURCES = [
     county: "Statewide",
     phone: "1-800-934-9840",
     website: "https://www.odvn.org/",
-    description: "Ohio-focused DV support, local shelter referrals, advocacy, and survivor resources.",
+    description: "Ohio-focused DV support, local shelter referrals, advocacy options, and survivor resources."
     emergency: true,
     childFriendly: true,
     petFriendly: true,
@@ -148,7 +148,7 @@ const RESOURCES = [
     phone: "1-888-373-7888",
     text: "Text 233733",
     website: "https://humantraffickinghotline.org/",
-    description: "24/7 confidential trafficking support, reporting options, safety planning, and service referrals.",
+    description: "24/7 confidential trafficking support, safety planning options, and service referrals."
     emergency: true,
     childFriendly: true,
     petFriendly: false,
@@ -248,14 +248,14 @@ export default function OhioDvResourceSection() {
           <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: C.midGreen }}>Emergency resources</p>
           <h2 className="mt-1 font-serif text-xl font-black leading-tight" style={{ color: C.darkGreen }}>Ohio DV Resource Finder</h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: C.mutedText }}>
-            Ohio-focused domestic violence, housing, legal, trafficking, sexual assault, child advocacy, transportation, and affirming support resources.
+            You are not alone. Ohio-focused domestic violence, housing, legal, trafficking, sexual assault, child advocacy, transportation, and affirming support resources are available when you are ready.
           </p>
         </div>
       </div>
 
       <div className="mt-4 rounded-2xl p-4" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
         <p className="text-xs font-bold leading-relaxed" style={{ color: C.darkGreen }}>
-          If you are in immediate danger, call 911. For 24/7 DV support, call 1-800-799-7233 or text START to 88788.
+          If danger feels immediate, emergency support is available through 911. For 24/7 DV support, you can call 1-800-799-7233 or text START to 88788.
         </p>
       </div>
 
@@ -265,7 +265,7 @@ export default function OhioDvResourceSection() {
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search shelter, legal aid, counseling..."
+            placeholder="Search support, shelter, legal aid, counseling..."
             className="w-full rounded-2xl border py-3 pl-9 pr-3 text-sm"
             style={{ borderColor: C.cream }}
           />
@@ -320,7 +320,7 @@ export default function OhioDvResourceSection() {
         })}
         {visibleResources.length === 0 && (
           <div className="rounded-2xl p-4 text-center text-sm font-bold" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
-            No resources match those filters. Try removing one filter or selecting all counties.
+            No resources match those filters right now. You can remove one filter or select all counties when you are ready.
           </div>
         )}
       </div>

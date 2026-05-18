@@ -54,7 +54,7 @@ export default function HiddenDocumentVault() {
   async function exportManifest() {
     const manifest = {
       exported_at: new Date().toISOString(),
-      notice: "Educational survivor vault export manifest. Private files require separate signed downloads.",
+      notice: "Private safety vault export manifest. Private files use separate temporary secure downloads.",
       record_count: items.length,
       records: items.map(item => ({
         title: item.title,
@@ -89,7 +89,7 @@ export default function HiddenDocumentVault() {
           <Link to="/sos" aria-label="Back" className="rounded-xl p-2" style={{ background: "rgba(255,255,255,0.18)" }}><ChevronLeft color="#fff" /></Link>
           <div className="flex-1">
             <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,0.76)" }}>Hidden survivor vault</p>
-            <h1 className="font-serif text-xl font-black" style={{ color: "#fff" }}>Private Evidence Vault</h1>
+            <h1 className="font-serif text-xl font-black" style={{ color: "#fff" }}>Private Safety Vault</h1>
           </div>
           <button onClick={exportManifest} className="rounded-xl px-3 py-2 text-xs font-black" style={{ background: C.cream, color: C.darkGreen, border: "none" }}><Download size={14} className="mr-1" /> Export</button>
         </div>
@@ -101,8 +101,8 @@ export default function HiddenDocumentVault() {
             <div className="flex items-start gap-3">
               <EyeOff color={C.darkGreen} />
               <div>
-                <h2 className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Discreet & encrypted</h2>
-                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>Files are stored privately and accessed only through temporary signed downloads. Records and logs are append-only.</p>
+                <h2 className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Private & protected</h2>
+                <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>You deserve safety. Files are stored privately and opened only through temporary secure downloads. Records and logs are append-only.</p>
               </div>
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs font-black" style={{ color: C.darkGreen }}>

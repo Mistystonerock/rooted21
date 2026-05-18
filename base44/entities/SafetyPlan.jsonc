@@ -48,11 +48,35 @@
     },
     "code_words": {
       "type": "array",
-      "description": "Code words and meanings",
+      "description": "Emergency code words and meanings",
       "items": {
         "type": "object"
       },
       "default": []
+    },
+    "school_safety_plan": {
+      "type": "string",
+      "description": "School pickup, trusted staff, office instructions, and emergency contact planning"
+    },
+    "emotional_regulation_tools": {
+      "type": "array",
+      "description": "Child emotional regulation tools",
+      "items": {
+        "type": "object"
+      },
+      "default": []
+    },
+    "child_calming_exercises": {
+      "type": "array",
+      "description": "Calming exercises that help the child settle safely",
+      "items": {
+        "type": "object"
+      },
+      "default": []
+    },
+    "violence_exposure_coping_strategies": {
+      "type": "string",
+      "description": "Coping strategies and support plan after exposure to violence"
     },
     "medication_list": {
       "type": "array",

@@ -5,7 +5,7 @@ const labels = {
   screenshot: "Screenshot",
   photo: "Photo",
   police_report: "Police report",
-  threatening_message: "Threatening message",
+  threatening_message: "Concerning message",
   custody_paperwork: "Custody paperwork",
   journal: "Journal",
   medical_document: "Medical document",

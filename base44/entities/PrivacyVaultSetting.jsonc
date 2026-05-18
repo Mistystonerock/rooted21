@@ -36,6 +36,40 @@
     "pin_set_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "encrypted_storage_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "sensitive_push_notifications_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "hidden_notification_previews": {
+      "type": "boolean",
+      "default": true
+    },
+    "private_mode_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "secure_session_timeout_minutes": {
+      "type": "number",
+      "default": 10
+    },
+    "secure_deletion_requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "secure_deletion_status": {
+      "type": "string",
+      "enum": [
+        "not_requested",
+        "requested",
+        "in_review",
+        "completed"
+      ],
+      "default": "not_requested"
     }
   },
   "required": [
