@@ -1,0 +1,105 @@
+{
+  "name": "RolePermissionPolicy",
+  "type": "object",
+  "properties": {
+    "role_key": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "family",
+        "professional",
+        "agency",
+        "admin",
+        "founder",
+        "system"
+      ],
+      "default": "family"
+    },
+    "allowed_modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "restricted_modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "can_view_sensitive_records": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_export_legal_records": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_manage_users": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_manage_resources": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_manage_billing": {
+      "type": "boolean",
+      "default": false
+    },
+    "requires_founder_reauth": {
+      "type": "boolean",
+      "default": false
+    },
+    "privacy_training_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "role_key",
+    "display_name",
+    "scope"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}

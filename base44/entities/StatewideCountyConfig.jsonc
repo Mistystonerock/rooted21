@@ -1,0 +1,104 @@
+{
+  "name": "StatewideCountyConfig",
+  "type": "object",
+  "properties": {
+    "state": {
+      "type": "string",
+      "default": "OH"
+    },
+    "county": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "launch_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "planning",
+        "pilot",
+        "active",
+        "paused"
+      ],
+      "default": "not_started"
+    },
+    "primary_admin_email": {
+      "type": "string"
+    },
+    "agency_partner_name": {
+      "type": "string"
+    },
+    "legal_aid_contact": {
+      "type": "string"
+    },
+    "crisis_contact": {
+      "type": "string"
+    },
+    "resource_review_owner": {
+      "type": "string"
+    },
+    "supported_languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "en"
+      ]
+    },
+    "accessibility_notes": {
+      "type": "string"
+    },
+    "data_sharing_notes": {
+      "type": "string"
+    },
+    "last_readiness_review_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "readiness_score": {
+      "type": "number",
+      "default": 0
+    },
+    "admin_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "state",
+    "county",
+    "launch_status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}
