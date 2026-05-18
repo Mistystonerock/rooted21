@@ -5,6 +5,7 @@ import FounderMetric from "@/components/admin/founder/FounderMetric";
 import AdminCodeManager from "@/components/admin/AdminCodeManager";
 import BetaTesterCodeManager from "@/components/admin/BetaTesterCodeManager";
 import AdminManagement from "@/components/rooted/AdminManagement";
+import ScalabilityOperationsPanel from "@/components/admin/founder/ScalabilityOperationsPanel";
 import {
   Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, Database, DollarSign,
   GraduationCap, KeyRound, Library, LockKeyhole, MailPlus, Search, Settings,
@@ -19,7 +20,7 @@ const CARD = "#ffffff";
 const MUTED = "#8b6f54";
 
 const sectionList = [
-  "analytics", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
+  "analytics", "operations", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
 ];
 
 function smallButton(label, onClick, tone = "green") {
@@ -221,6 +222,10 @@ export default function FounderDashboard() {
             <FounderMetric label="Content" value={contentItems.length} detail={`${contentItems.filter(c => c.status === "published").length} published`} />
             <FounderMetric label="Announcements" value={announcements.length} detail="Messages sent" />
           </div>
+        </FounderSection>
+
+        <FounderSection title="Statewide Operations Architecture" subtitle="Production monitoring, scalability readiness, integrations, offline drafts, and audit infrastructure" icon={Activity} open={openSections.operations} onToggle={() => toggle("operations")}>
+          <ScalabilityOperationsPanel />
         </FounderSection>
 
         <FounderSection title="User Management" subtitle="Search users, view profiles, change roles, and deactivate accounts" icon={UserCog} open={openSections.users} onToggle={() => toggle("users")}>

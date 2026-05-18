@@ -64,6 +64,7 @@ import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
+import FakeSafeScreen from '@/pages/FakeSafeScreen';
 import AppErrorBoundary from '@/components/system/AppErrorBoundary';
 import { I18nProvider } from '@/lib/i18n';
 import { initializePerformanceMonitoring } from '@/lib/monitoring';
@@ -134,6 +135,7 @@ function App() {
               <Route path="/" element={<Launch />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
+              <Route path="/quick-exit-safe" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />

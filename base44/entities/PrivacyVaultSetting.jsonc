@@ -13,14 +13,27 @@
       "type": "boolean",
       "default": true
     },
+    "fake_screen_type": {
+      "type": "string",
+      "enum": [
+        "weather",
+        "notes",
+        "parenting_article"
+      ],
+      "default": "weather"
+    },
+    "hide_dv_section": {
+      "type": "boolean",
+      "default": false
+    },
+    "sensitive_notifications_paused_until": {
+      "type": "string",
+      "format": "date-time"
+    },
     "pin_hash": {
       "type": "string"
     },
     "pin_set_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "last_unlocked_at": {
       "type": "string",
       "format": "date-time"
     }
@@ -38,6 +51,8 @@
     "update": {
       "user_email": "{{user.email}}"
     },
-    "delete": false
+    "delete": {
+      "user_email": "{{user.email}}"
+    }
   }
 }
