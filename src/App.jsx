@@ -64,6 +64,9 @@ import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
+import AppErrorBoundary from '@/components/system/AppErrorBoundary';
+import { I18nProvider } from '@/lib/i18n';
+import { initializePerformanceMonitoring } from '@/lib/monitoring';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -74,6 +77,7 @@ function App() {
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
+    initializePerformanceMonitoring();
     base44.functions.invoke("getMaintenanceMode", {}).then(res => setMaintenanceMode(res.data.enabled !== false)).catch(() => setMaintenanceMode(true));
     base44.auth.me().then(async u => {
       setUser(u);
@@ -105,6 +109,8 @@ function App() {
   }, []);
 
   return (
+    <AppErrorBoundary>
+    <I18nProvider>
     <ThemeProvider>
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
@@ -283,6 +289,8 @@ function App() {
       </QueryClientProvider>
     </AuthProvider>
     </ThemeProvider>
+    </I18nProvider>
+    </AppErrorBoundary>
   )
 }
 

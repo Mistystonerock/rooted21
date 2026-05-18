@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
+import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
 
 export default function SOS() {
   const navigate = useNavigate();
@@ -104,6 +105,8 @@ export default function SOS() {
             <Phone size={22} /> Call or Text 988
           </a>
         </section>
+
+        <DomesticViolenceSupportSection />
 
         <Link to="/chat?crisis=1" className="flex w-full items-center justify-center rounded-2xl py-4 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>
           Open Rooted 21 crisis coaching

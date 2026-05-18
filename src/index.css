@@ -297,6 +297,22 @@ input, textarea, select {
     transition-duration: 0.01ms !important;
   }
 }
+@media (forced-colors: active) {
+  button, a, input, select, textarea {
+    border: 1px solid ButtonText;
+  }
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .rooted-calm-mode,
 .rooted-calm-mode * {
   animation-duration: 0.01ms !important;
