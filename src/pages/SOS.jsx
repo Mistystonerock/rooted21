@@ -5,6 +5,7 @@ import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-reac
 import { C } from "@/lib/rooted-constants";
 import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
 import SurvivorModeControls from "@/components/sos/SurvivorModeControls";
+import OhioDvResourceSection from "@/components/sos/OhioDvResourceSection";
 
 export default function SOS() {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ export default function SOS() {
         </section>
 
         {!hideDvSection && <DomesticViolenceSupportSection />}
+        {!hideDvSection && <OhioDvResourceSection />}
         <SurvivorModeControls onHideChange={setHideDvSection} />
 
         <Link to="/chat?crisis=1" className="flex w-full items-center justify-center rounded-2xl py-4 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>

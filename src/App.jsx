@@ -64,10 +64,9 @@ import CopyrightFooter from '@/components/legal/CopyrightFooter';
 import ComingSoon from '@/pages/ComingSoon';
 import MoxieChatWidget from '@/components/moxie/MoxieChatWidget';
 import UnalterableRecords from '@/pages/UnalterableRecords';
+import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
-import AppErrorBoundary from '@/components/system/AppErrorBoundary';
-import { I18nProvider } from '@/lib/i18n';
-import { initializePerformanceMonitoring } from '@/lib/monitoring';
+import QuickExitButton from '@/components/privacy/QuickExitButton';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -78,7 +77,6 @@ function App() {
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
-    initializePerformanceMonitoring();
     base44.functions.invoke("getMaintenanceMode", {}).then(res => setMaintenanceMode(res.data.enabled !== false)).catch(() => setMaintenanceMode(true));
     base44.auth.me().then(async u => {
       setUser(u);
@@ -110,14 +108,14 @@ function App() {
   }, []);
 
   return (
-    <AppErrorBoundary>
-    <I18nProvider>
+    <ClientErrorBoundary>
     <ThemeProvider>
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <ProfessionalGate user={user}>
         <SkipToContentLink />
         <AccessibilityToolbar />
+        {user && !showComingSoon && <QuickExitButton />}
         {user && (
           <div className="fixed right-3 top-16 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <LogoutButton />
@@ -135,7 +133,7 @@ function App() {
               <Route path="/" element={<Launch />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
-              <Route path="/quick-exit-safe" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
+              <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/home" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Home /></FeatureLockGate></Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
@@ -291,8 +289,7 @@ function App() {
       </QueryClientProvider>
     </AuthProvider>
     </ThemeProvider>
-    </I18nProvider>
-    </AppErrorBoundary>
+    </ClientErrorBoundary>
   )
 }
 
