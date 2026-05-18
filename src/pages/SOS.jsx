@@ -4,11 +4,13 @@ import { base44 } from "@/api/base44Client";
 import { AlertTriangle, ChevronLeft, HeartPulse, Phone, Send } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
+import SurvivorModeControls from "@/components/sos/SurvivorModeControls";
 
 export default function SOS() {
   const navigate = useNavigate();
   const [sendingAlert, setSendingAlert] = useState(false);
   const [alertStatus, setAlertStatus] = useState("");
+  const [hideDvSection, setHideDvSection] = useState(localStorage.getItem("rooted_hide_dv_section") === "true");
 
   function getCurrentLocation() {
     return new Promise((resolve) => {
@@ -106,7 +108,8 @@ export default function SOS() {
           </a>
         </section>
 
-        <DomesticViolenceSupportSection />
+        {!hideDvSection && <DomesticViolenceSupportSection />}
+        <SurvivorModeControls onHideChange={setHideDvSection} />
 
         <Link to="/chat?crisis=1" className="flex w-full items-center justify-center rounded-2xl py-4 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>
           Open Rooted 21 crisis coaching

@@ -1,5 +1,6 @@
 import { DoorOpen, EyeOff, FileText, HeartHandshake, Home, MessageCircle, Phone, Shield } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
+import { activateQuickExit } from "@/lib/survivorMode";
 
 const SAFETY_TOOLS = [
   {
@@ -26,7 +27,7 @@ const SAFETY_TOOLS = [
 
 export default function DomesticViolenceSupportSection() {
   const quickExit = () => {
-    window.location.replace("https://www.google.com/search?q=weather");
+    activateQuickExit();
   };
 
   return (
