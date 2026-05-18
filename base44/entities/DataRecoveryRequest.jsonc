@@ -1,0 +1,90 @@
+{
+  "name": "DataRecoveryRequest",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Unique recovery request identifier"
+    },
+    "request_type": {
+      "type": "string",
+      "enum": [
+        "restore_deleted_record",
+        "recover_account_data",
+        "verify_export",
+        "correct_record",
+        "other"
+      ],
+      "default": "recover_account_data"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "needs_information",
+        "completed",
+        "denied"
+      ],
+      "default": "submitted"
+    },
+    "related_backup_id": {
+      "type": "string"
+    },
+    "related_entity_name": {
+      "type": "string"
+    },
+    "related_entity_id": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "safe_contact_method": {
+      "type": "string",
+      "enum": [
+        "in_app",
+        "email",
+        "phone",
+        "no_outbound_contact"
+      ],
+      "default": "in_app"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolution_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_email",
+    "request_id",
+    "request_type",
+    "status",
+    "requested_at"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}

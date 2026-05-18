@@ -1,0 +1,88 @@
+{
+  "name": "TrustTransparencyRecord",
+  "type": "object",
+  "properties": {
+    "record_key": {
+      "type": "string",
+      "description": "Unique transparency item key"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "privacy",
+        "security",
+        "legal",
+        "ai",
+        "clinical_safety",
+        "data_retention",
+        "accessibility",
+        "operations"
+      ],
+      "default": "privacy"
+    },
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "details": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "retired"
+      ],
+      "default": "active"
+    },
+    "public_visible": {
+      "type": "boolean",
+      "default": true
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "next_review_due": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "record_key",
+    "category",
+    "title",
+    "summary",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "read": true,
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "founder"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}

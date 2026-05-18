@@ -1,0 +1,80 @@
+{
+  "name": "DataBackupSnapshot",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "User who generated this backup snapshot"
+    },
+    "backup_id": {
+      "type": "string",
+      "description": "Unique backup/export identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "generated",
+        "downloaded",
+        "expired",
+        "revoked"
+      ],
+      "default": "generated"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "user_data",
+        "family_records",
+        "documents_only",
+        "full_account"
+      ],
+      "default": "full_account"
+    },
+    "record_count": {
+      "type": "number",
+      "default": 0
+    },
+    "entity_counts_json": {
+      "type": "string",
+      "description": "Small JSON summary of exported entity counts only"
+    },
+    "manifest_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the generated backup payload"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recovery_available": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_email",
+    "backup_id",
+    "status",
+    "generated_at",
+    "manifest_hash"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": false
+  }
+}
