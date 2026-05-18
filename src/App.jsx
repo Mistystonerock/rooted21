@@ -80,10 +80,23 @@ function withStartupTimeout(promise, ms = 8000) {
   ]);
 }
 
+function StartupErrorScreen({ onRetry }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+      <div className="mx-auto max-w-md rounded-3xl border border-rooted-cream bg-white p-6 shadow-sm">
+        <h1 className="text-xl font-bold text-rooted-dark-green">Rooted 21 needs a refresh</h1>
+        <p className="mt-2 text-sm text-muted-foreground">The preview session could not finish loading safely. Please refresh and try again.</p>
+        <button className="mt-4 rounded-xl bg-primary px-4 py-2 font-bold text-primary-foreground" onClick={onRetry}>Refresh</button>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [user, setUser] = React.useState(null);
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [bootLoading, setBootLoading] = React.useState(true);
+  const [bootFailed, setBootFailed] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const showComingSoon = maintenanceMode && !isFounder;
@@ -108,6 +121,7 @@ function App() {
     let mounted = true;
 
     async function bootApp() {
+      if (mounted) setBootFailed(false);
       try {
         const maintenanceResult = await withStartupTimeout(base44.functions.invoke("getMaintenanceMode", {}), 6000);
         if (mounted) setMaintenanceMode(maintenanceResult.data.enabled !== false);
@@ -141,8 +155,11 @@ function App() {
             if (mounted) setUser(refreshedUser);
           }
         }
-      } catch {
-        if (mounted) setUser(null);
+      } catch (error) {
+        if (mounted) {
+          setUser(null);
+          setBootFailed(error?.message === 'Startup timed out');
+        }
       } finally {
         if (mounted) setBootLoading(false);
       }
@@ -170,6 +187,8 @@ function App() {
         <Router>
           {bootLoading ? (
             <LoadingFallback />
+          ) : bootFailed ? (
+            <StartupErrorScreen onRetry={() => window.location.reload()} />
           ) : showComingSoon ? (
             <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
           ) : (
