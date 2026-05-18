@@ -3,63 +3,81 @@
   "type": "object",
   "properties": {
     "owner_email": {
-      "type": "string"
-    },
-    "case_number": {
-      "type": "string"
-    },
-    "child_name": {
-      "type": "string"
+      "type": "string",
+      "description": "User who owns this unalterable court-grade record"
     },
     "record_type": {
       "type": "string",
       "enum": [
         "message",
         "visitation_attendance",
-        "gps_checkin",
+        "gps_check_in",
         "case_plan_completion",
-        "court_hearing",
-        "shelter_care_72_hour",
-        "adjudication_30_day",
-        "review_90_day",
+        "hearing_summary",
+        "shelter_care_reminder",
+        "adjudication_reminder",
+        "review_hearing_reminder",
+        "permanency_timeline",
         "reunification_milestone",
-        "summary_note"
+        "other"
       ],
-      "default": "summary_note"
+      "default": "other"
     },
     "title": {
       "type": "string"
     },
-    "details": {
+    "summary": {
+      "type": "string",
+      "description": "Plain-language facts recorded by the user"
+    },
+    "child_name": {
       "type": "string"
     },
-    "occurred_at": {
+    "case_number": {
+      "type": "string"
+    },
+    "hearing_type": {
       "type": "string",
-      "format": "date-time"
+      "enum": [
+        "not_applicable",
+        "shelter_care",
+        "adjudication",
+        "disposition",
+        "review",
+        "permanency",
+        "other"
+      ],
+      "default": "not_applicable"
+    },
+    "hearing_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "event_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the event happened or was observed"
     },
     "submitted_at": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "Immutable submission timestamp"
+    },
+    "authentication_id": {
+      "type": "string",
+      "description": "Human-readable authentication ID printed on court exports"
     },
     "verification_id": {
-      "type": "string"
+      "type": "string",
+      "description": "Human-readable verification ID for court packets"
     },
     "record_hash": {
-      "type": "string"
+      "type": "string",
+      "description": "SHA-256 integrity hash of the record payload"
     },
     "previous_hash": {
-      "type": "string"
-    },
-    "attendance_status": {
       "type": "string",
-      "enum": [
-        "scheduled",
-        "attended",
-        "missed",
-        "cancelled",
-        "not_applicable"
-      ],
-      "default": "not_applicable"
+      "description": "Previous record hash for chronological chain verification"
     },
     "gps_latitude": {
       "type": "number"
@@ -70,52 +88,35 @@
     "gps_accuracy_meters": {
       "type": "number"
     },
-    "hearing_date": {
-      "type": "string",
-      "format": "date-time"
+    "location_label": {
+      "type": "string"
+    },
+    "attended": {
+      "type": "boolean"
+    },
+    "participant_name": {
+      "type": "string"
+    },
+    "case_plan_progress": {
+      "type": "number",
+      "description": "Completion percent at submission time"
     },
     "deadline_date": {
       "type": "string",
-      "format": "date-time"
+      "format": "date"
     },
-    "case_plan_item": {
-      "type": "string"
-    },
-    "completion_status": {
+    "certification_notice": {
       "type": "string",
-      "enum": [
-        "not_started",
-        "in_progress",
-        "completed",
-        "blocked",
-        "not_applicable"
-      ],
-      "default": "not_applicable"
-    },
-    "milestone_name": {
-      "type": "string"
-    },
-    "milestone_status": {
-      "type": "string",
-      "enum": [
-        "planned",
-        "in_progress",
-        "completed",
-        "delayed",
-        "not_applicable"
-      ],
-      "default": "not_applicable"
-    },
-    "immutable_notice": {
-      "type": "string",
-      "default": "Submitted records are append-only and cannot be edited or deleted in the app."
+      "default": "This record was submitted as an append-only court-grade family record. It cannot be edited or deleted through the application after submission."
     }
   },
   "required": [
     "owner_email",
     "record_type",
     "title",
+    "summary",
     "submitted_at",
+    "authentication_id",
     "verification_id",
     "record_hash"
   ],

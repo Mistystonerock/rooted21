@@ -7,6 +7,7 @@ import SurvivorSafetyPanel from "@/components/privacy/SurvivorSafetyPanel";
 import TrustIndicatorGrid from "@/components/privacy/TrustIndicatorGrid";
 import ConsentManagementPanel from "@/components/privacy/ConsentManagementPanel";
 import ReleaseInfoTracker from "@/components/privacy/ReleaseInfoTracker";
+import PrivacySafetyExplainer from "@/components/privacy/PrivacySafetyExplainer";
 
 const DATA_ENTITIES = [
   "ChildProfile", "BehaviorLog", "CheckIn", "Goal", "LessonProgress", "SafetyPlan", "DailySchedule",
@@ -73,6 +74,7 @@ export default function PrivacyCenter() {
   const [deleteError, setDeleteError] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [vault, setVault] = useState(null);
+  const [exportRequestMessage, setExportRequestMessage] = useState("");
 
   useEffect(() => {
     base44.auth.me().then(async me => {
@@ -120,6 +122,17 @@ export default function PrivacyCenter() {
     setExporting(false);
   }
 
+  async function requestDataExport() {
+    await base44.entities.DataExportRequest.create({
+      user_email: user.email,
+      status: "submitted",
+      request_type: "full_account",
+      requested_at: new Date().toISOString(),
+      notes: "User requested a full account export from the Privacy & Safety Center"
+    });
+    setExportRequestMessage("Your data export request was submitted. You can also download an immediate copy below.");
+  }
+
   async function clearLocalData() {
     sessionStorage.clear();
     if (window.caches) {
@@ -153,14 +166,15 @@ export default function PrivacyCenter() {
 
   return (
     <main className="min-h-screen" style={{ background: C.offWhite }}>
-      <MobileHeader title="Privacy Center" subtitle="Consent, sharing, export, and deletion" backTo="/profile" />
+      <MobileHeader title="Privacy & Safety" subtitle="Plain-language privacy controls" backTo="/profile" />
       <div className="mx-auto max-w-[520px] space-y-4 px-4 py-5">
         <section className="rounded-2xl p-5" style={{ background: C.darkGreen }}>
           <Shield size={24} color={C.gold} />
-          <p className="mt-3 font-serif text-lg font-bold" style={{ color: C.cream }}>You control your sensitive data.</p>
-          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Plain-language controls for consent, sharing, survivor safety, data export, and deletion requests.</p>
+          <p className="mt-3 font-serif text-lg font-bold" style={{ color: C.cream }}>You deserve privacy that feels clear and safe.</p>
+          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.lightGreen }}>Learn how Rooted 21 protects your information, then choose the settings that feel right for you.</p>
         </section>
 
+        <PrivacySafetyExplainer />
         <TrustIndicatorGrid />
         {user && <SurvivorSafetyPanel user={user} vault={vault} onVaultChange={setVault} />}
         {user && <ConsentManagementPanel user={user} />}
@@ -193,27 +207,31 @@ export default function PrivacyCenter() {
 
         <section className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
           <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Your Data</p>
-          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>Download a JSON copy of your records or permanently delete your account and data.</p>
+          <p className="mt-1 text-xs leading-relaxed" style={{ color: C.mutedText }}>You can ask for a full copy of your data, download an immediate copy, or request account deletion. You stay in control.</p>
+          <button onClick={requestDataExport} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-xs font-black" style={{ background: C.darkGreen, color: C.white, border: "none" }}>
+            <Download size={14} /> Request Full Data Export
+          </button>
+          {exportRequestMessage && <p className="mt-2 text-[11px] font-bold" style={{ color: C.midGreen }}>{exportRequestMessage}</p>}
           <button onClick={exportData} disabled={exporting} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-xs font-black" style={{ background: C.gold, color: C.darkGreen, border: "none", opacity: exporting ? 0.7 : 1 }}>
-            <Download size={14} /> {exporting ? "Preparing export…" : "Export My Data"}
+            <Download size={14} /> {exporting ? "Preparing export…" : "Download Immediate Copy"}
           </button>
         </section>
 
         {!showDelete ? (
           <button onClick={() => setShowDelete(true)} className="flex w-full items-center gap-2 rounded-2xl p-4 text-xs font-black" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8", color: "#B84C2A" }}>
-            <Trash2 size={14} /> Delete My Account and Data
+            <Trash2 size={14} /> Request Account Deletion
           </button>
         ) : (
           <section className="rounded-2xl p-4" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8" }}>
             <div className="flex gap-2">
               <AlertTriangle size={16} color="#B84C2A" className="mt-0.5" />
-              <p className="text-xs leading-relaxed" style={{ color: "#B84C2A" }}>This permanently deletes your account and personal records. Type DELETE to confirm.</p>
+              <p className="text-xs leading-relaxed" style={{ color: "#B84C2A" }}>This sends a careful account deletion request. We do this as a request so your records can be handled safely. Type DELETE to confirm.</p>
             </div>
             <input value={deleteText} onChange={event => setDeleteText(event.target.value)} placeholder="DELETE" className="mt-3 w-full rounded-xl px-3 py-2 text-sm font-bold" style={{ border: "1px solid #F4C9B8", background: C.white }} />
             {deleteError && <p className="mt-1 text-[11px] font-bold" style={{ color: "#B42318" }}>{deleteError}</p>}
             <div className="mt-3 grid grid-cols-2 gap-2">
               <button onClick={() => { setShowDelete(false); setDeleteText(""); setDeleteError(""); }} className="rounded-xl py-2 text-xs font-black" style={{ background: C.white, color: C.darkGreen, border: `1px solid ${C.cream}` }}>Cancel</button>
-              <button onClick={deleteAccount} disabled={deleting || deleteText !== "DELETE"} className="rounded-xl py-2 text-xs font-black" style={{ background: "#B84C2A", color: C.white, border: "none", opacity: deleting || deleteText !== "DELETE" ? 0.65 : 1 }}>{deleting ? "Deleting…" : "Delete"}</button>
+              <button onClick={deleteAccount} disabled={deleting || deleteText !== "DELETE"} className="rounded-xl py-2 text-xs font-black" style={{ background: "#B84C2A", color: C.white, border: "none", opacity: deleting || deleteText !== "DELETE" ? 0.65 : 1 }}>{deleting ? "Submitting…" : "Submit Request"}</button>
             </div>
           </section>
         )}

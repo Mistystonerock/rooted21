@@ -21,27 +21,7 @@
       "type": "boolean",
       "default": true
     },
-    "welcome_emails": {
-      "type": "boolean",
-      "default": true
-    },
-    "password_reset_emails": {
-      "type": "boolean",
-      "default": true
-    },
-    "verification_emails": {
-      "type": "boolean",
-      "default": true
-    },
-    "resource_update_reminders": {
-      "type": "boolean",
-      "default": true
-    },
     "court_reminders": {
-      "type": "boolean",
-      "default": true
-    },
-    "appointment_reminders": {
       "type": "boolean",
       "default": true
     },
@@ -49,7 +29,23 @@
       "type": "boolean",
       "default": true
     },
-    "crisis_alerts": {
+    "visitation_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "benefits_recertification_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "iep_meeting_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "medication_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "appointment_reminders": {
       "type": "boolean",
       "default": true
     },
@@ -57,11 +53,23 @@
       "type": "boolean",
       "default": true
     },
-    "admin_alerts": {
+    "resource_verification_reminders": {
+      "type": "boolean",
+      "default": true
+    },
+    "resource_updates": {
       "type": "boolean",
       "default": true
     },
     "beta_updates": {
+      "type": "boolean",
+      "default": true
+    },
+    "mute_sensitive_notifications": {
+      "type": "boolean",
+      "default": false
+    },
+    "hide_notification_previews": {
       "type": "boolean",
       "default": true
     },
@@ -85,14 +93,6 @@
         "so"
       ],
       "default": "en"
-    },
-    "sms_phone_last4": {
-      "type": "string",
-      "description": "Last four digits only; do not store full phone numbers here"
-    },
-    "push_device_label": {
-      "type": "string",
-      "description": "Device label for future push notification registration"
     }
   },
   "required": [

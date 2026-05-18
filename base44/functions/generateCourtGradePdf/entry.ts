@@ -54,6 +54,7 @@ Deno.serve(async (req) => {
         `Type: ${record.record_type}`,
         `Occurred: ${record.occurred_at || 'Not listed'}`,
         `Submitted: ${record.submitted_at}`,
+        `Authentication ID: ${record.authentication_id || record.verification_id}`,
         `Verification ID: ${record.verification_id}`,
         `Record Hash: ${record.record_hash}`,
         record.child_name ? `Child: ${safe(record.child_name)}` : '',
@@ -67,7 +68,7 @@ Deno.serve(async (req) => {
         doc.text(line, 18, y);
         y += 4;
       });
-      const detailLines = doc.splitTextToSize(`Details: ${safe(record.details)}`, 176);
+      const detailLines = doc.splitTextToSize(`Details: ${safe(record.summary)}`, 176);
       doc.text(detailLines, 18, y);
       y += detailLines.length * 4 + 5;
     });

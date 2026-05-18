@@ -33,10 +33,10 @@ export function buildCourtDeadlines(caseSnapshot) {
   const removal = caseSnapshot.removal_date ? parseISO(caseSnapshot.removal_date) : null;
 
   return [
-    { title: "Court hearing countdown", date: caseSnapshot.next_hearing_date, source: "Next hearing date" },
-    { title: "72-hour shelter care reminder", date: removal && isValid(removal) ? format(addDays(removal, 3), "yyyy-MM-dd") : "", source: "Removal date + 72 hours" },
-    { title: "30-day adjudication reminder", date: filing && isValid(filing) ? format(addDays(filing, 30), "yyyy-MM-dd") : "", source: "Filing date + 30 days" },
-    { title: "90-day review hearing reminder", date: filing && isValid(filing) ? format(addDays(filing, 90), "yyyy-MM-dd") : "", source: "Filing date + 90 days" }
+    { title: "Shelter care hearing", date: removal && isValid(removal) ? format(addDays(removal, 3), "yyyy-MM-dd") : caseSnapshot.shelter_care_hearing_date || "", source: "Removal date + 72 hours or entered shelter care date" },
+    { title: "Adjudication hearing", date: filing && isValid(filing) ? format(addDays(filing, 30), "yyyy-MM-dd") : caseSnapshot.adjudication_hearing_date || "", source: "Filing date + 30 days or entered adjudication date" },
+    { title: "Review hearing", date: caseSnapshot.next_hearing_date || (filing && isValid(filing) ? format(addDays(filing, 90), "yyyy-MM-dd") : ""), source: "Next hearing date or filing date + 90 days" },
+    { title: "Permanency timeline", date: removal && isValid(removal) ? format(addDays(removal, 365), "yyyy-MM-dd") : caseSnapshot.permanency_due_date || "", source: "Removal date + 12 months or entered permanency date" }
   ];
 }
 

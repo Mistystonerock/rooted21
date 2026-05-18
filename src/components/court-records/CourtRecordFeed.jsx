@@ -21,8 +21,10 @@ export default function CourtRecordFeed({ records }) {
           <div className="mt-3 grid gap-1 text-xs text-stone-500 sm:grid-cols-2">
             <span>Event: {formatDate(record.event_datetime)}</span>
             <span>Submitted: {formatDate(record.submitted_at)}</span>
-            <span>Verification: {record.verification_id}</span>
-            <span>Hash: {record.record_hash?.slice(0, 16)}...</span>
+            <span>Authentication ID: {record.authentication_id || record.verification_id}</span>
+            <span>Hash chain: {record.record_hash?.slice(0, 16)}...</span>
+            {record.gps_latitude && <span>GPS: {Number(record.gps_latitude).toFixed(5)}, {Number(record.gps_longitude).toFixed(5)}</span>}
+            {record.hearing_type && record.hearing_type !== "not_applicable" && <span>Hearing: {record.hearing_type.replaceAll("_", " ")}</span>}
           </div>
         </article>
       ))}

@@ -12,11 +12,21 @@
         "message",
         "appointment",
         "system",
+        "legal",
+        "court_reminder",
+        "case_plan_reminder",
+        "visitation_reminder",
+        "benefits_reminder",
+        "iep_meeting_reminder",
+        "medication_reminder",
+        "resource_verification_reminder",
+        "safety_plan_reminder",
+        "resource_update",
         "progress",
         "encouragement",
-        "policy",
-        "legal"
+        "policy"
       ],
+      "default": "system",
       "description": "Type of notification"
     },
     "title": {
@@ -27,9 +37,28 @@
       "type": "string",
       "description": "Notification message"
     },
+    "sensitive": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether preview text should be hidden when the user chooses privacy mode"
+    },
+    "delivery_channel": {
+      "type": "string",
+      "enum": [
+        "in_app",
+        "email",
+        "sms",
+        "push"
+      ],
+      "default": "in_app"
+    },
+    "related_entity": {
+      "type": "string",
+      "description": "Related entity name"
+    },
     "related_id": {
       "type": "string",
-      "description": "ID of related entity (message ID, appointment ID, etc)"
+      "description": "ID of related entity"
     },
     "related_link": {
       "type": "string",
