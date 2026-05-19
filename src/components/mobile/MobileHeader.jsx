@@ -24,6 +24,7 @@ export default function MobileHeader({
         position: "sticky",
         top: 0,
         zIndex: 10,
+        marginBottom: 16,
         boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
       }}
     >
