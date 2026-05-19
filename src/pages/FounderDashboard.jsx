@@ -6,10 +6,11 @@ import AdminCodeManager from "@/components/admin/AdminCodeManager";
 import BetaTesterCodeManager from "@/components/admin/BetaTesterCodeManager";
 import AdminManagement from "@/components/rooted/AdminManagement";
 import ScalabilityOperationsPanel from "@/components/admin/founder/ScalabilityOperationsPanel";
+import ProjectProtectionChecklist from "@/components/admin/founder/ProjectProtectionChecklist";
 import {
   Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, Database, DollarSign,
   GraduationCap, KeyRound, Library, LockKeyhole, MailPlus, Search, Settings,
-  Shield, Star, UserCog, Users
+  Shield, ShieldCheck, Star, UserCog, Users
 } from "lucide-react";
 
 const DARK = "#5a3d28";
@@ -20,7 +21,7 @@ const CARD = "#ffffff";
 const MUTED = "#8b6f54";
 
 const sectionList = [
-  "analytics", "operations", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
+  "analytics", "operations", "protection", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
 ];
 
 function smallButton(label, onClick, tone = "green") {
@@ -236,6 +237,10 @@ export default function FounderDashboard() {
 
         <FounderSection title="Statewide Operations Architecture" subtitle="Production monitoring, scalability readiness, integrations, offline drafts, and audit infrastructure" icon={Activity} open={openSections.operations} onToggle={() => toggle("operations")}>
           <ScalabilityOperationsPanel />
+        </FounderSection>
+
+        <FounderSection title="Project Protection Checklist" subtitle="Ownership, backup, export readiness, and long-term platform protection" icon={ShieldCheck} open={openSections.protection} onToggle={() => toggle("protection")}>
+          <ProjectProtectionChecklist />
         </FounderSection>
 
         <FounderSection title="User Management" subtitle="Search users, view profiles, change roles, and deactivate accounts" icon={UserCog} open={openSections.users} onToggle={() => toggle("users")}>

@@ -1,0 +1,65 @@
+{
+  "name": "RootedProtectionChecklistItem",
+  "type": "object",
+  "properties": {
+    "item_key": {
+      "type": "string",
+      "description": "Stable key for the protection checklist item"
+    },
+    "title": {
+      "type": "string",
+      "description": "Checklist item title"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Not Started",
+        "In Progress",
+        "Complete",
+        "Needs Review"
+      ],
+      "default": "Not Started"
+    },
+    "last_updated_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Last date this checklist item was updated"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "storage_location": {
+      "type": "string"
+    },
+    "responsible_person": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_key",
+    "title",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
+}
