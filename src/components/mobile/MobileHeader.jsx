@@ -24,11 +24,11 @@ export default function MobileHeader({
         position: "sticky",
         top: 0,
         zIndex: 10,
-        marginBottom: 16,
+        marginBottom: 20,
         boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
       }}
     >
-      <div className="flex items-center gap-2 px-3 pb-3">
+      <div className="flex items-center gap-2 px-3 pb-4">
         {hasBack ? (
           backTo ? (
             <Link

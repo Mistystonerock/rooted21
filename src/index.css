@@ -261,6 +261,13 @@ input, textarea, select {
   text-shadow: none !important;
 }
 
+/* Logged-in mobile spacing below green page headers */
+[role="banner"] + main,
+[role="banner"] + section,
+[role="banner"] + div {
+  margin-top: 1rem;
+}
+
 /* Accessibility enhancements */
 :focus-visible {
   outline: 3px solid #c9973a !important;
