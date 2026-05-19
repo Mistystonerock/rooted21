@@ -50,6 +50,7 @@ export default function TopRightMenu({ user }) {
   const [fontSize, setFontSize] = useState(() => localStorage.getItem("rooted21_font_size") || "normal");
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem("rooted21_high_contrast") === "true");
   const [language, setLanguage] = useState(() => localStorage.getItem("rooted21_language") || "en");
+  const [rememberPhone, setRememberPhone] = useState(() => localStorage.getItem("rooted21_remember_this_phone") === "true");
   const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
@@ -68,6 +69,10 @@ export default function TopRightMenu({ user }) {
     document.documentElement.dir = selected.dir;
     localStorage.setItem("rooted21_language", language);
   }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem("rooted21_remember_this_phone", String(rememberPhone));
+  }, [rememberPhone]);
 
   useEffect(() => {
     if (!open) return;
@@ -219,6 +224,11 @@ export default function TopRightMenu({ user }) {
                   <span>Open</span>
                 </button>
               )}
+
+              <button type="button" onClick={() => setRememberPhone(value => !value)} className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-bold" style={{ background: rememberPhone ? C.darkGreen : C.offWhite, color: rememberPhone ? C.cream : C.darkGreen, border: `1px solid ${C.cream}` }}>
+                <span>Remember sign-in on this phone</span>
+                <span>{rememberPhone ? "On" : "Off"}</span>
+              </button>
 
               <LogoutButton variant="menu" style={{ width: "100%", justifyContent: "space-between", background: C.offWhite, border: `1px solid ${C.cream}`, color: "#b42318", boxShadow: "none" }} />
             </div>

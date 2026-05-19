@@ -133,7 +133,21 @@ function App() {
       clearTimeout(timer);
       ["click", "keydown", "touchstart", "mousemove", "rooted21-session-timeout-changed"].forEach(event => window.removeEventListener(event, resetSecureTimer));
     };
-  }, []);
+  }, [user, isPublicLandingPath]);
+
+  React.useEffect(() => {
+    if (!user || isPublicLandingPath) return;
+
+    const shouldRemember = localStorage.getItem("rooted21_remember_this_phone") === "true";
+    if (shouldRemember) return;
+
+    const logoutOnLeave = () => {
+      base44.auth.logout("/");
+    };
+
+    window.addEventListener("pagehide", logoutOnLeave);
+    return () => window.removeEventListener("pagehide", logoutOnLeave);
+  }, [user, isPublicLandingPath]);
 
   React.useEffect(() => {
     let mounted = true;
