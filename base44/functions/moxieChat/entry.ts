@@ -46,6 +46,55 @@ function formatResources(resources = []) {
   }));
 }
 
+function shortText(value = '', limit = 700) {
+  const text = String(value || '').replace(/\s+/g, ' ').trim();
+  return text.length > limit ? `${text.slice(0, limit)}...` : text;
+}
+
+function formatLifeStory(entries = []) {
+  return entries.slice(0, 12).map(entry => ({
+    child_name: entry.child_name,
+    event_type: entry.entry_type,
+    title: entry.title,
+    date: entry.date,
+    age_at_event: entry.age_at_event,
+    linked_milestone: entry.linked_milestone || '',
+    emotional_tone: entry.emotional_tone,
+    story_summary: shortText(entry.description, 450),
+    journal_summary: shortText(entry.journal_entry, 450),
+    sensitive: !!entry.is_sensitive
+  }));
+}
+
+function formatCaseHistory(cases = [], notes = []) {
+  return cases.slice(0, 8).map(caseFile => ({
+    child_name: caseFile.child_name,
+    case_type: caseFile.case_type,
+    status: caseFile.status,
+    case_number: caseFile.case_number || '',
+    next_milestone: caseFile.next_milestone || '',
+    next_milestone_date: caseFile.next_milestone_date || '',
+    key_issues: Array.isArray(caseFile.key_issues) ? caseFile.key_issues.slice(0, 6) : [],
+    description: shortText(caseFile.description, 500),
+    recent_notes: notes
+      .filter(note => note.case_id === caseFile.id)
+      .slice(0, 4)
+      .map(note => ({ type: note.note_type, title: note.title || '', body: shortText(note.body, 350) }))
+  }));
+}
+
+function formatMentalHealthDocuments(documents = []) {
+  return documents.slice(0, 8).map(doc => ({
+    title: doc.title,
+    category: doc.category,
+    child_name: doc.child_name || '',
+    permission_segment: doc.permission_segment || '',
+    part2_segmented: !!doc.part2_segmented,
+    summary: shortText(doc.analysis_summary || doc.description, 500),
+    extracted_requirements: Array.isArray(doc.extracted_requirements) ? doc.extracted_requirements.slice(0, 5) : []
+  }));
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -63,8 +112,15 @@ Deno.serve(async (req) => {
     const mode = requestedMode === 'founder_admin' && !['admin', 'founder'].includes(user.role) ? inferMode(modulePath) : requestedMode;
     const history = Array.isArray(payload.history) ? payload.history.slice(-6) : [];
     const userZip = user?.housing_resources_zip || user?.zip_code || '';
-    const familyBackgroundRecords = await base44.entities.FamilyBackground.filter({ owner_email: user.email }, '-updated_date', 1);
+    const [familyBackgroundRecords, lifeStoryEntries, caseFiles, caseNotes, secureDocuments] = await Promise.all([
+      base44.entities.FamilyBackground.filter({ owner_email: user.email }, '-updated_date', 1),
+      base44.entities.LifeStoryEntry.filter({ owner_email: user.email }, '-date', 40),
+      base44.entities.CaseFile.filter({ parent_email: user.email }, '-updated_date', 20),
+      base44.entities.CaseNote.filter({ case_owner_email: user.email }, '-created_date', 60),
+      base44.entities.SecureDocument.filter({ owner_email: user.email }, '-updated_date', 50)
+    ]);
     const familyBackground = familyBackgroundRecords[0]?.consent_to_use_with_moxie === true ? familyBackgroundRecords[0] : null;
+    const mentalHealthDocuments = secureDocuments.filter(doc => ['behavioral_health', 'medical', 'therapy', 'substance_use', 'safety_plan'].includes(doc.category) || ['behavioral_health', 'substance_use', 'safety', 'medical'].includes(doc.permission_segment));
 
     if (!message) {
       return Response.json({ error: 'Message is required' }, { status: 400 });
@@ -93,19 +149,24 @@ Deno.serve(async (req) => {
       system_instructions: `Moxie AI is Rooted 21's trauma-informed assistant system. Specialized mode: ${mode}. Be warm, calm, human, supportive, clear, plain-language, nonjudgmental, and encouraging. Use short paragraphs and step-by-step guidance. Never diagnose, provide legal advice, replace an attorney, therapist, caseworker, crisis service, or doctor, make custody recommendations, predict court outcomes, guarantee outcomes, tell users to ignore court orders, encourage unsafe contact with an abuser, expose private information, invent resources, or shame addiction, CPS involvement, poverty, trauma, incarceration, or parenting struggles. If the user mentions immediate danger, abuse happening now, suicidal thoughts, wanting to harm someone, domestic violence danger, child safety emergency, overdose, or medical emergency, say: “If you or someone else is in immediate danger, call 911 now.” Also show 988, Poison Control 1-800-222-1222, and National Domestic Violence Hotline 1-800-799-7233 or text START to 88788. For court/form topics, always include: “Moxie provides legal information and court-form guidance, not legal advice. For legal advice about your case, contact an attorney or the court clerk.” For school/IEP topics, do not claim to replace an education attorney or advocate. For resources, use only provided verified Rooted 21 resources, official government sites, trusted nonprofits, legal aid, crisis hotlines, or approved partner agencies. Response structure: warm validation, plain-language explanation, next steps, resource/checklist if needed, and safety/legal/medical disclaimer if needed.`
     };
 
-    let familyContext = '';
+    let privateFamilyContext = '';
     if (familyBackground) {
-      familyContext = `\nPrivate family background provided by the caregiver. Use this quietly to understand context and personalize support. Do not repeat sensitive details unless the user asks or it is needed for safety. Never diagnose from this history.\n${JSON.stringify({
-        family_storyline: familyBackground.family_storyline || '',
-        family_strengths: familyBackground.family_strengths || '',
-        mental_health_history: familyBackground.mental_health_history || '',
-        trauma_history: familyBackground.trauma_history || '',
-        child_context: familyBackground.child_context || '',
-        triggers_patterns: familyBackground.triggers_patterns || '',
-        calming_supports: familyBackground.calming_supports || '',
-        important_people: familyBackground.important_people || '',
-        cultural_context: familyBackground.cultural_context || '',
-        moxie_notes: familyBackground.moxie_notes || ''
+      privateFamilyContext = `\nPrivate family context provided by the caregiver and saved family records. Use this quietly to understand patterns, history, strengths, trauma, mental health context, and case background. Do not repeat sensitive details unless the user asks or it is needed for immediate safety. Never diagnose, label, or treat this history as proof; use it only to personalize support and ask better questions.\n${JSON.stringify({
+        caregiver_background: {
+          family_storyline: shortText(familyBackground.family_storyline, 900),
+          family_strengths: shortText(familyBackground.family_strengths, 700),
+          mental_health_history: shortText(familyBackground.mental_health_history, 900),
+          trauma_history: shortText(familyBackground.trauma_history, 900),
+          child_context: shortText(familyBackground.child_context, 900),
+          triggers_patterns: shortText(familyBackground.triggers_patterns, 700),
+          calming_supports: shortText(familyBackground.calming_supports, 700),
+          important_people: shortText(familyBackground.important_people, 500),
+          cultural_context: shortText(familyBackground.cultural_context, 500),
+          moxie_notes: shortText(familyBackground.moxie_notes, 700)
+        },
+        life_story_timeline: formatLifeStory(lifeStoryEntries),
+        case_history: formatCaseHistory(caseFiles, caseNotes),
+        mental_health_and_trauma_related_documents: formatMentalHealthDocuments(mentalHealthDocuments)
       })}`;
     }
 
@@ -116,7 +177,7 @@ Deno.serve(async (req) => {
       resourceContext = `\nAvailable Rooted 21 resource records. Do not invent resources. Use only these if giving specific local resources:\n${JSON.stringify(formatResources(activeResources))}`;
     }
 
-    const prompt = `${config.system_instructions}\n\nCurrent mode: ${config.mode}\nCurrent module: ${moduleLabel}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP/county when local resources are needed'}\nUser role: ${user.role || 'user'}\n${familyContext}\n${user.role === 'founder' ? 'Founder access: allowed for founder-only operational summaries if explicitly requested.' : 'Founder-only analytics/admin management: not allowed.'}\n${resourceContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI. Return JSON only.`;
+    const prompt = `${config.system_instructions}\n\nCurrent mode: ${config.mode}\nCurrent module: ${moduleLabel}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP/county when local resources are needed'}\nUser role: ${user.role || 'user'}\n${privateFamilyContext}\n${user.role === 'founder' ? 'Founder access: allowed for founder-only operational summaries if explicitly requested.' : 'Founder-only analytics/admin management: not allowed.'}\n${resourceContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI. Return JSON only.`;
 
     const reply = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
