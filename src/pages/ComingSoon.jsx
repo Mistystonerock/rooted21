@@ -62,11 +62,11 @@ export default function ComingSoon({ onBetaAccess }) {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden px-4 py-8" style={{ background: "radial-gradient(circle at top, #1b5a34 0%, #0d2818 45%, #06170d 100%)", color: "#F7E8C6" }}>
+    <div className="relative min-h-screen overflow-x-hidden overflow-y-auto px-4 pt-6 md:py-8" style={{ background: "radial-gradient(circle at top, #1b5a34 0%, #0d2818 45%, #06170d 100%)", color: "#F7E8C6", paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}>
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, #c9973a 0 2px, transparent 2px)", backgroundSize: "42px 42px" }} />
-      <button onClick={() => base44.auth.redirectToLogin("/founder-dashboard")} className="absolute bottom-2 right-3 z-20 text-[10px] underline opacity-60 hover:opacity-100" style={{ background: "transparent", border: "none", color: "#E6D8B8" }}>Admin Login</button>
+      <button onClick={() => base44.auth.redirectToLogin("/founder-dashboard")} className="fixed right-3 top-3 z-20 text-[10px] underline opacity-60 hover:opacity-100" style={{ background: "transparent", border: "none", color: "#E6D8B8" }}>Admin Login</button>
 
-      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-64px)] max-w-[620px] flex-col justify-center">
+      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-64px)] max-w-[620px] flex-col justify-start pt-8 md:justify-center md:pt-0">
         <div className="rounded-[32px] border p-6 shadow-2xl md:p-8" style={{ background: "rgba(13,40,24,0.86)", borderColor: "rgba(247,232,198,0.24)", backdropFilter: "blur(18px)" }}>
           <div className="text-center">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style={{ background: "rgba(247,232,198,0.12)", border: "1px solid rgba(247,232,198,0.25)" }}>
@@ -81,7 +81,7 @@ export default function ComingSoon({ onBetaAccess }) {
             <p className="mt-4 font-serif text-lg italic" style={{ color: "#c9973a" }}>Breaking cycles. One family at a time.</p>
           </div>
 
-          <div className="mt-6 grid grid-cols-4 gap-2">
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {countdownItems.map(([label, value]) => (
               <div key={label} className="rounded-2xl border px-2 py-3 text-center" style={{ background: "rgba(255,255,255,0.06)", borderColor: "rgba(247,232,198,0.16)" }}>
                 <p className="text-2xl font-black">{String(value).padStart(2, "0")}</p>
@@ -106,6 +106,21 @@ export default function ComingSoon({ onBetaAccess }) {
               <p className="text-center text-[11px]" style={{ color: "#E6D8B8" }}>We will never spam you. You will only hear from us when we launch.</p>
             </form>
           )}
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border p-3 text-left" style={{ background: "rgba(255,255,255,0.06)", borderColor: "rgba(247,232,198,0.16)" }}>
+              <p className="text-xs font-black" style={{ color: "#c9973a" }}>Founder Note</p>
+              <p className="mt-1 text-xs leading-5" style={{ color: "#E6D8B8" }}>Built by Misty for families navigating hard seasons with support, safety, and hope.</p>
+            </div>
+            <div className="rounded-2xl border p-3 text-left" style={{ background: "rgba(255,255,255,0.06)", borderColor: "rgba(247,232,198,0.16)" }}>
+              <p className="text-xs font-black" style={{ color: "#c9973a" }}>Tour Video</p>
+              <p className="mt-1 text-xs leading-5" style={{ color: "#E6D8B8" }}>A short app tour will be shared here as launch gets closer.</p>
+            </div>
+            <div className="rounded-2xl border p-3 text-left" style={{ background: "rgba(255,255,255,0.06)", borderColor: "rgba(247,232,198,0.16)" }}>
+              <p className="text-xs font-black" style={{ color: "#c9973a" }}>Support</p>
+              <p className="mt-1 text-xs leading-5" style={{ color: "#E6D8B8" }}>You can support Rooted 21 by joining the list and sharing it with families who need it.</p>
+            </div>
+          </div>
 
           <div className="mt-5 text-center">
             <button onClick={() => setShowBeta(v => !v)} className="text-xs underline" style={{ background: "transparent", border: "none", color: "#E6D8B8" }}>Have a beta access code? Click here.</button>

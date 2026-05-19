@@ -96,20 +96,23 @@ function StartupErrorScreen({ onRetry }) {
 
 function App() {
   const [user, setUser] = React.useState(null);
-  const [maintenanceMode, setMaintenanceMode] = React.useState(true);
+  const [comingSoonMode, setComingSoonMode] = React.useState(true);
+  const [maintenanceMode, setMaintenanceMode] = React.useState(false);
   const [bootLoading, setBootLoading] = React.useState(true);
   const [bootFailed, setBootFailed] = React.useState(false);
   const [welcomeSeen, setWelcomeSeen] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
+  const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
   const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
   const isPublicLandingPath = publicLandingPaths.includes(window.location.pathname);
-  const showComingSoon = maintenanceMode && !user && !isFounder && !isPublicLandingPath;
+  const showPublicComingSoon = comingSoonMode && !user && isPublicLandingPath;
+  const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
   const needsWelcome = user && !welcomeSeen && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
-    if (isPublicLandingPath) return;
+    if (!user || isPublicLandingPath) return;
 
     let timer;
     const resetSecureTimer = () => {
@@ -126,20 +129,21 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    if (isPublicLandingPath) {
-      setBootLoading(false);
-      return;
-    }
-
     let mounted = true;
 
     async function bootApp() {
       if (mounted) setBootFailed(false);
       try {
         const maintenanceResult = await withStartupTimeout(base44.functions.invoke("getMaintenanceMode", {}), 6000);
-        if (mounted) setMaintenanceMode(maintenanceResult.data.enabled !== false);
+        if (mounted) {
+          setComingSoonMode(maintenanceResult.data.comingSoonMode !== false);
+          setMaintenanceMode(maintenanceResult.data.maintenanceMode === true);
+        }
       } catch {
-        if (mounted) setMaintenanceMode(true);
+        if (mounted) {
+          setComingSoonMode(true);
+          setMaintenanceMode(false);
+        }
       }
 
       try {
@@ -182,7 +186,29 @@ function App() {
     return () => { mounted = false; };
   }, []);
 
-  if (isPublicLandingPath) {
+  if (bootLoading) {
+    return (
+      <ClientErrorBoundary>
+        <ThemeProvider>
+          <LoadingFallback />
+          <Toaster />
+        </ThemeProvider>
+      </ClientErrorBoundary>
+    );
+  }
+
+  if (showPublicComingSoon) {
+    return (
+      <ClientErrorBoundary>
+        <ThemeProvider>
+          <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
+          <Toaster />
+        </ThemeProvider>
+      </ClientErrorBoundary>
+    );
+  }
+
+  if (!user && isPublicLandingPath) {
     return (
       <ClientErrorBoundary>
         <ThemeProvider>
@@ -203,13 +229,11 @@ function App() {
         <ProfessionalGate user={user}>
         <SkipToContentLink />
         <OfflineStatusBanner />
-        {user && !showComingSoon && <TopRightMenu user={user} />}
+        {user && !showLoggedInMaintenance && <TopRightMenu user={user} />}
         <Router>
-          {bootLoading ? (
-            <LoadingFallback />
-          ) : bootFailed ? (
+          {bootFailed ? (
             <StartupErrorScreen onRetry={() => window.location.reload()} />
-          ) : showComingSoon ? (
+          ) : showLoggedInMaintenance ? (
             <ComingSoon onBetaAccess={() => setBetaAccess(true)} />
           ) : (
           <AnimatePresence mode="wait">
@@ -381,12 +405,12 @@ function App() {
             )}
           </AnimatePresence>
           )}
-          {!showComingSoon && <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />}
-          {!showComingSoon && user && !needsOnboarding && (
+          {!showLoggedInMaintenance && <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />}
+          {!showLoggedInMaintenance && user && !needsOnboarding && (
             <div className="h-28 md:h-8" aria-hidden="true" />
           )}
-          {!showComingSoon && user && !needsOnboarding && <MoxieChatWidget compact={!!needsWelcome} />}
-          {!showComingSoon && user && !needsOnboarding && <BottomNav />}
+          {!showLoggedInMaintenance && user && !needsOnboarding && <MoxieChatWidget compact={!!needsWelcome} />}
+          {!showLoggedInMaintenance && user && !needsOnboarding && <BottomNav />}
         </Router>
         </ProfessionalGate>
         <Toaster />

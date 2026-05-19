@@ -40,7 +40,8 @@ export default function FounderDashboard() {
   const [openSections, setOpenSections] = useState(() => Object.fromEntries(sectionList.map((s, i) => [s, i < 3])));
   const [allUsers, setAllUsers] = useState([]);
   const [waitlist, setWaitlist] = useState([]);
-  const [maintenanceMode, setMaintenanceMode] = useState(true);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [comingSoonMode, setComingSoonMode] = useState(true);
   const [surveys, setSurveys] = useState([]);
   const [betaCodes, setBetaCodes] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -107,12 +108,20 @@ export default function FounderDashboard() {
     setAnnouncements(announcementList);
     setResourceListings(resourceList);
     setResourceReports(reportList);
-    setMaintenanceMode(maintenanceRes.data.enabled !== false);
+    setMaintenanceMode(maintenanceRes.data.maintenanceMode === true || maintenanceRes.data.enabled === true);
+    setComingSoonMode(maintenanceRes.data.comingSoonMode !== false);
   }
 
   async function toggleMaintenanceMode(enabled) {
     const res = await base44.functions.invoke("setMaintenanceMode", { enabled });
-    setMaintenanceMode(res.data.enabled);
+    setMaintenanceMode(res.data.maintenanceMode === true || res.data.enabled === true);
+    setComingSoonMode(res.data.comingSoonMode !== false);
+  }
+
+  async function toggleComingSoonMode(enabled) {
+    const res = await base44.functions.invoke("setMaintenanceMode", { comingSoonMode: enabled });
+    setMaintenanceMode(res.data.maintenanceMode === true || res.data.enabled === true);
+    setComingSoonMode(res.data.comingSoonMode !== false);
   }
 
   const stats = useMemo(() => {
@@ -215,14 +224,25 @@ export default function FounderDashboard() {
         </div>
 
         <FounderSection title="Platform Analytics" subtitle="Real-time user counts, activity totals, and usage stats" icon={BarChart3} open={openSections.analytics} onToggle={() => toggle("analytics")}>
-          <div className="mb-4 flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between" style={{ background: "#faf6f1", borderColor: "#d7c7aa" }}>
-            <div>
-              <p className="font-bold">Maintenance Mode — Coming Soon Page Active</p>
-              <p className="text-xs mt-1" style={{ color: MUTED }}>{maintenanceMode ? "Everyone except the founder sees the coming soon page." : "The full app is live for everyone."}</p>
+          <div className="mb-4 grid gap-3 md:grid-cols-2">
+            <div className="flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between" style={{ background: "#faf6f1", borderColor: "#d7c7aa" }}>
+              <div>
+                <p className="font-bold">Coming Soon Mode</p>
+                <p className="text-xs mt-1" style={{ color: MUTED }}>{comingSoonMode ? "Public visitors see the Coming Soon signup page." : "Public visitors see the normal public landing page."}</p>
+              </div>
+              <button onClick={() => toggleComingSoonMode(!comingSoonMode)} className="relative h-9 w-16 rounded-full transition-colors" style={{ background: comingSoonMode ? GREEN : "#c7b89a", border: "none" }} aria-label="Toggle coming soon mode">
+                <span className="absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all" style={{ left: comingSoonMode ? 34 : 4 }} />
+              </button>
             </div>
-            <button onClick={() => toggleMaintenanceMode(!maintenanceMode)} className="relative h-9 w-16 rounded-full transition-colors" style={{ background: maintenanceMode ? GREEN : "#c7b89a", border: "none" }} aria-label="Toggle maintenance mode">
-              <span className="absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all" style={{ left: maintenanceMode ? 34 : 4 }} />
-            </button>
+            <div className="flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between" style={{ background: "#faf6f1", borderColor: "#d7c7aa" }}>
+              <div>
+                <p className="font-bold">Maintenance Mode</p>
+                <p className="text-xs mt-1" style={{ color: MUTED }}>{maintenanceMode ? "Non-admin logged-in users see the maintenance message." : "Logged-in users access the app normally."}</p>
+              </div>
+              <button onClick={() => toggleMaintenanceMode(!maintenanceMode)} className="relative h-9 w-16 rounded-full transition-colors" style={{ background: maintenanceMode ? GREEN : "#c7b89a", border: "none" }} aria-label="Toggle maintenance mode">
+                <span className="absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all" style={{ left: maintenanceMode ? 34 : 4 }} />
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <FounderMetric label="Users" value={allUsers.length} detail="Registered accounts" />
