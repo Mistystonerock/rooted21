@@ -14,6 +14,7 @@ const routes = {
   ChildProfile: lazy(() => import("@/pages/ChildProfile")),
   ProfessionalPortal: lazy(() => import("@/pages/ProfessionalPortal")),
   Resources: lazy(() => import("@/pages/Resources")),
+  FreeLowCostFamilyFun: lazy(() => import("@/pages/FreeLowCostFamilyFun")),
   SupportHub: lazy(() => import("@/pages/SupportHub")),
   BehaviorHub: lazy(() => import("@/pages/BehaviorHub")),
   SubstanceAbuseResources: lazy(() => import("@/pages/SubstanceAbuseResources")),

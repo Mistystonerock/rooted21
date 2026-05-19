@@ -11,6 +11,9 @@
     "resource_county": {
       "type": "string"
     },
+    "resource_category": {
+      "type": "string"
+    },
     "report_type": {
       "type": "string",
       "enum": [
@@ -20,6 +23,18 @@
         "website_not_working",
         "eligibility_changed",
         "safety_concern",
+        "wrong_cost",
+        "event_no_longer_available",
+        "wrong_website",
+        "wrong_phone_number",
+        "not_actually_free",
+        "closed_location",
+        "accessibility_concern",
+        "transportation_concern",
+        "unsafe_or_outdated_information",
+        "broken_link",
+        "changed_prices",
+        "seasonal_update_needed",
         "other"
       ],
       "default": "other"

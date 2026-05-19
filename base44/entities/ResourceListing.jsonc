@@ -15,6 +15,7 @@
         "domestic_violence",
         "legal_aid",
         "parenting",
+        "family_fun",
         "childcare",
         "education",
         "transportation",
@@ -33,6 +34,9 @@
     "county": {
       "type": "string"
     },
+    "city": {
+      "type": "string"
+    },
     "state": {
       "type": "string",
       "default": "OH"
@@ -43,8 +47,9 @@
     "organization_name": {
       "type": "string"
     },
-    "address": {
-      "type": "string"
+    "crisis_priority": {
+      "type": "boolean",
+      "default": false
     },
     "phone": {
       "type": "string"
@@ -52,40 +57,14 @@
     "website": {
       "type": "string"
     },
-    "hours_of_operation": {
+    "events_url": {
       "type": "string"
     },
-    "emergency_availability": {
-      "type": "boolean",
-      "default": false
-    },
-    "eligibility_notes": {
+    "adventure_pass_url": {
       "type": "string"
     },
-    "referral_instructions": {
+    "address": {
       "type": "string"
-    },
-    "languages_offered": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "default": []
-    },
-    "accessibility_notes": {
-      "type": "string"
-    },
-    "child_friendly": {
-      "type": "boolean",
-      "default": false
-    },
-    "pet_friendly": {
-      "type": "boolean",
-      "default": false
-    },
-    "crisis_priority": {
-      "type": "boolean",
-      "default": false
     },
     "description_en": {
       "type": "string"
@@ -95,6 +74,63 @@
     },
     "description_so": {
       "type": "string"
+    },
+    "eligibility_notes": {
+      "type": "string"
+    },
+    "activity_type": {
+      "type": "string"
+    },
+    "cost": {
+      "type": "string"
+    },
+    "what_to_bring": {
+      "type": "string"
+    },
+    "age_range": {
+      "type": "string"
+    },
+    "setting": {
+      "type": "string",
+      "enum": [
+        "indoor",
+        "outdoor",
+        "indoor_outdoor",
+        "varies"
+      ],
+      "default": "varies"
+    },
+    "accessibility_notes": {
+      "type": "string"
+    },
+    "transportation_notes": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "benefit_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_low_cost": {
+      "type": "boolean",
+      "default": false
+    },
+    "review_interval_days": {
+      "type": "number",
+      "default": 60
     },
     "verified_at": {
       "type": "string",
@@ -109,20 +145,9 @@
         "verified",
         "needs_review",
         "outdated",
-        "closed",
-        "emergency_only",
         "archived"
       ],
       "default": "needs_review"
-    },
-    "verification_notes": {
-      "type": "string"
-    },
-    "supporting_document_url": {
-      "type": "string"
-    },
-    "assigned_admin_email": {
-      "type": "string"
     },
     "last_review_reminder_at": {
       "type": "string",
@@ -137,6 +162,18 @@
     },
     "admin_notes": {
       "type": "string"
+    },
+    "seasonal": {
+      "type": "boolean",
+      "default": false
+    },
+    "broken_link_flag": {
+      "type": "boolean",
+      "default": false
+    },
+    "changed_price_flag": {
+      "type": "boolean",
+      "default": false
     }
   },
   "required": [

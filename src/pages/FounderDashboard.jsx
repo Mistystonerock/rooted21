@@ -7,6 +7,7 @@ import BetaTesterCodeManager from "@/components/admin/BetaTesterCodeManager";
 import AdminManagement from "@/components/rooted/AdminManagement";
 import ScalabilityOperationsPanel from "@/components/admin/founder/ScalabilityOperationsPanel";
 import ProjectProtectionChecklist from "@/components/admin/founder/ProjectProtectionChecklist";
+import FamilyFunVerificationQueue from "@/components/admin/founder/FamilyFunVerificationQueue";
 import {
   Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, Database, DollarSign,
   GraduationCap, KeyRound, Library, LockKeyhole, MailPlus, Search, Settings,
@@ -21,7 +22,7 @@ const CARD = "#ffffff";
 const MUTED = "#8b6f54";
 
 const sectionList = [
-  "analytics", "operations", "protection", "users", "resources", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
+  "analytics", "operations", "protection", "users", "resources", "familyFunVerification", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
 ];
 
 function smallButton(label, onClick, tone = "green") {
@@ -261,6 +262,10 @@ export default function FounderDashboard() {
             <FounderMetric label="Categories" value={new Set(resourceListings.map(r => r.category).filter(Boolean)).size} detail="Service types" />
           </div>
           <a href="/resource-management" className="inline-flex rounded-xl px-4 py-2 text-sm font-bold no-underline" style={{ background: DARK, color: "#fff" }}>Open Resource Management</a>
+        </FounderSection>
+
+        <FounderSection title="Free & Low-Cost Fun Verification Queue" subtitle="Family activity verification, user reports, broken links, price changes, and seasonal updates" icon={Database} open={openSections.familyFunVerification} onToggle={() => toggle("familyFunVerification")}>
+          <FamilyFunVerificationQueue resourceListings={resourceListings} resourceReports={resourceReports} onRefresh={loadFounderData} />
         </FounderSection>
 
         <FounderSection title="Access Code Management" subtitle="Generate beta/admin codes, review status, and revoke access" icon={KeyRound} open={openSections.codes} onToggle={() => toggle("codes")}>

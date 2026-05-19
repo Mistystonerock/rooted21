@@ -30,6 +30,18 @@ const RESOURCE_SECTIONS = [
     ],
   },
   {
+    title: "Family Stability",
+    items: [
+      { title: "Free & Low-Cost Family Fun", description: "Find safe, free, low-cost, and benefit-based parks, library events, trails, festivals, books, and family bonding activities.", url: "/free-low-cost-family-fun", emoji: "🌿", tag: "NEW" },
+    ],
+  },
+  {
+    title: "Parenting Support",
+    items: [
+      { title: "Family Bonding Activities", description: "Free and low-cost ideas for connection, regulation, learning, and positive family memories.", url: "/free-low-cost-family-fun", emoji: "💚" },
+    ],
+  },
+  {
     title: "Local & Specialized Resources",
     items: [
       { title: "Substance Abuse Resources", description: "Detox, rehab, medication-assisted treatment, and peer recovery resources near your ZIP code.", url: "/substance-abuse-resources", emoji: "🫶", tag: "NEW" },
