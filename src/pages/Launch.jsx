@@ -183,7 +183,14 @@ export default function Launch() {
 
         <section className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.1fr]" id="waitlist">
           <div className="rounded-[2rem] border p-6" style={{ background: CARD, borderColor: BORDER }}>
-            <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>Founder note</p>
+            <div className="overflow-hidden rounded-[1.5rem] border" style={{ borderColor: BORDER }}>
+              <img
+                src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/e6f63fe7a_IMG_7776.jpg"
+                alt="Rooted 21 founder"
+                className="h-72 w-full object-cover object-center"
+              />
+            </div>
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>Founder note</p>
             <h2 className="mt-3 font-serif text-2xl font-black" style={{ color: DARK }}>Built from lived experience and frontline family support.</h2>
             <p className="mt-4 text-sm leading-7" style={{ color: MUTED }}>
               Rooted 21 was created to help families feel less alone while navigating systems that can feel confusing, intimidating, and emotionally heavy. The goal is simple: help parents and caregivers get organized, prepare questions, document progress, and find supportive next steps without shame.
