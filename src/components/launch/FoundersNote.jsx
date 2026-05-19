@@ -1,3 +1,4 @@
+const PHOTO_IMAGE_URL = "https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/3dd49f0ca_C1F95A21-F875-4BB1-B648-916D41C51BAE.png";
 const NOTE_IMAGE_URL = "https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/d6b939714_IMG_7781.png";
 
 const CREAM = "#f5ede2";
@@ -15,6 +16,33 @@ export default function FoundersNote() {
         paddingBottom: "calc(120px + env(safe-area-inset-bottom))",
       }}
     >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 680,
+          margin: "0 auto 20px",
+          borderRadius: 28,
+          padding: "clamp(12px, 4vw, 22px)",
+          background: `linear-gradient(135deg, ${CREAM} 0%, ${GREEN_TINT} 100%)`,
+          border: `1.5px solid ${BORDER}`,
+          boxShadow: "0 14px 42px rgba(90,61,40,0.12)",
+        }}
+      >
+        <img
+          src={PHOTO_IMAGE_URL}
+          alt="Misty Stonerock, founder of Rooted 21"
+          style={{
+            display: "block",
+            width: "100%",
+            height: "auto",
+            objectFit: "contain",
+            objectPosition: "center center",
+            borderRadius: 20,
+            boxShadow: "0 8px 28px rgba(90,61,40,0.14)",
+          }}
+        />
+      </div>
+
       <div
         style={{
           width: "100%",
