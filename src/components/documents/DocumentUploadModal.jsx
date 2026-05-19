@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { X, Upload, Loader2, AlertCircle, CheckCircle2, Plus } from "lucide-react";
+import DocumentAnalysisPreview from "@/components/documents/DocumentAnalysisPreview";
 
 const CATEGORIES = [
   { value: "court_order", label: "Court Order", segment: "legal" },
@@ -56,8 +57,8 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
     setFile(selectedFile);
     setError("");
 
-    // Auto-parse if image or PDF
-    if (selectedFile.type.startsWith("image/")) {
+    // Auto-analyze PDFs and photos for dates, document type, and metadata
+    if (selectedFile.type.startsWith("image/") || selectedFile.type === "application/pdf") {
       await parseDocument(selectedFile);
     }
   }
@@ -75,6 +76,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
         const response = await base44.functions.invoke("analyzeDocumentScan", {
           file_base64: base64,
           file_type: fileToparse.type,
+          document_hint: fileToparse.name,
         });
 
         if (response.data?.success) {
@@ -164,6 +166,10 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           is_private: true,
           uploaded_at: new Date().toISOString(),
           version: 1,
+          scanner_source: !!parsedData,
+          analysis_summary: parsedData?.summary || parsedData?.description || "",
+          extracted_dates: parsedData?.key_dates || [],
+          extracted_requirements: parsedData?.requirements || [],
         });
 
         onDocumentUploaded(newDoc);
@@ -180,7 +186,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
       <div className="w-full rounded-t-3xl max-h-[90vh] overflow-y-auto p-5" style={{ background: C.offWhite }}>
         <div className="flex items-center justify-between mb-4 sticky top-0" style={{ background: C.offWhite, paddingBottom: 12 }}>
           <h2 className="font-serif font-bold text-lg" style={{ color: C.darkGreen }}>
-            Upload Document
+            Smart Document Upload
           </h2>
           <button onClick={onClose} className="p-1" style={{ background: "transparent", border: "none", cursor: "pointer" }}>
             <X size={20} color={C.mutedText} />
@@ -215,7 +221,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
                 <>
                   <Upload size={24} color={C.midGreen} />
                   <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Upload document</p>
-                  <p className="text-[10px]" style={{ color: C.mutedText }}>PDF, JPG, PNG (max 10MB)</p>
+                  <p className="text-[10px]" style={{ color: C.mutedText }}>PDF or photo · AI extracts dates and details</p>
                 </>
               )}
             </button>
@@ -232,18 +238,11 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           {parsing && (
             <div className="rounded-xl p-3 flex items-center gap-2" style={{ background: "#EEF4FF", border: `1px solid #B0C8F0` }}>
               <Loader2 size={14} color="#4A6FA5" className="animate-spin" />
-              <p className="text-xs" style={{ color: "#4A6FA5" }}>Analyzing document with AI...</p>
+              <p className="text-xs" style={{ color: "#4A6FA5" }}>Analyzing dates, document type, and metadata...</p>
             </div>
           )}
 
-          {parsedData && (
-            <div className="rounded-xl p-3 flex items-start gap-2" style={{ background: "#EAF4EA", border: `1px solid ${C.midGreen}` }}>
-              <CheckCircle2 size={14} color={C.midGreen} className="flex-shrink-0 mt-0.5" />
-              <p className="text-xs" style={{ color: C.darkGreen }}>
-                Document parsed! Review details below and make any edits.
-              </p>
-            </div>
-          )}
+          <DocumentAnalysisPreview parsedData={parsedData} />
 
           {/* Title */}
           <div>

@@ -39,6 +39,8 @@ export default function SecureDocumentRepository() {
 
   async function fetchDocuments() {
     setLoading(true);
+    const me = await base44.auth.me();
+    setUser(me);
     const docs = await base44.entities.SecureDocument.list("-created_date", 500);
     setDocuments(docs);
     
@@ -75,9 +77,17 @@ export default function SecureDocumentRepository() {
 
   // Filter documents
   const filtered = documents.filter(doc => {
-    const matchesSearch = !searchTerm || 
-      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const searchableText = [
+      doc.title,
+      doc.description,
+      doc.file_name,
+      doc.analysis_summary,
+      ...(doc.tags || []),
+      ...(doc.extracted_dates || []),
+      ...(doc.extracted_requirements || []),
+    ].filter(Boolean).join(" ").toLowerCase();
+
+    const matchesSearch = !searchTerm || searchableText.includes(searchTerm.toLowerCase());
     
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     
@@ -129,7 +139,7 @@ export default function SecureDocumentRepository() {
           <Search size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: C.mutedText }} />
           <input
             type="text"
-            placeholder="Search by title, description..."
+            placeholder="Search titles, dates, tags, requirements..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-3 py-2.5 rounded-xl text-sm border outline-none"

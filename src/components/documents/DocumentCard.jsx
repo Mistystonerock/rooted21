@@ -73,6 +73,16 @@ export default function DocumentCard({ doc, onShare, onDelete }) {
             </p>
           )}
 
+          {doc.extracted_dates?.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {doc.extracted_dates.slice(0, 3).map(date => (
+                <span key={date} className="px-1.5 py-0.5 rounded-full text-[9px] font-bold" style={{ background: "#EEF4FF", color: "#315E91" }}>
+                  📅 {date}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Tags */}
           {doc.tags && doc.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
