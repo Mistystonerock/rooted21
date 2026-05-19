@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Accessibility, DoorOpen, Eye, Languages, Menu, Shield, Type, Volume2, X } from "lucide-react";
+import { Accessibility, Bell, BookOpen, DoorOpen, Eye, FileCheck2, Home, Languages, LayoutDashboard, LifeBuoy, Menu, NotebookText, Settings, Shield, ShieldCheck, Sparkles, Type, Volume2, X } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { activateQuickExit } from "@/lib/survivorMode";
 import { C } from "@/lib/rooted-constants";
@@ -12,6 +11,39 @@ const LANGUAGES = [
 ];
 
 const FONT_SIZES = { normal: "16px", large: "18px", xlarge: "20px" };
+
+const ROUTES = new Set([
+  "/dashboard",
+  "/welcome-to-rooted21",
+  "/app-guide",
+  "/resources",
+  "/support-hub",
+  "/accessibility",
+  "/privacy-center",
+  "/founder-dashboard",
+  "/resource-management",
+]);
+
+const mainMenuItems = [
+  { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+  { label: "Welcome Page", path: "/welcome-to-rooted21", icon: Home },
+  { label: "Founder Note", icon: NotebookText },
+  { label: "App Guide", path: "/app-guide", icon: BookOpen },
+  { label: "Resources", path: "/resources", icon: LifeBuoy },
+  { label: "Support", path: "/support-hub", icon: Sparkles },
+  { label: "Settings", icon: Settings },
+  { label: "Accessibility", path: "/accessibility", icon: Accessibility },
+  { label: "Privacy & Safety", path: "/privacy-center", icon: ShieldCheck },
+];
+
+const adminMenuItems = [
+  { label: "Founder Dashboard", path: "/founder-dashboard", icon: Shield },
+  { label: "Resource Verification Queue", path: "/resource-management", icon: FileCheck2 },
+  { label: "Beta Tester Management", icon: Bell },
+  { label: "Content Management", icon: NotebookText },
+  { label: "Announcements", icon: Bell },
+  { label: "Project Protection Checklist", icon: ShieldCheck },
+];
 
 export default function TopRightMenu({ user }) {
   const [open, setOpen] = useState(false);
@@ -37,19 +69,66 @@ export default function TopRightMenu({ user }) {
     localStorage.setItem("rooted21_language", language);
   }, [language]);
 
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
   function readPageSummary() {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    if (speaking) {
+    try {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      if (speaking) {
+        setSpeaking(false);
+        return;
+      }
+      const mainText = document.querySelector("main")?.innerText || document.body.innerText || "Rooted 21";
+      const utterance = new SpeechSynthesisUtterance(mainText.slice(0, 1800));
+      utterance.lang = language;
+      utterance.onend = () => setSpeaking(false);
+      setSpeaking(true);
+      window.speechSynthesis.speak(utterance);
+    } catch {
       setSpeaking(false);
-      return;
     }
-    const mainText = document.querySelector("main")?.innerText || document.body.innerText;
-    const utterance = new SpeechSynthesisUtterance(mainText.slice(0, 1800));
-    utterance.lang = language;
-    utterance.onend = () => setSpeaking(false);
-    setSpeaking(true);
-    window.speechSynthesis.speak(utterance);
+  }
+
+  function goTo(path) {
+    try {
+      if (!path || !ROUTES.has(path)) return;
+      setOpen(false);
+      window.location.assign(path);
+    } catch {
+      setOpen(false);
+    }
+  }
+
+  function MenuItem({ item }) {
+    const Icon = item.icon;
+    const ready = item.path && ROUTES.has(item.path);
+
+    return (
+      <button
+        type="button"
+        onClick={() => ready && goTo(item.path)}
+        disabled={!ready}
+        className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-bold"
+        style={{
+          background: C.offWhite,
+          color: ready ? C.darkGreen : C.mutedText,
+          border: `1px solid ${C.cream}`,
+          cursor: ready ? "pointer" : "not-allowed",
+          opacity: ready ? 1 : 0.75,
+        }}
+      >
+        <span className="flex items-center gap-2"><Icon size={14} /> {item.label}</span>
+        <span className="text-[10px]">{ready ? "Open" : "Coming soon"}</span>
+      </button>
+    );
   }
 
   const showFounderLink = user?.role === "founder" || user?.role === "admin";
@@ -74,13 +153,30 @@ export default function TopRightMenu({ user }) {
         <section
           role="dialog"
           aria-label="App menu"
-          className="mt-2 w-[min(330px,calc(100vw-24px))] rounded-2xl p-4 shadow-xl"
-          style={{ background: C.white, border: `1.5px solid ${C.cream}` }}
+          className="mt-2 w-[min(350px,calc(100vw-24px))] rounded-2xl p-4 shadow-xl transition-all"
+          style={{ background: C.white, border: `1.5px solid ${C.cream}`, maxHeight: "calc(100vh - 9rem)", overflowY: "auto" }}
         >
-          <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Quick menu</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Rooted 21 menu</p>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close app menu" className="rounded-xl px-2 py-1" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
+              <X size={16} />
+            </button>
+          </div>
+
           <div className="mt-4 space-y-4">
-            <div>
-              <p className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Accessibility size={14} /> Accessibility</p>
+            <div className="space-y-2">
+              {mainMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
+            </div>
+
+            {showFounderLink && (
+              <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Shield size={14} /> Founder/Admin</p>
+                {adminMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
+              </div>
+            )}
+
+            <div className="border-t pt-3" style={{ borderColor: C.cream }}>
+              <p className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Accessibility size={14} /> Accessibility tools</p>
               <div className="space-y-3">
                 <label className="block">
                   <span className="mb-1 flex items-center gap-2 text-xs font-bold" style={{ color: C.darkGreen }}><Languages size={14} /> Language</span>
@@ -122,13 +218,6 @@ export default function TopRightMenu({ user }) {
                   <span className="flex items-center gap-2"><DoorOpen size={14} /> Quick exit</span>
                   <span>Open</span>
                 </button>
-              )}
-
-              {showFounderLink && (
-                <Link to="/founder-dashboard" onClick={() => setOpen(false)} className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-bold no-underline" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
-                  <span className="flex items-center gap-2"><Shield size={14} /> Founder dashboard</span>
-                  <span>Go</span>
-                </Link>
               )}
 
               <LogoutButton variant="menu" style={{ width: "100%", justifyContent: "space-between", background: C.offWhite, border: `1px solid ${C.cream}`, color: "#b42318", boxShadow: "none" }} />

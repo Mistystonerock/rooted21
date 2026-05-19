@@ -214,7 +214,10 @@ function App() {
           ) : (
           <AnimatePresence mode="wait">
             {needsWelcome ? (
-              <WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />
+              <>
+                <TopRightMenu user={user} />
+                <WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />
+              </>
             ) : needsOnboarding ? (
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
