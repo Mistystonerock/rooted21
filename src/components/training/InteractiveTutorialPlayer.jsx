@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { C } from "@/lib/rooted-constants";
-import { ArrowDown, ArrowRight, HelpCircle, Pause, Play, RotateCcw, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, HelpCircle, Home, Pause, Play, RotateCcw, Volume2, X } from "lucide-react";
 
 function getTargetRect(targetElementId) {
   if (!targetElementId) return null;
@@ -40,12 +40,14 @@ function humanizeSpeechText(text = "") {
 }
 
 export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplete }) {
+  const cardRef = useRef(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [speaking, setSpeaking] = useState(false);
   const [targetRect, setTargetRect] = useState(null);
   const [targetClicked, setTargetClicked] = useState(false);
-  const step = tutorial.steps[stepIndex];
-  const pct = useMemo(() => Math.round(((stepIndex + 1) / tutorial.steps.length) * 100), [stepIndex, tutorial.steps.length]);
+  const hasSteps = Array.isArray(tutorial?.steps) && tutorial.steps.length > 0;
+  const step = hasSteps ? tutorial.steps[stepIndex] : null;
+  const pct = useMemo(() => hasSteps ? Math.round(((stepIndex + 1) / tutorial.steps.length) * 100) : 0, [hasSteps, stepIndex, tutorial?.steps?.length]);
 
   useEffect(() => {
     setTargetClicked(false);
@@ -108,6 +110,25 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
     setSpeaking(false);
   }
 
+  function closeTutorial() {
+    stopVoice();
+    onClose?.();
+  }
+
+  function exitToDashboard() {
+    closeTutorial();
+    if (window.location.pathname !== "/dashboard") window.location.assign("/dashboard");
+  }
+
+  function goBack() {
+    stopVoice();
+    if (stepIndex > 0) {
+      setStepIndex(stepIndex - 1);
+    } else {
+      closeTutorial();
+    }
+  }
+
   function nextStep() {
     stopVoice();
     if (stepIndex < tutorial.steps.length - 1) {
@@ -123,6 +144,44 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
     setTimeout(() => speak(tutorial.steps[0]?.narration), 100);
   }
 
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") closeTutorial();
+    };
+    const closeOnOutsideClick = (event) => {
+      const targetElement = step?.targetElementId ? document.getElementById(step.targetElementId.replace("#", "")) : null;
+      if (cardRef.current?.contains(event.target) || targetElement?.contains(event.target)) return;
+      closeTutorial();
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("touchstart", closeOnOutsideClick, { passive: true });
+    document.body.style.overflow = "hidden";
+    setTimeout(() => cardRef.current?.querySelector("button, a")?.focus?.(), 0);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("touchstart", closeOnOutsideClick);
+      document.body.style.overflow = "";
+      window.speechSynthesis?.cancel();
+    };
+  }, []);
+
+  if (!hasSteps) {
+    return (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "rgba(17, 24, 18, 0.68)", backdropFilter: "blur(3px)" }}>
+        <div className="w-full max-w-md rounded-[28px] p-5 text-center shadow-2xl" style={{ background: "rgba(255,255,255,0.92)", border: `1px solid ${C.cream}` }}>
+          <p className="font-serif text-lg font-bold" style={{ color: C.darkGreen }}>Something went wrong loading this tutorial.</p>
+          <p className="mt-2 text-sm" style={{ color: C.mutedText }}>You can return to the dashboard.</p>
+          <button type="button" onClick={exitToDashboard} className="mt-4 w-full rounded-2xl py-3 text-sm font-bold" style={{ background: C.darkGreen, color: "#fff", border: "none" }}>
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const spotlight = targetRect ? {
     top: Math.max(targetRect.top - 10, 8),
     left: Math.max(targetRect.left - 10, 8),
@@ -133,7 +192,7 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
   const cardAbove = spotlight && cardTop > window.innerHeight - 300;
 
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none">
+    <div className="fixed inset-0 z-[70] pointer-events-none">
       <div className="absolute inset-0" style={{ background: "rgba(17, 24, 18, 0.68)", backdropFilter: "blur(3px)" }} />
 
       {spotlight && (
@@ -162,7 +221,7 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
         className="absolute left-3 right-3 pointer-events-auto"
         style={{ top: spotlight ? (cardAbove ? Math.max(12, spotlight.top - 250) : Math.min(window.innerHeight - 260, spotlight.top + spotlight.height + 42)) : "50%", transform: spotlight ? "none" : "translateY(-50%)" }}
       >
-        <div className="mx-auto max-w-[500px] rounded-[28px] overflow-hidden shadow-2xl" style={{ background: "rgba(255,255,255,0.88)", border: "1px solid rgba(255,255,255,0.76)", backdropFilter: "blur(18px)", boxShadow: "0 28px 80px rgba(0,0,0,0.28)" }}>
+        <div ref={cardRef} className="mx-auto max-w-[500px] rounded-[28px] overflow-hidden shadow-2xl" style={{ background: "rgba(255,255,255,0.88)", border: "1px solid rgba(255,255,255,0.76)", backdropFilter: "blur(18px)", boxShadow: "0 28px 80px rgba(0,0,0,0.28)" }}>
           <div className="p-4 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.cream}` }}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl" style={{ background: "rgba(107,157,110,0.14)" }}>{tutorial.emoji}</div>
@@ -171,7 +230,7 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
                 <h2 className="font-serif font-bold text-base leading-tight" style={{ color: C.darkGreen }}>{tutorial.title}</h2>
               </div>
             </div>
-            <button onClick={() => { stopVoice(); onClose?.(); }} className="rounded-full p-2" style={{ background: "rgba(255,255,255,0.8)", border: "none" }}><X size={18} color={C.mutedText} /></button>
+            <button type="button" onClick={closeTutorial} aria-label="Exit tutorial" className="rounded-full p-2" style={{ background: "rgba(255,255,255,0.8)", border: "none" }}><X size={18} color={C.mutedText} /></button>
           </div>
 
           <div className="px-4 pt-4">
@@ -199,7 +258,13 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
             </AnimatePresence>
 
             <div className="flex gap-2 flex-wrap">
-              <button onClick={speaking ? stopVoice : () => speak(step.narration)} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
+              <button type="button" onClick={goBack} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
+                <ArrowLeft size={13} /> Back
+              </button>
+              <button type="button" onClick={exitToDashboard} aria-label="Exit tutorial" className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
+                <Home size={13} /> Exit
+              </button>
+              <button type="button" onClick={speaking ? stopVoice : () => speak(step.narration)} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
                 {speaking ? <Pause size={13} /> : <Play size={13} />} {speaking ? "Pause" : "Play"}
               </button>
               <button onClick={replay} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>

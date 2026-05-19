@@ -105,7 +105,7 @@ export default function MoxieChatWidget({ compact = false }) {
   }
 
   return (
-    <section className="fixed right-3 z-50 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: compact ? "calc(env(safe-area-inset-bottom) + 10rem)" : "calc(env(safe-area-inset-bottom) + 8rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
+    <section className="fixed right-3 z-40 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: compact ? "calc(env(safe-area-inset-bottom) + 10rem)" : "calc(env(safe-area-inset-bottom) + 8rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
       <div className="flex items-center gap-3 p-3" style={{ background: C.darkGreen }}>
         <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.16)" }}>
           <Bot size={20} color="#fff" />

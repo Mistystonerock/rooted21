@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Accessibility, Bell, BookOpen, DoorOpen, Eye, FileCheck2, Home, Languages, LayoutDashboard, LifeBuoy, Menu, NotebookText, Settings, Shield, ShieldCheck, Sparkles, Type, Volume2, X } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { activateQuickExit } from "@/lib/survivorMode";
@@ -49,6 +49,8 @@ const adminMenuItems = [
 
 export default function TopRightMenu({ user }) {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
   const [fontSize, setFontSize] = useState(() => localStorage.getItem("rooted21_font_size") || "normal");
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem("rooted21_high_contrast") === "true");
   const [language, setLanguage] = useState(() => localStorage.getItem("rooted21_language") || "en");
@@ -78,11 +80,31 @@ export default function TopRightMenu({ user }) {
 
   useEffect(() => {
     if (!open) return;
-    const closeOnEscape = (event) => {
-      if (event.key === "Escape") setOpen(false);
+
+    const closeMenu = () => {
+      setOpen(false);
+      setTimeout(() => buttonRef.current?.focus?.(), 0);
     };
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") closeMenu();
+    };
+
+    const closeOnOutsideClick = (event) => {
+      if (menuRef.current?.contains(event.target) || buttonRef.current?.contains(event.target)) return;
+      closeMenu();
+    };
+
     window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("touchstart", closeOnOutsideClick, { passive: true });
+    setTimeout(() => menuRef.current?.querySelector("button, a, select")?.focus?.(), 0);
+
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("touchstart", closeOnOutsideClick);
+    };
   }, [open]);
 
   function readPageSummary() {
@@ -144,11 +166,12 @@ export default function TopRightMenu({ user }) {
   if (isFounderDashboard) return null;
 
   return (
-    <div className={`fixed right-3 z-50 ${isFounderDashboard ? "top-24" : "top-16"}`} style={{ paddingTop: "env(safe-area-inset-top)" }}>
+    <div className={`fixed right-3 z-[60] ${isFounderDashboard ? "top-24" : "top-16"}`} style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setOpen(value => !value)}
-        aria-label="Open app menu"
+        aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         className="rounded-full shadow-lg"
         style={{ width: 46, height: 46, background: C.darkGreen, color: C.cream, border: `2px solid ${C.gold}` }}
@@ -158,6 +181,7 @@ export default function TopRightMenu({ user }) {
 
       {open && (
         <section
+          ref={menuRef}
           role="dialog"
           aria-label="App menu"
           className="mt-2 w-[min(350px,calc(100vw-24px))] rounded-2xl p-4 shadow-xl transition-all"
@@ -165,7 +189,7 @@ export default function TopRightMenu({ user }) {
         >
           <div className="flex items-center justify-between gap-3">
             <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Rooted 21 menu</p>
-            <button type="button" onClick={() => setOpen(false)} aria-label="Close app menu" className="rounded-xl px-2 py-1" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-xl px-2 py-1" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
               <X size={16} />
             </button>
           </div>
