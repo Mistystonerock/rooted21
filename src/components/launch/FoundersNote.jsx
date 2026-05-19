@@ -42,38 +42,64 @@ export default function FoundersNote() {
           Rooted in lived experience
         </h2>
 
-        <div
-          style={{
-            width: "100%",
-            maxWidth: 360,
-            margin: "0 auto",
-            borderRadius: 24,
-            padding: 10,
-            background: `linear-gradient(135deg, ${CREAM} 0%, ${GREEN_TINT} 100%)`,
-            border: `1.5px solid ${BORDER}`,
-            boxShadow: "0 12px 32px rgba(90,61,40,0.12)",
-            boxSizing: "border-box",
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src={PHOTO_IMAGE_URL}
-            alt="Misty Stonerock, founder of Rooted 21"
+        <div className="grid w-full max-w-full gap-4 overflow-hidden md:grid-cols-[360px_1fr] md:items-center">
+          <div
             style={{
-              display: "block",
+              width: "100%",
+              maxWidth: 360,
+              margin: "0 auto",
+              borderRadius: 24,
+              padding: 10,
+              background: `linear-gradient(135deg, ${CREAM} 0%, ${GREEN_TINT} 100%)`,
+              border: `1.5px solid ${BORDER}`,
+              boxShadow: "0 12px 32px rgba(90,61,40,0.12)",
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={PHOTO_IMAGE_URL}
+              alt="Misty Stonerock, founder of Rooted 21"
+              style={{
+                display: "block",
+                width: "100%",
+                maxWidth: "100%",
+                height: "auto",
+                objectFit: "contain",
+                objectPosition: "center center",
+                borderRadius: 18,
+              }}
+            />
+          </div>
+
+          <div
+            style={{
               width: "100%",
               maxWidth: "100%",
-              height: "auto",
-              objectFit: "contain",
-              objectPosition: "center center",
-              borderRadius: 18,
+              borderRadius: 24,
+              padding: "18px 16px",
+              background: CREAM,
+              border: `1.5px solid ${BORDER}`,
+              boxSizing: "border-box",
             }}
-          />
+          >
+            <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.16em", color: GREEN, textTransform: "uppercase", marginBottom: 8 }}>
+              Founder’s Note
+            </p>
+            <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.35rem", fontWeight: 900, lineHeight: 1.25, color: DARK, marginBottom: 10 }}>
+              Rooted 21 was created for families who deserve support without shame.
+            </p>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: MUTED, fontWeight: 700, marginBottom: 10 }}>
+              This platform was built from lived experience, compassion, and the belief that parents, caregivers, children, and support teams need calm tools, clear next steps, and real connection during hard seasons.
+            </p>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: MUTED, fontWeight: 700 }}>
+              Rooted 21 is here to help families feel seen, organized, supported, and less alone — one step, one resource, and one moment at a time.
+            </p>
+            <p style={{ marginTop: 14, fontSize: 12, fontWeight: 900, color: DARK }}>
+              — Misty Stonerock, Founder
+            </p>
+          </div>
         </div>
-
-        <p style={{ maxWidth: 560, margin: "14px auto 0", textAlign: "center", fontSize: 12, lineHeight: 1.7, color: MUTED, fontWeight: 700 }}>
-          Rooted 21 was built from lived experience, compassion, and a belief that families deserve support without shame.
-        </p>
       </div>
     </section>
   );
