@@ -1,37 +1,49 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const CRISIS_TERMS = [
-  'suicide', 'kill myself', 'kill my child', 'hurt myself', 'hurt my child',
-  'self harm', 'self-harm', 'overdose', 'unsafe right now', 'in danger',
-  'abuse happening', 'emergency', 'weapon'
+  'suicide', 'kill myself', 'kill my child', 'hurt myself', 'hurt my child', 'hurt someone',
+  'self harm', 'self-harm', 'overdose', 'unsafe right now', 'in danger', 'immediate danger',
+  'abuse happening', 'emergency', 'weapon', 'domestic violence', 'child is not safe'
 ];
 
-const MODULE_GUIDANCE = {
-  '/daily-checkin': 'Daily check-ins: mood, behavior notes, parent calm, child regulation, photos/documents when helpful.',
-  '/behavior-logs': 'Behavior logging: meltdowns, successes, school issues, mood changes, triggers, response, and outcome.',
-  '/case-plan-checklist': 'Case-plan progress: court tasks, parenting classes, therapy, drug tests, certificates, deadlines, and reminders.',
-  '/visitation-tracker': 'Visitation logging: start/end visit, attendance, activities, how the visit went, notes, photos, time, and location.',
-  '/court-preparation-checklist': 'Court prep: hearing countdowns, documentation, case-plan progress, and what to bring.',
-  '/court-ready-export': 'Court-ready export: time-stamped logs, authentication codes, and printable packets for court or attorneys.',
-  '/certified-legal-export': 'Certified legal export: authentication-coded communication and document packets.',
-  '/documents': 'Document vault: IEPs, 504 plans, court orders, evaluations, discipline notices, medical and school records.',
-  '/education-hub': 'Education support: IEP/504 meeting prep, special education questions, and document organization.',
-  '/medication-manager': 'Medication tracking: appointments, doses, side effects, symptoms, and mood patterns.',
-  '/family-safety-crisis-plan': 'Safety planning: warning signs, coping tools, safe contacts, local crisis support, and 988.',
-  '/peer-support': 'Peer support: parent-partner encouragement, Ohio START peer mentors, OhioKAN navigators, and safe connection.',
-  '/housing-resources': 'Housing, benefits, and financial help: Section 8 inspections, recertification reminders, SNAP, WIC, TANF, Medicaid, childcare subsidies, fair-housing scripts, shelters, rapid rehousing, and zip-code based local help.',
-  '/rights-card': 'Legal and rights education: Ohio Resource Family Bill of Rights, missing child information tracking, mandated-reporter hotline 1-855-OH-CHILD, and Ohio Legal Help self-help forms and clinics.',
-  '/court-rights-education': 'Legal aid and self-help: Ohio Legal Help, court forms, custody modification education, protection-order information, legal clinics, and rights documentation.'
+const MODE_PATHS = {
+  crisis_sos: ['/sos', '/emergency-toolbox', '/family-safety-crisis-plan', '/safe-screen'],
+  court_form_guidance: ['/legal', '/court', '/case-plan', '/documents', '/form-helper', '/protective-order', '/rights-card'],
+  resource_finder: ['/resources', '/housing', '/local', '/community-resources', '/resource-matcher'],
+  school_iep_support: ['/education', '/school', '/iep', '/child-profile'],
+  founder_admin: ['/founder', '/resource-management', '/app-docs'],
 };
 
-function getModuleContext(path = '') {
-  const match = Object.keys(MODULE_GUIDANCE).find(key => path.startsWith(key));
-  return match ? MODULE_GUIDANCE[match] : 'General Rooted 21 support: help the user find the right tool, log information, prepare documents, and stay safe.';
+function inferMode(path = '') {
+  for (const [mode, paths] of Object.entries(MODE_PATHS)) {
+    if (paths.some(item => path.startsWith(item))) return mode;
+  }
+  return 'parenting_support';
 }
 
 function hasCrisisLanguage(text = '') {
   const lower = text.toLowerCase();
   return CRISIS_TERMS.some(term => lower.includes(term));
+}
+
+function resourceIsOutdated(resource) {
+  if (!resource.verified_at) return true;
+  return Date.now() - new Date(resource.verified_at).getTime() > 60 * 24 * 60 * 60 * 1000;
+}
+
+function formatResources(resources = []) {
+  return resources.slice(0, 8).map(resource => ({
+    name: resource.name,
+    category: resource.category,
+    county_state: `${resource.county || 'Statewide'}, ${resource.state || 'OH'}`,
+    phone: resource.phone || 'Call or visit website to confirm',
+    website: resource.website || resource.source_url || '',
+    last_verified_date: resource.verified_at || 'Needs verification',
+    emergency_availability: resource.crisis_priority ? 'May support urgent needs' : 'Call first to confirm availability',
+    verification_status: resource.verification_status,
+    may_need_verification: resourceIsOutdated(resource),
+    next_step: resource.phone ? 'Call before going.' : 'Visit the website or call a local hotline for the next step.',
+  }));
 }
 
 Deno.serve(async (req) => {
@@ -46,7 +58,9 @@ Deno.serve(async (req) => {
     const payload = await req.json();
     const message = String(payload.message || '').trim();
     const modulePath = String(payload.modulePath || '');
-    const moduleLabel = String(payload.moduleLabel || 'this part of the app');
+    const moduleLabel = String(payload.moduleLabel || 'Rooted 21');
+    const requestedMode = String(payload.mode || inferMode(modulePath));
+    const mode = requestedMode === 'founder_admin' && !['admin', 'founder'].includes(user.role) ? inferMode(modulePath) : requestedMode;
     const history = Array.isArray(payload.history) ? payload.history.slice(-6) : [];
     const userZip = user?.housing_resources_zip || user?.zip_code || '';
 
@@ -54,16 +68,37 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    if (hasCrisisLanguage(message)) {
+    if (requestedMode === 'founder_admin' && !['admin', 'founder'].includes(user.role)) {
       return Response.json({
-        reply: "I’m really glad you said something. If you are in immediate danger call 911 or emergency services. If you might hurt yourself or feel like you cannot stay safe, call or text 988 now. You can also contact your local mobile-crisis team.\n\nTake one small step: move away from weapons, medicine, or anything dangerous. If you can, go near another safe adult and say: “I need help staying safe right now.”\n\nAfter safety is handled, I can help you write down what happened or open your safety plan. You are not alone.",
-        crisis: true,
-        suggestions: ['Open my safety plan', 'Help me find crisis contacts', 'What should I write down after this?']
+        reply: 'I can help with general Rooted 21 support, but Founder/Admin Moxie is only available to authorized admin roles.',
+        crisis: false,
+        mode,
+        suggestions: ['Help me find the right tool', 'Show safety resources']
       });
     }
 
-    const moduleContext = getModuleContext(modulePath);
-    const prompt = `You are Moxie, the AI helper inside Rooted 21.\n\nCore safety boundaries:\n- NEVER diagnose a user, child, caregiver, co-parent, or family member.\n- NEVER provide legal advice or tell someone what legal action to take.\n- NEVER replace therapists, doctors, crisis workers, attorneys, caseworkers, or emergency services.\n- NEVER make custody recommendations, predict custody outcomes, or suggest who should have custody.\n- NEVER present yourself as a professional clinician, attorney, crisis worker, or court expert.\n\nWhat Moxie MAY do:\n- Educate in plain language.\n- Organize information, timelines, notes, and documents.\n- Encourage users with calm, supportive wording.\n- Explain systems and common process steps without giving legal advice.\n- Help users prepare questions, forms, logs, and document packets.\n- Provide coping tools and grounding steps.\n- Guide users toward appropriate support people and emergency resources.\n\nRequired safety sentence:\n- Always include this exact sentence in every reply: “If you are in immediate danger call 911 or emergency services.”\n\nTone rules:\n- Trauma-informed, warm, calm, emotionally safe, and nonjudgmental.\n- Write at about a 6th-grade reading level. Use short sentences.\n- Be culturally responsive and respectful of family voice, kinship care, foster care, recovery, and court stress.\n- Use phrases like “you may want to ask,” “a support person may help,” and “one next step could be.”\n- If legal, medical, therapy, crisis, or custody topics appear, gently redirect to the right professional while still helping organize information.\n- If danger, abuse, self-harm, overdose, violence, or immediate safety risk appears, tell the user to call 911 first and call/text 988 when mental-health crisis support is needed.\n- Give practical next steps inside Rooted 21.\n- Mention privacy gently when helpful: logs are time-stamped and can support documentation.\n- Keep replies under 180 words unless the user asks for more.\n\nCurrent module: ${moduleLabel}\nModule context: ${moduleContext}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP when local resources are needed'}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie. End with 2 short suggested next actions.`;
+    if (hasCrisisLanguage(message)) {
+      return Response.json({
+        reply: 'If you or someone else is in immediate danger, call 911 now.\n\nYou can also call or text 988 for the Suicide & Crisis Lifeline, call 1-800-222-1222 for Poison Control, or contact the National Domestic Violence Hotline at 1-800-799-7233 or text START to 88788.\n\nRight now, move away from weapons, medicine, or anything dangerous if you can. Go near a safe adult or public place and say: “I need help staying safe right now.”',
+        crisis: true,
+        mode: 'crisis_sos',
+        suggestions: ['Open my safety plan', 'Help me find crisis contacts', 'Ground me for 60 seconds']
+      });
+    }
+
+    const config = {
+      mode,
+      system_instructions: `Moxie AI is Rooted 21's trauma-informed assistant system. Specialized mode: ${mode}. Be warm, calm, human, supportive, clear, plain-language, nonjudgmental, and encouraging. Use short paragraphs and step-by-step guidance. Never diagnose, provide legal advice, replace an attorney, therapist, caseworker, crisis service, or doctor, make custody recommendations, predict court outcomes, guarantee outcomes, tell users to ignore court orders, encourage unsafe contact with an abuser, expose private information, invent resources, or shame addiction, CPS involvement, poverty, trauma, incarceration, or parenting struggles. If the user mentions immediate danger, abuse happening now, suicidal thoughts, wanting to harm someone, domestic violence danger, child safety emergency, overdose, or medical emergency, say: “If you or someone else is in immediate danger, call 911 now.” Also show 988, Poison Control 1-800-222-1222, and National Domestic Violence Hotline 1-800-799-7233 or text START to 88788. For court/form topics, always include: “Moxie provides legal information and court-form guidance, not legal advice. For legal advice about your case, contact an attorney or the court clerk.” For school/IEP topics, do not claim to replace an education attorney or advocate. For resources, use only provided verified Rooted 21 resources, official government sites, trusted nonprofits, legal aid, crisis hotlines, or approved partner agencies. Response structure: warm validation, plain-language explanation, next steps, resource/checklist if needed, and safety/legal/medical disclaimer if needed.`
+    };
+
+    let resourceContext = '';
+    if (mode === 'resource_finder') {
+      const resources = await base44.entities.ResourceListing.list('-verified_at', 80);
+      const activeResources = resources.filter(resource => resource.verification_status !== 'archived');
+      resourceContext = `\nAvailable Rooted 21 resource records. Do not invent resources. Use only these if giving specific local resources:\n${JSON.stringify(formatResources(activeResources))}`;
+    }
+
+    const prompt = `${config.system_instructions}\n\nCurrent mode: ${config.mode}\nCurrent module: ${moduleLabel}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP/county when local resources are needed'}\nUser role: ${user.role || 'user'}\n${user.role === 'founder' ? 'Founder access: allowed for founder-only operational summaries if explicitly requested.' : 'Founder-only analytics/admin management: not allowed.'}\n${resourceContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI. Return JSON only.`;
 
     const reply = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
@@ -80,6 +115,7 @@ Deno.serve(async (req) => {
     return Response.json({
       reply: reply.reply,
       crisis: false,
+      mode: config.mode,
       suggestions: Array.isArray(reply.suggestions) ? reply.suggestions.slice(0, 3) : []
     });
   } catch (error) {

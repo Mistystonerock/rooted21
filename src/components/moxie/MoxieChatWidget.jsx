@@ -1,8 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Bot, LifeBuoy, Loader2, Send, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import MoxieModeSelector from "@/components/moxie/MoxieModeSelector";
+import { MOXIE_MODES, inferMoxieMode } from "@/lib/moxie-ai-config";
 
 const MODULE_LABELS = {
   "/daily-checkin": "Daily Check-in",
@@ -27,27 +29,40 @@ function currentModuleLabel(pathname) {
   return key ? MODULE_LABELS[key] : "Rooted 21";
 }
 
-function openingPrompt(label) {
-  if (label === "Daily Check-in") return "Need help logging how today went?";
-  if (label === "Case-plan Checklist") return "Want help sorting your next case-plan step?";
-  if (label === "Visitation Tracker") return "I can help you record this visit step by step.";
-  if (label === "Medication Manager") return "I can help you note doses, side effects, or mood changes.";
-  if (label === "Safety Plan") return "I can help you make a calm safety plan.";
-  if (label === "Housing & Benefits") return "I can help screen benefits, track recertification dates, or find local housing help.";
-  if (label === "Legal Rights") return "I can help explain rights, find legal aid, or organize mandated-report notes.";
-  return "Hi, I’m Moxie. I can help you find your next step.";
+function openingPrompt(mode) {
+  if (mode === "crisis_sos") return "I’m here with you. If there is immediate danger, call 911 now. Want a grounding step or crisis resource?";
+  if (mode === "court_form_guidance") return "I can help organize court questions, forms, and documents. I give legal information, not legal advice.";
+  if (mode === "resource_finder") return "I can help look for trusted resources and remind you when something may need verification.";
+  if (mode === "school_iep_support") return "I can help prepare school questions, IEP/504 notes, or a calm teacher message.";
+  if (mode === "founder_admin") return "Founder/Admin Moxie is ready for operations, resource review, and admin support.";
+  return "Hi, I’m Moxie AI. I can help you find the next calm step.";
 }
 
 export default function MoxieChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [user, setUser] = useState(null);
   const modulePath = window.location.pathname;
   const moduleLabel = useMemo(() => currentModuleLabel(modulePath), [modulePath]);
+  const [mode, setMode] = useState(() => inferMoxieMode(modulePath));
   const isFounderDashboard = modulePath === "/founder-dashboard";
   const [messages, setMessages] = useState([
-    { role: "assistant", content: openingPrompt(moduleLabel), suggestions: ["What should I do next?", "Help me document this", "Show crisis resources"] }
+    { role: "assistant", content: openingPrompt(inferMoxieMode(modulePath)), suggestions: ["What should I do next?", "Help me document this", "Show crisis resources"] }
   ]);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  function changeMode(nextMode) {
+    setMode(nextMode);
+    setMessages(prev => [...prev, {
+      role: "assistant",
+      content: openingPrompt(nextMode),
+      suggestions: ["What should I do next?", "Help me prepare", "Show safety resources"]
+    }]);
+  }
 
   async function sendMessage(text = input) {
     const clean = text.trim();
@@ -62,6 +77,7 @@ export default function MoxieChatWidget() {
       message: clean,
       modulePath,
       moduleLabel,
+      mode,
       history: nextMessages.map(({ role, content }) => ({ role, content }))
     });
 
@@ -80,9 +96,9 @@ export default function MoxieChatWidget() {
         onClick={() => setOpen(true)}
         className="fixed z-40 rounded-full px-4 py-3 shadow-xl"
         style={{ right: isFounderDashboard ? "5rem" : "1rem", bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
-        aria-label="Open Moxie chat"
+        aria-label="Open Moxie AI chat"
       >
-        <Bot size={18} className="mr-2" /> Ask Moxie
+        <Bot size={18} className="mr-2" /> Ask Moxie AI
       </button>
     );
   }
@@ -94,13 +110,15 @@ export default function MoxieChatWidget() {
           <Bot size={20} color="#fff" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-black" style={{ color: C.cream }}>Moxie</p>
-          <p className="truncate text-[11px]" style={{ color: C.cream }}>Calm support, not legal or clinical advice</p>
+          <p className="text-sm font-black" style={{ color: C.cream }}>Moxie AI</p>
+          <p className="truncate text-[11px]" style={{ color: C.cream }}>{MOXIE_MODES[mode]?.label || "Trauma-informed support"}</p>
         </div>
-        <button onClick={() => setOpen(false)} className="rounded-xl" style={{ color: C.cream, background: "transparent", border: "none" }} aria-label="Close Moxie chat">
+        <button onClick={() => setOpen(false)} className="rounded-xl" style={{ color: C.cream, background: "transparent", border: "none" }} aria-label="Close Moxie AI chat">
           <X size={18} />
         </button>
       </div>
+
+      <MoxieModeSelector mode={mode} onChange={changeMode} user={user} />
 
       <div className="max-h-[min(420px,55vh)] space-y-3 overflow-y-auto p-3" style={{ background: C.offWhite }}>
         <a href="tel:988" className="flex items-center gap-2 rounded-2xl p-3 text-xs font-bold no-underline" style={{ background: "#FEF3EE", color: "#9A3412", border: "1px solid #F4C9B8" }}>
@@ -130,7 +148,7 @@ export default function MoxieChatWidget() {
           <div className="flex justify-start">
             <div className="flex items-center gap-2 rounded-2xl px-3 py-2" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
               <Loader2 size={14} className="animate-spin" color={C.midGreen} />
-              <span className="text-xs" style={{ color: C.mutedText }}>Moxie is thinking…</span>
+              <span className="text-xs" style={{ color: C.mutedText }}>Moxie AI is thinking…</span>
             </div>
           </div>
         )}
@@ -141,7 +159,7 @@ export default function MoxieChatWidget() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === "Enter" && sendMessage()}
-          placeholder="Ask Moxie..."
+          placeholder={`Ask ${MOXIE_MODES[mode]?.shortLabel || "Moxie"} Moxie...`}
           className="min-w-0 flex-1 rounded-xl border px-3 py-2 text-sm outline-none"
           style={{ borderColor: C.cream }}
         />
