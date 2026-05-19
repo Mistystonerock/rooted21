@@ -128,10 +128,10 @@ export default function Launch() {
           </div>
         </div>
         <button
-          onClick={() => window.location.assign("/login?next=/welcome")}
+          onClick={() => window.location.assign("/login")}
           style={{ background: CARD, border: `1.5px solid ${GREEN}`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
         >
-          Already have access? Log in
+          Already have access? Log In
         </button>
       </div>
 
@@ -269,7 +269,7 @@ export default function Launch() {
         {/* ── FOOTER ACTIONS ── */}
         <div id="footer-actions" style={{ background: CARD, borderRadius: 16, overflow: "hidden", marginBottom: 16, border: `1px solid ${BORDER}`, scrollMarginTop: 90 }}>
           {[
-            { label: "Sign In", action: () => window.location.assign("/login?next=/welcome") },
+            { label: "Sign In", action: () => window.location.assign("/login") },
             { label: "Redeem Access Code", action: () => setShowCodeModal(true) },
             { label: "Admin Access", href: "/founder-access" },
           ].map((btn, i) => (

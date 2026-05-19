@@ -287,20 +287,8 @@ function App() {
   }
 
   if (showSignInRequired) {
-    return (
-      <ClientErrorBoundary>
-        <ThemeProvider>
-          <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
-            <div className="mx-auto max-w-md rounded-3xl border border-rooted-cream bg-white p-6 shadow-sm">
-              <h1 className="text-xl font-bold text-rooted-dark-green">Sign in required</h1>
-              <p className="mt-2 text-sm text-muted-foreground">Please sign in to view family, child, or legal information.</p>
-              <button className="mt-4 rounded-xl bg-primary px-4 py-2 font-bold text-primary-foreground" onClick={() => base44.auth.redirectToLogin(currentPath)}>Sign in</button>
-            </div>
-          </div>
-          <Toaster />
-        </ThemeProvider>
-      </ClientErrorBoundary>
-    );
+    window.location.replace("/login");
+    return null;
   }
 
   return (
