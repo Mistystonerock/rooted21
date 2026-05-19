@@ -104,10 +104,10 @@ export default function PeerSupport() {
     <div className="min-h-screen" style={{ background: C.offWhite }}>
       <MobileHeader title="Parent Community" subtitle="You are not alone" backTo="/dashboard" />
 
-      <div className="max-w-[540px] mx-auto">
+      <div className="max-w-[540px] mx-auto pb-32">
 
         {/* Tabs */}
-        <div className="flex border-b px-4 pt-3" style={{ background: C.white, borderColor: C.cream }}>
+        <div className="flex border-b px-4 pt-4 overflow-x-auto" style={{ background: C.white, borderColor: C.cream }}>
           {[
             { id: "feed", label: "Community Feed", icon: <Users size={14} /> },
             { id: "match", label: "Find a Peer", icon: <Sparkles size={14} /> },
@@ -126,7 +126,7 @@ export default function PeerSupport() {
         </div>
 
         {activeTab === "feed" && (
-          <div className="px-4 py-4 space-y-4">
+          <div className="px-4 pt-5 pb-10 space-y-5">
 
             {/* Streak badge */}
             {streak > 0 && (
@@ -233,14 +233,16 @@ export default function PeerSupport() {
         )}
 
         {activeTab === "match" && user && (
+        <div className="pb-8">
           <PeerMatchPanel user={user} />
+        </div>
         )}
 
         {activeTab === "connections" && user && (
           <PeerConnectionModule user={user} />
         )}
 
-        <div className="pb-8" />
+        <div className="pb-16" />
       </div>
     </div>
   );

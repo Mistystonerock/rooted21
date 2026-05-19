@@ -76,7 +76,7 @@ export default function PeerMatchPanel({ user }) {
   };
 
   return (
-    <div className="px-4 py-4 space-y-4">
+    <div className="px-4 pt-5 pb-24 space-y-5">
 
       {/* Intro */}
       <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
@@ -95,7 +95,7 @@ export default function PeerMatchPanel({ user }) {
 
         <div>
           <p className="text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>I AM A...</p>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2.5">
             {FAMILY_TYPES.map(t => (
               <button key={t} onClick={() => setFamilyType(t)}
                 className="px-3 py-1.5 rounded-full text-xs font-bold capitalize"
@@ -113,7 +113,7 @@ export default function PeerMatchPanel({ user }) {
 
         <div>
           <p className="text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>MY CHILD'S NEEDS (select all that apply)</p>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2.5">
             {NEEDS.map(n => (
               <button key={n} onClick={() =>
                 setChildNeeds(prev => prev.includes(n) ? prev.filter(x => x !== n) : [...prev, n])}
@@ -161,7 +161,7 @@ export default function PeerMatchPanel({ user }) {
       {matches.map((match, i) => {
         const topic = TOPIC_LABELS[match.topic] || { label: match.topic, emoji: "💬" };
         return (
-          <div key={i} className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <div key={i} className="rounded-2xl p-4 mb-3" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xl">{topic.emoji}</span>
               <div>

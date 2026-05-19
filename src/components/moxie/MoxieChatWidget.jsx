@@ -44,6 +44,7 @@ export default function MoxieChatWidget() {
   const [sending, setSending] = useState(false);
   const modulePath = window.location.pathname;
   const moduleLabel = useMemo(() => currentModuleLabel(modulePath), [modulePath]);
+  const isFounderDashboard = modulePath === "/founder-dashboard";
   const [messages, setMessages] = useState([
     { role: "assistant", content: openingPrompt(moduleLabel), suggestions: ["What should I do next?", "Help me document this", "Show crisis resources"] }
   ]);
@@ -77,8 +78,8 @@ export default function MoxieChatWidget() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed right-4 z-40 rounded-full px-4 py-3 shadow-xl"
-        style={{ bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
+        className="fixed z-40 rounded-full px-4 py-3 shadow-xl"
+        style={{ right: isFounderDashboard ? "5rem" : "1rem", bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
         aria-label="Open Moxie chat"
       >
         <Bot size={18} className="mr-2" /> Ask Moxie

@@ -5,7 +5,7 @@ export default function FounderSection({ title, subtitle, icon: Icon, open, onTo
     <section className="rounded-3xl overflow-hidden bg-white shadow-sm" style={{ border: "1.5px solid #f5ede2" }}>
       <button
         onClick={onToggle}
-        className="w-full min-h-[64px] px-4 py-4 flex items-center gap-3 text-left"
+        className="w-full min-h-[72px] px-4 py-5 flex items-center gap-3 text-left"
         style={{ background: "#ffffff", borderBottom: open ? "1.5px solid #f5ede2" : "none" }}
       >
         {Icon && (
@@ -19,7 +19,7 @@ export default function FounderSection({ title, subtitle, icon: Icon, open, onTo
         </div>
         <ChevronDown className={`transition-transform ${open ? "rotate-180" : ""}`} size={19} color="#8b6f54" />
       </button>
-      {open && <div className="p-4 space-y-4" style={{ background: "#ffffff" }}>{children}</div>}
+      {open && <div className="p-5 space-y-5" style={{ background: "#ffffff" }}>{children}</div>}
     </section>
   );
 }

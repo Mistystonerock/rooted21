@@ -53,9 +53,12 @@ export default function TopRightMenu({ user }) {
   }
 
   const showFounderLink = user?.role === "founder" || user?.role === "admin";
+  const isFounderDashboard = window.location.pathname === "/founder-dashboard";
+
+  if (isFounderDashboard) return null;
 
   return (
-    <div className="fixed right-3 top-16 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+    <div className={`fixed right-3 z-50 ${isFounderDashboard ? "top-24" : "top-16"}`} style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <button
         type="button"
         onClick={() => setOpen(value => !value)}

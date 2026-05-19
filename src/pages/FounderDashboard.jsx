@@ -192,16 +192,20 @@ export default function FounderDashboard() {
       <header className="sticky top-0 z-20 backdrop-blur-xl" style={{ background: "rgba(255,255,255,0.92)", borderBottom: `1.5px solid ${CREAM}`, paddingTop: "max(14px, env(safe-area-inset-top))" }}>
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: CREAM, border: `1.5px solid ${GREEN}30` }}><Shield color={GREEN} /></div>
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-[10px] font-extrabold tracking-[0.22em]" style={{ color: MUTED }}>ROOTED 21</p>
             <h1 className="font-serif font-bold text-xl md:text-2xl" style={{ color: DARK }}>Founder Dashboard</h1>
+            <p className="mt-1 text-xs" style={{ color: MUTED }}>Founder tools, platform health, and admin actions</p>
           </div>
-          <button onClick={loadFounderData} className="ml-auto rounded-xl px-3 py-2 text-xs font-bold" style={{ background: GREEN, color: "#fff", border: "none" }}>Refresh</button>
+          <div className="flex flex-col items-end gap-1.5 sm:flex-row sm:items-center">
+            <span className="hidden rounded-full px-3 py-1 text-[10px] font-black sm:inline-flex" style={{ background: CREAM, color: DARK }}>Founder tools</span>
+            <button onClick={loadFounderData} className="rounded-xl px-3 py-2 text-xs font-bold" style={{ background: GREEN, color: "#fff", border: "none" }}>Refresh</button>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <main className="max-w-7xl mx-auto px-4 pt-7 pb-36 space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <FounderMetric label="Active users" value={stats.activeUsers} detail={`${allUsers.length} total accounts`} />
           <FounderMetric label="Waitlist" value={waitlist.length} detail={`${waitlist.filter(w => w.notified_at_launch).length} invited`} />
           <FounderMetric label="Survey rating" value={stats.avgRating} detail={`${surveys.length} responses`} />
@@ -218,7 +222,7 @@ export default function FounderDashboard() {
               <span className="absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all" style={{ left: maintenanceMode ? 34 : 4 }} />
             </button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <FounderMetric label="Users" value={allUsers.length} detail="Registered accounts" />
             <FounderMetric label="Active" value={stats.activeUsers} detail="Not deactivated" />
             <FounderMetric label="Classes" value={classes.length} detail={`${enrollments.length} enrollments`} />
@@ -241,7 +245,7 @@ export default function FounderDashboard() {
         </FounderSection>
 
         <FounderSection title="Resource Verification Queue" subtitle="Outdated statewide resources, crisis-priority listings, and admin review workflow" icon={Database} open={openSections.resources} onToggle={() => toggle("resources")}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             <FounderMetric label="Resources" value={resourceListings.length} detail="Statewide listings" />
             <FounderMetric label="Verified" value={resourceListings.filter(r => r.verification_status === "verified").length} detail="Trusted badge active" />
             <FounderMetric label="Need review" value={resourceListings.filter(r => r.verification_status === "needs_review").length} detail="60+ day queue" />
@@ -295,7 +299,7 @@ export default function FounderDashboard() {
           <div className="rounded-2xl p-4 border flex items-center justify-between gap-4" style={{ borderColor: "#d7c7aa", background: "#faf6f1" }}><div><p className="font-bold">Two-factor authentication</p><p className="text-xs mt-1" style={{ color: MUTED }}>Stores the founder security preference for account hardening.</p></div><button onClick={() => updateUser(user.id, { two_factor_enabled: !user.two_factor_enabled }).then(() => setUser(prev => ({ ...prev, two_factor_enabled: !prev.two_factor_enabled })))} className="rounded-xl px-4 py-2 text-xs font-bold" style={{ background: user.two_factor_enabled ? GREEN : DARK, color: "#fff", border: "none" }}>{user.two_factor_enabled ? "Enabled" : "Enable 2FA"}</button></div>
         </FounderSection>
 
-        <div className="pb-8" />
+        <div className="pb-16" />
       </main>
     </div>
   );

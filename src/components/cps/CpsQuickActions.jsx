@@ -14,13 +14,13 @@ const ACTIONS = [
 
 export default function CpsQuickActions() {
   return (
-    <section className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+    <section className="rounded-2xl p-5" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
       <p className="mb-3 text-sm font-black" style={{ color: C.darkGreen }}>What do you need to do next?</p>
-      <div className="grid gap-2">
+      <div className="grid gap-3">
         {ACTIONS.map(action => {
           const Icon = action.icon;
           return (
-            <Link key={action.to} to={action.to} className="rounded-xl p-3 no-underline" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+            <Link key={action.to} to={action.to} className="rounded-2xl p-3.5 no-underline" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: C.white }}><Icon size={16} color={C.midGreen} /></span>
                 <span className="min-w-0 flex-1">
