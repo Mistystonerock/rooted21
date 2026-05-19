@@ -19,7 +19,7 @@ export default function FounderPhotoCard() {
         <div className="mx-auto flex h-48 w-48 items-center justify-center overflow-hidden rounded-full border-4 shadow-sm" style={{ borderColor: GREEN, background: "#faf6f1" }}>
           {!imageFailed ? (
             <img
-              src="/misty-founder-photo"
+              src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/03f450f10_C1F95A21-F875-4BB1-B648-916D41C51BAE.png"
               alt="Misty Stonerock, founder of Rooted 21 Parenting Network"
               className="h-full w-full object-contain"
               onError={() => setImageFailed(true)}
