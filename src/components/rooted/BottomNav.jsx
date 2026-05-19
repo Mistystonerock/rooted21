@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, LayoutGrid, BookOpen, Stethoscope, Building2 } from "lucide-react";
+import { Home, LayoutGrid, BookOpen, Stethoscope, ClipboardList } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 
 const BG = "#0f1f14";
@@ -69,10 +69,10 @@ export default function BottomNav() {
         <span style={{ fontSize: 10, fontWeight: 700 }}>Lessons</span>
       </Link>
 
-      {/* Housing */}
-      <Link to="/housing-resources" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/housing-resources") ? GREEN : MUTED }}>
-        <Building2 size={20} strokeWidth={isActive("/housing-resources") ? 2.5 : 1.8} />
-        <span style={{ fontSize: 10, fontWeight: 700 }}>Housing</span>
+      {/* Intake */}
+      <Link to="/crisis-intake" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/crisis-intake") ? GREEN : MUTED }}>
+        <ClipboardList size={20} strokeWidth={isActive("/crisis-intake") ? 2.5 : 1.8} />
+        <span style={{ fontSize: 10, fontWeight: 700 }}>Intake</span>
       </Link>
 
       {/* Local Medical */}

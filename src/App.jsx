@@ -249,6 +249,7 @@ function App() {
               <Route path="/" element={<PublicLandingPage />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
+              <Route path="/crisis-intake" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CrisisIntake /></FeatureLockGate></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
               <Route path="/home" element={<PublicLandingPage />} />

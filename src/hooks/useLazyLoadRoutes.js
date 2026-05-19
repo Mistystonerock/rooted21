@@ -23,6 +23,7 @@ const routes = {
   TrainingVideos: lazy(() => import("@/pages/TrainingVideos")),
   Chat: lazy(() => import("@/pages/Chat")),
   CrisisSupport: lazy(() => import("@/pages/CrisisSupport")),
+  CrisisIntake: lazy(() => import("@/pages/CrisisIntake")),
   MyTeam: lazy(() => import("@/pages/MyTeam")),
   FamilyDashboard: lazy(() => import("@/pages/FamilyDashboard")),
   RespiteCare: lazy(() => import("@/pages/RespiteCare")),

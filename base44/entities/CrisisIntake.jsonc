@@ -1,0 +1,84 @@
+{
+  "name": "CrisisIntake",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "crisis_type": {
+      "type": "string",
+      "enum": [
+        "court",
+        "cps",
+        "housing",
+        "food",
+        "domestic_violence",
+        "behavior",
+        "school",
+        "medical",
+        "recovery",
+        "transportation",
+        "other"
+      ],
+      "default": "other"
+    },
+    "county": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "child_age": {
+      "type": "string"
+    },
+    "urgency_level": {
+      "type": "string",
+      "enum": [
+        "today",
+        "this_week",
+        "soon",
+        "planning"
+      ],
+      "default": "this_week"
+    },
+    "safety_concern": {
+      "type": "boolean",
+      "default": false
+    },
+    "situation_summary": {
+      "type": "string"
+    },
+    "support_already_tried": {
+      "type": "string"
+    },
+    "ranked_steps_json": {
+      "type": "string"
+    },
+    "ranked_resources_json": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_email",
+    "crisis_type",
+    "county",
+    "situation_summary"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}
