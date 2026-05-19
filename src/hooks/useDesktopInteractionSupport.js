@@ -29,6 +29,8 @@ function ensureFocusable(element) {
 
 export default function useDesktopInteractionSupport() {
   useEffect(() => {
+    let touchStart = null;
+
     const refreshFocusableElements = () => {
       document.querySelectorAll("[role='button'], [role='tab'], [role='menuitem'], [role='link'], .cursor-pointer").forEach(ensureFocusable);
     };
@@ -44,13 +46,35 @@ export default function useDesktopInteractionSupport() {
       target.click();
     };
 
+    const handleTouchStart = (event) => {
+      const touch = event.changedTouches?.[0];
+      if (!touch) return;
+      touchStart = { x: touch.clientX, y: touch.clientY, target: event.target };
+    };
+
+    const handleTouchEnd = (event) => {
+      const touch = event.changedTouches?.[0];
+      if (!touchStart || !touch || isTypingTarget(event.target)) return;
+
+      const moved = Math.abs(touch.clientX - touchStart.x) > 12 || Math.abs(touch.clientY - touchStart.y) > 12;
+      const target = touchStart.target?.closest?.("[role='button'], [role='tab'], [role='menuitem'], [role='link'], .cursor-pointer");
+      touchStart = null;
+
+      if (moved || !target || target.matches("button, a[href], input, select, textarea")) return;
+      target.click();
+    };
+
     const observer = new MutationObserver(refreshFocusableElements);
     refreshFocusableElements();
     document.addEventListener("keydown", handleKeyDown, true);
+    document.addEventListener("touchstart", handleTouchStart, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd, { passive: true });
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
       observer.disconnect();
     };
   }, []);
