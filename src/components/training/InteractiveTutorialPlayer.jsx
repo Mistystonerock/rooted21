@@ -112,12 +112,18 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
 
   function closeTutorial() {
     stopVoice();
+    document.body.style.overflow = "";
+    document.body.style.pointerEvents = "";
     onClose?.();
   }
 
   function exitToDashboard() {
     closeTutorial();
     if (window.location.pathname !== "/dashboard") window.location.assign("/dashboard");
+  }
+
+  function stopBackdropClick(event) {
+    event.stopPropagation();
   }
 
   function goBack() {
@@ -192,8 +198,20 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
   const cardAbove = spotlight && cardTop > window.innerHeight - 300;
 
   return (
-    <div className="fixed inset-0 z-[70] pointer-events-none">
+    <div className="fixed inset-0 z-[70] pointer-events-auto" onMouseDown={closeTutorial} onTouchStart={closeTutorial}>
       <div className="absolute inset-0" style={{ background: "rgba(17, 24, 18, 0.68)", backdropFilter: "blur(3px)" }} />
+
+      <div className="absolute left-3 right-3 top-3 z-[75] pointer-events-auto" onMouseDown={stopBackdropClick} onTouchStart={stopBackdropClick} style={{ paddingTop: "env(safe-area-inset-top)" }}>
+        <div className="mx-auto flex max-w-[520px] items-center gap-2 rounded-2xl p-2 shadow-xl" style={{ background: "rgba(255,255,255,0.94)", border: `1px solid ${C.cream}` }}>
+          <button type="button" onClick={goBack} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-1" style={{ background: C.cream, color: C.darkGreen, border: "none" }} aria-label="Back from tutorial">
+            <ArrowLeft size={14} /> Back
+          </button>
+          <p className="min-w-0 flex-1 truncate text-center text-xs font-black" style={{ color: C.darkGreen }}>{tutorial.title}</p>
+          <button type="button" onClick={closeTutorial} className="rounded-xl px-3 py-2 text-xs font-bold" style={{ background: C.cream, color: C.darkGreen, border: "none" }} aria-label="Close tutorial">
+            <X size={16} />
+          </button>
+        </div>
+      </div>
 
       {spotlight && (
         <>
@@ -219,7 +237,9 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         className="absolute left-3 right-3 pointer-events-auto"
-        style={{ top: spotlight ? (cardAbove ? Math.max(12, spotlight.top - 250) : Math.min(window.innerHeight - 260, spotlight.top + spotlight.height + 42)) : "50%", transform: spotlight ? "none" : "translateY(-50%)" }}
+        onMouseDown={stopBackdropClick}
+        onTouchStart={stopBackdropClick}
+        style={{ top: spotlight ? Math.max(92, Math.min(window.innerHeight - 330, cardAbove ? spotlight.top - 250 : spotlight.top + spotlight.height + 42)) : "50%", transform: spotlight ? "none" : "translateY(-50%)" }}
       >
         <div ref={cardRef} className="mx-auto max-w-[500px] rounded-[28px] overflow-hidden shadow-2xl" style={{ background: "rgba(255,255,255,0.88)", border: "1px solid rgba(255,255,255,0.76)", backdropFilter: "blur(18px)", boxShadow: "0 28px 80px rgba(0,0,0,0.28)" }}>
           <div className="p-4 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.cream}` }}>
@@ -267,7 +287,7 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
               <button type="button" onClick={speaking ? stopVoice : () => speak(step.narration)} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
                 {speaking ? <Pause size={13} /> : <Play size={13} />} {speaking ? "Pause" : "Play"}
               </button>
-              <button onClick={replay} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
+              <button type="button" onClick={replay} className="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
                 <RotateCcw size={13} /> Replay
               </button>
               <Link to="/support-chat" className="ml-auto rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2" style={{ background: "#FFFBEE", color: "#7A5200", border: "1px solid #F4DFA0", textDecoration: "none" }}>
@@ -281,7 +301,7 @@ export default function InteractiveTutorialPlayer({ tutorial, onClose, onComplet
                   {step.button_label || "Open section"}
                 </Link>
               )}
-              <button onClick={nextStep} disabled={step.requiresClick && !targetClicked} className="flex-1 rounded-2xl py-3 text-sm font-bold flex items-center justify-center gap-2" style={{ background: step.requiresClick && !targetClicked ? C.cream : C.darkGreen, color: step.requiresClick && !targetClicked ? C.mutedText : "#fff", border: "none" }}>
+              <button type="button" onClick={nextStep} disabled={step.requiresClick && !targetClicked} className="flex-1 rounded-2xl py-3 text-sm font-bold flex items-center justify-center gap-2" style={{ background: step.requiresClick && !targetClicked ? C.cream : C.darkGreen, color: step.requiresClick && !targetClicked ? C.mutedText : "#fff", border: "none" }}>
                 {step.requiresClick ? "Waiting for click" : stepIndex === tutorial.steps.length - 1 ? "Complete" : "Next step"} <ArrowRight size={15} />
               </button>
             </div>
