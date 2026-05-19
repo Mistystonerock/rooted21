@@ -43,6 +43,7 @@ const TILES = [
   { to: "/communications", emoji: "💬", icon: null, label: "Communications", sub: "Messages, agency emails, meeting notes, court audit trail", accent: "#102b24", border: `${GREEN}30` },
   { to: "/communication-tone-tool", emoji: "⚖️", icon: null, label: "Tone Check", sub: "AI feedback and court-appropriate message rewrites", accent: "#102b24", border: `${GREEN}30` },
   { to: "/compliance-risks", emoji: "⚖️", icon: null, label: "Compliance Risks", sub: "AI court-readiness predictions and corrective actions", accent: "#2a1f0a", border: `${GOLD}30` },
+  { to: "/case-insights", emoji: "✨", icon: null, label: "AI Case Insights", sub: "Scans documents, logs, deadlines, and case-plan risks", accent: "#2a1f0a", border: `${GOLD}30` },
   { to: "/court-report-generator", emoji: "📄", icon: null, label: "Court Report", sub: "AI-formatted 30-day child report for court", accent: "#2a1f0a", border: `${GOLD}30` },
   { to: "/consent-forms", emoji: "📝", icon: null, label: "Consent Forms", sub: "Release of information and signed consent templates", accent: "#102b24", border: `${GREEN}30` },
 ];
