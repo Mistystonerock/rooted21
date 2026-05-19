@@ -129,7 +129,7 @@ function App() {
   const isPublicInfoPath = !user && publicInfoPaths.includes(currentPath);
   const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
-  const loggedInHomePath = user?.role === "founder" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
+  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
   const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;

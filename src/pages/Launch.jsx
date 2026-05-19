@@ -1,94 +1,81 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
-import FeatureShowcase from "@/components/launch/FeatureShowcase";
-import FoundersNote from "@/components/launch/FoundersNote";
-import DonationPanel from "@/components/launch/DonationPanel";
-import { Sparkles, ChevronRight } from "lucide-react";
+import { ArrowRight, CalendarDays, CheckCircle2, Clock, HeartHandshake, LockKeyhole, ShieldCheck } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
 
-function useCountdown() {
-  const [time, setTime] = useState(() => getTimeLeft());
-  function getTimeLeft() {
-    const diff = LAUNCH_DATE - new Date();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, launched: true };
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-      launched: false,
-    };
-  }
-  useEffect(() => {
-    const t = setInterval(() => setTime(getTimeLeft()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  return time;
-}
-
 const BG = "#faf6f1";
 const CARD = "#ffffff";
-const CARD2 = "#f5ede2";
-const BORDER = "rgba(120,85,60,0.2)";
+const CREAM = "#f5ede2";
+const BORDER = "rgba(120,85,60,0.18)";
 const GREEN = "#6b9d6e";
-const GOLD = "#a67c52";
-const TEXT = "#5a3d28";
+const DARK = "#5a3d28";
 const MUTED = "#8b6f54";
+const GOLD = "#a67c52";
 
-const WHAT_WE_HELP = [
-  { emoji: "⚖️", title: "Court & CPS", desc: "Know your rights. Track every date, document, and requirement." },
-  { emoji: "🧠", title: "Behavior & Trauma", desc: "Real-time coaching when your child is dysregulated." },
-  { emoji: "📋", title: "Case Plans", desc: "Break down court-ordered requirements into clear steps." },
-  { emoji: "🤝", title: "Co-Parenting", desc: "Court-supervised messaging that protects you both." },
-  { emoji: "🏥", title: "Medical & Meds", desc: "Track medications, appointments, and providers." },
-  { emoji: "💙", title: "You Matter Too", desc: "Caregiver burnout is real. This holds space for you too." },
-];
+function getTimeLeft() {
+  const diff = LAUNCH_DATE - new Date();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
+}
 
-const TRUTHS = [
-  "You don't have to navigate this alone.",
-  "Fear is not a parenting strategy — but neither is shame.",
-  "You are your child's greatest advocate.",
-  "Hard families deserve real tools, not judgment.",
-];
+function CountdownBox({ label, value }) {
+  return (
+    <div className="rounded-2xl border p-3 text-center" style={{ background: CREAM, borderColor: BORDER }}>
+      <p className="font-serif text-2xl font-black" style={{ color: DARK }}>{String(value).padStart(2, "0")}</p>
+      <p className="mt-1 text-[10px] font-black uppercase tracking-wide" style={{ color: MUTED }}>{label}</p>
+    </div>
+  );
+}
+
+function InfoCard({ icon: Icon, title, text }) {
+  return (
+    <div className="rounded-2xl border p-4" style={{ background: CARD, borderColor: BORDER }}>
+      <Icon size={20} color={GREEN} />
+      <p className="mt-3 text-sm font-black" style={{ color: DARK }}>{title}</p>
+      <p className="mt-2 text-xs leading-6" style={{ color: MUTED }}>{text}</p>
+    </div>
+  );
+}
 
 export default function Launch() {
-  const time = useCountdown();
+  const [time, setTime] = useState(() => getTimeLeft());
   const [form, setForm] = useState({ full_name: "", email: "", family_type: "foster", message: "", beta_code: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [count, setCount] = useState(null);
   const [showCodeModal, setShowCodeModal] = useState(false);
-  const [activeTruth, setActiveTruth] = useState(0);
-  const [deletedMessage, setDeletedMessage] = useState("");
 
   useEffect(() => {
-    const message = localStorage.getItem("account_deleted_message");
-    if (message) {
-      setDeletedMessage(message);
-      localStorage.removeItem("account_deleted_message");
-    }
-    base44.entities.WaitlistSignup.list("-created_date", 1000).then(list => setCount(list.length)).catch(() => {});
-    const t = setInterval(() => setActiveTruth(n => (n + 1) % TRUTHS.length), 4000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setTime(getTimeLeft()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.full_name.trim() || !form.email.trim()) { setError("Please enter your name and email."); return; }
-    setLoading(true); setError("");
+    if (!form.full_name.trim() || !form.email.trim()) {
+      setError("Please enter your name and email.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
 
     const betaCode = form.beta_code.trim().toUpperCase();
     if (betaCode) {
       try {
         await base44.functions.invoke("validateBetaTesterCode", { code: betaCode });
         localStorage.setItem("pending_beta_code", betaCode);
-        base44.auth.redirectToLogin("/dashboard");
+        base44.auth.redirectToLogin("/welcome");
         return;
       } catch {
-        setError("This code is not valid. Please contact Misty at rooted21parenting.org for access.");
+        setError("This beta access code could not be verified. Please check the code and try again.");
         setLoading(false);
         return;
       }
@@ -100,199 +87,165 @@ export default function Launch() {
       family_type: form.family_type,
       message: form.message.trim(),
     });
-    setSubmitted(true); setLoading(false);
-    setCount(c => (c || 0) + 1);
+    setSubmitted(true);
+    setLoading(false);
   }
 
-  const inp = {
-    width: "100%", background: "rgba(255,255,255,0.07)", border: `1.5px solid rgba(255,255,255,0.12)`,
-    borderRadius: 10, padding: "12px 14px", color: "#fff", fontSize: 14, outline: "none",
-    boxSizing: "border-box", fontFamily: "var(--font-sans)",
+  const inputStyle = {
+    width: "100%",
+    background: CARD,
+    border: `1.5px solid ${BORDER}`,
+    borderRadius: 12,
+    padding: "12px 14px",
+    color: DARK,
+    fontSize: 14,
+    outline: "none",
+    boxSizing: "border-box",
   };
 
   return (
-    <div id="top" style={{ background: BG, minHeight: "100vh", fontFamily: "var(--font-sans)", color: TEXT, overflowX: "hidden" }}>
-
-      {/* Ambient glows - root/growth aesthetic */}
-      <div style={{ position: "fixed", top: "-10%", right: "-20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,157,110,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div style={{ position: "fixed", bottom: "10%", left: "-20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(166,124,82,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      {/* ── NAV ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "max(18px, env(safe-area-inset-top)) 20px 14px", position: "relative", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 26 }}>🌿</span>
+    <div className="min-h-screen" style={{ background: BG, color: DARK }}>
+      <header className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: CREAM }}>
+            <span className="text-xl">🌿</span>
+          </div>
           <div>
-            <p style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 20, color: TEXT, lineHeight: 1 }}>
-              Rooted <span style={{ color: GOLD }}>21</span>
-            </p>
-            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", color: MUTED, marginTop: 2 }}>PARENTING NETWORK</p>
+            <p className="font-serif text-xl font-black leading-none" style={{ color: DARK }}>Rooted 21</p>
+            <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: MUTED }}>Parenting Network</p>
           </div>
         </div>
         <button
-          onClick={() => window.location.assign("/login")}
-          style={{ background: CARD, border: `1.5px solid ${GREEN}`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
+          type="button"
+          onClick={() => base44.auth.redirectToLogin("/welcome")}
+          className="rounded-xl px-4 py-2 text-sm font-black"
+          style={{ background: CARD, color: GREEN, border: `1.5px solid ${GREEN}` }}
         >
           Already have access? Log In
         </button>
-      </div>
+      </header>
 
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px max(140px, calc(env(safe-area-inset-bottom) + 96px))", position: "relative", zIndex: 1 }}>
-        {deletedMessage && (
-          <div style={{ background: "#EAF4EA", border: `1.5px solid ${GREEN}40`, color: TEXT, borderRadius: 14, padding: "12px 14px", margin: "8px 0 14px", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
-            {deletedMessage}
-          </div>
-        )}
-
-        {/* ── HERO ── */}
-        <div style={{ textAlign: "center", padding: "20px 0 28px" }}>
-          {/* Rotating affirmation pill */}
-          <div style={{ background: CARD, border: `1px solid ${GREEN}30`, borderRadius: 50, padding: "7px 18px", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 22, minHeight: 34 }}>
-            <p style={{ fontSize: 12, color: "#48D17A", fontStyle: "italic", margin: 0 }}>"{TRUTHS[activeTruth]}"</p>
-          </div>
-
-          <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 900, fontSize: "clamp(1.9rem, 8vw, 2.6rem)", lineHeight: 1.1, color: TEXT, marginBottom: 14, letterSpacing: "-0.5px" }}>
-            You don't have to figure<br />this out alone.
-          </h1>
-
-          <p style={{ fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 340, margin: "0 auto 24px", fontWeight: 400 }}>
-            Rooted 21 is a calm, private place for foster, adoptive, kinship, and biological parents navigating hard systems.
-          </p>
-        </div>
-
-        {/* ── FOUNDER'S NOTE ── */}
-        <div id="founders-note" style={{ scrollMarginTop: 90 }}>
-          <FoundersNote />
-        </div>
-
-        {/* ── COMING SOON ── */}
-        <section id="coming-soon" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "22px 18px", marginBottom: 28, textAlign: "center", scrollMarginTop: 90 }}>
-          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 8 }}>Coming Soon</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 10, lineHeight: 1.2 }}>Rooted 21 is currently being finalized.</h2>
-          <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 14 }}>
-            The platform is in development and testing while we add more tools, resources, and support for families and professionals. Beta access may be available by invitation.
-          </p>
-          <div style={{ background: CARD2, borderRadius: 14, padding: "14px 12px" }}>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontWeight: 900, fontSize: 34, color: GREEN, lineHeight: 1, margin: 0 }}>{time.days}</p>
-              <p style={{ fontSize: 10, color: MUTED, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 3 }}>days until opening</p>
+      <main className="mx-auto max-w-5xl px-4 pb-16">
+        <section className="grid gap-6 py-6 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-10">
+          <div className="space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wide" style={{ background: CARD, borderColor: BORDER, color: GREEN }}>
+              <CalendarDays size={14} /> Launching July 10, 2026
             </div>
-            <p style={{ fontWeight: 700, fontSize: 14, color: TEXT, marginTop: 8 }}>Opening July 10, 2026</p>
-            <p style={{ fontSize: 12, color: MUTED, marginTop: 3 }}>Join the waitlist — we'll let you know first</p>
+            <div>
+              <h1 className="font-serif text-4xl font-black leading-tight md:text-6xl" style={{ color: DARK }}>
+                Calm support for families navigating hard systems.
+              </h1>
+              <p className="mt-5 max-w-2xl text-base leading-8 md:text-lg" style={{ color: MUTED }}>
+                Rooted 21 Parenting Network is being built as a private, trauma-informed place to organize paperwork, prepare for court/CPS and school meetings, document progress, and connect families with wraparound supports.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
+                className="rounded-2xl px-5 py-3 text-sm font-black"
+                style={{ background: GREEN, color: "#fff", border: "none" }}
+              >
+                Join the Waitlist <ArrowRight size={16} className="ml-2" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCodeModal(true)}
+                className="rounded-2xl px-5 py-3 text-sm font-black"
+                style={{ background: CARD, color: DARK, border: `1.5px solid ${BORDER}` }}
+              >
+                Redeem Beta Access
+              </button>
+            </div>
           </div>
-          {count !== null && count > 0 && (
-           <p style={{ fontSize: 12, color: TEXT, marginTop: 10 }}>🌱 {count} families already on the list</p>
-          )}
+
+          <div className="rounded-[2rem] border p-5 shadow-sm" style={{ background: CARD, borderColor: BORDER }}>
+            <div className="flex items-center gap-2 text-sm font-black" style={{ color: DARK }}>
+              <Clock size={18} color={GREEN} /> Live countdown
+            </div>
+            <div className="mt-4 grid grid-cols-4 gap-2">
+              <CountdownBox label="Days" value={time.days} />
+              <CountdownBox label="Hours" value={time.hours} />
+              <CountdownBox label="Minutes" value={time.minutes} />
+              <CountdownBox label="Seconds" value={time.seconds} />
+            </div>
+            <p className="mt-4 rounded-2xl p-4 text-sm leading-7" style={{ background: BG, color: MUTED }}>
+              We are finalizing tools for parenting support, paperwork organization, court/CPS preparation, behavior tracking, care coordination, and family resource navigation.
+            </p>
+          </div>
         </section>
 
-        {/* ── DONATIONS ── */}
-        <div id="donations" style={{ scrollMarginTop: 90 }}>
-          <DonationPanel />
-        </div>
+        <section className="grid gap-3 md:grid-cols-3">
+          <InfoCard icon={ShieldCheck} title="Trauma-informed support" text="Built to reduce overwhelm, use plain language, and help families take one next step at a time." />
+          <InfoCard icon={LockKeyhole} title="Private organization" text="Designed for sensitive family information, documents, reminders, and progress tracking." />
+          <InfoCard icon={HeartHandshake} title="Wraparound services" text="Supports coordination across court, CPS, school, behavioral health, housing, recovery, and community resources." />
+        </section>
 
-        {/* ── APP TOUR ── */}
-        <div id="app-tour" style={{ marginBottom: 28, scrollMarginTop: 90 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>See it in action</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.25 }}>
-            Everything inside Rooted 21
-          </h2>
-          <FeatureShowcase />
-        </div>
-
-        {/* ── WHAT WE HELP WITH ── */}
-        <div id="what-we-help" style={{ marginBottom: 28, scrollMarginTop: 90 }}>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GREEN, marginBottom: 6, textAlign: "center" }}>What Rooted 21 helps with</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: "clamp(1.3rem, 5vw, 1.7rem)", color: TEXT, textAlign: "center", marginBottom: 18, lineHeight: 1.25 }}>
-            Everything the system throws at you —<br />in one calm place
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {WHAT_WE_HELP.map(item => (
-              <div key={item.title} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "14px 12px" }}>
-                <div style={{ fontSize: 22, marginBottom: 8 }}>{item.emoji}</div>
-                <p style={{ fontWeight: 700, fontSize: 13, color: TEXT, marginBottom: 5 }}>{item.title}</p>
-                <p style={{ fontSize: 11, lineHeight: 1.55, color: MUTED }}>{item.desc}</p>
-              </div>
-            ))}
+        <section className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.1fr]" id="waitlist">
+          <div className="rounded-[2rem] border p-6" style={{ background: CARD, borderColor: BORDER }}>
+            <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>Founder note</p>
+            <h2 className="mt-3 font-serif text-2xl font-black" style={{ color: DARK }}>Built from lived experience and frontline family support.</h2>
+            <p className="mt-4 text-sm leading-7" style={{ color: MUTED }}>
+              Rooted 21 was created to help families feel less alone while navigating systems that can feel confusing, intimidating, and emotionally heavy. The goal is simple: help parents and caregivers get organized, prepare questions, document progress, and find supportive next steps without shame.
+            </p>
           </div>
-        </div>
 
-        {/* ── JOIN WAITLIST ── */}
-        <div id="waitlist" style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 18px", marginBottom: 28, scrollMarginTop: 90 }}>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "clamp(1.4rem, 6vw, 1.8rem)", color: TEXT, marginBottom: 6, lineHeight: 1.15 }}>Save your spot</h2>
-          <p style={{ fontSize: 13, color: MUTED, marginBottom: 20, lineHeight: 1.65 }}>
-            We'll email you when we open. No spam. Just a heads up that your support is ready.
-          </p>
-
-          {submitted ? (
-            <div style={{ background: `rgba(107,157,110,0.08)`, border: `1.5px solid ${GREEN}30`, borderRadius: 14, padding: "28px 20px", textAlign: "center" }}>
-              <p style={{ fontSize: 32, marginBottom: 10 }}>🌱</p>
-              <p style={{ fontFamily: "var(--font-serif)", fontWeight: 700, fontSize: 20, color: TEXT, marginBottom: 8 }}>You're on the list.</p>
-              <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.65 }}>We'll be in touch before June 10. Thank you for believing in this.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <div>
-                <label htmlFor="waitlist-full-name" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your name</label>
-                <input id="waitlist-full-name" name="full_name" type="text" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="First and last name" style={inp} />
+          <div className="rounded-[2rem] border p-6" style={{ background: CARD, borderColor: BORDER }}>
+            <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>Join waitlist</p>
+            <h2 className="mt-3 font-serif text-2xl font-black" style={{ color: DARK }}>Be notified when Rooted 21 opens.</h2>
+            {submitted ? (
+              <div className="mt-5 rounded-2xl p-5 text-center" style={{ background: CREAM }}>
+                <CheckCircle2 size={28} color={GREEN} className="mx-auto" />
+                <p className="mt-3 font-black" style={{ color: DARK }}>You’re on the waitlist.</p>
+                <p className="mt-2 text-sm" style={{ color: MUTED }}>Thank you. We’ll keep you updated before launch.</p>
               </div>
-              <div>
-                <label htmlFor="waitlist-email" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Email address</label>
-                <input id="waitlist-email" name="email" type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@email.com" style={inp} />
-              </div>
-              <div>
-                <label htmlFor="waitlist-family-type" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Your family (optional)</label>
-                <select id="waitlist-family-type" name="family_type" value={form.family_type} onChange={e => setForm(f => ({ ...f, family_type: e.target.value }))} style={{ ...inp, color: "#fff" }}>
-                  <option value="foster" style={{ color: "#000" }}>Foster Parent</option>
-                  <option value="adoptive" style={{ color: "#000" }}>Adoptive Parent</option>
-                  <option value="kinship" style={{ color: "#000" }}>Kinship Caregiver</option>
-                  <option value="biological" style={{ color: "#000" }}>Biological Parent</option>
-                  <option value="other" style={{ color: "#000" }}>Other / Professional</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="waitlist-message" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Anything you want us to know? (optional)</label>
-                <textarea id="waitlist-message" name="message" value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="What's been hardest for your family?" rows={3} style={{ ...inp, resize: "none" }} />
-              </div>
-              <div>
-                <label htmlFor="waitlist-beta-code" style={{ fontSize: 11, fontWeight: 600, color: MUTED, display: "block", marginBottom: 5 }}>Have a Beta Access Code? Enter it here for full program access.</label>
-                <input id="waitlist-beta-code" name="beta_code" type="text" value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta code" maxLength={8} style={{ ...inp, textTransform: "uppercase", letterSpacing: "0.08em" }} />
-              </div>
-
-              {error && <p style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.25)", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#c85a3a" }}>{error}</p>}
-
-              <button type="submit" disabled={loading} style={{ width: "100%", padding: "15px", background: loading ? `${GREEN}50` : GREEN, border: "none", borderRadius: 12, color: "#fff", fontWeight: 800, fontSize: 15, cursor: loading ? "default" : "pointer", boxShadow: loading ? "none" : `0 4px 20px ${GREEN}30`, fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                {loading ? "Saving your spot…" : (<><Sparkles size={15} /> Yes, notify me when we open</>)}
-              </button>
-              <p style={{ textAlign: "center", fontSize: 11, color: MUTED, marginTop: 2 }}>No spam. No selling your info. Ever.</p>
-            </form>
-          )}
-        </div>
-
-        {/* ── FOOTER ACTIONS ── */}
-        <div id="footer-actions" style={{ background: CARD, borderRadius: 16, overflow: "hidden", marginBottom: 16, border: `1px solid ${BORDER}`, scrollMarginTop: 90 }}>
-          {[
-            { label: "Sign In", action: () => window.location.assign("/login") },
-            { label: "Redeem Access Code", action: () => setShowCodeModal(true) },
-            { label: "Admin Access", href: "/founder-access" },
-          ].map((btn, i) => (
-            btn.href ? (
-              <a key={btn.label} href={btn.href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", color: MUTED, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
-                 {btn.label} <ChevronRight size={14} color={MUTED} />
-              </a>
             ) : (
-              <button key={btn.label} onClick={btn.action} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "14px 18px", borderBottom: i < 2 ? `1px solid ${BORDER}` : "none", background: "none", border: "none", color: MUTED, fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "left" }}>
-                {btn.label} <ChevronRight size={14} color={MUTED} />
-              </button>
-            )
-          ))}
-        </div>
+              <form onSubmit={handleSubmit} className="mt-5 space-y-3">
+                <input value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Full name" style={inputStyle} />
+                <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="Email address" style={inputStyle} />
+                <select value={form.family_type} onChange={e => setForm(f => ({ ...f, family_type: e.target.value }))} style={inputStyle}>
+                  <option value="foster">Foster parent</option>
+                  <option value="adoptive">Adoptive parent</option>
+                  <option value="kinship">Kinship caregiver</option>
+                  <option value="biological">Biological parent</option>
+                  <option value="professional">Professional / provider</option>
+                  <option value="other">Other</option>
+                </select>
+                <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="Optional: What kind of support are you looking for?" rows={3} style={{ ...inputStyle, resize: "none" }} />
+                <input value={form.beta_code} onChange={e => setForm(f => ({ ...f, beta_code: e.target.value.toUpperCase() }))} placeholder="Optional beta access code" maxLength={12} style={{ ...inputStyle, textTransform: "uppercase", letterSpacing: "0.08em" }} />
+                {error && <p className="rounded-xl p-3 text-sm font-bold" style={{ background: "#FEF3EE", color: "#9A3412" }}>{error}</p>}
+                <button type="submit" disabled={loading} className="w-full rounded-2xl px-5 py-3 text-sm font-black" style={{ background: loading ? `${GREEN}88` : GREEN, color: "#fff", border: "none" }}>
+                  {loading ? "Saving…" : "Join Waitlist"}
+                </button>
+              </form>
+            )}
+          </div>
+        </section>
 
-        <div style={{ display: "flex", gap: 20, justifyContent: "center", alignItems: "center", padding: "8px 0 40px" }}>
-          <a href="/survey" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Give Feedback</a>
-          <a href="/privacy-policy" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Privacy Policy</a>
-          <a href="/legal-disclaimers" style={{ fontSize: 11, color: MUTED, textDecoration: "none" }}>Legal & Disclaimers</a>
-          <span style={{ fontSize: 11, color: MUTED }}>Rooted 21 Parenting Network LLC — Chillicothe, Ross County, Ohio — A mission-driven company dedicated to serving families at low or no cost</span>
-        </div>
+        <section className="mt-6 rounded-[2rem] border p-6" style={{ background: CARD, borderColor: BORDER }}>
+          <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>Support the mission</p>
+          <h2 className="mt-3 font-serif text-2xl font-black" style={{ color: DARK }}>Help keep family support accessible.</h2>
+          <p className="mt-4 text-sm leading-7" style={{ color: MUTED }}>
+            Donations and community support help Rooted 21 continue building low-cost tools for families who need organization, preparation, documentation, and connection during difficult seasons.
+          </p>
+          <a href="/donate" className="mt-4 inline-flex rounded-2xl px-5 py-3 text-sm font-black no-underline" style={{ background: GOLD, color: "#fff" }}>Donation / Support Info</a>
+        </section>
 
-      </div>
+        <section className="mt-6 rounded-[2rem] border p-5" style={{ background: CREAM, borderColor: BORDER }}>
+          <p className="text-sm font-black" style={{ color: DARK }}>Professional boundary disclaimer</p>
+          <p className="mt-2 text-xs leading-6" style={{ color: MUTED }}>
+            Rooted 21 helps organize information, prepare questions, document progress, and connect families with supports. It does not replace an attorney, therapist, medical provider, emergency service, court order, or crisis service. If there is immediate danger, call 911 or local emergency services. For mental health crisis support, call or text 988.
+          </p>
+        </section>
+
+        <footer className="mt-8 flex flex-col items-center justify-center gap-3 pb-8 text-center text-xs md:flex-row" style={{ color: MUTED }}>
+          <a href="/privacy-policy" className="no-underline" style={{ color: MUTED }}>Privacy Policy</a>
+          <span className="hidden md:inline">•</span>
+          <a href="/terms-of-service" className="no-underline" style={{ color: MUTED }}>Terms of Service</a>
+          <span className="hidden md:inline">•</span>
+          <a href="/legal-disclaimers" className="no-underline" style={{ color: MUTED }}>Legal & Disclaimers</a>
+        </footer>
+      </main>
 
       {showCodeModal && <AdminCodeRedemption onClose={() => setShowCodeModal(false)} onSuccess={() => setShowCodeModal(false)} />}
     </div>

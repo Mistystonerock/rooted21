@@ -385,7 +385,7 @@ export default function WelcomeToRooted21({ user, onContinue }) {
   const navigate = useNavigate();
 
   const dashboardPath = useMemo(() => {
-    if (user?.role === "founder") return "/founder-dashboard";
+    if (user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com") return "/founder-dashboard";
     if (user?.role === "admin") return "/resource-management";
     if (user?.role === "professional") return "/professional";
     return "/dashboard";
