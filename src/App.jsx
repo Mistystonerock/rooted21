@@ -94,6 +94,22 @@ function StartupErrorScreen({ onRetry }) {
   );
 }
 
+function SignInRedirect() {
+  React.useEffect(() => {
+    const nextUrl = new URLSearchParams(window.location.search).get("next") || "/welcome";
+    base44.auth.redirectToLogin(nextUrl);
+  }, []);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+      <div className="mx-auto max-w-md rounded-3xl border border-rooted-cream bg-white p-6 shadow-sm">
+        <h1 className="text-xl font-bold text-rooted-dark-green">Opening sign in</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Please wait while Rooted 21 opens the secure sign-in page.</p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [user, setUser] = React.useState(null);
   const [comingSoonMode, setComingSoonMode] = React.useState(true);
@@ -105,7 +121,7 @@ function App() {
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
   const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist", "/tour", "/support"];
-  const publicInfoPaths = ["/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey"];
+  const publicInfoPaths = ["/login", "/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey"];
   const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
   const currentPath = window.location.pathname;
   const isPublicLandingPath = publicPaths.includes(currentPath);
@@ -241,6 +257,7 @@ function App() {
         <ThemeProvider>
           <Router>
             <Routes>
+              <Route path="/login" element={<SignInRedirect />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/donation-info" element={<Donate />} />
@@ -300,14 +317,15 @@ function App() {
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
             <Routes>
-              <Route path="/" element={<Navigate to={loggedInHomePath} replace />} />
+              <Route path="/" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/crisis-intake" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CrisisIntake /></FeatureLockGate></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
-              <Route path="/home" element={<Navigate to={loggedInHomePath} replace />} />
+              <Route path="/home" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
               <Route path="/welcome" element={<FeatureLockGate user={user}><WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} /></FeatureLockGate>} />
+              <Route path="/login" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
               <Route path="/coming-soon" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/waitlist" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -374,7 +392,9 @@ function App() {
               <Route path="/court-generate-report" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtGenerateReport /></FeatureLockGate></Suspense>} />
               <Route path="/my-reflections" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyReflections /></FeatureLockGate></Suspense>} />
               <Route path="/local-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalResourceFinder /></FeatureLockGate></Suspense>} />
+              <Route path="/medical" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalMedical /></FeatureLockGate></Suspense>} />
               <Route path="/local-medical" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.LocalMedical /></FeatureLockGate></Suspense>} />
+              <Route path="/housing" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.HousingResources /></FeatureLockGate></Suspense>} />
               <Route path="/housing-resources" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.HousingResources /></FeatureLockGate></Suspense>} />
               <Route path="/weekly-habits" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WeeklyHabits /></FeatureLockGate></Suspense>} />
               <Route path="/professional-directory" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ProfessionalDirectory /></FeatureLockGate></Suspense>} />
@@ -447,6 +467,7 @@ function App() {
               <Route path="/support-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportChat /></FeatureLockGate></Suspense>} />
               <Route path="/agency-outcomes" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AgencyOutcomeReports /></FeatureLockGate></Suspense>} />
               <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate founderOnly><FounderDashboard /></AdminRouteGate></Suspense>} />
+              <Route path="/admin" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/resource-management" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
