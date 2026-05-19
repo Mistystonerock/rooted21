@@ -4,7 +4,8 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ChecklistUploader from "@/components/checklist/ChecklistUploader";
 import ChecklistItem from "@/components/checklist/ChecklistItem";
-import { Plus, ChevronDown, ChevronUp, Trash2, FileText } from "lucide-react";
+import CasePlanProgressTracker from "@/components/checklist/CasePlanProgressTracker";
+import { Plus, ChevronDown, ChevronUp, Trash2, FileText, Sparkles } from "lucide-react";
 import StatusReportModal from "@/components/checklist/StatusReportModal";
 
 const SOURCE_LABELS = {
@@ -13,6 +14,14 @@ const SOURCE_LABELS = {
   professional: "Professional",
   manual: "Manual",
 };
+
+const STARTER_TASKS = [
+  { text: "Complete parenting classes", category: "service" },
+  { text: "Attend scheduled drug testing", category: "court_order" },
+  { text: "Participate in recommended counseling or treatment", category: "behavioral" },
+  { text: "Attend all visitation appointments", category: "appointment" },
+  { text: "Submit requested documents to caseworker or attorney", category: "document" },
+];
 
 function ProgressRing({ pct }) {
   const r = 20, circ = 2 * Math.PI * r;
@@ -124,6 +133,33 @@ export default function CasePlanChecklist() {
     setChecklists(prev => prev.map(c => c.id === checklistId ? updated : c));
   }
 
+  async function handleCreateStarterPlan() {
+    const items = STARTER_TASKS.map((task, idx) => ({
+      id: `starter-${Date.now()}-${idx}`,
+      text: task.text,
+      category: task.category,
+      due_date: null,
+      completed: false,
+      completed_date: null,
+      proof_url: null,
+      proof_filename: null,
+      notes: null,
+    }));
+
+    const created = await base44.entities.CasePlanChecklist.create({
+      parent_email: user.email,
+      child_name: selectedChild || "Family",
+      title: "Family Case Plan Journey",
+      source: "manual",
+      items,
+      ai_summary: "A starter case-plan tracker for common requirements like parenting classes, drug testing, treatment participation, visitation, and document submission.",
+      status: "active",
+    });
+
+    setChecklists(prev => [created, ...prev]);
+    setExpanded({ [created.id]: true });
+  }
+
   async function handleDelete(id) {
     await base44.entities.CasePlanChecklist.delete(id);
     setChecklists(prev => prev.filter(c => c.id !== id));
@@ -158,7 +194,9 @@ export default function CasePlanChecklist() {
         }
       />
 
-      <div className="max-w-[520px] mx-auto px-4 py-5 space-y-4">
+      <div className="max-w-[520px] mx-auto px-4 pt-6 pb-32 space-y-5">
+
+        <CasePlanProgressTracker checklists={checklists} />
 
         {/* ── UPLOADER ─────────────────────────────────────────── */}
         {showUploader && (
@@ -253,11 +291,18 @@ export default function CasePlanChecklist() {
             <p className="text-xs leading-relaxed mb-4" style={{ color: C.mutedText }}>
               Upload your case plan from CPS, a court order, or your caseworker. The AI will extract every task you need to complete into a personal checklist.
             </p>
-            <button onClick={() => setShowUploader(true)}
-              className="px-5 py-3 rounded-xl font-bold text-sm"
-              style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
-              + Upload Case Plan
-            </button>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => setShowUploader(true)}
+                className="px-5 py-3 rounded-xl font-bold text-sm"
+                style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
+                + Upload Case Plan
+              </button>
+              <button onClick={handleCreateStarterPlan}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm"
+                style={{ background: C.cream, color: C.darkGreen, border: `1.5px solid ${C.midGreen}40`, cursor: "pointer" }}>
+                <Sparkles size={15} /> Start with common tasks
+              </button>
+            </div>
           </div>
         )}
 
@@ -269,7 +314,7 @@ export default function CasePlanChecklist() {
           const isOpen = expanded[cl.id];
 
           return (
-            <div key={cl.id} className="rounded-2xl overflow-hidden"
+            <div key={cl.id} className="rounded-3xl overflow-hidden shadow-sm"
               style={{ border: `1.5px solid ${cl.status === "completed" ? C.midGreen + "80" : C.cream}` }}>
               {/* Header */}
               <div
@@ -306,7 +351,7 @@ export default function CasePlanChecklist() {
 
               {/* Expanded body */}
               {isOpen && (
-                <div className="p-4 space-y-3" style={{ background: "#fff" }}>
+                <div className="p-4 space-y-4" style={{ background: "#fff" }}>
                   {/* AI Summary */}
                   {cl.ai_summary && (
                     <div className="rounded-xl p-3" style={{ background: "#F0F7F2", border: `1px solid ${C.midGreen}30` }}>
@@ -328,7 +373,7 @@ export default function CasePlanChecklist() {
                   {(cl.items || []).length === 0 ? (
                     <p className="text-xs text-center py-4" style={{ color: C.mutedText }}>No items in this checklist.</p>
                   ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {cl.items.map(item => (
                         <ChecklistItem
                           key={item.id}
@@ -368,7 +413,7 @@ export default function CasePlanChecklist() {
           </button>
         )}
 
-        <div className="pb-8" />
+        <div className="pb-16" />
       </div>
 
       {/* Status Report Modal */}
