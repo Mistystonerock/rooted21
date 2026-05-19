@@ -135,7 +135,7 @@ export default function Launch() {
         </button>
       </div>
 
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px max(96px, env(safe-area-inset-bottom))", position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px max(140px, calc(env(safe-area-inset-bottom) + 96px))", position: "relative", zIndex: 1 }}>
         {deletedMessage && (
           <div style={{ background: "#EAF4EA", border: `1.5px solid ${GREEN}40`, color: TEXT, borderRadius: 14, padding: "12px 14px", margin: "8px 0 14px", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
             {deletedMessage}

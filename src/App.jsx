@@ -104,11 +104,15 @@ function App() {
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
-  const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist"];
+  const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist", "/tour", "/support"];
   const publicInfoPaths = ["/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey"];
-  const isPublicLandingPath = [...publicComingSoonPaths, ...publicInfoPaths].includes(window.location.pathname);
-  const showPublicComingSoon = !user && publicComingSoonPaths.includes(window.location.pathname);
-  const isPublicInfoPath = !user && publicInfoPaths.includes(window.location.pathname);
+  const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
+  const currentPath = window.location.pathname;
+  const isPublicLandingPath = publicPaths.includes(currentPath);
+  const showPublicComingSoon = !user && publicComingSoonPaths.includes(currentPath) && comingSoonMode;
+  const showPublicLanding = !user && publicComingSoonPaths.includes(currentPath) && !comingSoonMode;
+  const isPublicInfoPath = !user && publicInfoPaths.includes(currentPath);
+  const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
   const loggedInHomePath = user?.role === "founder" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
@@ -207,7 +211,7 @@ function App() {
     );
   }
 
-  if (showPublicComingSoon) {
+  if (showPublicComingSoon || showPublicLanding) {
     return (
       <ClientErrorBoundary>
         <ThemeProvider>
@@ -236,6 +240,23 @@ function App() {
             </Routes>
             <Toaster />
           </Router>
+        </ThemeProvider>
+      </ClientErrorBoundary>
+    );
+  }
+
+  if (showSignInRequired) {
+    return (
+      <ClientErrorBoundary>
+        <ThemeProvider>
+          <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+            <div className="mx-auto max-w-md rounded-3xl border border-rooted-cream bg-white p-6 shadow-sm">
+              <h1 className="text-xl font-bold text-rooted-dark-green">Sign in required</h1>
+              <p className="mt-2 text-sm text-muted-foreground">Please sign in to view family, child, or legal information.</p>
+              <button className="mt-4 rounded-xl bg-primary px-4 py-2 font-bold text-primary-foreground" onClick={() => base44.auth.redirectToLogin(currentPath)}>Sign in</button>
+            </div>
+          </div>
+          <Toaster />
         </ThemeProvider>
       </ClientErrorBoundary>
     );
