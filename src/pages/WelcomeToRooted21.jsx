@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import FounderPhotoCard from "@/components/rooted/FounderPhotoCard";
 import {
   Baby,
   BookOpen,
@@ -435,6 +436,7 @@ It is here to help you breathe, get organized, find support, understand your nex
 
         {storySections.map((section) => (
           <Section key={section.title} title={section.title} defaultOpen={section.defaultOpen}>
+            {section.title === "Meet Misty" && <FounderPhotoCard />}
             <Paragraphs text={section.text} />
           </Section>
         ))}
