@@ -134,6 +134,13 @@ function App() {
   const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
+  const handleWelcomeContinue = React.useCallback(() => {
+    if (user?.email) {
+      localStorage.setItem(`rooted21_welcome_seen_${user.email}`, "true");
+    }
+    setWelcomeSeen(true);
+  }, [user?.email]);
+
   React.useEffect(() => {
     if (!user || isPublicLandingPath) return;
 
@@ -191,7 +198,10 @@ function App() {
         }
 
         const u = await withStartupTimeout(base44.auth.me(), 8000);
-        if (mounted) setUser(u);
+        if (mounted) {
+          setUser(u);
+          setWelcomeSeen(localStorage.getItem(`rooted21_welcome_seen_${u.email}`) === "true" || u.welcome_completed === true);
+        }
         if (u?.email) {
           try {
             await withStartupTimeout(base44.functions.invoke("initializeFounder", {}), 6000);
@@ -311,7 +321,7 @@ function App() {
             {needsWelcome ? (
               <>
                 <TopRightMenu user={user} />
-                <WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />
+                <WelcomeToRooted21 user={user} onContinue={handleWelcomeContinue} />
               </>
             ) : needsOnboarding ? (
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
@@ -324,14 +334,14 @@ function App() {
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
               <Route path="/home" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
-              <Route path="/welcome" element={<FeatureLockGate user={user}><WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} /></FeatureLockGate>} />
+              <Route path="/welcome" element={<FeatureLockGate user={user}><WelcomeToRooted21 user={user} onContinue={handleWelcomeContinue} /></FeatureLockGate>} />
               <Route path="/login" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
               <Route path="/coming-soon" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/waitlist" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/donation-info" element={<Donate />} />
-              <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />} />
+              <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={handleWelcomeContinue} />} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
               <Route path="/cps-case-navigation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CPSCaseNavigation /></FeatureLockGate></Suspense>} />
