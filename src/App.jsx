@@ -377,6 +377,9 @@ function App() {
           </AnimatePresence>
           )}
           {!showComingSoon && <CopyrightFooter hasBottomNav={!!(user && !needsOnboarding)} />}
+          {!showComingSoon && user && !needsOnboarding && (
+            <div className="h-28 md:h-8" aria-hidden="true" />
+          )}
           {!showComingSoon && user && !needsOnboarding && <MoxieChatWidget />}
           {!showComingSoon && user && !needsOnboarding && <BottomNav />}
         </Router>
