@@ -6,7 +6,6 @@ import {
   Brain,
   CalendarDays,
   Car,
-  ChevronRight,
   ClipboardList,
   Compass,
   FileText,
@@ -524,14 +523,16 @@ Rooted 21 is here to help you find your next right step.
 You are not alone here.`} />
         </Section>
 
-        <button
-          type="button"
-          onClick={continueToDashboard}
-          className="sticky bottom-28 z-10 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black shadow-lg md:bottom-6"
-          style={{ background: GREEN, color: "#fff", border: "none" }}
-        >
-          Continue to My Dashboard <ChevronRight size={18} />
-        </button>
+        <div className="pb-10 text-center">
+          <button
+            type="button"
+            onClick={continueToDashboard}
+            className="text-sm font-bold underline"
+            style={{ background: "transparent", color: GREEN, border: "none" }}
+          >
+            Go to Dashboard
+          </button>
+        </div>
       </main>
     </div>
   );
