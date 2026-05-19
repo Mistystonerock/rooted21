@@ -2,6 +2,8 @@ import { FileText, Sparkles } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 
 const FILING_TYPES = [
+  { value: "service_request", label: "Service Request Form", help: "Pre-filled request for services, supports, or referrals" },
+  { value: "status_report", label: "Status Report", help: "Court-ready progress and compliance update" },
   { value: "status_update", label: "Status Update", help: "Progress summary for court or CPS review" },
   { value: "compliance_summary", label: "Compliance Summary", help: "Shows completed and pending case plan items" },
   { value: "hearing_statement", label: "Hearing Statement", help: "Prepared statement for an upcoming hearing" },

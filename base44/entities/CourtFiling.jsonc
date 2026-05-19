@@ -17,12 +17,14 @@
     "filing_type": {
       "type": "string",
       "enum": [
+        "service_request",
+        "status_report",
         "status_update",
         "compliance_summary",
         "hearing_statement",
         "communication_exhibit"
       ],
-      "default": "status_update",
+      "default": "service_request",
       "description": "Type of court-ready filing"
     },
     "title": {
@@ -74,5 +76,19 @@
     "owner_email",
     "filing_type",
     "title"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
 }

@@ -1,9 +1,46 @@
 import ReactMarkdown from "react-markdown";
-import { ClipboardList, FileSignature } from "lucide-react";
+import { jsPDF } from "jspdf";
+import { ClipboardList, Download, FileSignature } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import SignaturePad from "@/components/legal/SignaturePad";
 
 export default function FilingDraftPreview({ draft, signature, setSignature, agreed, setAgreed, onSign, signing }) {
+  function downloadPdf() {
+    const doc = new jsPDF();
+    const margin = 18;
+    const maxWidth = 174;
+    let y = 20;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(15);
+    doc.text(draft.title || "Court-ready document", margin, y);
+    y += 10;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    const lines = doc.splitTextToSize(draft.draft_markdown || "", maxWidth);
+    lines.forEach(line => {
+      if (y > 275) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(line, margin, y);
+      y += 6;
+    });
+
+    if (signature) {
+      if (y > 230) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFont("helvetica", "bold");
+      doc.text("Signature", margin, y + 8);
+      doc.addImage(signature, "PNG", margin, y + 12, 70, 25);
+    }
+
+    doc.save(`${(draft.title || "court-document").replace(/[^a-z0-9]+/gi, "-")}.pdf`);
+  }
+
   if (!draft) {
     return (
       <div className="rounded-2xl p-8 text-center" style={{ background: C.white, border: `1.5px dashed ${C.cream}` }}>
@@ -34,6 +71,10 @@ export default function FilingDraftPreview({ draft, signature, setSignature, agr
             </ul>
           </div>
         )}
+
+        <button onClick={downloadPdf} className="w-full rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>
+          <Download size={15} /> Download PDF
+        </button>
 
         <div className="rounded-xl p-4" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
           <SignaturePad onSignatureChange={setSignature} />

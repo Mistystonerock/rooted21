@@ -41,7 +41,7 @@ export default function CourtFilingWorkflow() {
   const [signature, setSignature] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [saved, setSaved] = useState(null);
-  const [form, setForm] = useState({ filing_type: "status_update", case_plan_id: "", case_id: "", court_name: "" });
+  const [form, setForm] = useState({ filing_type: "service_request", case_plan_id: "", case_id: "", court_name: "" });
 
   useEffect(() => {
     base44.auth.me().then(async me => {
@@ -84,13 +84,21 @@ export default function CourtFilingWorkflow() {
       meeting_notes: caseNotes.slice(0, 25).map(n => ({ title: n.title, author: n.author_name, date: n.created_date, body: n.body })),
     };
 
+    const documentInstructions = form.filing_type === "service_request"
+      ? "Create a pre-filled service request form with: caption placeholder, family/case identifiers, requested service or referral section, reason for request, urgency/impact, supporting facts from the data, proposed provider/support notes, requested response timeline, exhibit list, and signature/declaration block."
+      : form.filing_type === "status_report"
+        ? "Create a court-ready status report with: caption placeholder, report period placeholder, child/case identifiers, case plan progress summary, completed items, pending items, barriers, communication/meeting summary, safety or stability updates, requested next steps, exhibit list, and signature/declaration block."
+        : "Create a polished filing with: caption placeholder, title, introduction, facts/background, case plan compliance summary, communication audit summary, requested next steps, exhibit list, and signature/declaration block.";
+
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Draft a court-ready filing document using the mapped data below. This is not legal advice; format it as a clear official draft the parent can review with counsel.
+      prompt: `Draft a court-ready legal document using the mapped data below. This is not legal advice; format it as a clear official draft the parent can review with counsel.
+
+DOCUMENT TYPE: ${form.filing_type}
 
 DATA SOURCES:
 ${JSON.stringify(sourceContext, null, 2)}
 
-Create a polished filing with: caption placeholder, title, introduction, facts/background, case plan compliance summary, communication audit summary, requested next steps, exhibit list, and signature/declaration block. Use plain respectful language and avoid making claims not supported by the source data.`,
+${documentInstructions} Use plain respectful language and avoid making claims not supported by the source data.`, 
       response_json_schema: {
         type: "object",
         properties: {
@@ -150,8 +158,8 @@ Create a polished filing with: caption placeholder, title, introduction, facts/b
       <main className="max-w-6xl mx-auto px-4 py-5 space-y-5">
         <section className="rounded-3xl p-5" style={{ background: C.darkGreen }}>
           <p className="text-[10px] font-extrabold tracking-[0.18em] uppercase" style={{ color: C.cream }}>Automated court-ready filings</p>
-          <h1 className="font-serif font-bold text-2xl mt-2" style={{ color: "#fff" }}>Map your case plan and communication audit into an official draft.</h1>
-          <p className="text-sm mt-3 leading-relaxed" style={{ color: C.cream }}>Generate a formatted filing, preview it, complete prep tasks, and sign a saved copy inside your secure portal.</p>
+          <h1 className="font-serif font-bold text-2xl mt-2" style={{ color: "#fff" }}>Map your case data into service requests and status reports.</h1>
+          <p className="text-sm mt-3 leading-relaxed" style={{ color: C.cream }}>Generate a formatted document, preview it, download a PDF, and sign a saved copy inside your secure portal.</p>
         </section>
 
         <div className="rounded-xl p-3.5 flex gap-3" style={{ background: "#FEF3EE", border: "1.5px solid #F4C9B8" }}>
