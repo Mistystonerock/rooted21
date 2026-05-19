@@ -25,27 +25,23 @@ export default function FoundersNote() {
       <div style={{
         borderRadius: 24,
         overflow: "hidden",
-        marginBottom: 16,
+        marginBottom: 24,
         boxShadow: `0 8px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(120,85,60,0.15)`,
         position: "relative",
+        background: "linear-gradient(135deg, #f5ede2 0%, #eef6ef 100%)",
+        height: "clamp(320px, 72vw, 420px)",
       }}>
         <img
           src="https://media.base44.com/images/public/69f855fbccd3f90a3663fb94/b73f4af3a_5061CC5C-2841-45A8-A3F9-073AC259189A.png"
           alt="Misty Stonerock, Founder of Rooted 21"
           style={{
             width: "100%",
-            height: "auto",
+            height: "100%",
             display: "block",
-            maxHeight: 420,
-            objectFit: "cover",
-            objectPosition: "center top",
+            objectFit: "contain",
+            objectPosition: "center center",
           }}
         />
-        {/* bottom fade */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
-          background: "linear-gradient(transparent, #faf6f1)",
-        }} />
       </div>
 
       {/* ── Header card ── */}

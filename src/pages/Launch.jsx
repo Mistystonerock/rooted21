@@ -4,7 +4,6 @@ import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
 import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
 import DonationPanel from "@/components/launch/DonationPanel";
-import QuickPageSearch from "@/components/launch/QuickPageSearch";
 import {
   ArrowRight,
   CalendarDays,
@@ -150,7 +149,7 @@ export default function Launch() {
         </button>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-16">
+      <main className="mx-auto max-w-6xl px-4 pb-[160px]">
         <section className="grid gap-6 py-6 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-10">
           <div className="space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wide" style={{ background: CARD, borderColor: BORDER, color: GREEN }}>
@@ -283,7 +282,6 @@ export default function Launch() {
         </footer>
       </main>
 
-      <QuickPageSearch />
       {showCodeModal && <AdminCodeRedemption onClose={() => setShowCodeModal(false)} onSuccess={() => setShowCodeModal(false)} />}
     </div>
   );
