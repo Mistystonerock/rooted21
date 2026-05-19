@@ -26,6 +26,7 @@ const routes = {
   CrisisIntake: lazy(() => import("@/pages/CrisisIntake")),
   MyTeam: lazy(() => import("@/pages/MyTeam")),
   FamilyDashboard: lazy(() => import("@/pages/FamilyDashboard")),
+  FamilyBackground: lazy(() => import("@/pages/FamilyBackground")),
   RespiteCare: lazy(() => import("@/pages/RespiteCare")),
   ResourceLibrary: lazy(() => import("@/pages/ResourceLibrary")),
   Profile: lazy(() => import("@/pages/Profile")),

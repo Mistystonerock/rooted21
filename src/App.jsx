@@ -343,6 +343,7 @@ function App() {
               <Route path="/training-videos" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.TrainingVideos /></FeatureLockGate></Suspense>} />
               <Route path="/my-team" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MyTeam /></FeatureLockGate></Suspense>} />
               <Route path="/family-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyDashboard /></FeatureLockGate></Suspense>} />
+              <Route path="/family-background" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.FamilyBackground /></FeatureLockGate></Suspense>} />
               <Route path="/respite-care" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.RespiteCare /></FeatureLockGate></Suspense>} />
               <Route path="/resource-library" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ResourceLibrary /></FeatureLockGate></Suspense>} />
               <Route path="/analytics" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Analytics /></FeatureLockGate></Suspense>} />

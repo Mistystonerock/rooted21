@@ -1,0 +1,71 @@
+{
+  "name": "FamilyBackground",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string"
+    },
+    "family_storyline": {
+      "type": "string",
+      "description": "Plain-language family backstory and timeline for Moxie context"
+    },
+    "family_strengths": {
+      "type": "string",
+      "description": "Strengths, values, protective factors, and what helps this family keep going"
+    },
+    "mental_health_history": {
+      "type": "string",
+      "description": "Family mental health history shared by the caregiver"
+    },
+    "trauma_history": {
+      "type": "string",
+      "description": "Known trauma history, losses, disruptions, or safety concerns shared by the caregiver"
+    },
+    "child_context": {
+      "type": "string",
+      "description": "Important child-specific context Moxie should understand"
+    },
+    "triggers_patterns": {
+      "type": "string",
+      "description": "Known triggers, patterns, stress responses, or escalation signs"
+    },
+    "calming_supports": {
+      "type": "string",
+      "description": "What helps the child or family regulate and feel safe"
+    },
+    "important_people": {
+      "type": "string",
+      "description": "Important family members, caregivers, support people, or professionals"
+    },
+    "cultural_context": {
+      "type": "string",
+      "description": "Culture, faith, identity, language, or family traditions that matter"
+    },
+    "moxie_notes": {
+      "type": "string",
+      "description": "Anything Moxie should remember when supporting this family"
+    },
+    "consent_to_use_with_moxie": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this private background may be used as context for Moxie responses"
+    }
+  },
+  "required": [
+    "owner_email"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}

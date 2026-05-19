@@ -63,6 +63,8 @@ Deno.serve(async (req) => {
     const mode = requestedMode === 'founder_admin' && !['admin', 'founder'].includes(user.role) ? inferMode(modulePath) : requestedMode;
     const history = Array.isArray(payload.history) ? payload.history.slice(-6) : [];
     const userZip = user?.housing_resources_zip || user?.zip_code || '';
+    const familyBackgroundRecords = await base44.entities.FamilyBackground.filter({ owner_email: user.email }, '-updated_date', 1);
+    const familyBackground = familyBackgroundRecords[0]?.consent_to_use_with_moxie === true ? familyBackgroundRecords[0] : null;
 
     if (!message) {
       return Response.json({ error: 'Message is required' }, { status: 400 });
@@ -91,6 +93,22 @@ Deno.serve(async (req) => {
       system_instructions: `Moxie AI is Rooted 21's trauma-informed assistant system. Specialized mode: ${mode}. Be warm, calm, human, supportive, clear, plain-language, nonjudgmental, and encouraging. Use short paragraphs and step-by-step guidance. Never diagnose, provide legal advice, replace an attorney, therapist, caseworker, crisis service, or doctor, make custody recommendations, predict court outcomes, guarantee outcomes, tell users to ignore court orders, encourage unsafe contact with an abuser, expose private information, invent resources, or shame addiction, CPS involvement, poverty, trauma, incarceration, or parenting struggles. If the user mentions immediate danger, abuse happening now, suicidal thoughts, wanting to harm someone, domestic violence danger, child safety emergency, overdose, or medical emergency, say: “If you or someone else is in immediate danger, call 911 now.” Also show 988, Poison Control 1-800-222-1222, and National Domestic Violence Hotline 1-800-799-7233 or text START to 88788. For court/form topics, always include: “Moxie provides legal information and court-form guidance, not legal advice. For legal advice about your case, contact an attorney or the court clerk.” For school/IEP topics, do not claim to replace an education attorney or advocate. For resources, use only provided verified Rooted 21 resources, official government sites, trusted nonprofits, legal aid, crisis hotlines, or approved partner agencies. Response structure: warm validation, plain-language explanation, next steps, resource/checklist if needed, and safety/legal/medical disclaimer if needed.`
     };
 
+    let familyContext = '';
+    if (familyBackground) {
+      familyContext = `\nPrivate family background provided by the caregiver. Use this quietly to understand context and personalize support. Do not repeat sensitive details unless the user asks or it is needed for safety. Never diagnose from this history.\n${JSON.stringify({
+        family_storyline: familyBackground.family_storyline || '',
+        family_strengths: familyBackground.family_strengths || '',
+        mental_health_history: familyBackground.mental_health_history || '',
+        trauma_history: familyBackground.trauma_history || '',
+        child_context: familyBackground.child_context || '',
+        triggers_patterns: familyBackground.triggers_patterns || '',
+        calming_supports: familyBackground.calming_supports || '',
+        important_people: familyBackground.important_people || '',
+        cultural_context: familyBackground.cultural_context || '',
+        moxie_notes: familyBackground.moxie_notes || ''
+      })}`;
+    }
+
     let resourceContext = '';
     if (mode === 'resource_finder') {
       const resources = await base44.entities.ResourceListing.list('-verified_at', 80);
@@ -98,7 +116,7 @@ Deno.serve(async (req) => {
       resourceContext = `\nAvailable Rooted 21 resource records. Do not invent resources. Use only these if giving specific local resources:\n${JSON.stringify(formatResources(activeResources))}`;
     }
 
-    const prompt = `${config.system_instructions}\n\nCurrent mode: ${config.mode}\nCurrent module: ${moduleLabel}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP/county when local resources are needed'}\nUser role: ${user.role || 'user'}\n${user.role === 'founder' ? 'Founder access: allowed for founder-only operational summaries if explicitly requested.' : 'Founder-only analytics/admin management: not allowed.'}\n${resourceContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI. Return JSON only.`;
+    const prompt = `${config.system_instructions}\n\nCurrent mode: ${config.mode}\nCurrent module: ${moduleLabel}\nKnown user ZIP, if available: ${userZip || 'not saved — ask for ZIP/county when local resources are needed'}\nUser role: ${user.role || 'user'}\n${familyContext}\n${user.role === 'founder' ? 'Founder access: allowed for founder-only operational summaries if explicitly requested.' : 'Founder-only analytics/admin management: not allowed.'}\n${resourceContext}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI. Return JSON only.`;
 
     const reply = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
