@@ -1,4 +1,4 @@
-import { Pencil, Trash2, GripVertical, FileText, Image } from "lucide-react";
+import { Pencil, Trash2, GripVertical, FileText, Image, Mic, NotebookText } from "lucide-react";
 import { ENTRY_TYPES } from "@/pages/ChildLifeStory";
 import { C } from "@/lib/rooted-constants";
 
@@ -33,9 +33,13 @@ export default function LifeStoryEntryCard({ entry, isLast, onEdit, onDelete }) 
       <div className="flex-1 min-w-0 mb-4 rounded-2xl overflow-hidden"
         style={{ background: C.white, border: `1px solid ${C.cream}` }}>
 
-        {/* Photo */}
-        {entry.photo_url && (
-          <img src={entry.photo_url} alt="Memory" className="w-full h-36 object-cover" />
+        {/* Photo gallery */}
+        {Array.from(new Set([...(entry.photo_urls || []), entry.photo_url].filter(Boolean))).length > 0 && (
+          <div className="grid grid-cols-2 gap-1 p-1">
+            {Array.from(new Set([...(entry.photo_urls || []), entry.photo_url].filter(Boolean))).slice(0, 4).map((url, index) => (
+              <img key={url} src={url} alt={`Memory ${index + 1}`} className="h-28 w-full object-cover rounded-xl" />
+            ))}
+          </div>
         )}
 
         <div className="p-3">
@@ -78,18 +82,31 @@ export default function LifeStoryEntryCard({ entry, isLast, onEdit, onDelete }) 
           {entry.description && (
             <p className="text-xs mt-2 leading-relaxed" style={{ color: "#3a3028" }}>{entry.description}</p>
           )}
+          {entry.linked_milestone && (
+            <p className="text-[10px] mt-1.5 font-bold" style={{ color: C.darkGreen }}>🏷️ Linked milestone: {entry.linked_milestone}</p>
+          )}
           {entry.people_involved && (
             <p className="text-[10px] mt-1.5" style={{ color: C.mutedText }}>👥 {entry.people_involved}</p>
           )}
+          {entry.voice_note_url && (
+            <div className="mt-2 rounded-xl p-2" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+              <p className="mb-1 flex items-center gap-1 text-[10px] font-bold" style={{ color: C.darkGreen }}><Mic size={11} /> Voice note</p>
+              <audio controls src={entry.voice_note_url} className="w-full" />
+            </div>
+          )}
+          {entry.journal_entry && (
+            <div className="mt-2 rounded-xl p-2" style={{ background: "#FEF9EC", border: `1px solid ${C.gold}55` }}>
+              <p className="mb-1 flex items-center gap-1 text-[10px] font-bold" style={{ color: C.brown }}><NotebookText size={11} /> Private journal entry</p>
+              <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: "#3a3028" }}>{entry.journal_entry}</p>
+            </div>
+          )}
 
           {/* Attachments */}
-          <div className="flex gap-2 mt-2">
-            {entry.photo_url && !entry.photo_url.match(/\.(jpg|jpeg|png|gif|webp)$/i) && (
-              <a href={entry.photo_url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg"
-                style={{ background: C.offWhite, color: C.darkGreen, textDecoration: "none" }}>
-                <Image size={10} /> Photo
-              </a>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {Array.from(new Set([...(entry.photo_urls || []), entry.photo_url].filter(Boolean))).length > 0 && (
+              <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg" style={{ background: C.offWhite, color: C.darkGreen }}>
+                <Image size={10} /> {Array.from(new Set([...(entry.photo_urls || []), entry.photo_url].filter(Boolean))).length} photo(s)
+              </span>
             )}
             {entry.document_url && (
               <a href={entry.document_url} target="_blank" rel="noopener noreferrer"

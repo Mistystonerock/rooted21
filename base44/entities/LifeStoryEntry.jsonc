@@ -32,6 +32,14 @@
     "description": {
       "type": "string"
     },
+    "journal_entry": {
+      "type": "string",
+      "description": "Long-form private narrative or journal entry connected to this life event"
+    },
+    "linked_milestone": {
+      "type": "string",
+      "description": "Specific milestone or event this multimedia memory is connected to"
+    },
     "date": {
       "type": "string",
       "format": "date"
@@ -49,6 +57,22 @@
     },
     "photo_url": {
       "type": "string"
+    },
+    "photo_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Multiple uploaded photos for this life story entry"
+    },
+    "voice_note_url": {
+      "type": "string",
+      "description": "Uploaded audio/voice note URL"
+    },
+    "voice_note_name": {
+      "type": "string",
+      "description": "Original voice note file name"
     },
     "document_url": {
       "type": "string"
@@ -71,7 +95,7 @@
     },
     "is_private": {
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "is_sensitive": {
       "type": "boolean",

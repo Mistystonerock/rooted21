@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
-import { GripVertical, Pencil, Trash2, ChevronDown, ChevronUp, FileText, Lock } from "lucide-react";
+import { GripVertical, Pencil, Trash2, ChevronDown, ChevronUp, FileText, Lock, Mic, NotebookText } from "lucide-react";
 
 const TYPE_CONFIG = {
   placement: { emoji: "🏠", color: "#2E7D60", bg: "#EAF4EA" },
@@ -17,7 +17,8 @@ export default function LifeStoryCard({ entry, dragHandleProps, onEdit, onDelete
   const [expanded, setExpanded] = useState(false);
   const config = TYPE_CONFIG[entry.entry_type] || TYPE_CONFIG.other;
 
-  const hasExtra = entry.description || entry.photo_url || entry.document_url || entry.people_involved || entry.location || entry.private_note;
+  const photos = Array.from(new Set([...(entry.photo_urls || []), entry.photo_url].filter(Boolean)));
+  const hasExtra = entry.description || entry.journal_entry || entry.voice_note_url || photos.length > 0 || entry.document_url || entry.people_involved || entry.location || entry.private_note || entry.caregiver_notes;
 
   return (
     <div className="flex gap-3 items-start relative" style={{ zIndex: 1 }}>
@@ -81,13 +82,11 @@ export default function LifeStoryCard({ entry, dragHandleProps, onEdit, onDelete
         </div>
 
         {/* Photo preview strip (always visible if photo exists) */}
-        {entry.photo_url && (
-          <div className="px-3 pb-2">
-            <img
-              src={entry.photo_url}
-              alt="Memory"
-              className="w-full max-h-40 object-cover rounded-lg"
-            />
+        {photos.length > 0 && (
+          <div className="grid grid-cols-2 gap-1 px-3 pb-2">
+            {photos.slice(0, 4).map((url, index) => (
+              <img key={url} src={url} alt={`Memory ${index + 1}`} className="h-28 w-full object-cover rounded-lg" />
+            ))}
           </div>
         )}
 
@@ -99,6 +98,18 @@ export default function LifeStoryCard({ entry, dragHandleProps, onEdit, onDelete
             )}
             {entry.people_involved && (
               <p className="text-[11px]" style={{ color: C.mutedText }}>👥 {entry.people_involved}</p>
+            )}
+            {entry.voice_note_url && (
+              <div className="rounded-lg p-2" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>
+                <p className="mb-1 flex items-center gap-1 text-[11px] font-bold" style={{ color: C.darkGreen }}><Mic size={11} /> Voice note</p>
+                <audio controls src={entry.voice_note_url} className="w-full" />
+              </div>
+            )}
+            {entry.journal_entry && (
+              <div className="rounded-lg p-2" style={{ background: "#FEF9EC", border: `1px solid ${C.gold}55` }}>
+                <p className="mb-1 flex items-center gap-1 text-[11px] font-bold" style={{ color: C.brown }}><NotebookText size={11} /> Private journal</p>
+                <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: C.darkGreen }}>{entry.journal_entry}</p>
+              </div>
             )}
             {entry.document_url && (
               <a
