@@ -121,7 +121,7 @@ function App() {
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
   const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist", "/tour", "/support"];
-  const publicInfoPaths = ["/login", "/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey"];
+  const publicInfoPaths = ["/login", "/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey", "/founder-access"];
   const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
   const currentPath = window.location.pathname;
   const isPublicLandingPath = publicPaths.includes(currentPath);
@@ -276,6 +276,7 @@ function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/legal-disclaimers" element={<LegalAndDisclaimers />} />
               <Route path="/survey" element={<AppSurvey />} />
+              <Route path="/founder-access" element={<FounderAccessPortal />} />
               <Route path="*" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
             </Routes>
             <Toaster />
