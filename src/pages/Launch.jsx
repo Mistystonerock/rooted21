@@ -128,7 +128,7 @@ export default function Launch() {
   };
 
   return (
-    <div id="top" className="min-h-screen" style={{ background: BG, color: DARK }}>
+    <div id="top" className="min-h-screen w-full max-w-[100vw] overflow-x-hidden" style={{ background: BG, color: DARK }}>
       <header className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: CREAM }}>
@@ -149,7 +149,7 @@ export default function Launch() {
         </button>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-[160px]">
+      <main className="mx-auto w-full max-w-6xl overflow-x-hidden px-4 pb-[160px]">
         <section className="grid gap-6 py-6 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-10">
           <div className="space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wide" style={{ background: CARD, borderColor: BORDER, color: GREEN }}>
@@ -199,29 +199,30 @@ export default function Launch() {
           </div>
         </section>
 
-        <section id="founders-note" className="grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-start">
+        <section id="founders-note" className="mt-4 w-full max-w-full overflow-x-hidden">
           <FoundersNote />
-          <div className="space-y-6">
-            <div id="app-tour">
-              <FeatureShowcase />
-            </div>
-            <section id="what-we-help" className="rounded-[2rem] border p-5" style={{ background: CARD, borderColor: BORDER }}>
-              <div className="mb-4 flex items-center gap-2">
-                <Sparkles size={18} color={GREEN} />
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>What we help with</p>
-                  <h2 className="font-serif text-2xl font-black" style={{ color: DARK }}>Tools for real-life family systems.</h2>
-                </div>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {HELP_ITEMS.map(item => <HelpCard key={item.title} {...item} />)}
-              </div>
-            </section>
-          </div>
         </section>
 
-        <section id="donations" className="mt-6">
+        <section id="donations" className="mt-6 w-full max-w-full overflow-x-hidden">
           <DonationPanel />
+        </section>
+
+        <section id="app-tour" className="mt-6 grid w-full max-w-full gap-6 overflow-x-hidden md:grid-cols-[1.1fr_0.9fr] md:items-start">
+          <div className="min-w-0">
+            <FeatureShowcase />
+          </div>
+          <section id="what-we-help" className="min-w-0 rounded-[2rem] border p-5" style={{ background: CARD, borderColor: BORDER }}>
+            <div className="mb-4 flex items-center gap-2">
+              <Sparkles size={18} color={GREEN} />
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: GREEN }}>What we help with</p>
+                <h2 className="font-serif text-2xl font-black" style={{ color: DARK }}>Tools for real-life family systems.</h2>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {HELP_ITEMS.map(item => <HelpCard key={item.title} {...item} />)}
+            </div>
+          </section>
         </section>
 
         <section className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.1fr]" id="waitlist">

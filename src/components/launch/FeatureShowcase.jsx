@@ -282,7 +282,7 @@ export default function FeatureShowcase() {
         </button>
 
         {/* Dot indicators — scrollable strip */}
-        <div style={{ flex: 1, overflowX: "auto", display: "flex", gap: 5, alignItems: "center", scrollbarWidth: "none" }}>
+        <div style={{ flex: 1, display: "flex", flexWrap: "wrap", gap: 5, alignItems: "center", scrollbarWidth: "none" }}>
           {SLIDES.map((s, i) => (
             <button
               key={i}
