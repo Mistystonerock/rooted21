@@ -4,7 +4,6 @@ import AdminCodeRedemption from "@/components/rooted/AdminCodeRedemption";
 import FeatureShowcase from "@/components/launch/FeatureShowcase";
 import FoundersNote from "@/components/launch/FoundersNote";
 import DonationPanel from "@/components/launch/DonationPanel";
-import QuickPageSearch from "@/components/launch/QuickPageSearch";
 import { Sparkles, ChevronRight } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
@@ -117,8 +116,6 @@ export default function Launch() {
       {/* Ambient glows - root/growth aesthetic */}
       <div style={{ position: "fixed", top: "-10%", right: "-20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,157,110,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
       <div style={{ position: "fixed", bottom: "10%", left: "-20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(166,124,82,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <QuickPageSearch />
-
       {/* ── NAV ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "max(18px, env(safe-area-inset-top)) 20px 14px", position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

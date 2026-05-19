@@ -15,35 +15,58 @@ export default function DonationPanel() {
   const [customAmount, setCustomAmount] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const selectedAmount = Number(customAmount || amount);
+  const emailLooksValid = !email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   async function handleDonate() {
+    setMessage("");
     if (!selectedAmount || selectedAmount < 1 || loading) return;
+    if (!emailLooksValid) {
+      setMessage("Please enter a valid email address or leave the receipt email blank.");
+      return;
+    }
+
     setLoading(true);
-    const response = await base44.functions.invoke("createDonationCheckout", {
-      amount: selectedAmount,
-      donorEmail: email.trim() || undefined,
-      successUrl: `${window.location.origin}/?donation=success`,
-      cancelUrl: `${window.location.origin}/?donation=cancelled`,
-    });
-    window.location.href = response.data.url;
+    try {
+      const response = await base44.functions.invoke("createDonationCheckout", {
+        amount: selectedAmount,
+        donorEmail: email.trim() || undefined,
+        successUrl: `${window.location.origin}/?donation=success`,
+        cancelUrl: `${window.location.origin}/?donation=cancelled`,
+      });
+
+      if (response.data?.url) {
+        window.location.href = response.data.url;
+        return;
+      }
+
+      setMessage("Donation payments are coming soon. Thank you for wanting to support Rooted 21. Please check back soon or contact us for partnership opportunities.");
+    } catch {
+      setMessage("Donation payments are coming soon. Thank you for wanting to support Rooted 21. Please check back soon or contact us for partnership opportunities.");
+    }
+    setLoading(false);
+  }
+
+  function handleGrantPartnership() {
+    setMessage("Grant and partnership applications are coming soon. If you are an agency, funder, school, court, or community partner interested in Rooted 21, please check back soon.");
   }
 
   return (
-    <section style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 22, padding: "24px 18px", marginBottom: 28, boxShadow: "0 10px 30px rgba(90,61,40,0.06)" }}>
+    <section style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 22, padding: "24px 18px calc(140px + env(safe-area-inset-bottom))", marginBottom: 28, boxShadow: "0 10px 30px rgba(90,61,40,0.06)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <div style={{ width: 42, height: 42, borderRadius: 14, background: `${GREEN}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Heart size={20} color={GREEN} fill={GREEN} />
         </div>
         <div>
-          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", color: GREEN, textTransform: "uppercase" }}>Support Rooted 21</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 24, color: TEXT, lineHeight: 1.15 }}>Help us keep this free for every family that needs it.</h2>
+          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "0.18em", color: GREEN, textTransform: "uppercase" }}>Support Our Mission</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: 24, color: TEXT, lineHeight: 1.15 }}>Help Keep Rooted 21 Free</h2>
         </div>
       </div>
 
       <p style={{ fontSize: 13, lineHeight: 1.7, color: MUTED, marginBottom: 16 }}>
-        Rooted 21 is a mission-driven parenting support company dedicated to breaking generational cycles by providing free trauma-informed parenting tools, classes, and resources to families navigating hard things. Every donation — no matter the size — helps us keep this platform free and expand our reach to more families across Ohio and beyond.
+        Rooted 21 is a mission-driven parenting support company dedicated to breaking generational cycles by providing free trauma-informed parenting tools, classes, and resources to families navigating hard things. Every voluntary contribution — no matter the size — helps us keep this platform free and expand our reach to more families across Ohio and beyond.
       </p>
 
       <div style={{ background: "#F0F6F0", border: `1px solid ${GREEN}35`, borderRadius: 14, padding: "13px 14px", marginBottom: 16 }}>
@@ -60,7 +83,8 @@ export default function DonationPanel() {
         {AMOUNTS.map(value => (
           <button
             key={value}
-            onClick={() => { setAmount(value); setCustomAmount(""); }}
+            type="button"
+            onClick={() => { setAmount(value); setCustomAmount(""); setMessage(""); }}
             style={{ padding: "10px 0", borderRadius: 12, border: `1.5px solid ${amount === value && !customAmount ? GREEN : BORDER}`, background: amount === value && !customAmount ? `${GREEN}18` : "#fff", color: amount === value && !customAmount ? GREEN : TEXT, fontWeight: 900, cursor: "pointer" }}
           >
             ${value}
@@ -76,7 +100,7 @@ export default function DonationPanel() {
           type="number"
           min="1"
           value={customAmount}
-          onChange={e => setCustomAmount(e.target.value)}
+          onChange={e => { setCustomAmount(e.target.value); setMessage(""); }}
           placeholder="Custom amount"
           style={{ width: "100%", border: `1.5px solid ${BORDER}`, borderRadius: 12, padding: "12px 14px", fontSize: 13, boxSizing: "border-box" }}
         />
@@ -86,7 +110,7 @@ export default function DonationPanel() {
           aria-label="Email for donation receipt"
           type="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={e => { setEmail(e.target.value); setMessage(""); }}
           placeholder="Email for receipt (optional)"
           style={{ width: "100%", border: `1.5px solid ${BORDER}`, borderRadius: 12, padding: "12px 14px", fontSize: 13, boxSizing: "border-box" }}
         />
@@ -97,18 +121,25 @@ export default function DonationPanel() {
         disabled={loading || !selectedAmount || selectedAmount < 1}
         style={{ width: "100%", marginTop: 14, padding: "15px", background: loading ? `${GREEN}70` : GREEN, border: "none", borderRadius: 14, color: "#fff", fontWeight: 900, fontSize: 14, cursor: loading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
       >
-        {loading ? <><Loader2 size={15} className="animate-spin" /> Opening secure checkout…</> : <><Sparkles size={15} /> Donate Now — Support Our Mission</>}
+        {loading ? <><Loader2 size={15} className="animate-spin" /> Checking secure checkout…</> : <><Sparkles size={15} /> Contribute — Support Our Mission</>}
       </button>
 
-      <a
-        href="mailto:mstonerock@rooted21parenting.com?subject=Grant%20Partnership%20Application"
+      <button
+        type="button"
+        onClick={handleGrantPartnership}
         style={{ width: "100%", marginTop: 10, padding: "12px", background: "#fff", border: `1.5px solid ${GREEN}`, borderRadius: 14, color: GREEN, fontWeight: 900, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}
       >
         Apply for a Grant Partnership
-      </a>
+      </button>
 
-      <p style={{ textAlign: "center", fontSize: 10, color: GOLD, marginTop: 10, fontWeight: 700, lineHeight: 1.5 }}>
-        Rooted 21 Parenting Network LLC accepts voluntary donations to support our mission of keeping this platform free for families. Please note that as an LLC, donations are not currently tax deductible. We intend to pursue nonprofit status in the future.
+      {message && (
+        <p style={{ background: "#F0F6F0", border: `1px solid ${GREEN}35`, borderRadius: 12, padding: "11px 12px", textAlign: "center", fontSize: 12, color: TEXT, marginTop: 12, fontWeight: 700, lineHeight: 1.55 }}>
+          {message}
+        </p>
+      )}
+
+      <p style={{ textAlign: "center", fontSize: 10, color: GOLD, marginTop: 12, fontWeight: 700, lineHeight: 1.5 }}>
+        Rooted 21 Parenting Network LLC accepts voluntary contributions to support our mission of keeping this platform free for families. Rooted 21 is not currently a nonprofit organization, and contributions are not tax-deductible as charitable donations. We intend to pursue nonprofit status in the future.
       </p>
     </section>
   );
