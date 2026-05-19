@@ -99,7 +99,7 @@ function App() {
   const [maintenanceMode, setMaintenanceMode] = React.useState(true);
   const [bootLoading, setBootLoading] = React.useState(true);
   const [bootFailed, setBootFailed] = React.useState(false);
-  const [welcomeSeen, setWelcomeSeen] = React.useState(() => localStorage.getItem("rooted21_welcome_seen") === "true");
+  const [welcomeSeen, setWelcomeSeen] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
@@ -220,7 +220,7 @@ function App() {
           ) : (
           <AnimatePresence mode="wait">
             {needsWelcome ? (
-              <WelcomeToRooted21 user={user} onContinue={() => { localStorage.setItem("rooted21_welcome_seen", "true"); setWelcomeSeen(true); }} />
+              <WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />
             ) : needsOnboarding ? (
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
@@ -233,7 +233,7 @@ function App() {
               <Route path="/home" element={<PublicLandingPage />} />
               <Route path="/welcome" element={<PublicLandingPage />} />
               <Route path="/coming-soon" element={<PublicLandingPage />} />
-              <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={() => { localStorage.setItem("rooted21_welcome_seen", "true"); setWelcomeSeen(true); }} />} />
+              <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
               <Route path="/cps-case-navigation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CPSCaseNavigation /></FeatureLockGate></Suspense>} />
