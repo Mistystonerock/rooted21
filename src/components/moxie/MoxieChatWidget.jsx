@@ -77,8 +77,8 @@ export default function MoxieChatWidget() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-4 z-40 rounded-full px-4 py-3 shadow-xl"
-        style={{ background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
+        className="fixed right-4 z-40 rounded-full px-4 py-3 shadow-xl"
+        style={{ bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
         aria-label="Open Moxie chat"
       >
         <Bot size={18} className="mr-2" /> Ask Moxie
@@ -87,7 +87,7 @@ export default function MoxieChatWidget() {
   }
 
   return (
-    <section className="fixed bottom-20 right-3 z-50 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+    <section className="fixed right-3 z-50 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: "calc(env(safe-area-inset-bottom) + 5.75rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
       <div className="flex items-center gap-3 p-3" style={{ background: C.darkGreen }}>
         <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.16)" }}>
           <Bot size={20} color="#fff" />
@@ -101,7 +101,7 @@ export default function MoxieChatWidget() {
         </button>
       </div>
 
-      <div className="max-h-[420px] space-y-3 overflow-y-auto p-3" style={{ background: C.offWhite }}>
+      <div className="max-h-[min(420px,55vh)] space-y-3 overflow-y-auto p-3" style={{ background: C.offWhite }}>
         <a href="tel:988" className="flex items-center gap-2 rounded-2xl p-3 text-xs font-bold no-underline" style={{ background: "#FEF3EE", color: "#9A3412", border: "1px solid #F4C9B8" }}>
           <LifeBuoy size={15} /> If you are in immediate danger call 911 or emergency services. For crisis support, call or text 988.
         </a>

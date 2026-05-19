@@ -48,7 +48,7 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import AccessibilityStatement from '@/pages/AccessibilityStatement';
 import SkipToContentLink from '@/components/accessibility/SkipToContentLink';
-import AccessibilityToolbar from '@/components/accessibility/AccessibilityToolbar';
+import TopRightMenu from '@/components/rooted/TopRightMenu';
 import CrisisDisclaimer from '@/pages/CrisisDisclaimer';
 import AIDisclaimer from '@/pages/AIDisclaimer';
 import DataUsePolicy from '@/pages/DataUsePolicy';
@@ -57,7 +57,7 @@ import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
 import Donate from '@/pages/Donate';
 import SOS from '@/pages/SOS';
-import LogoutButton from '@/components/auth/LogoutButton';
+
 import BottomNav from '@/components/rooted/BottomNav';
 import RequiredOnboardingFlow from '@/components/onboarding/RequiredOnboardingFlow';
 import CopyrightFooter from '@/components/legal/CopyrightFooter';
@@ -69,7 +69,7 @@ import BehavioralHealthRecords from '@/pages/BehavioralHealthRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
 import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
-import QuickExitButton from '@/components/privacy/QuickExitButton';
+
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 import AdminRouteGate from '@/components/security/AdminRouteGate';
 import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
@@ -203,13 +203,7 @@ function App() {
         <ProfessionalGate user={user}>
         <SkipToContentLink />
         <OfflineStatusBanner />
-        <AccessibilityToolbar />
-        {user && !showComingSoon && <QuickExitButton />}
-        {user && (
-          <div className="fixed right-3 top-16 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
-            <LogoutButton />
-          </div>
-        )}
+        {user && !showComingSoon && <TopRightMenu user={user} />}
         <Router>
           {bootLoading ? (
             <LoadingFallback />
