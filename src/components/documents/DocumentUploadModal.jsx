@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { X, Upload, Loader2, AlertCircle, CheckCircle2, Plus } from "lucide-react";
 import DocumentAnalysisPreview from "@/components/documents/DocumentAnalysisPreview";
+import DocumentCalendarSyncPanel from "@/components/documents/DocumentCalendarSyncPanel";
 
 const CATEGORIES = [
   { value: "court_order", label: "Court Order", segment: "legal" },
@@ -33,6 +34,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
   const [loading, setLoading] = useState(false);
   const [parsing, setParsing] = useState(false);
   const [parsedData, setParsedData] = useState(null);
+  const [syncToCalendar, setSyncToCalendar] = useState(true);
   const [error, setError] = useState("");
   const [newTag, setNewTag] = useState("");
   const fileInputRef = useRef(null);
@@ -172,7 +174,19 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           extracted_requirements: parsedData?.requirements || [],
         });
 
-        onDocumentUploaded(newDoc);
+        if (syncToCalendar && parsedData) {
+          const syncResponse = await base44.functions.invoke("syncDocumentDeadlinesToCalendar", {
+            document_id: newDoc.id,
+            document_title: newDoc.title,
+            child_name: newDoc.child_name,
+            calendar_items: parsedData.calendar_items || [],
+            deadlines: parsedData.deadlines || [],
+            key_dates: parsedData.key_dates || [],
+          });
+          onDocumentUploaded({ ...newDoc, calendar_event_ids: (syncResponse.data.events || []).map(event => event.id) });
+        } else {
+          onDocumentUploaded(newDoc);
+        }
       };
       reader.readAsDataURL(file);
     } catch (err) {
@@ -243,6 +257,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           )}
 
           <DocumentAnalysisPreview parsedData={parsedData} />
+          <DocumentCalendarSyncPanel parsedData={parsedData} enabled={syncToCalendar} onChange={setSyncToCalendar} />
 
           {/* Title */}
           <div>
@@ -372,7 +387,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
             {loading ? (
               <><Loader2 size={16} className="animate-spin" /> Uploading...</>
             ) : (
-              <>✓ Upload Document</>
+              <>{syncToCalendar && parsedData ? "✓ Upload & Sync Calendar" : "✓ Upload Document"}</>
             )}
           </button>
         </form>
