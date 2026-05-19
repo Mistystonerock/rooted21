@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Bot, LifeBuoy, Loader2, Send, X } from "lucide-react";
+import { ArrowLeft, Bot, Home, LifeBuoy, Loader2, Send, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import MoxieModeSelector from "@/components/moxie/MoxieModeSelector";
 import { MOXIE_MODES, inferMoxieMode } from "@/lib/moxie-ai-config";
@@ -39,9 +39,12 @@ function openingPrompt(mode) {
 }
 
 export default function MoxieChatWidget({ compact = false }) {
+  const panelRef = useRef(null);
+  const openerRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const modulePath = window.location.pathname;
   const moduleLabel = useMemo(() => currentModuleLabel(modulePath), [modulePath]);
@@ -54,6 +57,33 @@ export default function MoxieChatWidget({ compact = false }) {
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => setUser(null));
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") closeMoxie();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    setTimeout(() => panelRef.current?.querySelector("button, input, a")?.focus?.(), 0);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
+  function closeMoxie() {
+    setOpen(false);
+    setSending(false);
+    setError("");
+    document.body.style.overflow = "";
+    setTimeout(() => openerRef.current?.focus?.(), 0);
+  }
+
+  function exitMoxie() {
+    closeMoxie();
+    window.location.assign(user ? "/dashboard" : "/");
+  }
+
+  function backFromMoxie() {
+    closeMoxie();
+  }
 
   function changeMode(nextMode) {
     setMode(nextMode);
@@ -71,28 +101,35 @@ export default function MoxieChatWidget({ compact = false }) {
     const nextMessages = [...messages, { role: "user", content: clean }];
     setMessages(nextMessages);
     setInput("");
+    setError("");
     setSending(true);
 
-    const response = await base44.functions.invoke("moxieChat", {
-      message: clean,
-      modulePath,
-      moduleLabel,
-      mode,
-      history: nextMessages.map(({ role, content }) => ({ role, content }))
-    });
+    try {
+      const response = await base44.functions.invoke("moxieChat", {
+        message: clean,
+        modulePath,
+        moduleLabel,
+        mode,
+        history: nextMessages.map(({ role, content }) => ({ role, content }))
+      });
 
-    setMessages(prev => [...prev, {
-      role: "assistant",
-      content: response.data.reply,
-      suggestions: response.data.suggestions || [],
-      crisis: response.data.crisis
-    }]);
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: response.data.reply,
+        suggestions: response.data.suggestions || [],
+        crisis: response.data.crisis
+      }]);
+    } catch {
+      setError("Something went wrong loading Moxie. You can return to the dashboard.");
+    }
     setSending(false);
   }
 
   if (!open) {
     return (
       <button
+        ref={openerRef}
+        type="button"
         onClick={() => setOpen(true)}
         className={`fixed z-40 shadow-xl ${compact ? "rounded-full p-3" : "rounded-full px-4 py-3"}`}
         style={{ right: isFounderDashboard ? "5rem" : "1rem", bottom: compact ? "calc(env(safe-area-inset-bottom) + 7rem)" : "calc(env(safe-area-inset-bottom) + 8rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
@@ -105,17 +142,23 @@ export default function MoxieChatWidget({ compact = false }) {
   }
 
   return (
-    <section className="fixed right-3 z-40 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: compact ? "calc(env(safe-area-inset-bottom) + 10rem)" : "calc(env(safe-area-inset-bottom) + 8rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
-      <div className="flex items-center gap-3 p-3" style={{ background: C.darkGreen }}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.16)" }}>
-          <Bot size={20} color="#fff" />
+    <section ref={panelRef} className="fixed right-3 z-40 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: compact ? "calc(env(safe-area-inset-bottom) + 10rem)" : "calc(env(safe-area-inset-bottom) + 8rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
+      <div className="flex items-center gap-2 p-3" style={{ background: C.darkGreen }}>
+        <button type="button" onClick={backFromMoxie} className="rounded-xl px-2 py-2 text-xs font-black" style={{ color: C.cream, background: "rgba(255,255,255,0.12)", border: "none" }} aria-label="Back from Moxie chat">
+          <ArrowLeft size={16} className="mr-1" /> Back
+        </button>
+        <div className="min-w-0 flex-1 text-center">
+          <p className="truncate text-sm font-black" style={{ color: C.cream }}>{MOXIE_MODES[mode]?.label || "Moxie AI"}</p>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-black" style={{ color: C.cream }}>Moxie AI</p>
-          <p className="truncate text-[11px]" style={{ color: C.cream }}>{MOXIE_MODES[mode]?.label || "Trauma-informed support"}</p>
-        </div>
-        <button onClick={() => setOpen(false)} className="rounded-xl" style={{ color: C.cream, background: "transparent", border: "none" }} aria-label="Close Moxie AI chat">
+        <button type="button" onClick={closeMoxie} className="rounded-xl px-2 py-2" style={{ color: C.cream, background: "rgba(255,255,255,0.12)", border: "none" }} aria-label="Close Moxie chat">
           <X size={18} />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between gap-2 px-3 py-2" style={{ background: C.white, borderBottom: `1px solid ${C.cream}` }}>
+        <span className="flex items-center gap-2 text-[11px] font-bold" style={{ color: C.mutedText }}><Bot size={14} /> Moxie support panel</span>
+        <button type="button" onClick={exitMoxie} className="rounded-xl px-3 py-1.5 text-[11px] font-black" style={{ background: C.cream, color: C.darkGreen, border: "none" }} aria-label="Exit Moxie">
+          <Home size={12} className="mr-1" /> Exit Moxie
         </button>
       </div>
 
@@ -144,6 +187,16 @@ export default function MoxieChatWidget({ compact = false }) {
             </div>
           </div>
         ))}
+
+        {error && (
+          <div className="rounded-2xl p-3 text-center" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+            <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{error}</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <button type="button" onClick={exitMoxie} className="rounded-xl px-2 py-2 text-xs font-bold" style={{ background: C.darkGreen, color: C.cream, border: "none" }}>Return to Dashboard</button>
+              <button type="button" onClick={closeMoxie} className="rounded-xl px-2 py-2 text-xs font-bold" style={{ background: C.cream, color: C.darkGreen, border: "none" }}>Close Moxie</button>
+            </div>
+          </div>
+        )}
 
         {sending && (
           <div className="flex justify-start">
