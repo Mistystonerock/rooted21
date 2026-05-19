@@ -52,7 +52,7 @@ export default function FamilyFunResourceCard({ resource, onReported }) {
         <div className="min-w-0">
           <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: C.mutedText }}>{resource.activity_type || "Family activity"}</p>
           <h3 className="mt-1 font-serif text-lg font-bold leading-tight" style={{ color: C.darkGreen }}>{resource.name}</h3>
-          <p className="mt-1 flex items-center gap-1 text-xs" style={{ color: C.mutedText }}><MapPin size={12} /> {resource.city || "Ohio"}{resource.county ? `, ${resource.county} County` : ""}</p>
+          <p className="mt-1 flex items-center gap-1 text-xs" style={{ color: C.mutedText }}><MapPin size={12} /> {resource.city || "Ohio"}{resource.county ? `, ${resource.county} County` : ""}{resource.zip_code ? ` · ${resource.zip_code}` : ""}</p>
         </div>
         <span className="rounded-full px-2.5 py-1 text-[10px] font-black" style={{ background: resource.verification_status === "verified" ? "#EAF4EA" : "#FEF3EE", color: resource.verification_status === "verified" ? "#2F7D32" : "#9A3412" }}>{resource.verification_status || "needs_review"}</span>
       </div>

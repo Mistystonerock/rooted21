@@ -37,6 +37,18 @@
     "city": {
       "type": "string"
     },
+    "zip_code": {
+      "type": "string",
+      "description": "Primary ZIP code for local resources"
+    },
+    "service_area_zips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "ZIP codes served by this resource"
+    },
     "state": {
       "type": "string",
       "default": "OH"
