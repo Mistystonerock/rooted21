@@ -125,13 +125,13 @@ function App() {
   const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
   const currentPath = window.location.pathname;
   const isPublicLandingPath = publicPaths.includes(currentPath);
-  const showPublicComingSoon = !user && publicComingSoonPaths.includes(currentPath);
+  const showPublicComingSoon = publicComingSoonPaths.includes(currentPath);
   const isPublicInfoPath = !user && publicInfoPaths.includes(currentPath);
   const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
   const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
-  const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
+  const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/welcome"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   const handleWelcomeContinue = React.useCallback(() => {
@@ -316,13 +316,13 @@ function App() {
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
             <Routes>
-              <Route path="/" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
+              <Route path="/" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/crisis-intake" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CrisisIntake /></FeatureLockGate></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
-              <Route path="/home" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
+              <Route path="/home" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/welcome" element={<FeatureLockGate user={user}><WelcomeToRooted21 user={user} onContinue={handleWelcomeContinue} /></FeatureLockGate>} />
               <Route path="/login" element={<Navigate to={needsWelcome ? "/welcome" : loggedInHomePath} replace />} />
               <Route path="/coming-soon" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
