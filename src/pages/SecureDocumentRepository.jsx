@@ -9,6 +9,7 @@ import DocumentSearchFilter from "@/components/documents/DocumentSearchFilter";
 import DocumentCard from "@/components/documents/DocumentCard";
 import DocumentShareModal from "@/components/documents/DocumentShareModal";
 import DocumentWorkflowToolkit from "@/components/documents/DocumentWorkflowToolkit";
+import RedeemCodePanel from "@/components/documents/RedeemCodePanel";
 
 export default function SecureDocumentRepository() {
   const [user, setUser] = useState(null);
@@ -67,6 +68,21 @@ export default function SecureDocumentRepository() {
       });
     }
     setShowUploadModal(false);
+  }
+
+  async function handleView(doc) {
+    if (doc.file_url) {
+      window.open(doc.file_url, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (doc.private_file_uri) {
+      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({
+        file_uri: doc.private_file_uri,
+        expires_in: 300,
+      });
+      window.open(signed_url, "_blank", "noopener,noreferrer");
+    }
   }
 
   async function handleDelete(docId) {
@@ -134,6 +150,8 @@ export default function SecureDocumentRepository() {
 
         <DocumentWorkflowToolkit />
 
+        <RedeemCodePanel onRedeemed={fetchDocuments} />
+
         {/* Search */}
         <div className="relative">
           <Search size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: C.mutedText }} />
@@ -195,6 +213,7 @@ export default function SecureDocumentRepository() {
               <DocumentCard
                 key={doc.id}
                 doc={doc}
+                onView={() => handleView(doc)}
                 onShare={() => setShareModalDoc(doc)}
                 onDelete={() => handleDelete(doc.id)}
               />

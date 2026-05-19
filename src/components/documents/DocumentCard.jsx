@@ -2,7 +2,7 @@ import { C } from "@/lib/rooted-constants";
 import { FileText, Eye, Share2, Trash2, Lock } from "lucide-react";
 import { format } from "date-fns";
 
-export default function DocumentCard({ doc, onShare, onDelete }) {
+export default function DocumentCard({ doc, onView, onShare, onDelete }) {
   // Get icon by category
   const getCategoryIcon = (cat) => {
     const icons = {
@@ -117,26 +117,14 @@ export default function DocumentCard({ doc, onShare, onDelete }) {
 
       {/* Actions */}
       <div className="flex gap-1.5 mt-2 pt-2" style={{ borderTop: `1px solid ${C.cream}` }}>
-        {doc.file_url ? (
-          <a
-            href={doc.file_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
-            style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer", textDecoration: "none" }}
-          >
-            <Eye size={12} /> View
-          </a>
-        ) : (
-          <button
-            type="button"
-            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
-            style={{ background: C.cream, color: C.darkGreen, border: "none" }}
-            title="Private vault files require signed access"
-          >
-            <Eye size={12} /> Vaulted
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onView}
+          className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"
+          style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}
+        >
+          <Eye size={12} /> View
+        </button>
         <button
           onClick={onShare}
           className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg font-bold text-[10px]"

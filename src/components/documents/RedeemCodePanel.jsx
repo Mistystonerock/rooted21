@@ -100,6 +100,9 @@ export default function RedeemCodePanel({ onRedeemed }) {
                 <p className="text-[11px] mt-1" style={{ color: C.mutedText }}>{result.document.description}</p>
               )}
             </div>
+            <p className="text-[10px] font-bold" style={{ color: C.mutedText }}>
+              This secure link expires in 5 minutes.
+            </p>
             <div className="flex gap-2">
               <button
                 onClick={() => window.open(result.document.file_url, "_blank")}

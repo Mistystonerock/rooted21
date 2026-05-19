@@ -44,22 +44,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'The document associated with this code no longer exists.' }, { status: 404 });
     }
 
-    // Mark code as used (but still allow repeated access)
-    if (!record.is_used) {
-      await base44.asServiceRole.entities.DocumentAccessCode.update(record.id, {
-        is_used: true,
-        used_at: new Date().toISOString(),
-      });
+    if (record.is_used) {
+      return Response.json({ error: 'This access code has already been used. Please request a new one.' }, { status: 403 });
     }
 
-    // Ensure recipient is in shared_with
-    const currentShared = doc.shared_with || [];
-    if (!currentShared.includes(user.email)) {
-      await base44.asServiceRole.entities.SecureDocument.update(doc.id, {
-        shared_with: [...currentShared, user.email],
-        is_private: false,
+    let signedUrl = doc.file_url || '';
+    if (doc.private_file_uri) {
+      const signed = await base44.asServiceRole.integrations.Core.CreateFileSignedUrl({
+        file_uri: doc.private_file_uri,
+        expires_in: 300,
       });
+      signedUrl = signed.signed_url;
     }
+
+    await base44.asServiceRole.entities.DocumentAccessCode.update(record.id, {
+      is_used: true,
+      used_at: new Date().toISOString(),
+    });
 
     return Response.json({
       success: true,
@@ -67,13 +68,14 @@ Deno.serve(async (req) => {
         id: doc.id,
         title: doc.title,
         category: doc.category,
-        file_url: doc.file_url,
+        file_url: signedUrl,
         file_name: doc.file_name,
         child_name: doc.child_name,
         description: doc.description,
         tags: doc.tags,
       },
       grantedBy: record.granted_by_name,
+      expiresInMinutes: 5,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
