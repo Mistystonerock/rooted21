@@ -68,9 +68,7 @@
     "situation_summary"
   ],
   "rls": {
-    "create": {
-      "owner_email": "{{user.email}}"
-    },
+    "create": true,
     "read": {
       "owner_email": "{{user.email}}"
     },

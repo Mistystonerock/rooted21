@@ -131,11 +131,11 @@ export default function Launch() {
           onClick={() => base44.auth.redirectToLogin("/dashboard")}
           style={{ background: CARD, border: `1.5px solid ${GREEN}`, borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, padding: "9px 18px", cursor: "pointer" }}
         >
-          Sign In
+          Already have access? Log in
         </button>
       </div>
 
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px", position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 16px max(96px, env(safe-area-inset-bottom))", position: "relative", zIndex: 1 }}>
         {deletedMessage && (
           <div style={{ background: "#EAF4EA", border: `1.5px solid ${GREEN}40`, color: TEXT, borderRadius: 14, padding: "12px 14px", margin: "8px 0 14px", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
             {deletedMessage}

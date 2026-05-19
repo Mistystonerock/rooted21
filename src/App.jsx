@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Suspense } from 'react';
 import React from 'react';
@@ -104,11 +104,15 @@ function App() {
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
   const isFounder = user?.email === "misty.stonerock88@gmail.com";
   const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
-  const publicLandingPaths = ["/", "/home", "/welcome", "/coming-soon"];
-  const isPublicLandingPath = publicLandingPaths.includes(window.location.pathname);
-  const showPublicComingSoon = comingSoonMode && !user && isPublicLandingPath;
+  const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist"];
+  const publicInfoPaths = ["/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey"];
+  const isPublicLandingPath = [...publicComingSoonPaths, ...publicInfoPaths].includes(window.location.pathname);
+  const showPublicComingSoon = !user && publicComingSoonPaths.includes(window.location.pathname);
+  const isPublicInfoPath = !user && publicInfoPaths.includes(window.location.pathname);
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
-  const needsWelcome = user && !welcomeSeen && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
+  const loggedInHomePath = user?.role === "founder" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
+  const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
+  const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/founder-dashboard", "/founder-access", "/founder-admin-management"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
 
   React.useEffect(() => {
@@ -147,6 +151,12 @@ function App() {
       }
 
       try {
+        const isAuthenticated = await withStartupTimeout(base44.auth.isAuthenticated(), 8000);
+        if (!isAuthenticated) {
+          if (mounted) setUser(null);
+          return;
+        }
+
         const u = await withStartupTimeout(base44.auth.me(), 8000);
         if (mounted) setUser(u);
         if (u?.email) {
@@ -208,12 +218,22 @@ function App() {
     );
   }
 
-  if (!user && isPublicLandingPath) {
+  if (isPublicInfoPath) {
     return (
       <ClientErrorBoundary>
         <ThemeProvider>
           <Router>
-            <PublicLandingPage />
+            <Routes>
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/donation-info" element={<Donate />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/donate" element={<Donate />} />
+              <Route path="/legal-disclaimers" element={<LegalAndDisclaimers />} />
+              <Route path="/survey" element={<AppSurvey />} />
+              <Route path="*" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
+            </Routes>
             <Toaster />
           </Router>
         </ThemeProvider>
@@ -246,15 +266,19 @@ function App() {
               <RequiredOnboardingFlow user={user} onComplete={() => setUser(prev => ({ ...prev, onboarding_completed: true }))} />
             ) : (
             <Routes>
-              <Route path="/" element={<PublicLandingPage />} />
+              <Route path="/" element={<Navigate to={loggedInHomePath} replace />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/crisis-intake" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CrisisIntake /></FeatureLockGate></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
               <Route path="/hidden-document-vault" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><HiddenDocumentVault /></FeatureLockGate></Suspense>} />
-              <Route path="/home" element={<PublicLandingPage />} />
-              <Route path="/welcome" element={<PublicLandingPage />} />
-              <Route path="/coming-soon" element={<PublicLandingPage />} />
+              <Route path="/home" element={<Navigate to={loggedInHomePath} replace />} />
+              <Route path="/welcome" element={<FeatureLockGate user={user}><WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} /></FeatureLockGate>} />
+              <Route path="/coming-soon" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
+              <Route path="/waitlist" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/donation-info" element={<Donate />} />
               <Route path="/welcome-to-rooted21" element={<WelcomeToRooted21 user={user} onContinue={() => setWelcomeSeen(true)} />} />
               <Route path="/dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.Dashboard /></FeatureLockGate></Suspense>} />
               <Route path="/wraparound-support" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.WraparoundSupport /></FeatureLockGate></Suspense>} />
