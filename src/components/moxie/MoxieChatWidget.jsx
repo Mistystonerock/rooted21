@@ -38,7 +38,7 @@ function openingPrompt(mode) {
   return "Hi, I’m Moxie AI. I can help you find the next calm step.";
 }
 
-export default function MoxieChatWidget() {
+export default function MoxieChatWidget({ compact = false }) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -94,17 +94,18 @@ export default function MoxieChatWidget() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed z-40 rounded-full px-4 py-3 shadow-xl"
-        style={{ right: isFounderDashboard ? "5rem" : "1rem", bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
+        className={`fixed z-40 shadow-xl ${compact ? "rounded-full p-3" : "rounded-full px-4 py-3"}`}
+        style={{ right: isFounderDashboard ? "5rem" : "1rem", bottom: compact ? "calc(env(safe-area-inset-bottom) + 1.25rem)" : "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
         aria-label="Open Moxie AI chat"
+        title="Ask Moxie AI"
       >
-        <Bot size={18} className="mr-2" /> Ask Moxie AI
+        <Bot size={compact ? 20 : 18} className={compact ? "" : "mr-2"} /> {!compact && "Ask Moxie AI"}
       </button>
     );
   }
 
   return (
-    <section className="fixed right-3 z-50 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: "calc(env(safe-area-inset-bottom) + 5.75rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
+    <section className="fixed right-3 z-50 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: compact ? "calc(env(safe-area-inset-bottom) + 4.5rem)" : "calc(env(safe-area-inset-bottom) + 5.75rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
       <div className="flex items-center gap-3 p-3" style={{ background: C.darkGreen }}>
         <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.16)" }}>
           <Bot size={20} color="#fff" />

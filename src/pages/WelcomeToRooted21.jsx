@@ -144,29 +144,29 @@ But then something changed.`
   {
     title: "The System That Helped Save My Life",
     defaultOpen: true,
-    text: `At 30 years old, I entered Family Treatment Court.
+    text: `At 30 years old, I entered Ross County Juvenile Treatment Court with Judge Benson.
 
 I was face to face with the same system I once believed failed me as a child.
 
 Some of the same people were still there. And honestly, some people probably did not think I would make it.
 
-But Family Treatment Court changed my life.
+But Ross County Juvenile Treatment Court with Judge Benson changed my life.
 
 Recovery changed my life.
 
 My recovery date is May 7, 2018.
 
-Treatment Court gave me structure when I needed structure. Accountability when I needed accountability. Support when I needed support. And a chance when I needed someone to believe I could become more than my past.
+Ross County Juvenile Treatment Court gave me structure when I needed structure, accountability when I needed accountability, support when I needed support, and a chance when I needed someone to believe I could become more than my past.
 
-It did not just help me get through a case.
+Judge Benson and the treatment court team helped me see that accountability and support could exist together.
+
+Ross County Juvenile Treatment Court did not just help me get through a case.
 
 It helped save my life.
 
 It helped me become the mother I wanted to be. It helped me become the woman I was always meant to be. It helped me turn pain into purpose.
 
-The same system I once hated became the system I learned to understand, work with, challenge, and help change.
-
-I went from being someone who felt failed by the system to becoming someone who now works beside the system to help families succeed.
+After graduating, I became connected to the same system in a new way. I went from being someone who felt failed by the system to becoming someone who now works beside the system to help families succeed.
 
 I worked at CPS as a Family Peer Mentor for three years. I have mentored in Juvenile Treatment Court for years. I am now a Community Behavioral Health Worker and Risk Management provider.
 
@@ -367,7 +367,7 @@ function Section({ title, children, defaultOpen = false }) {
       <summary className="cursor-pointer list-none font-serif text-xl font-bold" style={{ color: DARK }}>
         <span className="inline-flex w-full items-center justify-between gap-3">
           {title}
-          <span className="rounded-full px-3 py-1 text-xs font-bold" style={{ background: CREAM, color: MUTED }}>Read</span>
+          <span className="rounded-full px-3 py-1 text-xs font-bold" style={{ background: CREAM, color: MUTED }}>Read More</span>
         </span>
       </summary>
       <div className="mt-4 space-y-4 text-sm leading-7" style={{ color: MUTED }}>
@@ -398,7 +398,7 @@ export default function WelcomeToRooted21({ user, onContinue }) {
 
   return (
     <div className="min-h-screen px-4 py-6" style={{ background: BG, color: DARK }}>
-      <main className="mx-auto max-w-3xl space-y-4 pb-10">
+      <main className="mx-auto max-w-3xl space-y-4 pb-48 md:pb-32">
         <section className="rounded-[2rem] border p-6 text-center shadow-sm" style={{ background: CARD, borderColor: BORDER }}>
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full" style={{ background: CREAM }}>
             <Leaf size={28} color={GREEN} />
@@ -527,7 +527,7 @@ You are not alone here.`} />
         <button
           type="button"
           onClick={continueToDashboard}
-          className="sticky bottom-4 z-10 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black shadow-lg"
+          className="sticky bottom-28 z-10 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-sm font-black shadow-lg md:bottom-6"
           style={{ background: GREEN, color: "#fff", border: "none" }}
         >
           Continue to My Dashboard <ChevronRight size={18} />
