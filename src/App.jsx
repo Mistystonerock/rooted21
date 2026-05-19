@@ -109,8 +109,7 @@ function App() {
   const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
   const currentPath = window.location.pathname;
   const isPublicLandingPath = publicPaths.includes(currentPath);
-  const showPublicComingSoon = !user && publicComingSoonPaths.includes(currentPath) && comingSoonMode;
-  const showPublicLanding = !user && publicComingSoonPaths.includes(currentPath) && !comingSoonMode;
+  const showPublicComingSoon = !user && publicComingSoonPaths.includes(currentPath);
   const isPublicInfoPath = !user && publicInfoPaths.includes(currentPath);
   const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
@@ -211,7 +210,7 @@ function App() {
     );
   }
 
-  if (showPublicComingSoon || showPublicLanding) {
+  if (showPublicComingSoon) {
     return (
       <ClientErrorBoundary>
         <ThemeProvider>
