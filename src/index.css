@@ -133,14 +133,21 @@
     /* Global minimum font size for readability (WCAG) — bumped for accessibility */
     font-size: max(16px, 1rem);
   }
-  button, a {
+  button, a, [role="button"], [role="tab"], [role="menuitem"], [role="link"], .cursor-pointer {
     @apply select-none;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  button, a {
     /* Minimum 44×44px tap target on touch devices */
     min-height: 44px;
     min-width: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  button:hover, a:hover, [role="button"]:hover, [role="tab"]:hover, [role="menuitem"]:hover, [role="link"]:hover, .cursor-pointer:hover {
+    filter: brightness(0.98);
   }
   /* Restore inline links so they don't get 44px height */
   p a, span a, li a {

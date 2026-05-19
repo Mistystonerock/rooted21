@@ -74,6 +74,7 @@ import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled
 import AdminRouteGate from '@/components/security/AdminRouteGate';
 import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
 import WelcomeToRooted21 from '@/pages/WelcomeToRooted21';
+import useDesktopInteractionSupport from '@/hooks/useDesktopInteractionSupport';
 
 function withStartupTimeout(promise, ms = 8000) {
   return Promise.race([
@@ -111,6 +112,8 @@ function SignInRedirect() {
 }
 
 function App() {
+  useDesktopInteractionSupport();
+
   const [user, setUser] = React.useState(null);
   const [comingSoonMode, setComingSoonMode] = React.useState(true);
   const [maintenanceMode, setMaintenanceMode] = React.useState(false);
