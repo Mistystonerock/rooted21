@@ -27,6 +27,21 @@
         "ohiorise",
         "fcfc",
         "casa",
+        "veterans",
+        "social_security",
+        "benefits",
+        "employment",
+        "clothing",
+        "crisis",
+        "youth_support",
+        "kinship_foster_care",
+        "court_support",
+        "medical",
+        "local_government",
+        "parks",
+        "trails",
+        "wellness",
+        "emergency_assistance",
         "other"
       ],
       "default": "other"
@@ -157,6 +172,9 @@
         "verified",
         "needs_review",
         "outdated",
+        "user_reported_issue",
+        "broken_link",
+        "seasonal_event_based",
         "archived"
       ],
       "default": "needs_review"

@@ -38,6 +38,8 @@ export default function ResourceManagement() {
   const assignedCounties = permissions?.assigned_counties || [];
   const manageableResources = user?.role === "founder" ? resources : resources.filter(resource => !assignedCounties.length || assignedCounties.includes(resource.county));
   const counties = useMemo(() => [...new Set(manageableResources.map(r => r.county).filter(Boolean))].sort(), [manageableResources]);
+  const resourcesByCounty = useMemo(() => counties.map(county => ({ county, count: manageableResources.filter(r => r.county === county).length })), [counties, manageableResources]);
+  const resourcesByCategory = useMemo(() => [...new Set(manageableResources.map(r => r.category).filter(Boolean))].sort().map(category => ({ category, count: manageableResources.filter(r => r.category === category).length })), [manageableResources]);
   const filtered = manageableResources.filter(resource => {
     const text = `${resource.name} ${resource.county} ${resource.category} ${resource.description_en}`.toLowerCase();
     const matchesSearch = !filters.search || text.includes(filters.search.toLowerCase());
@@ -93,7 +95,10 @@ export default function ResourceManagement() {
       verified: resources.filter(r => r.verification_status === "verified").length,
       needs_review: resources.filter(r => r.verification_status === "needs_review").length,
       outdated: resources.filter(r => r.verification_status === "outdated").length,
-      closed: resources.filter(r => r.verification_status === "closed").length,
+      broken_links: resources.filter(r => r.verification_status === "broken_link" || r.broken_link_flag).length,
+      user_reported_issues: reports.filter(r => r.status === "pending").length,
+      resources_by_county: resourcesByCounty,
+      resources_by_category: resourcesByCategory,
       pending_reports: reports.filter(r => r.status === "pending").length,
       resources: resources.map(r => ({ name: r.name, county: r.county, category: r.category, status: r.verification_status, last_verified: r.verified_at || "never", verified_by: r.verified_by || "" }))
     };
@@ -131,11 +136,26 @@ export default function ResourceManagement() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Total</p><p className="text-2xl font-black">{manageableResources.length}</p></div>
           <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Verified</p><p className="text-2xl font-black">{manageableResources.filter(r => r.verification_status === "verified").length}</p></div>
-          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Needs review</p><p className="text-2xl font-black">{manageableResources.filter(r => ["needs_review", "outdated"].includes(r.verification_status)).length}</p></div>
-          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Closed</p><p className="text-2xl font-black">{manageableResources.filter(r => r.verification_status === "closed").length}</p></div>
-          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Pending reports</p><p className="text-2xl font-black">{reports.filter(r => r.status === "pending").length}</p></div>
-          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Emergency</p><p className="text-2xl font-black">{manageableResources.filter(r => r.crisis_priority || r.emergency_availability || r.verification_status === "emergency_only").length}</p></div>
+          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Needs review</p><p className="text-2xl font-black">{manageableResources.filter(r => r.verification_status === "needs_review").length}</p></div>
+          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Outdated</p><p className="text-2xl font-black">{manageableResources.filter(r => r.verification_status === "outdated").length}</p></div>
+          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">Broken links</p><p className="text-2xl font-black">{manageableResources.filter(r => r.verification_status === "broken_link" || r.broken_link_flag).length}</p></div>
+          <div className="rounded-2xl border bg-white p-4"><p className="text-xs font-bold text-stone-500">User reports</p><p className="text-2xl font-black">{reports.filter(r => r.status === "pending").length}</p></div>
           <button onClick={load} className="rounded-2xl border bg-white p-4 text-left"><p className="text-xs font-bold text-stone-500">Refresh</p><p className="inline-flex items-center text-sm font-black"><RefreshCw className="mr-2 h-4 w-4" /> Reload</p></button>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <section className="rounded-3xl border bg-white p-4 shadow-sm">
+            <p className="mb-3 text-sm font-black">Resources by county</p>
+            <div className="flex flex-wrap gap-2">
+              {resourcesByCounty.slice(0, 12).map(item => <span key={item.county} className="rounded-full bg-stone-100 px-3 py-1 text-xs font-bold">{item.county}: {item.count}</span>)}
+            </div>
+          </section>
+          <section className="rounded-3xl border bg-white p-4 shadow-sm">
+            <p className="mb-3 text-sm font-black">Resources by category</p>
+            <div className="flex flex-wrap gap-2">
+              {resourcesByCategory.slice(0, 16).map(item => <span key={item.category} className="rounded-full bg-stone-100 px-3 py-1 text-xs font-bold">{item.category?.replaceAll("_", " ")}: {item.count}</span>)}
+            </div>
+          </section>
         </div>
 
         {reports.filter(report => report.status === "pending").length > 0 && (

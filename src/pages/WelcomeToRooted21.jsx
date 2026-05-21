@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import FounderPhotoCard from "@/components/rooted/FounderPhotoCard";
+import FounderStoryAudioControls from "@/components/rooted/FounderStoryAudioControls";
 import {
   Baby,
   BookOpen,
@@ -36,6 +37,96 @@ const GREEN = "#6b9d6e";
 const DARK = "#5a3d28";
 const MUTED = "#8b6f54";
 const BORDER = "rgba(120,85,60,0.2)";
+
+const welcomeStoryText = `I’m so glad you’re here.
+
+Before you go any further into this app, I want you to know something important.
+
+Rooted 21 was not built by someone who only studied trauma, systems, parenting, or behavior from the outside.
+
+It was built by someone who has lived it.
+
+It was built by someone who knows what it feels like to be the child no one understood.
+
+The student who was labeled.
+
+The parent who made mistakes.
+
+The person who sat across from the system scared, angry, ashamed, and overwhelmed.
+
+The person who had to rebuild her life from the ground up.
+
+And the person who now works every day to help children and families feel seen, supported, and understood.
+
+Rooted 21 was created for families who are trying to survive hard systems while still holding everything together at home.
+
+This app is not here to judge you.
+
+It is here to help you breathe, get organized, find support, understand your next step, and remember that you are not alone.`;
+
+const missionStoryText = `My mission is to turn pain into purpose by helping families break generational cycles, supporting parents with real tools instead of judgment, advocating for children who have experienced trauma, and building a community where healing, accountability, and growth can happen together.
+
+Rooted 21 exists because families need more than orders, paperwork, and expectations.
+
+They need support. They need tools. They need reminders. They need plain language. They need connection. They need someone to believe they are more than their worst day.
+
+This app is not just about parenting.
+
+It is about helping families stay rooted while they are walking through hard seasons.
+
+It is about helping people feel seen, supported, prepared, and less alone.
+
+It is about helping children feel safe enough to learn, grow, and succeed.
+
+It is about taking lived experience and turning it into something that can help the next family.`;
+
+const notAloneStoryText = `I built Rooted 21 because I know what it feels like to need help and not know where to start.
+
+I know what it feels like to have people judge your past before they see your progress.
+
+I know what it feels like to be labeled before someone understands your story.
+
+I know what it feels like to be counted out and still have something inside you fighting to become more.
+
+I know what it feels like to want better for your children.
+
+I know what it feels like to carry shame.
+
+I know what it feels like to rebuild.
+
+I know what it feels like to look at a child and know there is more underneath the behavior.
+
+That is why this app was created with love, lived experience, and a deep belief that families deserve tools that actually help.
+
+You are not just a case.
+
+You are not just paperwork.
+
+You are not just a number in a system.
+
+You are not your worst day.
+
+You are not your past.
+
+You are not the labels people placed on you.
+
+You are a person.
+
+Your family matters.
+
+Your story matters.
+
+Your healing matters.
+
+Your progress matters.
+
+Your children matter.
+
+Your future matters.
+
+Rooted 21 is here to help you find your next right step.
+
+You are not alone here.`;
 
 const storySections = [
   {
@@ -406,33 +497,11 @@ export default function WelcomeToRooted21({ user, onContinue }) {
           <p className="text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: GREEN }}>Rooted 21</p>
           <h1 className="mt-2 font-serif text-3xl font-black md:text-4xl" style={{ color: DARK }}>Welcome to Rooted 21</h1>
           <div className="mx-auto mt-4 max-w-2xl space-y-4 text-sm leading-7" style={{ color: MUTED }}>
-            <Paragraphs text={`I’m so glad you’re here.
-
-Before you go any further into this app, I want you to know something important.
-
-Rooted 21 was not built by someone who only studied trauma, systems, parenting, or behavior from the outside.
-
-It was built by someone who has lived it.
-
-It was built by someone who knows what it feels like to be the child no one understood.
-
-The student who was labeled.
-
-The parent who made mistakes.
-
-The person who sat across from the system scared, angry, ashamed, and overwhelmed.
-
-The person who had to rebuild her life from the ground up.
-
-And the person who now works every day to help children and families feel seen, supported, and understood.
-
-Rooted 21 was created for families who are trying to survive hard systems while still holding everything together at home.
-
-This app is not here to judge you.
-
-It is here to help you breathe, get organized, find support, understand your next step, and remember that you are not alone.`} />
+            <Paragraphs text={welcomeStoryText} />
           </div>
         </section>
+
+        <FounderStoryAudioControls user={user} welcomeText={welcomeStoryText} storySections={storySections} missionText={missionStoryText} notAloneText={notAloneStoryText} />
 
         {storySections.map((section) => (
           <Section key={section.title} title={section.title} defaultOpen={section.defaultOpen}>
@@ -446,21 +515,7 @@ It is here to help you breathe, get organized, find support, understand your nex
             <p>Real Support. Real Tools. Real Change.</p>
             <p>Stronger Parents. Stronger Kids. Stronger Families.</p>
           </div>
-          <Paragraphs text={`My mission is to turn pain into purpose by helping families break generational cycles, supporting parents with real tools instead of judgment, advocating for children who have experienced trauma, and building a community where healing, accountability, and growth can happen together.
-
-Rooted 21 exists because families need more than orders, paperwork, and expectations.
-
-They need support. They need tools. They need reminders. They need plain language. They need connection. They need someone to believe they are more than their worst day.
-
-This app is not just about parenting.
-
-It is about helping families stay rooted while they are walking through hard seasons.
-
-It is about helping people feel seen, supported, prepared, and less alone.
-
-It is about helping children feel safe enough to learn, grow, and succeed.
-
-It is about taking lived experience and turning it into something that can help the next family.`} />
+          <Paragraphs text={missionStoryText} />
         </Section>
 
         <Section title="What Rooted 21 Helps With" defaultOpen>
@@ -476,53 +531,7 @@ It is about taking lived experience and turning it into something that can help 
         </Section>
 
         <Section title="You Are Not Alone Here" defaultOpen>
-          <Paragraphs text={`I built Rooted 21 because I know what it feels like to need help and not know where to start.
-
-I know what it feels like to have people judge your past before they see your progress.
-
-I know what it feels like to be labeled before someone understands your story.
-
-I know what it feels like to be counted out and still have something inside you fighting to become more.
-
-I know what it feels like to want better for your children.
-
-I know what it feels like to carry shame.
-
-I know what it feels like to rebuild.
-
-I know what it feels like to look at a child and know there is more underneath the behavior.
-
-That is why this app was created with love, lived experience, and a deep belief that families deserve tools that actually help.
-
-You are not just a case.
-
-You are not just paperwork.
-
-You are not just a number in a system.
-
-You are not your worst day.
-
-You are not your past.
-
-You are not the labels people placed on you.
-
-You are a person.
-
-Your family matters.
-
-Your story matters.
-
-Your healing matters.
-
-Your progress matters.
-
-Your children matter.
-
-Your future matters.
-
-Rooted 21 is here to help you find your next right step.
-
-You are not alone here.`} />
+          <Paragraphs text={notAloneStoryText} />
         </Section>
 
         <div className="pb-10 text-center">
