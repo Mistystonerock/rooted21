@@ -130,7 +130,8 @@ export default function TopRightMenu({ user }) {
     try {
       if (!path || !ROUTES.has(path)) return;
       setOpen(false);
-      window.location.assign(path);
+      window.history.pushState({}, "", path);
+      window.dispatchEvent(new PopStateEvent("popstate"));
     } catch {
       setOpen(false);
     }
