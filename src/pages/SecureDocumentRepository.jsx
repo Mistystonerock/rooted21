@@ -101,6 +101,13 @@ export default function SecureDocumentRepository() {
       ...(doc.tags || []),
       ...(doc.extracted_dates || []),
       ...(doc.extracted_requirements || []),
+      doc.court_case_number,
+      doc.judge_name,
+      doc.court_name,
+      doc.hearing_type,
+      ...(doc.extracted_case_numbers || []),
+      ...(doc.extracted_judges || []),
+      ...(doc.court_packet_tags || []),
     ].filter(Boolean).join(" ").toLowerCase();
 
     const matchesSearch = !searchTerm || searchableText.includes(searchTerm.toLowerCase());

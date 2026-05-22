@@ -172,6 +172,16 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           analysis_summary: parsedData?.summary || parsedData?.description || "",
           extracted_dates: parsedData?.key_dates || [],
           extracted_requirements: parsedData?.requirements || [],
+          court_case_number: parsedData?.primary_case_number || parsedData?.case_numbers?.[0] || "",
+          extracted_case_numbers: parsedData?.case_numbers || [],
+          judge_name: parsedData?.primary_judge_name || parsedData?.judge_names?.[0] || "",
+          extracted_judges: parsedData?.judge_names || [],
+          court_name: parsedData?.court_name || "",
+          hearing_type: parsedData?.hearing_type || "",
+          extracted_court_dates: parsedData?.court_dates || [],
+          court_packet_tags: parsedData?.court_packet_tags || [],
+          ocr_confidence: parsedData?.confidence || "",
+          auto_populate_court_packet: parsedData?.is_court_document === true,
         });
 
         if (syncToCalendar && parsedData) {
@@ -182,6 +192,13 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
             calendar_items: parsedData.calendar_items || [],
             deadlines: parsedData.deadlines || [],
             key_dates: parsedData.key_dates || [],
+            court_dates: parsedData.court_dates || [],
+            court_metadata: {
+              primary_case_number: parsedData.primary_case_number || parsedData.case_numbers?.[0] || "",
+              primary_judge_name: parsedData.primary_judge_name || parsedData.judge_names?.[0] || "",
+              court_name: parsedData.court_name || "",
+              hearing_type: parsedData.hearing_type || "",
+            },
           });
           onDocumentUploaded({ ...newDoc, calendar_event_ids: (syncResponse.data.events || []).map(event => event.id) });
         } else {

@@ -6,6 +6,7 @@ import CourtPacketCard from "@/components/court-packet/CourtPacketCard";
 import CourtPacketGuide from "@/components/court-packet/CourtPacketGuide";
 import CourtPacketQuestionnaire from "@/components/court-packet/CourtPacketQuestionnaire";
 import CourtResourceCard from "@/components/court-packet/CourtResourceCard";
+import CourtVaultMetadataPanel from "@/components/court-packet/CourtVaultMetadataPanel";
 import { COURT_PACKETS, OFFICIAL_COURT_RESOURCES } from "@/lib/court-packet-data";
 import { C } from "@/lib/rooted-constants";
 import { ArrowLeft, FileText, MapPin, Search } from "lucide-react";
@@ -17,8 +18,18 @@ export default function CourtPacketHelper() {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [location, setLocation] = useState({ state: "OH", county: "Ross", zip: "45601", courtType: "" });
   const [search, setSearch] = useState("");
+  const [courtDocuments, setCourtDocuments] = useState([]);
 
-  useEffect(() => { base44.auth.me().then(setUser).catch(() => setUser(null)); }, []);
+  useEffect(() => {
+    async function loadCourtContext() {
+      const me = await base44.auth.me().catch(() => null);
+      setUser(me);
+      if (!me) return;
+      const docs = await base44.entities.SecureDocument.list("-created_date", 100);
+      setCourtDocuments(docs.filter(doc => doc.auto_populate_court_packet || doc.extracted_court_dates?.length || doc.court_case_number || doc.judge_name));
+    }
+    loadCourtContext();
+  }, []);
 
   const filteredPackets = useMemo(() => COURT_PACKETS.filter(packet => !search || packet.title.toLowerCase().includes(search.toLowerCase())), [search]);
   const resources = OFFICIAL_COURT_RESOURCES.filter(resource => {
@@ -64,6 +75,8 @@ export default function CourtPacketHelper() {
                 <input value={location.courtType} onChange={e => setLocation(prev => ({ ...prev, courtType: e.target.value }))} placeholder="Court type if known" className="rounded-xl border px-3 py-2 text-sm" style={{ borderColor: C.cream }} />
               </div>
             </section>
+
+            <CourtVaultMetadataPanel documents={courtDocuments} />
 
             <button type="button" onClick={() => setShowQuestionnaire(value => !value)} className="w-full rounded-2xl px-4 py-4 text-sm font-black" style={{ background: C.gold, color: C.darkGreen, border: "none" }}>Not sure where to start?</button>
             {showQuestionnaire && <CourtPacketQuestionnaire packets={COURT_PACKETS} onSelectPacket={setSelected} />}

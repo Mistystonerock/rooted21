@@ -4,8 +4,17 @@ function isCourtRelated(text) {
   return /court|hearing|review|custody|case plan|deadline|filing|appearance/i.test(text || '');
 }
 
+function courtMetadataNote(metadata = {}) {
+  const parts = [];
+  if (metadata.case_number || metadata.primary_case_number) parts.push(`Case #: ${metadata.case_number || metadata.primary_case_number}`);
+  if (metadata.judge_name || metadata.primary_judge_name) parts.push(`Judge/Magistrate: ${metadata.judge_name || metadata.primary_judge_name}`);
+  if (metadata.court_name) parts.push(`Court: ${metadata.court_name}`);
+  if (metadata.hearing_type) parts.push(`Hearing: ${metadata.hearing_type}`);
+  return parts.join(' · ');
+}
+
 function normalizeEventType(item, fallbackTitle) {
-  const text = `${item?.event_type || ''} ${item?.title || ''} ${fallbackTitle || ''}`;
+  const text = `${item?.event_type || ''} ${item?.title || ''} ${fallbackTitle || ''} ${item?.hearing_type || ''}`;
   if (isCourtRelated(text)) return 'court_date';
   if (/iep|school/i.test(text)) return 'school_meeting';
   if (/therapy|counsel/i.test(text)) return 'therapy';
@@ -35,8 +44,23 @@ Deno.serve(async (req) => {
     const calendarItems = Array.isArray(payload.calendar_items) ? payload.calendar_items : [];
     const deadlines = Array.isArray(payload.deadlines) ? payload.deadlines : [];
     const keyDates = Array.isArray(payload.key_dates) ? payload.key_dates : [];
+    const courtDates = Array.isArray(payload.court_dates) ? payload.court_dates : [];
+    const courtMetadata = payload.court_metadata || {};
 
     const candidates = [];
+
+    for (const item of courtDates) {
+      if (!item?.date) continue;
+      const metadataNote = courtMetadataNote({ ...courtMetadata, ...item });
+      candidates.push({
+        title: item.hearing_type || courtMetadata.hearing_type || `${documentTitle} court date`,
+        event_type: 'court_date',
+        date: item.date,
+        time: item.time || '',
+        location: item.location || item.courtroom || courtMetadata.court_name || '',
+        notes: [metadataNote, item.notes, `OCR extracted from ${documentTitle}`].filter(Boolean).join('\n'),
+      });
+    }
 
     for (const item of calendarItems) {
       if (!item?.date) continue;
@@ -46,7 +70,7 @@ Deno.serve(async (req) => {
         date: item.date,
         time: item.time || '',
         location: item.location || '',
-        notes: item.notes || item.requirement || `Extracted from ${documentTitle}`,
+        notes: [courtMetadataNote(courtMetadata), item.notes || item.requirement || `Extracted from ${documentTitle}`].filter(Boolean).join('\n'),
       });
     }
 
@@ -58,7 +82,7 @@ Deno.serve(async (req) => {
         date: item.due_date,
         time: '',
         location: '',
-        notes: `Deadline extracted from ${documentTitle}`,
+        notes: [courtMetadataNote(courtMetadata), `Deadline extracted from ${documentTitle}`].filter(Boolean).join('\n'),
       });
     }
 

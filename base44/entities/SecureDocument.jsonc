@@ -100,6 +100,99 @@
       "type": "string",
       "description": "Associated case ID (optional)"
     },
+    "court_case_number": {
+      "type": "string",
+      "description": "Primary court case number extracted by OCR"
+    },
+    "extracted_case_numbers": {
+      "type": "array",
+      "description": "All case numbers extracted from the scanned document",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "judge_name": {
+      "type": "string",
+      "description": "Primary judge or magistrate name extracted by OCR"
+    },
+    "extracted_judges": {
+      "type": "array",
+      "description": "All judge or magistrate names extracted from the scanned document",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "court_name": {
+      "type": "string",
+      "description": "Court name extracted by OCR"
+    },
+    "hearing_type": {
+      "type": "string",
+      "description": "Detected hearing or court event type"
+    },
+    "extracted_court_dates": {
+      "type": "array",
+      "description": "Court dates and hearing details extracted by OCR",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "hearing_type": {
+            "type": "string"
+          },
+          "judge_name": {
+            "type": "string"
+          },
+          "case_number": {
+            "type": "string"
+          },
+          "courtroom": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "court_packet_tags": {
+      "type": "array",
+      "description": "Suggested Court Packet Helper packet categories based on OCR",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "ocr_confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        ""
+      ],
+      "default": "",
+      "description": "Overall OCR extraction confidence"
+    },
+    "auto_populate_court_packet": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this document should appear in the Court Packet Helper"
+    },
     "shared_with": {
       "type": "array",
       "description": "Emails of team members this document is shared with",

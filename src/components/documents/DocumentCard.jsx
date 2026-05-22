@@ -1,5 +1,5 @@
 import { C } from "@/lib/rooted-constants";
-import { FileText, Eye, Share2, Trash2, Lock } from "lucide-react";
+import { FileText, Eye, Share2, Trash2, Lock, Gavel } from "lucide-react";
 import { format } from "date-fns";
 
 export default function DocumentCard({ doc, onView, onShare, onDelete }) {
@@ -71,6 +71,15 @@ export default function DocumentCard({ doc, onView, onShare, onDelete }) {
             <p className="text-[10px] leading-relaxed mt-1 line-clamp-2" style={{ color: "#3a3028" }}>
               {doc.description}
             </p>
+          )}
+
+          {doc.auto_populate_court_packet && (
+            <div className="mt-2 rounded-xl p-2 text-[10px] leading-relaxed" style={{ background: "#FFF8E6", color: C.darkGreen }}>
+              <p className="font-black"><Gavel size={11} className="mr-1 inline" /> Court OCR</p>
+              {doc.court_case_number && <p>Case #: {doc.court_case_number}</p>}
+              {doc.judge_name && <p>Judge/Magistrate: {doc.judge_name}</p>}
+              {doc.court_name && <p>Court: {doc.court_name}</p>}
+            </div>
           )}
 
           {doc.extracted_dates?.length > 0 && (

@@ -1,4 +1,4 @@
-import { CalendarDays, FileType, ListChecks, Tags } from "lucide-react";
+import { CalendarDays, FileType, Gavel, Hash, ListChecks, Tags, UserRound } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 
 function PreviewRow({ icon: Icon, label, children }) {
@@ -20,6 +20,10 @@ export default function DocumentAnalysisPreview({ parsedData }) {
   const dates = parsedData.key_dates || [];
   const requirements = parsedData.requirements || [];
   const tags = parsedData.tags || [];
+  const courtDates = parsedData.court_dates || [];
+  const caseNumbers = parsedData.case_numbers || [];
+  const judgeNames = parsedData.judge_names || [];
+  const hasCourtDetails = parsedData.is_court_document || courtDates.length > 0 || caseNumbers.length > 0 || judgeNames.length > 0 || parsedData.court_name;
 
   return (
     <div className="space-y-2 rounded-2xl p-3" style={{ background: "#EAF4EA", border: `1.5px solid ${C.midGreen}` }}>
@@ -33,6 +37,18 @@ export default function DocumentAnalysisPreview({ parsedData }) {
       <PreviewRow icon={FileType} label="Detected type">
         <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{parsedData.category || "Document"}</p>
       </PreviewRow>
+
+      {hasCourtDetails && (
+        <PreviewRow icon={Gavel} label="Court OCR details">
+          <div className="space-y-1 text-[11px] leading-snug" style={{ color: C.darkGreen }}>
+            {parsedData.court_name && <p><strong>Court:</strong> {parsedData.court_name}</p>}
+            {parsedData.hearing_type && <p><strong>Hearing:</strong> {parsedData.hearing_type}</p>}
+            {caseNumbers.length > 0 && <p><Hash size={11} className="mr-1 inline" /><strong>Case #:</strong> {caseNumbers.slice(0, 3).join(", ")}</p>}
+            {judgeNames.length > 0 && <p><UserRound size={11} className="mr-1 inline" /><strong>Judge/Magistrate:</strong> {judgeNames.slice(0, 3).join(", ")}</p>}
+            {courtDates.length > 0 && <p><CalendarDays size={11} className="mr-1 inline" /><strong>Court dates:</strong> {courtDates.slice(0, 3).map(item => `${item.date}${item.time ? ` ${item.time}` : ""}`).join(", ")}</p>}
+          </div>
+        </PreviewRow>
+      )}
 
       {dates.length > 0 && (
         <PreviewRow icon={CalendarDays} label="Key dates">

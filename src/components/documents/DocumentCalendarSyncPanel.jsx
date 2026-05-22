@@ -4,10 +4,11 @@ import { C } from "@/lib/rooted-constants";
 export default function DocumentCalendarSyncPanel({ parsedData, enabled, onChange }) {
   if (!parsedData) return null;
 
+  const courtDateCount = (parsedData.court_dates || []).filter(item => item.date).length;
   const calendarCount = (parsedData.calendar_items || []).filter(item => item.date).length;
   const deadlineCount = (parsedData.deadlines || []).filter(item => item.due_date).length;
   const keyDateCount = parsedData.key_dates?.length || 0;
-  const total = calendarCount + deadlineCount || keyDateCount;
+  const total = courtDateCount + calendarCount + deadlineCount || keyDateCount;
 
   if (!total) return null;
 
@@ -25,7 +26,7 @@ export default function DocumentCalendarSyncPanel({ parsedData, enabled, onChang
           <p className="text-xs font-black" style={{ color: C.darkGreen }}>Sync dates to family calendar</p>
         </div>
         <p className="mt-1 text-[11px] leading-relaxed" style={{ color: C.mutedText }}>
-          Add {total} extracted legal date{total === 1 ? "" : "s"} to the master family calendar and create push reminders for upcoming court dates.
+          Add {total} extracted legal/court date{total === 1 ? "" : "s"} to the Care Calendar, including case number and judge details when found.
         </p>
         <div className="mt-2 flex items-center gap-1 text-[10px] font-bold" style={{ color: C.brown }}>
           <Bell size={12} /> Court and hearing reminders will appear in notifications.
