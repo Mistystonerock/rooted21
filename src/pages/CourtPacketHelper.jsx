@@ -48,7 +48,7 @@ export default function CourtPacketHelper() {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.14)" }}><FileText color={C.cream} /></div>
             <div>
               <p className="font-serif text-2xl font-black" style={{ color: C.cream }}>Court Packet Helper</p>
-              <p className="mt-2 text-sm leading-6" style={{ color: C.lightGreen }}>Find possible paperwork categories, official resources, document checklists, reminders, and Moxie plain-language prompts.</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: C.lightGreen }}>Find common documents that may apply, official links when verified, county requirement reminders, and filing preparation checklists.</p>
             </div>
           </div>
         </section>
@@ -61,6 +61,7 @@ export default function CourtPacketHelper() {
             <section className="rounded-3xl border bg-white p-5 shadow-sm" style={{ borderColor: C.cream }}>
               <p className="font-serif text-2xl font-black" style={{ color: C.darkGreen }}>{selected.title}</p>
               <p className="mt-2 text-sm leading-6" style={{ color: C.mutedText }}>{selected.usedFor}</p>
+              <p className="mt-3 rounded-2xl p-3 text-xs font-bold leading-5" style={{ background: "#fff7ed", color: "#9a3412" }}>Before filing, verify current requirements with the court clerk, attorney, legal aid, or official court website. This packet may not include every required form.</p>
             </section>
             <CourtPacketGuide packet={selected} user={user} />
           </>

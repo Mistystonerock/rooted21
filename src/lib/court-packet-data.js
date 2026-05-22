@@ -1,12 +1,22 @@
-export const COURT_PACKET_DISCLAIMER = "Rooted 21 provides general information, organization tools, and links to official court resources. Rooted 21 does not provide legal advice and does not replace an attorney, court clerk, magistrate, judge, caseworker, advocate, or legal aid provider. Court rules and forms can vary by county and state. Always confirm requirements with the official court, an attorney, or legal aid before filing.";
+export const COURT_PACKET_DISCLAIMER = "Rooted 21 provides general information, organization tools, common document checklists, and links to official court resources when available. Court Packet Helper does not include every form required for filing. Required forms, local rules, filing fees, service/notice requirements, and procedures vary by county, court, case type, and individual situation. Always verify filing requirements with the court clerk, an attorney, legal aid, or the official court website before filing anything.";
 
 export const COURT_PACKET_CATEGORIES = [
   "Shared Parenting", "Emergency Custody / Ex Parte", "Full Custody", "Custody Modification", "Visitation / Parenting Time Change", "Child Support", "Protection Order", "Civil Protection Order", "Domestic Violence Protection Order", "Juvenile Court Support", "Probate / Guardianship", "Kinship Caregiver Support", "Foster / Caregiver Court Support", "Record Sealing / Expungement", "Name Change", "Divorce / Dissolution Support", "Contempt / Enforcing a Court Order", "School / IEP Court-Related Documentation", "CPS Case Plan / Court Preparation", "Family Treatment Court Support", "Juvenile Treatment Court Support", "Reentry / Criminal Record Support", "Housing Court / Eviction Support", "Benefits Appeal Support", "General Court Meeting Preparation"
 ];
 
 const common = {
-  warning: "This is general education and organization support only. Ask the court clerk, legal aid, or an attorney what is required before filing.",
-  forms: ["Ask the correct court clerk where the official forms are located", "Check Ohio Legal Help and Supreme Court of Ohio forms when applicable", "Confirm county-specific forms before filing"],
+  warning: "This is general education and organization support only. This packet lists common documents that may apply, but it is not a complete filing packet. Ask the court clerk, legal aid, official court website, or an attorney what is required before filing.",
+  forms: ["Common court cover sheet or complaint/motion form if required", "Affidavit, statement, or declaration form if required", "Existing order attachment if there is already a case", "Financial disclosure or child support documents if the issue involves support", "Proposed order, parenting plan, or schedule if requested by that court", "Ask the correct court clerk for official county-specific forms before filing"],
+  officialLinks: [
+    { label: "Supreme Court of Ohio standardized forms", url: "https://www.supremecourt.ohio.gov/forms/all-forms/domestic-relations-and-juvenile-standardized/1" },
+    { label: "Ohio Legal Help", url: "https://www.ohiolegalhelp.org/" }
+  ],
+  localRequirements: ["Local county requirements may include extra cover sheets, parenting seminar rules, notarization, copies, proposed orders, or e-filing steps.", "If you are filing in Ross County or another Ohio county, check that court’s official website or call the clerk before filing.", "If a local requirement is not shown here, that does not mean it is not required."],
+  serviceNotice: "Many filings require proper service or notice to the other party, agency, guardian ad litem, or other required people. Ask the clerk, legal aid, or attorney how service must be completed before filing or before the hearing.",
+  feeReminder: "Filing fees vary by court and case type. Ask whether a filing fee, deposit, poverty affidavit, fee waiver, or payment plan applies before filing.",
+  callReminder: "Call the court clerk, legal aid, or your attorney before filing to confirm the current forms, number of copies, filing fee or waiver, service/notice steps, and hearing requirements.",
+  verification_status: "needs county-specific verification",
+  verified_at: "2026-05-22",
   documents: ["Current court orders", "Notices or hearing letters", "Communication logs", "Timeline of important events", "Proof of service or attendance when applicable"],
   questions: ["Which court handles this issue?", "Are there local forms or local rules?", "Is there a filing fee or fee waiver?", "How does service/notice work?", "What should I bring to the hearing?"],
   checklist: ["Confirm court and form source", "Gather documents", "Write down deadlines", "Prepare questions", "Save copies in Document Vault", "Add court dates to reminders"],
@@ -17,8 +27,8 @@ export const COURT_PACKETS = COURT_PACKET_CATEGORIES.map((title) => ({
   slug: title.toLowerCase().replaceAll(" / ", "-").replaceAll(" ", "-").replaceAll("/", "-").replaceAll(".", ""),
   usedFor: `${title} paperwork or hearing preparation may involve court-specific forms, deadlines, documents, and questions for the clerk or legal aid.`,
   ...common,
-  fees: "Fees vary by court. Ask about a fee waiver, poverty affidavit, or filing-fee assistance if cost is a barrier.",
-  service: "Many filings require proper service or notice. Ask the clerk or legal aid what applies before filing.",
+  fees: common.feeReminder,
+  service: common.serviceNotice,
   hearing: ["Bring copies of filed forms", "Bring court orders and proof documents", "Write down key dates", "Prepare calm questions", "Arrive early or log in early for virtual hearings"],
   evidence: ["Court orders", "Messages", "School records", "Medical or safety documents if relevant", "Attendance or service records", "Photos/screenshots only if safe and allowed"],
   emergency: title.includes("Protection") || title.includes("Emergency") || title.includes("Domestic Violence"),
@@ -37,6 +47,10 @@ setPacket("Shared Parenting", {
 
 setPacket("Emergency Custody / Ex Parte", {
   warning: "If a child is in immediate danger, call 911 or contact the proper child protection or emergency services. Rooted 21 does not replace emergency services, CPS, law enforcement, or an attorney.",
+  officialLinks: [
+    { label: "Supreme Court of Ohio domestic relations and juvenile forms", url: "https://www.supremecourt.ohio.gov/forms/all-forms/domestic-relations-and-juvenile-standardized/1" },
+    { label: "Ohio Legal Help emergency custody information", url: "https://www.ohiolegalhelp.org/" }
+  ],
   documents: ["Safety timeline", "Police reports if applicable", "Medical records if applicable", "School reports if applicable", "Witness names/contact information", "Court filing checklist", "Follow-up hearing date"],
   checklist: ["Call emergency services if there is immediate danger", "Document dates and facts", "Gather safety records", "Ask legal aid/court about emergency process", "Track follow-up hearing", "Confirm service/notice rules"],
   emergency: true
@@ -45,9 +59,9 @@ setPacket("Emergency Custody / Ex Parte", {
 setPacket("Full Custody", { documents: ["Current order", "School/medical records", "Parenting concerns", "Safety concerns", "Communication log", "Visitation history", "Child support information"], checklist: ["Upload current order", "Gather school/medical records", "Organize safety concerns", "Print communication log", "Prepare hearing notes"] });
 setPacket("Visitation / Parenting Time Change", { documents: ["Current order", "What changed", "Missed visits log", "Safety concerns", "Transportation concerns", "Communication log", "Proposed schedule worksheet"] });
 setPacket("Child Support", { documents: ["Income documents", "Employment information", "Existing support order", "Payment records", "Parenting time/custody documents"], questions: ["Which child support agency handles this?", "What income documents are needed?", "How do modification requests work?", "How can I get payment records?"] });
-setPacket("Protection Order", { warning: "Safety first. If you are in immediate danger, call 911. Consider using Quick Exit and local domestic violence resources. Do not store unsafe information if someone monitors your device.", documents: ["Incident timeline", "Evidence checklist", "Children’s safety concerns", "Police reports if applicable", "Medical records if safe", "Hearing preparation notes"], emergency: true });
-setPacket("Civil Protection Order", { emergency: true });
-setPacket("Domestic Violence Protection Order", { warning: "Safety first. If you are in immediate danger, call 911. Use a safer device if yours may be monitored. Rooted 21 does not replace an advocate, attorney, or emergency services.", emergency: true });
+setPacket("Protection Order", { warning: "Safety first. If you are in immediate danger, call 911. Consider using Quick Exit and local domestic violence resources. Do not store unsafe information if someone monitors your device.", officialLinks: [{ label: "Supreme Court of Ohio protection order forms", url: "https://www.supremecourt.ohio.gov/forms/all-forms/protection-order/2" }, { label: "Ohio Legal Help", url: "https://www.ohiolegalhelp.org/" }], documents: ["Incident timeline", "Evidence checklist", "Children’s safety concerns", "Police reports if applicable", "Medical records if safe", "Hearing preparation notes"], emergency: true });
+setPacket("Civil Protection Order", { officialLinks: [{ label: "Supreme Court of Ohio protection order forms", url: "https://www.supremecourt.ohio.gov/forms/all-forms/protection-order/2" }, { label: "Ohio Legal Help", url: "https://www.ohiolegalhelp.org/" }], emergency: true });
+setPacket("Domestic Violence Protection Order", { warning: "Safety first. If you are in immediate danger, call 911. Use a safer device if yours may be monitored. Rooted 21 does not replace an advocate, attorney, or emergency services.", officialLinks: [{ label: "Supreme Court of Ohio protection order forms", url: "https://www.supremecourt.ohio.gov/forms/all-forms/protection-order/2" }, { label: "Ohio Legal Help domestic violence resources", url: "https://www.ohiolegalhelp.org/" }], emergency: true });
 setPacket("Record Sealing / Expungement", { usedFor: "Organizing case numbers, dates, costs, and official resources. Rules can be complicated and change over time. Rooted 21 does not determine eligibility.", documents: ["Case numbers", "Conviction or dismissal dates", "Fines/costs information", "County court search results", "Legal aid notes"], questions: ["Am I eligible under current law?", "Which court has my record?", "Are all fines/costs resolved?", "Is a hearing required?"] });
 setPacket("Probate / Guardianship", { documents: ["Kinship/caregiver documentation", "Child relationship documents", "Caregiver affidavit if applicable", "Safety concerns", "Probate court notices", "Hearing checklist"] });
 setPacket("CPS Case Plan / Court Preparation", { documents: ["Case plan", "Court dates", "Services checklist", "Visitation log", "Drug screen log if applicable", "Treatment attendance", "Parenting class log", "Housing/employment progress", "Communication log"] });
