@@ -3,18 +3,33 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import MonthlyConsistencyReport from "@/components/visitation/MonthlyConsistencyReport";
 
 const EMOTIONS = ["calm", "anxious", "excited", "upset", "withdrawn"];
 const VISIT_TYPES = ["parent", "sibling", "relative", "other"];
 
 const BLANK = {
   child_name: "", visit_type: "parent", visitor_name: "",
-  visit_date: "", visit_time: "", duration_minutes: 60,
-  location: "", supervised: true, supervisor_name: "",
-  attended: true, no_show_reason: "",
+  visit_date: "", visit_time: "", scheduled_start_time: "", scheduled_duration_minutes: 60,
+  actual_start_time: "", actual_end_time: "", duration_minutes: 60, actual_duration_minutes: 60,
+  location: "", actual_location: "", supervised: true, supervisor_name: "",
+  attended: true, compliance_status: "as_scheduled", no_show_reason: "",
   child_behavior_before: "calm", child_behavior_after: "calm",
+  incident_type: "none", incident_notes: "", logistical_challenges: "",
   notes: "", concerns: "",
 };
+
+const COMPLIANCE_STATUSES = [
+  ["as_scheduled", "As scheduled"], ["late_start", "Late start"], ["ended_early", "Ended early"],
+  ["shortened", "Shortened"], ["rescheduled", "Rescheduled"], ["cancelled", "Cancelled"],
+  ["no_show", "No-show"], ["other", "Other"],
+];
+
+const INCIDENT_TYPES = [
+  ["none", "No notable incident"], ["late_arrival", "Late arrival"], ["missed_visit", "Missed visit"],
+  ["early_departure", "Early departure"], ["location_issue", "Location issue"], ["transportation_issue", "Transportation issue"],
+  ["communication_issue", "Communication issue"], ["safety_concern", "Safety concern"], ["child_distress", "Child distress"], ["other", "Other"],
+];
 
 const emotionEmoji = { calm: "😌", anxious: "😰", excited: "😄", upset: "😢", withdrawn: "😶" };
 
@@ -25,6 +40,9 @@ export default function VisitationTracker() {
   const [form, setForm] = useState(BLANK);
   const [saving, setSaving] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
+  const [reportMonth, setReportMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [reportLoading, setReportLoading] = useState(false);
+  const [monthlyReport, setMonthlyReport] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -49,6 +67,13 @@ export default function VisitationTracker() {
   }
 
   function f(key, val) { setForm(p => ({ ...p, [key]: val })); }
+
+  async function generateMonthlyReport() {
+    setReportLoading(true);
+    const response = await base44.functions.invoke("generateVisitationConsistencyReport", { month: reportMonth });
+    setMonthlyReport(response.data);
+    setReportLoading(false);
+  }
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -86,14 +111,14 @@ export default function VisitationTracker() {
             <div className="grid grid-cols-2 gap-2">
               <input type="date" value={form.visit_date} onChange={e => f("visit_date", e.target.value)}
                 className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
-              <input type="time" value={form.visit_time} onChange={e => f("visit_time", e.target.value)}
+              <input type="time" value={form.scheduled_start_time || form.visit_time} onChange={e => { f("scheduled_start_time", e.target.value); f("visit_time", e.target.value); }}
                 className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <input placeholder="Location" value={form.location} onChange={e => f("location", e.target.value)}
+              <input placeholder="Scheduled location" value={form.location} onChange={e => f("location", e.target.value)}
                 className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
-              <input type="number" placeholder="Duration (min)" value={form.duration_minutes} onChange={e => f("duration_minutes", Number(e.target.value))}
+              <input type="number" placeholder="Scheduled duration (min)" value={form.scheduled_duration_minutes} onChange={e => { f("scheduled_duration_minutes", Number(e.target.value)); f("duration_minutes", Number(e.target.value)); }}
                 className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
             </div>
 
@@ -112,6 +137,17 @@ export default function VisitationTracker() {
             )}
 
             {form.attended && (
+              <>
+              <div className="grid grid-cols-2 gap-2">
+                <input type="time" value={form.actual_start_time} onChange={e => f("actual_start_time", e.target.value)} placeholder="Actual start"
+                  className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+                <input type="time" value={form.actual_end_time} onChange={e => f("actual_end_time", e.target.value)} placeholder="Actual end"
+                  className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+                <input placeholder="Actual location" value={form.actual_location} onChange={e => f("actual_location", e.target.value)}
+                  className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+                <input type="number" placeholder="Actual duration (min)" value={form.actual_duration_minutes} onChange={e => { f("actual_duration_minutes", Number(e.target.value)); f("duration_minutes", Number(e.target.value)); }}
+                  className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <p className="text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>BEFORE VISIT</p>
@@ -128,7 +164,23 @@ export default function VisitationTracker() {
                   </select>
                 </div>
               </div>
+              </>
             )}
+
+            <div className="grid grid-cols-2 gap-2">
+              <select value={form.compliance_status} onChange={e => f("compliance_status", e.target.value)} className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }}>
+                {COMPLIANCE_STATUSES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+              <select value={form.incident_type} onChange={e => f("incident_type", e.target.value)} className="px-3 py-2 rounded-lg text-sm border outline-none" style={{ borderColor: C.cream, background: C.offWhite }}>
+                {INCIDENT_TYPES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+            </div>
+
+            <textarea placeholder="Notable incidents, if any..." value={form.incident_notes} onChange={e => f("incident_notes", e.target.value)} rows={2}
+              className="w-full px-3 py-2 rounded-lg text-sm border outline-none resize-none" style={{ borderColor: C.cream, background: C.offWhite }} />
+
+            <textarea placeholder="Logistical challenges (transportation, timing, pickup location, communication)..." value={form.logistical_challenges} onChange={e => f("logistical_challenges", e.target.value)} rows={2}
+              className="w-full px-3 py-2 rounded-lg text-sm border outline-none resize-none" style={{ borderColor: C.cream, background: C.offWhite }} />
 
             <textarea placeholder="Notes about the visit..." value={form.notes} onChange={e => f("notes", e.target.value)} rows={3}
               className="w-full px-3 py-2 rounded-lg text-sm border outline-none resize-none" style={{ borderColor: C.cream, background: C.offWhite }} />
@@ -150,6 +202,8 @@ export default function VisitationTracker() {
             </div>
           </div>
         )}
+
+        <MonthlyConsistencyReport month={reportMonth} setMonth={setReportMonth} onGenerate={generateMonthlyReport} loading={reportLoading} result={monthlyReport} />
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2">
@@ -213,17 +267,22 @@ export default function VisitationTracker() {
                         <p className="text-lg">{emotionEmoji[log.child_behavior_after]}</p>
                         <p className="text-[10px]" style={{ color: C.darkGreen }}>{log.child_behavior_after}</p>
                       </div>
-                      {log.duration_minutes && (
+                      {(log.actual_duration_minutes || log.duration_minutes) && (
                         <div className="ml-auto text-right">
-                          <p className="text-[10px]" style={{ color: C.mutedText }}>Duration</p>
-                          <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{log.duration_minutes}min</p>
+                          <p className="text-[10px]" style={{ color: C.mutedText }}>Actual Duration</p>
+                          <p className="text-sm font-bold" style={{ color: C.darkGreen }}>{log.actual_duration_minutes || log.duration_minutes}min</p>
                         </div>
                       )}
                     </div>
                   )}
+                  <p className="text-[11px]" style={{ color: C.mutedText }}><strong>Scheduled:</strong> {log.scheduled_start_time || log.visit_time || "time not set"} · {log.scheduled_duration_minutes || log.duration_minutes || 0}min · {log.location || "location not set"}</p>
+                  {log.attended && <p className="text-[11px]" style={{ color: C.mutedText }}><strong>Actual:</strong> {log.actual_start_time || "start not set"}–{log.actual_end_time || "end not set"} · {log.actual_location || log.location || "location not set"}</p>}
+                  {log.compliance_status && <p className="text-[11px] capitalize" style={{ color: C.darkGreen }}><strong>Status:</strong> {log.compliance_status.replaceAll("_", " ")}</p>}
+                  {log.incident_type && log.incident_type !== "none" && <p className="text-[11px] px-2 py-1 rounded" style={{ color: "#B84C2A", background: "#FEF3EE" }}><strong>Incident:</strong> {log.incident_type.replaceAll("_", " ")} {log.incident_notes && `— ${log.incident_notes}`}</p>}
+                  {log.logistical_challenges && <p className="text-[11px]" style={{ color: C.mutedText }}><strong>Logistical challenge:</strong> {log.logistical_challenges}</p>}
                   {log.notes && <p className="text-[11px]" style={{ color: C.darkGreen }}><strong>Notes:</strong> {log.notes}</p>}
                   {log.concerns && <p className="text-[11px] px-2 py-1 rounded" style={{ color: "#B84C2A", background: "#FEF3EE" }}><strong>⚠️ Concern:</strong> {log.concerns}</p>}
-                  {log.location && <p className="text-[11px]" style={{ color: C.mutedText }}>📍 {log.location}</p>}
+                  {log.location && <p className="text-[11px]" style={{ color: C.mutedText }}>📍 {log.actual_location || log.location}</p>}
                   {log.supervised && log.supervisor_name && <p className="text-[11px]" style={{ color: C.mutedText }}>Supervisor: {log.supervisor_name}</p>}
                 </div>
               )}

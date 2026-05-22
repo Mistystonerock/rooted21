@@ -25,13 +25,40 @@
       "format": "date"
     },
     "visit_time": {
-      "type": "string"
+      "type": "string",
+      "description": "Legacy scheduled visit time"
+    },
+    "scheduled_start_time": {
+      "type": "string",
+      "description": "Scheduled start time"
+    },
+    "scheduled_duration_minutes": {
+      "type": "number",
+      "description": "Planned visit duration in minutes"
+    },
+    "actual_start_time": {
+      "type": "string",
+      "description": "Actual start time"
+    },
+    "actual_end_time": {
+      "type": "string",
+      "description": "Actual end time"
     },
     "duration_minutes": {
-      "type": "number"
+      "type": "number",
+      "description": "Actual or legacy duration in minutes"
+    },
+    "actual_duration_minutes": {
+      "type": "number",
+      "description": "Actual visit duration in minutes"
     },
     "location": {
-      "type": "string"
+      "type": "string",
+      "description": "Scheduled or legacy visit location"
+    },
+    "actual_location": {
+      "type": "string",
+      "description": "Where the visit actually occurred"
     },
     "supervised": {
       "type": "boolean",
@@ -43,6 +70,21 @@
     "attended": {
       "type": "boolean",
       "default": true
+    },
+    "compliance_status": {
+      "type": "string",
+      "enum": [
+        "as_scheduled",
+        "late_start",
+        "ended_early",
+        "shortened",
+        "rescheduled",
+        "cancelled",
+        "no_show",
+        "other"
+      ],
+      "default": "as_scheduled",
+      "description": "Scheduled versus actual parenting-time outcome"
     },
     "no_show_reason": {
       "type": "string"
@@ -68,6 +110,30 @@
         "withdrawn"
       ],
       "description": "Child's emotional state after visit"
+    },
+    "incident_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "late_arrival",
+        "missed_visit",
+        "early_departure",
+        "location_issue",
+        "transportation_issue",
+        "communication_issue",
+        "safety_concern",
+        "child_distress",
+        "other"
+      ],
+      "default": "none"
+    },
+    "incident_notes": {
+      "type": "string",
+      "description": "Notable incidents during or around the visit"
+    },
+    "logistical_challenges": {
+      "type": "string",
+      "description": "Transportation, location, scheduling, communication, or timing challenges"
     },
     "notes": {
       "type": "string"
