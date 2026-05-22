@@ -43,7 +43,7 @@ export const MOXIE_MODE_ORDER = [
 
 export function inferMoxieMode(pathname = "") {
   if (["/sos", "/emergency-toolbox", "/family-safety-crisis-plan", "/safe-screen"].some(path => pathname.startsWith(path))) return "crisis_sos";
-  if (["/legal", "/court", "/case-plan", "/documents", "/form-helper", "/protective-order", "/rights-card"].some(path => pathname.startsWith(path))) return "court_form_guidance";
+  if (["/legal", "/court", "/case-plan", "/documents", "/form-helper", "/protective-order", "/rights-card", "/court-packet-helper"].some(path => pathname.startsWith(path))) return "court_form_guidance";
   if (["/resources", "/housing", "/local", "/community-resources", "/resource-matcher"].some(path => pathname.startsWith(path))) return "resource_finder";
   if (["/education", "/school", "/iep", "/child-profile"].some(path => pathname.startsWith(path))) return "school_iep_support";
   if (["/founder", "/resource-management", "/app-docs"].some(path => pathname.startsWith(path))) return "founder_admin";

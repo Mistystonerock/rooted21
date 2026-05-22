@@ -8,6 +8,7 @@ import AdminManagement from "@/components/rooted/AdminManagement";
 import ScalabilityOperationsPanel from "@/components/admin/founder/ScalabilityOperationsPanel";
 import ProjectProtectionChecklist from "@/components/admin/founder/ProjectProtectionChecklist";
 import FamilyFunVerificationQueue from "@/components/admin/founder/FamilyFunVerificationQueue";
+import CourtResourceVerificationQueue from "@/components/court-packet/CourtResourceVerificationQueue";
 import {
   Activity, BarChart3, Bell, BookOpen, CheckCircle2, ClipboardList, Database, DollarSign,
   GraduationCap, KeyRound, Library, LockKeyhole, MailPlus, Search, Settings,
@@ -22,7 +23,7 @@ const CARD = "#ffffff";
 const MUTED = "#8b6f54";
 
 const sectionList = [
-  "analytics", "operations", "protection", "users", "resources", "familyFunVerification", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
+  "analytics", "operations", "protection", "users", "resources", "courtResourceVerification", "familyFunVerification", "codes", "waitlist", "surveys", "beta", "classes", "content", "funding", "announcements", "settings"
 ];
 
 function smallButton(label, onClick, tone = "green") {
@@ -282,6 +283,10 @@ export default function FounderDashboard() {
             <FounderMetric label="Categories" value={new Set(resourceListings.map(r => r.category).filter(Boolean)).size} detail="Service types" />
           </div>
           <a href="/resource-management" className="inline-flex rounded-xl px-4 py-2 text-sm font-bold no-underline" style={{ background: DARK, color: "#fff" }}>Open Resource Management</a>
+        </FounderSection>
+
+        <FounderSection title="Court Resource Verification Queue" subtitle="Court forms, official links, county-specific resources, reports, and 60-day review tracking" icon={Database} open={openSections.courtResourceVerification} onToggle={() => toggle("courtResourceVerification")}>
+          <CourtResourceVerificationQueue resourceListings={resourceListings} resourceReports={resourceReports} />
         </FounderSection>
 
         <FounderSection title="Free & Low-Cost Fun Verification Queue" subtitle="Family activity verification, user reports, broken links, price changes, and seasonal updates" icon={Database} open={openSections.familyFunVerification} onToggle={() => toggle("familyFunVerification")}>
