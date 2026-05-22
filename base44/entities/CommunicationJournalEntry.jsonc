@@ -1,0 +1,142 @@
+{
+  "name": "CommunicationJournalEntry",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "User who created the journal entry"
+    },
+    "shared_with": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Caregivers or co-parents who can view this entry"
+    },
+    "partnership_id": {
+      "type": "string",
+      "description": "Optional linked co-parenting partnership"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "entry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "interaction_type": {
+      "type": "string",
+      "enum": [
+        "daily_update",
+        "milestone",
+        "challenge",
+        "schedule",
+        "school",
+        "medical",
+        "visitation",
+        "court_related",
+        "other"
+      ],
+      "default": "daily_update"
+    },
+    "title": {
+      "type": "string"
+    },
+    "neutral_summary": {
+      "type": "string",
+      "description": "Neutral factual summary of the interaction"
+    },
+    "milestone": {
+      "type": "string"
+    },
+    "challenge": {
+      "type": "string"
+    },
+    "draft_message": {
+      "type": "string",
+      "description": "Optional message text analyzed for tone"
+    },
+    "ai_risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        ""
+      ],
+      "default": ""
+    },
+    "ai_tone": {
+      "type": "string"
+    },
+    "court_readiness_score": {
+      "type": "number"
+    },
+    "ai_summary": {
+      "type": "string"
+    },
+    "flagged_phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phrase": {
+            "type": "string"
+          },
+          "concern": {
+            "type": "string"
+          },
+          "safer_alternative": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "suggested_rewrite": {
+      "type": "string"
+    },
+    "communication_tips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "private"
+      ],
+      "default": "shared"
+    }
+  },
+  "required": [
+    "owner_email",
+    "entry_date",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "owner_email": "{{user.email}}"
+        },
+        {
+          "shared_with": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}

@@ -426,6 +426,7 @@ function App() {
               <Route path="/system-guides" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SystemGuides /></FeatureLockGate></Suspense>} />
               <Route path="/meeting-prep-chatbot" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.MeetingPrepChatbot /></FeatureLockGate></Suspense>} />
               <Route path="/communications" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CommunicationsPortal /></FeatureLockGate></Suspense>} />
+              <Route path="/communication-journal" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CommunicationJournal /></FeatureLockGate></Suspense>} />
               <Route path="/communication-tone-tool" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><CommunicationToneTool /></FeatureLockGate></Suspense>} />
               <Route path="/court-filings" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtFilingWorkflow /></FeatureLockGate></Suspense>} />
               <Route path="/compliance-risks" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ComplianceRiskDashboard /></FeatureLockGate></Suspense>} />
