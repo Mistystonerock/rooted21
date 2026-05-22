@@ -4,6 +4,7 @@ import DynamicBehaviorInsights from "@/components/behavior/DynamicBehaviorInsigh
 import { C } from "@/lib/rooted-constants";
 
 const BEHAVIOR_ITEMS = [
+  { title: "AI Behavior Support", description: "Describe a difficult moment and get trauma-informed de-escalation scripts.", url: "/behavior-support", emoji: "🧠", tag: "AI" },
   { id: "behavior-log-button", title: "Behavior Daily Logs", description: "Track patterns, triggers, mood, and regulation over time.", url: "/behavior-logs", emoji: "📋" },
   { title: "Behavior Analytics", description: "View trends and understand what may be driving behaviors.", url: "/analytics", emoji: "📊" },
   { title: "Behavioral Trends", description: "Visual progress charts for patterns and improvements.", url: "/behavioral-trends", emoji: "📈" },
