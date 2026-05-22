@@ -57,10 +57,10 @@ export default function useDesktopInteractionSupport() {
       if (!touchStart || !touch || isTypingTarget(event.target)) return;
 
       const moved = Math.abs(touch.clientX - touchStart.x) > 12 || Math.abs(touch.clientY - touchStart.y) > 12;
-      const target = touchStart.target?.closest?.("[role='button'], [role='tab'], [role='menuitem'], [role='link'], .cursor-pointer");
+      const target = touchStart.target?.closest?.(INTERACTIVE_SELECTOR);
       touchStart = null;
 
-      if (moved || !target || target.matches("button, a[href], input, select, textarea")) return;
+      if (moved || !target || target.matches("input, select, textarea")) return;
       target.click();
     };
 
