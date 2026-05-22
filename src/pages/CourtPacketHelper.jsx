@@ -63,6 +63,7 @@ export default function CourtPacketHelper() {
               <p className="mt-2 text-sm leading-6" style={{ color: C.mutedText }}>{selected.usedFor}</p>
               <p className="mt-3 rounded-2xl p-3 text-xs font-bold leading-5" style={{ background: "#fff7ed", color: "#9a3412" }}>Before filing, verify current requirements with the court clerk, attorney, legal aid, or official court website. This packet may not include every required form.</p>
             </section>
+            <a href="/evidence-timeline" className="block rounded-2xl px-4 py-3 text-center text-sm font-black no-underline" style={{ background: C.gold, color: C.darkGreen }}>Open Evidence Timeline + Chronology Exhibit</a>
             <CourtPacketGuide packet={selected} user={user} />
           </>
         ) : (

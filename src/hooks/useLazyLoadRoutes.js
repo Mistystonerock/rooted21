@@ -21,6 +21,7 @@ const routes = {
   SubstanceAbuseResources: lazy(() => import("@/pages/SubstanceAbuseResources")),
   CourtRightsEducation: lazy(() => import("@/pages/CourtRightsEducation")),
   CourtPacketHelper: lazy(() => import("@/pages/CourtPacketHelper")),
+  EvidenceTimeline: lazy(() => import("@/pages/EvidenceTimeline")),
   ProtectiveOrderHelp: lazy(() => import("@/pages/ProtectiveOrderHelp")),
   TrainingVideos: lazy(() => import("@/pages/TrainingVideos")),
   Chat: lazy(() => import("@/pages/Chat")),

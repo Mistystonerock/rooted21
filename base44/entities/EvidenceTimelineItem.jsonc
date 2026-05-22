@@ -1,0 +1,90 @@
+{
+  "name": "EvidenceTimelineItem",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "User who owns this evidence item"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the evidence relates to"
+    },
+    "event_time": {
+      "type": "string",
+      "description": "Optional time the event occurred"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short evidence title"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Neutral factual summary of the evidence"
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "photo",
+        "document",
+        "message",
+        "other"
+      ],
+      "default": "document"
+    },
+    "case_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Case tags such as Visitation, Safety, School, Medical, Communication, CPS, Court"
+    },
+    "private_file_uri": {
+      "type": "string",
+      "description": "Private uploaded evidence file URI"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "file_size": {
+      "type": "number"
+    },
+    "message_text": {
+      "type": "string",
+      "description": "Message text or transcript if evidence is a message"
+    },
+    "related_document_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "SecureDocument IDs from Court Packet Helper or Document Vault cross-referenced by this item"
+    },
+    "source_note": {
+      "type": "string",
+      "description": "Where this evidence came from"
+    }
+  },
+  "required": [
+    "owner_email",
+    "event_date",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}
