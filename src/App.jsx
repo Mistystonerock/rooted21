@@ -451,6 +451,7 @@ function App() {
               <Route path="/expense-split" element={<FeatureLockGate user={user}><ExpenseSplit /></FeatureLockGate>} />
               <Route path="/document-scanner" element={<FeatureLockGate user={user}><DocumentScanner /></FeatureLockGate>} />
               <Route path="/case-plan-checklist" element={<FeatureLockGate user={user}><CasePlanChecklist /></FeatureLockGate>} />
+              <Route path="/case-plan-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CasePlanTracker /></FeatureLockGate></Suspense>} />
               <Route path="/expense-tracker" element={<FeatureLockGate user={user}><ExpenseTracker /></FeatureLockGate>} />
               <Route path="/visitation-tracker" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.VisitationTracker /></FeatureLockGate></Suspense>} />
               <Route path="/medication-manager" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><MedicationManager /></FeatureLockGate></Suspense>} />

@@ -1,0 +1,92 @@
+{
+  "name": "CasePlanRequirement",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "User who owns this case plan requirement"
+    },
+    "title": {
+      "type": "string",
+      "description": "Requirement or task title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "visitation",
+        "parenting_classes",
+        "treatment",
+        "housing",
+        "employment",
+        "drug_screening",
+        "mental_health",
+        "school",
+        "court",
+        "documentation",
+        "other"
+      ],
+      "default": "other"
+    },
+    "legal_source": {
+      "type": "string",
+      "description": "Court order, CPS case plan, hearing order, or other source"
+    },
+    "description": {
+      "type": "string",
+      "description": "Plain-language details of what is required"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed",
+        "needs_review"
+      ],
+      "default": "not_started"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    },
+    "evidence_item_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "EvidenceTimelineItem IDs attached to this requirement"
+    },
+    "progress_notes": {
+      "type": "string",
+      "description": "Caregiver notes about actions taken and progress"
+    }
+  },
+  "required": [
+    "owner_email",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}

@@ -23,6 +23,7 @@ const routes = {
   CourtPacketHelper: lazy(() => import("@/pages/CourtPacketHelper")),
   EvidenceTimeline: lazy(() => import("@/pages/EvidenceTimeline")),
   AutomatedBriefing: lazy(() => import("@/pages/AutomatedBriefing")),
+  CasePlanTracker: lazy(() => import("@/pages/CasePlanTracker")),
   ProtectiveOrderHelp: lazy(() => import("@/pages/ProtectiveOrderHelp")),
   TrainingVideos: lazy(() => import("@/pages/TrainingVideos")),
   Chat: lazy(() => import("@/pages/Chat")),

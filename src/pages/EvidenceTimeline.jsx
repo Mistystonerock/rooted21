@@ -56,6 +56,7 @@ export default function EvidenceTimeline() {
           <p className="mt-2 text-sm leading-6" style={{ color: C.lightGreen }}>Pin photos, documents, and messages chronologically, tag them by case category, and export a Chronology Exhibit PDF with court-document cross-references.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link to="/documents" className="inline-flex rounded-xl px-4 py-2 text-xs font-bold no-underline" style={{ background: C.gold, color: C.darkGreen }}><FolderOpen size={14} className="mr-1" /> Open Document Vault</Link>
+            <Link to="/case-plan-tracker" className="inline-flex rounded-xl px-4 py-2 text-xs font-bold no-underline" style={{ background: "rgba(255,255,255,0.12)", color: C.cream, border: `1px solid ${C.gold}` }}><FileText size={14} className="mr-1" /> Case Plan Tracker</Link>
             <Link to="/automated-briefing" className="inline-flex rounded-xl px-4 py-2 text-xs font-bold no-underline" style={{ background: "rgba(255,255,255,0.12)", color: C.cream, border: `1px solid ${C.gold}` }}><FileText size={14} className="mr-1" /> Automated Briefing</Link>
           </div>
         </section>
