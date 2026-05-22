@@ -6,6 +6,14 @@
       "type": "string",
       "description": "User who owns this case plan requirement"
     },
+    "child_profile_id": {
+      "type": "string",
+      "description": "Linked ChildProfile ID for child-specific filtering"
+    },
+    "child_name": {
+      "type": "string",
+      "description": "Child this requirement relates to"
+    },
     "title": {
       "type": "string",
       "description": "Requirement or task title"

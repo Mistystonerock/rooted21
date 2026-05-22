@@ -23,7 +23,7 @@ export default function RequirementCard({ requirement, evidenceItems, onUpdate, 
     <article className="rounded-3xl border bg-white p-4 shadow-sm" style={{ borderColor: C.cream }}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-black uppercase tracking-wide" style={{ color: C.mutedText }}>{requirement.category?.replaceAll("_", " ")} · {requirement.priority} priority</p>
+          <p className="text-[11px] font-black uppercase tracking-wide" style={{ color: C.mutedText }}>{requirement.category?.replaceAll("_", " ")} · {requirement.priority} priority{requirement.child_name ? ` · ${requirement.child_name}` : ""}</p>
           <h3 className="mt-1 font-serif text-lg font-black" style={{ color: C.darkGreen }}>{requirement.title}</h3>
         </div>
         <button type="button" onClick={() => onDelete(requirement.id)} className="rounded-xl p-2" style={{ background: C.offWhite, color: "#9a3412", border: `1px solid ${C.cream}` }} aria-label="Delete requirement"><Trash2 size={15} /></button>

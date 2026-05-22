@@ -24,7 +24,7 @@ export default function EvidenceTimelineList({ items, courtDocuments, onDelete }
             <div className="absolute -left-1 top-5 h-4 w-4 rounded-full" style={{ background: C.gold }} />
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-[11px] font-black uppercase tracking-wide" style={{ color: C.mutedText }}>Exhibit {index + 1} · {item.event_date}{item.event_time ? ` at ${item.event_time}` : ""}</p>
+                <p className="text-[11px] font-black uppercase tracking-wide" style={{ color: C.mutedText }}>Exhibit {index + 1} · {item.event_date}{item.event_time ? ` at ${item.event_time}` : ""}{item.child_name ? ` · ${item.child_name}` : ""}</p>
                 <h3 className="mt-1 font-serif text-lg font-black" style={{ color: C.darkGreen }}>{item.title}</h3>
               </div>
               <button type="button" onClick={() => onDelete(item.id)} className="rounded-xl p-2" style={{ background: C.offWhite, color: "#9a3412", border: `1px solid ${C.cream}` }} aria-label="Delete evidence"><Trash2 size={15} /></button>

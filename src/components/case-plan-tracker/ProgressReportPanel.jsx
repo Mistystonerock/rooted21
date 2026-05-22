@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import { C } from "@/lib/rooted-constants";
 import { FileDown } from "lucide-react";
+import { getChildDisplayName } from "@/lib/child-selection";
 
 function pct(requirements, status) {
   if (!requirements.length) return 0;
@@ -13,7 +14,7 @@ function wrap(doc, text, x, y, width) {
   return y + lines.length * 5;
 }
 
-export default function ProgressReportPanel({ requirements, evidenceItems }) {
+export default function ProgressReportPanel({ requirements, evidenceItems, selectedChild }) {
   const completed = pct(requirements, "completed");
   const inProgress = pct(requirements, "in_progress");
   const evidenceLinked = requirements.filter(item => item.evidence_item_ids?.length).length;
@@ -24,11 +25,12 @@ export default function ProgressReportPanel({ requirements, evidenceItems }) {
     let y = 18;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Progress vs. Requirements Report", 14, y);
+    const childName = selectedChild ? getChildDisplayName(selectedChild) : "All children";
+    doc.text(`${childName} Court Status Report`, 14, y);
     y += 8;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
-    y = wrap(doc, "This report helps visualize how current caregiver actions align with CPS or court case plan requirements. Review with your attorney, legal aid, caseworker, or court before filing or sharing.", 14, y, 180);
+    y = wrap(doc, `This child-specific report consolidates progress across case plan requirements and linked Evidence Timeline items for ${childName}. Review with your attorney, legal aid, caseworker, or court before filing or sharing.`, 14, y, 180);
     y += 5;
     doc.text(`Requirements: ${requirements.length} · Completed: ${completed}% · In Progress: ${inProgress}% · Evidence linked: ${evidenceLinked}`, 14, y);
     y += 8;
@@ -55,12 +57,12 @@ export default function ProgressReportPanel({ requirements, evidenceItems }) {
       y += 7;
     });
 
-    doc.save(`progress-vs-requirements-${new Date().toISOString().slice(0, 10)}.pdf`);
+    doc.save(`court-status-report-${childName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${new Date().toISOString().slice(0, 10)}.pdf`);
   }
 
   return (
     <section className="rounded-3xl border bg-white p-4 shadow-sm" style={{ borderColor: C.cream }}>
-      <p className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Progress vs. Requirements</p>
+      <p className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>{selectedChild ? `${getChildDisplayName(selectedChild)} Court Status Report` : "Progress vs. Requirements"}</p>
       <div className="mt-4 grid grid-cols-3 gap-2 text-center">
         <Metric label="Completed" value={`${completed}%`} />
         <Metric label="In progress" value={`${inProgress}%`} />
@@ -69,7 +71,7 @@ export default function ProgressReportPanel({ requirements, evidenceItems }) {
       <div className="mt-4 h-3 overflow-hidden rounded-full" style={{ background: C.offWhite }}>
         <div className="h-full" style={{ width: `${completed}%`, background: C.darkGreen }} />
       </div>
-      <button type="button" onClick={exportReport} disabled={!requirements.length} className="mt-4 w-full rounded-2xl px-4 py-3 text-sm font-black" style={{ background: requirements.length ? C.darkGreen : C.cream, color: C.cream, border: "none" }}><FileDown size={16} className="mr-2" /> Export Progress Report PDF</button>
+      <button type="button" onClick={exportReport} disabled={!requirements.length} className="mt-4 w-full rounded-2xl px-4 py-3 text-sm font-black" style={{ background: requirements.length ? C.darkGreen : C.cream, color: C.cream, border: "none" }}><FileDown size={16} className="mr-2" /> Export Child Court Status PDF</button>
     </section>
   );
 }

@@ -2,11 +2,12 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Upload } from "lucide-react";
+import { getChildDisplayName } from "@/lib/child-selection";
 
 const CATEGORY_OPTIONS = ["Visitation", "Safety", "Communication", "School", "Medical", "CPS", "Court", "Child Support", "Housing", "Other"];
 const BLANK = { event_date: "", event_time: "", title: "", summary: "", evidence_type: "document", case_categories: [], message_text: "", related_document_ids: [], source_note: "" };
 
-export default function EvidenceUploadForm({ user, courtDocuments, onCreated }) {
+export default function EvidenceUploadForm({ user, courtDocuments, selectedChild, onCreated }) {
   const [form, setForm] = useState(BLANK);
   const [file, setFile] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -37,7 +38,8 @@ export default function EvidenceUploadForm({ user, courtDocuments, onCreated }) 
       const result = await base44.integrations.Core.UploadPrivateFile({ file });
       uploaded = { private_file_uri: result.file_uri, file_name: file.name, file_size: file.size };
     }
-    const created = await base44.entities.EvidenceTimelineItem.create({ ...form, ...uploaded, owner_email: user.email });
+    const childData = selectedChild ? { child_profile_id: selectedChild.id, child_name: getChildDisplayName(selectedChild) } : {};
+    const created = await base44.entities.EvidenceTimelineItem.create({ ...form, ...uploaded, ...childData, owner_email: user.email });
     onCreated(created);
     setForm(BLANK);
     setFile(null);
@@ -49,6 +51,7 @@ export default function EvidenceUploadForm({ user, courtDocuments, onCreated }) 
     <form onSubmit={handleSubmit} className="rounded-3xl border bg-white p-4 shadow-sm" style={{ borderColor: C.cream }}>
       <p className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Pin evidence to the timeline</p>
       <p className="mt-1 text-xs leading-5" style={{ color: C.mutedText }}>Upload a photo/document or paste message text, then tag it for court chronology review.</p>
+      {selectedChild && <p className="mt-2 rounded-xl px-3 py-2 text-xs font-bold" style={{ background: C.offWhite, color: C.darkGreen }}>For: {getChildDisplayName(selectedChild)}</p>}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <input required type="date" value={form.event_date} onChange={e => setForm(prev => ({ ...prev, event_date: e.target.value }))} className="rounded-xl border px-3 py-2 text-sm" style={{ borderColor: C.cream }} />

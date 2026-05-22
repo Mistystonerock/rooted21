@@ -5,6 +5,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import RequirementForm from "@/components/case-plan-tracker/RequirementForm";
 import RequirementCard from "@/components/case-plan-tracker/RequirementCard";
 import ProgressReportPanel from "@/components/case-plan-tracker/ProgressReportPanel";
+import ChildSelector from "@/components/children/ChildSelector";
 import { C } from "@/lib/rooted-constants";
 import { GitBranch, Scale } from "lucide-react";
 
@@ -14,6 +15,7 @@ export default function CasePlanTracker() {
   const [evidenceItems, setEvidenceItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [selectedChild, setSelectedChild] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -30,7 +32,9 @@ export default function CasePlanTracker() {
     load();
   }, []);
 
-  const filtered = useMemo(() => filter === "all" ? requirements : requirements.filter(item => item.status === filter), [requirements, filter]);
+  const childRequirements = useMemo(() => requirements.filter(item => !selectedChild || item.child_profile_id === selectedChild.id || item.child_name === selectedChild.full_name || item.child_name === selectedChild.name), [requirements, selectedChild]);
+  const childEvidenceItems = useMemo(() => evidenceItems.filter(item => !selectedChild || item.child_profile_id === selectedChild.id || item.child_name === selectedChild.full_name || item.child_name === selectedChild.name), [evidenceItems, selectedChild]);
+  const filtered = useMemo(() => filter === "all" ? childRequirements : childRequirements.filter(item => item.status === filter), [childRequirements, filter]);
 
   async function createRequirement(data) {
     const created = await base44.entities.CasePlanRequirement.create(data);
@@ -67,8 +71,9 @@ export default function CasePlanTracker() {
 
         <section className="rounded-3xl border p-4 text-xs leading-6" style={{ background: "#fff7ed", borderColor: "#fed7aa", color: "#9a3412" }}>This tracker is for organization and progress visualization only. Confirm legal obligations, deadlines, required proof, and filing needs with your caseworker, attorney, legal aid, court clerk, or official court website.</section>
 
-        <ProgressReportPanel requirements={requirements} evidenceItems={evidenceItems} />
-        <RequirementForm user={user} onCreate={createRequirement} />
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+        <ProgressReportPanel requirements={childRequirements} evidenceItems={childEvidenceItems} selectedChild={selectedChild} />
+        <RequirementForm user={user} selectedChild={selectedChild} onCreate={createRequirement} />
 
         <section className="rounded-3xl border bg-white p-3 shadow-sm" style={{ borderColor: C.cream }}>
           <div className="flex gap-2 overflow-x-auto pb-1">
@@ -77,7 +82,7 @@ export default function CasePlanTracker() {
         </section>
 
         <section className="space-y-3">
-          {filtered.length === 0 ? <div className="rounded-3xl border bg-white p-8 text-center" style={{ borderColor: C.cream }}><p className="text-sm font-bold" style={{ color: C.darkGreen }}>No requirements in this view</p></div> : filtered.map(item => <RequirementCard key={item.id} requirement={item} evidenceItems={evidenceItems} onUpdate={updateRequirement} onDelete={deleteRequirement} />)}
+          {filtered.length === 0 ? <div className="rounded-3xl border bg-white p-8 text-center" style={{ borderColor: C.cream }}><p className="text-sm font-bold" style={{ color: C.darkGreen }}>No requirements in this view</p></div> : filtered.map(item => <RequirementCard key={item.id} requirement={item} evidenceItems={childEvidenceItems} onUpdate={updateRequirement} onDelete={deleteRequirement} />)}
         </section>
       </main>
     </div>

@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import { Plus } from "lucide-react";
+import { getChildDisplayName } from "@/lib/child-selection";
 
 const BLANK = { title: "", category: "visitation", legal_source: "", description: "", due_date: "", status: "not_started", priority: "medium", progress_notes: "", evidence_item_ids: [] };
 const CATEGORIES = [
   ["visitation", "Visitation"], ["parenting_classes", "Parenting Classes"], ["treatment", "Treatment"], ["housing", "Housing"], ["employment", "Employment"], ["drug_screening", "Drug Screening"], ["mental_health", "Mental Health"], ["school", "School"], ["court", "Court"], ["documentation", "Documentation"], ["other", "Other"]
 ];
 
-export default function RequirementForm({ user, onCreate }) {
+export default function RequirementForm({ user, selectedChild, onCreate }) {
   const [form, setForm] = useState(BLANK);
   const [saving, setSaving] = useState(false);
 
   async function submit(event) {
     event.preventDefault();
     setSaving(true);
-    await onCreate({ ...form, owner_email: user.email });
+    const childData = selectedChild ? { child_profile_id: selectedChild.id, child_name: getChildDisplayName(selectedChild) } : {};
+    await onCreate({ ...form, ...childData, owner_email: user.email });
     setForm(BLANK);
     setSaving(false);
   }
@@ -22,6 +24,7 @@ export default function RequirementForm({ user, onCreate }) {
   return (
     <form onSubmit={submit} className="rounded-3xl border bg-white p-4 shadow-sm" style={{ borderColor: C.cream }}>
       <p className="font-serif text-lg font-black" style={{ color: C.darkGreen }}>Add case plan requirement</p>
+      {selectedChild && <p className="mt-2 rounded-xl px-3 py-2 text-xs font-bold" style={{ background: C.offWhite, color: C.darkGreen }}>For: {getChildDisplayName(selectedChild)}</p>}
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <input required value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))} placeholder="Requirement title" className="rounded-xl border px-3 py-2 text-sm sm:col-span-2" style={{ borderColor: C.cream }} />
         <select value={form.category} onChange={e => setForm(prev => ({ ...prev, category: e.target.value }))} className="rounded-xl border px-3 py-2 text-sm" style={{ borderColor: C.cream }}>

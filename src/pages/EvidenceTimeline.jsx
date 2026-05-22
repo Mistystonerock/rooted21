@@ -4,6 +4,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import EvidenceUploadForm from "@/components/evidence/EvidenceUploadForm";
 import EvidenceTimelineList from "@/components/evidence/EvidenceTimelineList";
 import ChronologyExportButton from "@/components/evidence/ChronologyExportButton";
+import ChildSelector from "@/components/children/ChildSelector";
 import { C } from "@/lib/rooted-constants";
 import { Link } from "react-router-dom";
 import { FileText, FolderOpen, Search } from "lucide-react";
@@ -15,6 +16,7 @@ export default function EvidenceTimeline() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [selectedChild, setSelectedChild] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -33,9 +35,10 @@ export default function EvidenceTimeline() {
 
   const categories = useMemo(() => [...new Set(items.flatMap(item => item.case_categories || []))].sort(), [items]);
   const filteredItems = useMemo(() => items
+    .filter(item => !selectedChild || item.child_profile_id === selectedChild.id || item.child_name === selectedChild.full_name || item.child_name === selectedChild.name)
     .filter(item => category === "all" || (item.case_categories || []).includes(category))
-    .filter(item => !search || [item.title, item.summary, item.message_text, item.source_note, ...(item.case_categories || [])].filter(Boolean).join(" ").toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => `${a.event_date || ""} ${a.event_time || ""}`.localeCompare(`${b.event_date || ""} ${b.event_time || ""}`)), [items, category, search]);
+    .filter(item => !search || [item.title, item.summary, item.message_text, item.source_note, item.child_name, ...(item.case_categories || [])].filter(Boolean).join(" ").toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => `${a.event_date || ""} ${a.event_time || ""}`.localeCompare(`${b.event_date || ""} ${b.event_time || ""}`)), [items, category, search, selectedChild]);
 
   async function deleteItem(id) {
     if (!confirm("Delete this timeline evidence item?")) return;
@@ -61,7 +64,8 @@ export default function EvidenceTimeline() {
           </div>
         </section>
 
-        <EvidenceUploadForm user={user} courtDocuments={courtDocuments} onCreated={item => setItems(prev => [...prev, item])} />
+        <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+        <EvidenceUploadForm user={user} courtDocuments={courtDocuments} selectedChild={selectedChild} onCreated={item => setItems(prev => [...prev, item])} />
 
         <section className="rounded-3xl border bg-white p-4 shadow-sm" style={{ borderColor: C.cream }}>
           <div className="relative"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" color={C.mutedText} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search timeline evidence..." className="w-full rounded-2xl border py-3 pl-10 pr-3 text-sm" style={{ borderColor: C.cream }} /></div>
