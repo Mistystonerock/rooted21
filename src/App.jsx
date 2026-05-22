@@ -75,6 +75,7 @@ import AdminRouteGate from '@/components/security/AdminRouteGate';
 import OfflineStatusBanner from '@/components/system/OfflineStatusBanner';
 import WelcomeToRooted21 from '@/pages/WelcomeToRooted21';
 import useDesktopInteractionSupport from '@/hooks/useDesktopInteractionSupport';
+import GlobalBackButton from '@/components/navigation/GlobalBackButton';
 
 function withStartupTimeout(promise, ms = 8000) {
   return Promise.race([
@@ -304,6 +305,7 @@ function App() {
         <OfflineStatusBanner />
         {user && !showLoggedInMaintenance && <TopRightMenu user={user} />}
         <Router>
+          {user && !needsOnboarding && !needsWelcome && !showLoggedInMaintenance && <GlobalBackButton />}
           {bootFailed ? (
             <StartupErrorScreen onRetry={() => window.location.reload()} />
           ) : showLoggedInMaintenance ? (

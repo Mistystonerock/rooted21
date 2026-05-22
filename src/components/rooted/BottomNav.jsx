@@ -28,8 +28,8 @@ export default function BottomNav() {
       }}
     >
       {/* Home */}
-      <Link to="/home" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/home") ? GREEN : MUTED }}>
-        <Home size={20} strokeWidth={isActive("/home") ? 2.5 : 1.8} />
+      <Link to="/dashboard" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 0", textDecoration: "none", color: isActive("/dashboard") ? GREEN : MUTED }}>
+        <Home size={20} strokeWidth={isActive("/dashboard") ? 2.5 : 1.8} />
         <span style={{ fontSize: 10, fontWeight: 700 }}>Home</span>
       </Link>
 

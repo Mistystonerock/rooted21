@@ -14,11 +14,9 @@ import TreeLogo from "@/components/rooted/TreeLogo";
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
-import OnboardingTour from "@/components/onboarding/OnboardingTour";
 import MobileRefresh from "@/components/mobile/MobileRefresh";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
-import TrainingVideoSeries from "@/components/training/TrainingVideoSeries";
 import ChildSelector from "@/components/children/ChildSelector";
 import QuickAddChildCard from "@/components/children/QuickAddChildCard";
 import DashboardPersonalizationCard from "@/components/dashboard/DashboardPersonalizationCard";
@@ -59,7 +57,6 @@ export default function Dashboard() {
   const [recentCheckins, setRecentCheckins] = useState([]);
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
-  const [showTour, setShowTour] = useState(false);
   const [childRefreshKey, setChildRefreshKey] = useState(0);
 
   async function handleRefresh() {
@@ -78,8 +75,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     handleRefresh();
-    const hasSeenTour = localStorage.getItem("rooted21_tour_seen");
-    if (!hasSeenTour) setShowTour(true);
   }, []);
 
   const completedLessons = lessonProgress.length;
@@ -188,8 +183,6 @@ export default function Dashboard() {
               })}
             </div>
           )}
-
-          <TrainingVideoSeries compact />
 
           {/* Quick Actions */}
           <div id="quick-actions">
@@ -329,9 +322,6 @@ export default function Dashboard() {
         </div>
       </MobileRefresh>
 
-      {showTour && (
-        <OnboardingTour onComplete={() => { setShowTour(false); localStorage.setItem("rooted21_tour_seen", "true"); }} />
-      )}
     </div>
   );
 }
