@@ -441,6 +441,7 @@ function App() {
               <Route path="/emergency-toolbox" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><EmergencyToolbox /></FeatureLockGate></Suspense>} />
               <Route path="/anger-management" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><AngerManagementHub /></FeatureLockGate></Suspense>} />
               <Route path="/court-ready-export" element={<FeatureLockGate user={user}><CourtReadyExport /></FeatureLockGate>} />
+              <Route path="/court-ready-document-generator" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CourtReadyDocumentGenerator /></FeatureLockGate></Suspense>} />
               <Route path="/unalterable-records" element={<FeatureLockGate user={user}><UnalterableRecords /></FeatureLockGate>} />
               <Route path="/court-report-generator" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ChildCourtReportGenerator /></FeatureLockGate></Suspense>} />
               <Route path="/court-preparation-checklist" element={<FeatureLockGate user={user}><CourtPreparationChecklist /></FeatureLockGate>} />
