@@ -50,5 +50,61 @@
     "parent_2_email",
     "child_name",
     "court_email"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "court_staff"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "parent_1_email": "{{user.email}}"
+        },
+        {
+          "parent_2_email": "{{user.email}}"
+        },
+        {
+          "court_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "court_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "founder"
+      }
+    }
+  }
 }

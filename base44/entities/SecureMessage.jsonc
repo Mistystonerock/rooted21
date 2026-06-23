@@ -37,5 +37,40 @@
     "professional_email",
     "sender_email",
     "body"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "sender_email": "{{user.email}}"
+    }
+  }
 }

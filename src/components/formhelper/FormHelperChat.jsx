@@ -3,14 +3,15 @@ import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { Send, RefreshCw, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { C } from "@/lib/rooted-constants";
 
-const CARD = "#12271a";
-const CARD2 = "#162f21";
-const BORDER = "rgba(255,255,255,0.08)";
-const GREEN = "#3db870";
-const GOLD = "#c9973a";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.55)";
+const CARD = C.white;
+const CARD2 = C.offWhite;
+const BORDER = C.cream;
+const GREEN = C.darkGreen;
+const GOLD = C.gold;
+const TEXT = C.darkText;
+const MUTED = C.mutedText;
 
 const ROLE_LABELS = {
   foster: "Foster Parent", adoptive: "Adoptive Parent", kinship: "Kinship Caregiver",
@@ -130,7 +131,7 @@ export default function FormHelperChat({ answers, onReset }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Context banner */}
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "12px 14px" }}>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 20, padding: "14px 16px", boxShadow: "0 8px 24px rgba(90,61,40,0.08)" }}>
         <div className="flex items-center justify-between">
           <div>
             <p style={{ fontSize: 11, fontWeight: 800, color: GREEN, letterSpacing: "0.1em" }}>YOUR SITUATION</p>
@@ -151,7 +152,7 @@ export default function FormHelperChat({ answers, onReset }) {
       </div>
 
       {/* Legal glossary toggle */}
-      <div style={{ background: CARD, border: `1px solid ${GOLD}30`, borderRadius: 14, overflow: "hidden" }}>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 24px rgba(90,61,40,0.08)" }}>
         <button
           onClick={() => setGlossaryOpen(v => !v)}
           style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", background: "none", border: "none", cursor: "pointer" }}
@@ -177,7 +178,7 @@ export default function FormHelperChat({ answers, onReset }) {
       {/* Messages */}
       <div className="space-y-3">
         {messages.length === 0 && loading && (
-          <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: "16px 18px" }}>
+          <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 18, padding: "16px 18px" }}>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
               {[0, 1, 2].map(i => (
                 <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: GREEN, animation: `blink 1.2s ${i * 0.2}s infinite` }} />
@@ -195,8 +196,8 @@ export default function FormHelperChat({ answers, onReset }) {
           >
             {msg.role === "user" ? (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <div style={{ maxWidth: "85%", background: `${GREEN}20`, border: `1px solid ${GREEN}40`, borderRadius: "18px 18px 4px 18px", padding: "11px 14px" }}>
-                  <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.5 }}>{msg.content}</p>
+                <div style={{ maxWidth: "85%", background: GREEN, border: `1px solid ${GREEN}`, borderRadius: "18px 18px 4px 18px", padding: "11px 14px" }}>
+                  <p style={{ fontSize: 13, color: C.white, lineHeight: 1.5 }}>{msg.content}</p>
                 </div>
               </div>
             ) : (
@@ -262,7 +263,7 @@ export default function FormHelperChat({ answers, onReset }) {
       )}
 
       {/* Input */}
-      <div style={{ display: "flex", gap: 10, alignItems: "flex-end", position: "sticky", bottom: 72, background: "#0b1f12", paddingBottom: 8, paddingTop: 4 }}>
+      <div style={{ display: "flex", gap: 10, alignItems: "flex-end", position: "sticky", bottom: 72, background: C.offWhite, paddingBottom: 8, paddingTop: 4 }}>
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
@@ -271,7 +272,7 @@ export default function FormHelperChat({ answers, onReset }) {
           rows={2}
           style={{
             flex: 1, background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 14,
-            padding: "11px 14px", color: "#fff", fontSize: 14, fontFamily: "var(--font-sans)",
+            padding: "11px 14px", color: TEXT, fontSize: 14, fontFamily: "var(--font-sans)",
             outline: "none", resize: "none", lineHeight: 1.5,
           }}
         />
@@ -280,12 +281,12 @@ export default function FormHelperChat({ answers, onReset }) {
           disabled={loading || !input.trim()}
           style={{
             width: 48, height: 48, borderRadius: 14, flexShrink: 0,
-            background: input.trim() && !loading ? GREEN : `${GREEN}30`,
+            background: input.trim() && !loading ? GREEN : C.cream,
             border: "none", cursor: input.trim() && !loading ? "pointer" : "default",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}
         >
-          <Send size={18} color={input.trim() && !loading ? "#0b1f12" : MUTED} />
+          <Send size={18} color={input.trim() && !loading ? C.white : MUTED} />
         </button>
       </div>
     </div>

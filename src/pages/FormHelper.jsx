@@ -4,7 +4,6 @@ import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import FormHelperChat from "@/components/formhelper/FormHelperChat";
 import FormHelperWizard from "@/components/formhelper/FormHelperWizard";
-import BottomNav from "@/components/rooted/BottomNav";
 
 export default function FormHelper() {
   const [wizardDone, setWizardDone] = useState(false);
@@ -16,7 +15,7 @@ export default function FormHelper() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#0b1f12" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: C.offWhite }}>
       <MobileHeader
         title="Form & Paperwork Helper"
         subtitle="Plain-language guidance for your situation"
@@ -32,7 +31,6 @@ export default function FormHelper() {
       </div>
 
       <div className="pb-20" />
-      <BottomNav />
     </div>
   );
 }

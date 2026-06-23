@@ -86,9 +86,6 @@
         },
         {
           "used_by_email": "{{user.email}}"
-        },
-        {
-          "status": "active"
         }
       ]
     },

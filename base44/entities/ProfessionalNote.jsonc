@@ -19,9 +19,49 @@
     },
     "professional_role": {
       "type": "string"
+    },
+    "professional_email": {
+      "type": "string",
+      "description": "Professional who created this note"
     }
   },
   "required": [
     "note"
-  ]
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "family_email": "{{user.email}}"
+        },
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "professional_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    }
+  }
 }

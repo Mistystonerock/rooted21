@@ -17,7 +17,6 @@
         "shelter_care_reminder",
         "adjudication_reminder",
         "review_hearing_reminder",
-        "permanency_timeline",
         "reunification_milestone",
         "other"
       ],
@@ -36,23 +35,6 @@
     "case_number": {
       "type": "string"
     },
-    "hearing_type": {
-      "type": "string",
-      "enum": [
-        "not_applicable",
-        "shelter_care",
-        "adjudication",
-        "disposition",
-        "review",
-        "permanency",
-        "other"
-      ],
-      "default": "not_applicable"
-    },
-    "hearing_date": {
-      "type": "string",
-      "format": "date"
-    },
     "event_datetime": {
       "type": "string",
       "format": "date-time",
@@ -62,10 +44,6 @@
       "type": "string",
       "format": "date-time",
       "description": "Immutable submission timestamp"
-    },
-    "authentication_id": {
-      "type": "string",
-      "description": "Human-readable authentication ID printed on court exports"
     },
     "verification_id": {
       "type": "string",
@@ -116,7 +94,6 @@
     "title",
     "summary",
     "submitted_at",
-    "authentication_id",
     "verification_id",
     "record_hash"
   ],

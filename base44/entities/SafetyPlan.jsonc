@@ -8,11 +8,11 @@
     },
     "child_name": {
       "type": "string",
-      "description": "Child or family member this plan supports"
+      "description": "Child's name"
     },
     "child_age": {
       "type": "number",
-      "description": "Child age"
+      "description": "Child's age"
     },
     "parent_name": {
       "type": "string",
@@ -20,133 +20,86 @@
     },
     "created_date": {
       "type": "string",
-      "format": "date"
+      "format": "date",
+      "description": "Date plan was created"
     },
     "contacts": {
       "type": "array",
       "description": "Emergency contacts",
       "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "trusted_adults": {
-      "type": "array",
-      "description": "Trusted adults and helpers",
-      "items": {
-        "type": "object"
-      },
-      "default": []
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "relationship": {
+            "type": "string"
+          }
+        }
+      }
     },
     "safe_locations": {
       "type": "array",
-      "description": "Safe places to go",
+      "description": "Safe places the child can go during crisis",
       "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "code_words": {
-      "type": "array",
-      "description": "Emergency code words and meanings",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "school_safety_plan": {
-      "type": "string",
-      "description": "School pickup, trusted staff, office instructions, and emergency contact planning"
-    },
-    "emotional_regulation_tools": {
-      "type": "array",
-      "description": "Child emotional regulation tools",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "child_calming_exercises": {
-      "type": "array",
-      "description": "Calming exercises that help the child settle safely",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "violence_exposure_coping_strategies": {
-      "type": "string",
-      "description": "Coping strategies and support plan after exposure to violence"
-    },
-    "medication_list": {
-      "type": "array",
-      "description": "Medication names, doses, and instructions",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "important_documents": {
-      "type": "array",
-      "description": "Important document checklist",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "emergency_bag": {
-      "type": "array",
-      "description": "Emergency bag checklist",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "after_hours_numbers": {
-      "type": "array",
-      "description": "After-hours crisis numbers",
-      "items": {
-        "type": "object"
-      },
-      "default": []
-    },
-    "emergency_escape_plan": {
-      "type": "string"
-    },
-    "transportation_backup": {
-      "type": "string"
-    },
-    "child_pickup_plan": {
-      "type": "string"
-    },
-    "pet_safety_plan": {
-      "type": "string"
-    },
-    "shelter_plan": {
-      "type": "string"
-    },
-    "warning_signs": {
-      "type": "string"
-    },
-    "crisis_resources": {
-      "type": "string"
-    },
-    "important_notes": {
-      "type": "string"
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
     },
     "calming_activities": {
       "type": "array",
+      "description": "Specific activities that help calm the child",
       "items": {
-        "type": "object"
-      },
-      "default": []
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "emoji": {
+            "type": "string"
+          }
+        }
+      }
     },
-    "pin_enabled": {
-      "type": "boolean",
-      "default": false
+    "warning_signs": {
+      "type": "string",
+      "description": "Signs that child is becoming dysregulated"
     },
-    "pin_code": {
-      "type": "string"
+    "crisis_resources": {
+      "type": "string",
+      "description": "Emergency resources and hotlines"
+    },
+    "important_notes": {
+      "type": "string",
+      "description": "Any other important information"
     },
     "is_active": {
       "type": "boolean",

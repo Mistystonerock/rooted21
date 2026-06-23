@@ -83,5 +83,14 @@
       ],
       "default": "active"
     }
-  }
+  },
+  "required": [
+    "county",
+    "organization_id",
+    "organization_name",
+    "zip_code",
+    "housing_resources_zip",
+    "sensitive_action_reauth_at",
+    "admin_session_valid_until"
+  ]
 }

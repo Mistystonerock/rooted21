@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import { C } from "@/lib/rooted-constants";
 
-const BG = "#0b1f12";
-const CARD = "#12271a";
-const BORDER = "rgba(255,255,255,0.08)";
-const GREEN = "#3db870";
-const GOLD = "#c9973a";
-const TEXT = "#f0e8d8";
-const MUTED = "rgba(240,232,216,0.55)";
+const CARD = C.white;
+const BORDER = C.cream;
+const GREEN = C.darkGreen;
+const GOLD = C.gold;
+const TEXT = C.darkText;
+const MUTED = C.mutedText;
 
 const STEPS = [
   {
@@ -137,7 +137,7 @@ export default function FormHelperWizard({ onComplete }) {
           transition={{ duration: 0.22 }}
         >
           {/* Question card */}
-          <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 20, padding: "24px 20px", marginBottom: 16 }}>
+          <div style={{ background: CARD, border: `1.5px solid ${BORDER}`, borderRadius: 24, padding: "24px 20px", marginBottom: 16, boxShadow: "0 8px 24px rgba(90,61,40,0.08)" }}>
             <p style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "1.25rem", color: TEXT, lineHeight: 1.2, marginBottom: 8 }}>
               {current.question}
             </p>
@@ -156,7 +156,7 @@ export default function FormHelperWizard({ onComplete }) {
                 onKeyDown={e => e.key === "Enter" && handleTextNext()}
                 style={{
                   width: "100%", background: CARD, border: `1.5px solid ${BORDER}`,
-                  borderRadius: 14, padding: "14px 16px", color: "#fff", fontSize: 16,
+                  borderRadius: 14, padding: "14px 16px", color: TEXT, fontSize: 16,
                   fontFamily: "var(--font-sans)", outline: "none", boxSizing: "border-box",
                 }}
               />
@@ -165,7 +165,7 @@ export default function FormHelperWizard({ onComplete }) {
                 disabled={!answers[current.key]?.trim()}
                 style={{
                   width: "100%", padding: "14px", background: answers[current.key]?.trim() ? GREEN : `${GREEN}40`,
-                  border: "none", borderRadius: 14, color: "#0b1f12", fontWeight: 800,
+                  border: "none", borderRadius: 14, color: C.white, fontWeight: 800,
                   fontSize: 15, cursor: answers[current.key]?.trim() ? "pointer" : "default",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   fontFamily: "var(--font-sans)",
