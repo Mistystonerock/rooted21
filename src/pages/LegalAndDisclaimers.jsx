@@ -236,10 +236,10 @@ export default function LegalAndDisclaimers() {
             Rooted 21 is committed to transparency. These policies outline how we protect your data, what we can and cannot do, and your rights as a user.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <a href="/privacy-policy-page" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
+            <a href="/privacy-policy" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
               📄 Read Full Privacy Policy
             </a>
-            <a href="/terms-of-service-page" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
+            <a href="/terms-of-service" style={{ fontSize: 12, fontWeight: 700, color: "#c9973a", textDecoration: "none", padding: "10px 14px", background: "rgba(201,151,58,0.15)", borderRadius: 8, display: "block", textAlign: "center" }}>
               ⚖️ Read Full Terms of Service
             </a>
           </div>
