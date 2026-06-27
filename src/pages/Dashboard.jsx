@@ -44,6 +44,7 @@ const TILES = [
   { to: "/case-insights", emoji: "✨", icon: null, label: "AI Case Insights", sub: "Scans documents, logs, deadlines, and case-plan risks", accent: "#2a1f0a", border: `${GOLD}30` },
   { to: "/court-report-generator", emoji: "📄", icon: null, label: "Court Report", sub: "AI-formatted 30-day child report for court", accent: "#2a1f0a", border: `${GOLD}30` },
   { to: "/consent-forms", emoji: "📝", icon: null, label: "Consent Forms", sub: "Release of information and signed consent templates", accent: "#102b24", border: `${GREEN}30` },
+  { to: "/consent-dashboard", emoji: "🔐", icon: null, label: "Consent Dashboard", sub: "Toggle what each professional role can see", accent: "#102b24", border: `${GREEN}30` },
 ];
 
 export default function Dashboard() {

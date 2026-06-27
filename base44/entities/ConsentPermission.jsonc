@@ -1,0 +1,72 @@
+{
+  "name": "ConsentPermission",
+  "type": "object",
+  "properties": {
+    "owner_email": {
+      "type": "string",
+      "description": "Parent or caregiver who controls this sharing permission"
+    },
+    "professional_role": {
+      "type": "string",
+      "enum": [
+        "therapist_counselor",
+        "cps_caseworker",
+        "court_legal_viewer",
+        "school_education_professional",
+        "other_support_professional"
+      ],
+      "description": "Professional role this permission applies to"
+    },
+    "data_category": {
+      "type": "string",
+      "enum": [
+        "journal_entries",
+        "behavior_logs",
+        "court_documents",
+        "school_documents",
+        "safety_plans",
+        "case_plan_progress",
+        "visitation_logs",
+        "communication_logs",
+        "evidence_timeline",
+        "care_calendar"
+      ],
+      "description": "Type of family data covered by this permission"
+    },
+    "allowed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this category may be shared with this professional role"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_by_email": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional parent notes about this sharing permission"
+    }
+  },
+  "required": [
+    "owner_email",
+    "professional_role",
+    "data_category"
+  ],
+  "rls": {
+    "create": {
+      "owner_email": "{{user.email}}"
+    },
+    "read": {
+      "owner_email": "{{user.email}}"
+    },
+    "update": {
+      "owner_email": "{{user.email}}"
+    },
+    "delete": {
+      "owner_email": "{{user.email}}"
+    }
+  }
+}

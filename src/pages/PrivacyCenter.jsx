@@ -180,6 +180,14 @@ export default function PrivacyCenter() {
         {user && <ConsentManagementPanel user={user} />}
         {user && <ReleaseInfoTracker user={user} />}
 
+        <a href="/consent-dashboard" className="flex items-center justify-between rounded-2xl p-4 no-underline" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>
+          <span>
+            <span className="block text-sm font-black" style={{ color: C.darkGreen }}>Consent Dashboard</span>
+            <span className="block text-xs" style={{ color: C.mutedText }}>Choose exactly what each professional role can see.</span>
+          </span>
+          <span className="text-xs font-black" style={{ color: C.midGreen }}>Open</span>
+        </a>
+
         <SelectRow icon={Eye} label="Behavior logs visibility" value={settings.behavior_log_visibility} options={OPTIONS.behavior_log_visibility} onChange={value => setSettings(prev => ({ ...prev, behavior_log_visibility: value }))} />
         <SelectRow icon={Eye} label="Notes and reflections visibility" value={settings.notes_visibility} options={OPTIONS.notes_visibility} onChange={value => setSettings(prev => ({ ...prev, notes_visibility: value }))} />
         <SelectRow icon={Shield} label="Legal records visibility" value={settings.legal_data_visibility} options={OPTIONS.legal_data_visibility} onChange={value => setSettings(prev => ({ ...prev, legal_data_visibility: value }))} />

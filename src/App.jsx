@@ -435,6 +435,7 @@ function App() {
               <Route path="/compliance-risks" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ComplianceRiskDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/case-insights" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CaseInsightDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/consent-forms" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ConsentForms /></FeatureLockGate></Suspense>} />
+              <Route path="/consent-dashboard" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.ConsentDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/documents" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><SecureDocumentRepository /></FeatureLockGate></Suspense>} />
               <Route path="/personalized-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><PersonalizedChat /></FeatureLockGate></Suspense>} />
               <Route path="/growth-insights" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><GrowthInsights /></FeatureLockGate></Suspense>} />
