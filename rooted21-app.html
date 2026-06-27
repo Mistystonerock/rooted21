@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f3ecdf" />
+  <title>Rooted 21 Parenting Network</title>
+  <link rel="stylesheet" href="rooted21-styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+</head>
+<body>
+  <audio id="rooted21-audio" src="rooted21-song.mp3" loop preload="auto"></audio>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Rooted 21 home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="img">
+          <path d="M32 47V18" />
+          <path d="M32 26c-9-10-18-8-22-1 9 3 16 4 22 1Z" />
+          <path d="M32 27c9-11 18-8 22-1-9 3-16 4-22 1Z" />
+          <path d="M32 38c-6-8-13-7-17-1 7 3 12 3 17 1Z" />
+          <path d="M32 39c6-8 13-7 17-1-7 3-12 3-17 1Z" />
+          <path d="M24 51c3-3 6-4 8-4s5 1 8 4" />
+          <path d="M18 56c5-5 9-7 14-7s9 2 14 7" />
+        </svg>
+      </span>
+      <span>
+        <strong>Rooted 21</strong>
+        <small>Parenting Network LLC</small>
+      </span>
+    </a>
+    <nav class="top-nav" aria-label="Primary navigation">
+      <a href="#mission">Mission</a>
+      <a href="#heart">Heart</a>
+      <a href="#family-app">App</a>
+      <a href="#professionals">Professionals</a>
+      <a href="#admin">Admin</a>
+    </nav>
+    <button class="header-action" type="button" data-auth-open>Sign In</button>
+  </header>
+
+  <button class="music-control" id="music-control" type="button" aria-pressed="false">
+    <span class="music-control__icon" aria-hidden="true">Music</span>
+    <span id="music-label">Play Song</span>
+  </button>
+
+  <section class="auth-panel" id="login" aria-label="Rooted 21 sign in">
+    <div class="auth-card">
+      <div>
+        <p class="eyebrow">Secure App Access</p>
+        <h2>Sign in to Rooted 21</h2>
+        <p>
+          Supabase authentication is now wired for real accounts. If Supabase is unavailable while viewing this file
+          locally, Rooted 21 will fall back to local preview mode so the app remains usable during setup.
+        </p>
+      </div>
+      <form class="auth-form" id="auth-form">
+        <label>
+          Email
+          <input id="auth-email" type="email" value="rooted21parenting@gmail.com" autocomplete="email" />
+        </label>
+        <label>
+          Password
+          <input id="auth-password" type="password" placeholder="Enter or create your password" autocomplete="current-password" required />
+        </label>
+        <label>
+          Role to preview
+          <select id="auth-role">
+            <option value="founder">Founder / Super Admin</option>
+            <option value="admin">Admin</option>
+            <option value="family">Parent / Family User</option>
+            <option value="caregiver">Kinship / Foster Caregiver</option>
+            <option value="professional">Professional User</option>
+          </select>
+        </label>
+        <button class="button button-primary" type="submit" id="auth-submit">Sign In / Create Account</button>
+        <p class="form-note" id="auth-message">Founder email: rooted21parenting@gmail.com</p>
+        <p class="form-note" id="auth-status">Checking Supabase connection...</p>
+      </form>
+    </div>
+  </section>
+
+  <main>
+    <section class="workspace is-locked" id="workspace">
+      <div class="workspace-topline">
+        <div>
+          <p class="eyebrow">Private Workspace</p>
+          <h2 id="workspace-title">Sign in to open your dashboard.</h2>
+          <p id="workspace-copy">
+            Role-based tools will appear here after login.
+          </p>
+        </div>
+        <button class="button button-soft" type="button" id="sign-out-button" hidden>Sign Out</button>
+      </div>
+      <div class="workspace-grid" id="workspace-grid"></div>
+      <div class="workspace-actions" id="workspace-actions"></div>
+    </section>
+
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">Support. Heal. Grow. Together.</p>
+        <h1>Everything Rooted 21 Stands For</h1>
+        <p class="hero-text">
+          A trauma-informed parenting app and support network for families navigating real life, CPS involvement,
+          court preparation, co-parenting, school advocacy, recovery, housing, benefits, and community resources.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#family-app">Explore the App</a>
+          <a class="button button-soft" href="#heart">The Heart of Rooted</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-label="Rooted 21 visual brand reference">
+        <img src="rooted21-heart/IMG_8008.jpeg" alt="Rooted 21 founder brand message" />
+      </div>
+      <div class="trust-badge">
+        <span>Trauma-informed</span>
+        <span>Compassionate</span>
+        <span>Empowering</span>
+      </div>
+    </section>
+
+    <section class="heart-section" id="heart">
+      <div class="section-intro">
+        <p class="eyebrow">The Heart of Rooted</p>
+        <h2>She did not just survive it. She rooted others through it.</h2>
+        <p>
+          These slides shape the full app: a calm bridge between overwhelmed families, hard systems,
+          practical tools, community resources, and next steps that feel possible.
+        </p>
+      </div>
+      <div class="story-feature">
+        <img src="rooted21-heart/IMG_8009.jpeg" alt="Rooted 21 mission and values slide" />
+        <div>
+          <p class="script">Rooted in real life</p>
+          <h3>Breaking cycles with real tools, real support, and real change.</h3>
+          <p>
+            The app should always feel trauma-informed, compassionate, empowering, judgment-free,
+            and built for every family.
+          </p>
+        </div>
+      </div>
+      <div class="story-grid">
+        <article>
+          <img src="rooted21-heart/IMG_8010.jpeg" alt="Families are told what to do, not shown how to do it" />
+          <h3>The Problem</h3>
+          <p>Families are asked to complete heavy requirements while carrying fear, shame, isolation, unstable housing, recovery, transport barriers, and scattered support.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8011.jpeg" alt="Rooted 21 organize prepare understand connect slide" />
+          <h3>The Support Loop</h3>
+          <p>Organize court dates and documents, prepare for meetings, understand plain-language next steps, and connect to verified local support.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8012.jpeg" alt="How families enter Rooted 21 app flow" />
+          <h3>The Family Flow</h3>
+          <p>Public pages first, protected login, warm founder welcome, then a simple dashboard with SOS, Moxie AI, case plan, court prep, resources, and progress.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mission-band" id="mission">
+      <div class="section-intro">
+        <p class="script">Our Mission</p>
+        <h2>Breaking cycles with real tools, real support, and real change.</h2>
+        <p>
+          Rooted 21 helps families take the next right step with calm guidance, organized records, practical
+          education, and consent-based collaboration.
+        </p>
+      </div>
+      <div class="principles">
+        <article>
+          <span class="line-icon book"></span>
+          <h3>Trauma-Informed Parenting Education</h3>
+          <p>Expert-led lessons and reflection tools that help caregivers understand trauma and build connection.</p>
+        </article>
+        <article>
+          <span class="line-icon family"></span>
+          <h3>Family Support Tools</h3>
+          <p>Daily support for parenting moments, emotional regulation, recovery, housing, benefits, and progress.</p>
+        </article>
+        <article>
+          <span class="line-icon pin"></span>
+          <h3>Community Resource Navigation</h3>
+          <p>Verified local and statewide resources for food, legal aid, domestic violence support, veterans, and more.</p>
+        </article>
+        <article>
+          <span class="line-icon folder"></span>
+          <h3>Paperwork Organization</h3>
+          <p>A secure document vault for case plans, court orders, medical records, school records, and parenting plans.</p>
+        </article>
+        <article>
+          <span class="line-icon scale"></span>
+          <h3>Court/CPS & School Meeting Preparation</h3>
+          <p>Step-by-step checklists, timelines, meeting questions, and review-ready progress summaries.</p>
+        </article>
+        <article>
+          <span class="line-icon shield"></span>
+          <h3>Safety Planning & Progress Tracking</h3>
+          <p>Clear milestones, reminders, access logs, consent-based sharing, and exportable progress reports.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="support-strip" aria-label="Support categories">
+      <p>Support for what matters most</p>
+      <div>
+        <span>Parenting</span>
+        <span>Recovery</span>
+        <span>Housing</span>
+        <span>Benefits</span>
+        <span>Child Behavior</span>
+        <span>Emotional Regulation</span>
+      </div>
+    </section>
+
+    <section class="app-section" id="family-app">
+      <div class="section-intro section-intro-left">
+        <p class="eyebrow">Family Mobile App</p>
+        <h2>One calm place to organize, prepare, understand, and connect.</h2>
+        <p>
+          The family experience is designed for parents, kinship caregivers, and foster caregivers who need support
+          on the go without feeling overwhelmed.
+        </p>
+      </div>
+      <div class="app-showcase">
+        <aside class="phone-frame" aria-label="Rooted 21 mobile app preview">
+          <div class="phone-screen">
+            <div class="phone-top">
+              <span class="mini-logo">R21</span>
+              <span>9:21</span>
+            </div>
+            <div class="phone-brand">
+              <div class="phone-mark">R</div>
+              <p>Support. Heal. Grow. Together.</p>
+            </div>
+            <button class="sos-button" type="button">SOS Support</button>
+            <div class="mobile-list">
+              <button type="button" data-mobile-panel="tools">My Tools</button>
+              <button type="button" data-mobile-panel="resources">Resources</button>
+              <button type="button" data-mobile-panel="community">Community</button>
+              <button type="button" data-mobile-panel="progress">Progress</button>
+              <button type="button" data-mobile-panel="plan">My Plan</button>
+            </div>
+          </div>
+        </aside>
+        <div class="feature-panel">
+          <div class="panel-tabs" role="tablist" aria-label="Family app modules">
+            <button class="is-active" type="button" data-panel-target="tools">My Tools</button>
+            <button type="button" data-panel-target="moxie">Moxie AI</button>
+            <button type="button" data-panel-target="vault">Vault</button>
+            <button type="button" data-panel-target="class">Class</button>
+          </div>
+          <article class="panel-card is-active" id="panel-tools">
+            <h3>My Tools</h3>
+            <p>Case plan tracking, court preparation, school advocacy, behavior logs, co-parenting support, and reminders.</p>
+            <ul>
+              <li>Today: parenting class day 7 reflection</li>
+              <li>Tomorrow: visit log summary due</li>
+              <li>This week: court packet readiness check</li>
+            </ul>
+          </article>
+          <article class="panel-card" id="panel-moxie">
+            <h3>Moxie AI + SOS</h3>
+            <p>Plain-language guidance, grounding prompts, calmer message rewrites, pattern summaries, and next-step planning.</p>
+            <ul>
+              <li>Will not provide legal, medical, therapy, or emergency advice</li>
+              <li>Requires user review before any external sharing</li>
+              <li>Flags high-conflict language with supportive alternatives</li>
+            </ul>
+          </article>
+          <article class="panel-card" id="panel-vault">
+            <h3>Secure Document Vault</h3>
+            <p>Organize court orders, case plans, medical records, parenting plans, school records, IDs, and housing documents.</p>
+            <ul>
+              <li>Encrypted storage</li>
+              <li>Role-based access</li>
+              <li>Consent and audit logs for every share</li>
+            </ul>
+          </article>
+          <article class="panel-card" id="panel-class">
+            <h3>21-Day Parenting Class</h3>
+            <p>Daily lessons, quizzes, activities, reflection prompts, completion tracking, and certificates.</p>
+            <ul>
+              <li>Progress included in court-ready summaries</li>
+              <li>Plain-language trauma-informed lessons</li>
+              <li>Downloadable completion certificate</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolkit-section" id="toolkit">
+      <div class="section-intro section-intro-left">
+        <p class="eyebrow">Full MVP Toolkit</p>
+        <h2>Built from the full Rooted 21 roadmap.</h2>
+        <p>
+          These modules turn the Heart of Rooted deck into working product areas for families, professionals,
+          admins, partners, donors, and future statewide growth.
+        </p>
+      </div>
+      <div class="toolkit-grid">
+        <article>
+          <img src="rooted21-heart/IMG_8013.jpeg" alt="Moxie AI and SOS boundaries slide" />
+          <h3>Moxie AI + SOS</h3>
+          <p>Plain-language AI, grounding tools, safety prompts, resource suggestions, and strict boundaries against legal, medical, therapy, or emergency advice.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8014.jpeg" alt="Court packet helper situation types slide" />
+          <h3>Court Packet Helper</h3>
+          <p>Preparation support for 23 situation types, official links, checklists, deadline reminders, fee waiver reminders, and attorney-review disclaimers.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8015.jpeg" alt="CPS child welfare case plan tracker slide" />
+          <h3>CPS Case Plan Tracker</h3>
+          <p>Track requirements, parent progress, visits, communication, certificates, court order uploads, summaries, and next-step checklists.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8016.jpeg" alt="Co-parenting and school advocacy slide" />
+          <h3>Co-Parenting + School Advocacy</h3>
+          <p>Communication logs, tone checks, parenting calendars, IEP/504 prep, school behavior documentation, and teacher communication support.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8017.jpeg" alt="Behavior logs and daily check-in slide" />
+          <h3>Behavior Logs + Daily Check-In</h3>
+          <p>Incident logs, trigger tracking, calm scripts, meltdown support, mood checks, reflection prompts, and pattern summaries over time.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8018.jpeg" alt="Recovery support domestic violence safety and family voice slide" />
+          <h3>Recovery, Safety + Family Voice</h3>
+          <p>Private recovery tracking, DV safety planning, quick exit concepts, family priorities, service preferences, and dignity-centered planning.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8019.jpeg" alt="Ross County and Chillicothe resource hub slide" />
+          <h3>Resource Hub</h3>
+          <p>Hyper-local verified categories for food, housing, utilities, transport, legal aid, veterans, mental health, schools, benefits, crisis, youth support, and more.</p>
+        </article>
+        <article>
+          <img src="rooted21-heart/IMG_8021.jpeg" alt="Document vault reminders and parent community slide" />
+          <h3>Vault, Reminders + Community</h3>
+          <p>PIN-protected document organization, court and treatment reminders, progress logs, parent groups, caregiver spaces, and shame-free support circles.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="dashboard-section" id="professionals">
+      <div class="section-intro section-intro-left">
+        <p class="eyebrow">Professional Web Portal</p>
+        <h2>Consent-based, read-only support for the people helping families.</h2>
+        <p>
+          Therapists, CPS workers, court/legal support users, and school professionals can review family-approved
+          records without taking ownership away from the family.
+        </p>
+      </div>
+      <div class="dashboard">
+        <div class="dashboard-sidebar">
+          <strong>Professional Portal</strong>
+          <button class="is-active" type="button" data-role-target="therapist">Therapist</button>
+          <button type="button" data-role-target="cps">CPS Worker</button>
+          <button type="button" data-role-target="court">Court/Legal</button>
+          <button type="button" data-role-target="school">School</button>
+        </div>
+        <div class="dashboard-main">
+          <div class="dashboard-topline">
+            <div>
+              <p class="eyebrow">Assigned Families</p>
+              <h3 id="role-title">Therapist View</h3>
+            </div>
+            <button class="button button-soft" type="button">Generate QR Code</button>
+          </div>
+          <div class="metric-grid">
+            <article><strong>12</strong><span>Linked families</span></article>
+            <article><strong>38</strong><span>Completed lessons</span></article>
+            <article><strong>9</strong><span>Reports ready</span></article>
+            <article><strong>100%</strong><span>Access logged</span></article>
+          </div>
+          <div class="family-row">
+            <div>
+              <strong>Family A</strong>
+              <span id="role-detail">Behavior logs, class completions, co-parenting insights, and approved summaries.</span>
+            </div>
+            <span class="status">Read-only</span>
+          </div>
+          <div class="report-card">
+            <h4>AI-Assisted Summary Draft</h4>
+            <p>
+              Summary is generated from approved data only and must be reviewed before export. Access, export, and
+              QR activity are saved to the audit log.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bridge-section" id="bridge">
+      <div class="section-intro">
+        <p class="eyebrow">Why Rooted 21</p>
+        <h2>More than an app. A bridge.</h2>
+        <p>
+          Rooted 21 connects lived experience, families, parents, recovery, overwhelm, isolation,
+          fear, and shame with systems, resources, preparation, community, and accountability.
+        </p>
+      </div>
+      <div class="bridge-layout">
+        <img src="rooted21-heart/IMG_8023.jpeg" alt="More than an app, a bridge slide" />
+        <div class="bridge-cards">
+          <article>
+            <h3>Who We Serve</h3>
+            <p>Parents, caregivers, court-involved families, parents in recovery, school navigation families, families in crisis, youth, kinship and foster families, and veteran families.</p>
+          </article>
+          <article>
+            <h3>Traction + Roadmap</h3>
+            <p>Ohio LLC filed, IRS EIN confirmed, app build active, Ross County resource hub growing, and MVP target set for Q3 2026.</p>
+          </article>
+          <article>
+            <h3>How People Can Help</h3>
+            <p>Community connections, donors, supporters, advisors, advocates, local agencies, legal aid, recovery leaders, and families who have been there.</p>
+          </article>
+        </div>
+      </div>
+      <div class="deck-strip" aria-label="Rooted 21 supporting slides">
+        <img src="rooted21-heart/IMG_8020.jpeg" alt="Veterans benefits and free family fun slide" />
+        <img src="rooted21-heart/IMG_8022.jpeg" alt="Every family navigating a hard system slide" />
+        <img src="rooted21-heart/IMG_8024.jpeg" alt="Rooted 21 traction and roadmap slide" />
+        <img src="rooted21-heart/IMG_8025.jpeg" alt="Help us build this for every family slide" />
+        <img src="rooted21-heart/IMG_8026.jpeg" alt="You are not alone Rooted 21 closing slide" />
+      </div>
+    </section>
+
+    <section class="dashboard-section admin-section" id="admin">
+      <div class="section-intro section-intro-left">
+        <p class="eyebrow">Admin and Founder Dashboard</p>
+        <h2>Operational control without losing the Rooted 21 warmth.</h2>
+        <p>
+          Admins manage resources, users, content, access codes, AI boundaries, reports, waitlists, and announcements.
+          Founder access includes platform-wide controls and legal/compliance oversight.
+        </p>
+      </div>
+      <div class="admin-grid">
+        <article>
+          <h3>User & Access Management</h3>
+          <p>Invite families, approve professionals, revoke codes, and review account status.</p>
+        </article>
+        <article>
+          <h3>Content & Classes</h3>
+          <p>Maintain the 21-day class, anger management modules, resource library, and survey content.</p>
+        </article>
+        <article>
+          <h3>AI Safety Settings</h3>
+          <p>Configure Moxie boundaries, review flagged output, and maintain disclaimer language.</p>
+        </article>
+        <article>
+          <h3>Analytics & Reports</h3>
+          <p>Track engagement, completion, waitlist growth, funding opportunities, and export activity.</p>
+        </article>
+      </div>
+      <div class="founder-callout">
+        <div>
+          <p class="eyebrow">Founder Account</p>
+          <h3>rooted21parenting@gmail.com</h3>
+          <p>
+            Sign in with this email to preview the founder workspace, including platform-wide controls, access
+            oversight, AI safety settings, and launch readiness tools.
+          </p>
+        </div>
+        <button class="button button-primary" type="button" data-auth-open>Open Founder Login</button>
+      </div>
+    </section>
+
+    <section class="waitlist" id="waitlist">
+      <div>
+        <p class="script">You are not alone.</p>
+        <h2>Rooted 21 is your place to find real tools, real support, and real change.</h2>
+      </div>
+      <form class="waitlist-form">
+        <label>
+          Name
+          <input type="text" name="name" placeholder="Your name" />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@example.com" />
+        </label>
+        <label>
+          I am interested as
+          <select name="role">
+            <option>Parent or caregiver</option>
+            <option>Professional</option>
+            <option>Partner or funder</option>
+          </select>
+        </label>
+        <button class="button button-primary" type="button">Save Waitlist Interest</button>
+      </form>
+    </section>
+
+    <section class="disclaimer">
+      <h2>Support Boundaries</h2>
+      <p>
+        Rooted 21 provides preparation, organization, parenting education, resource navigation, and AI-assisted
+        support. It does not provide legal advice, medical advice, therapy, emergency services, court filing services,
+        or guaranteed outcomes. If there is immediate danger, contact local emergency services or a trusted crisis
+        resource.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Together, we heal. Together, we grow. Together, we break cycles.</p>
+  </footer>
+
+  <script src="rooted21-app.js"></script>
+</body>
+</html>
