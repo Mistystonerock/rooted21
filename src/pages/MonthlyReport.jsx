@@ -2,12 +2,62 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Download, Loader, Calendar } from "lucide-react";
+import { Download, Loader, Calendar, TrendingUp } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import ChildSelector from "@/components/children/ChildSelector";
 import { filterRecordsForChild, getChildDisplayName } from "@/lib/child-selection";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+
+const MOODS = ["calm", "sad", "anxious", "angry", "dysregulated"];
+const MOOD_LABELS = { calm: "Calm", sad: "Sad", anxious: "Anxious", angry: "Angry", dysregulated: "Dysregulated" };
+
+function getLogDate(log) {
+  return log.entry_date || log.created_date?.slice(0, 10) || "";
+}
+
+function filterByMonth(records, month, dateGetter = (record) => record.created_date) {
+  const [year, monthStr] = month.split("-");
+  return records.filter((record) => {
+    const dateValue = dateGetter(record);
+    if (!dateValue) return false;
+    const d = dateValue.length > 10 ? new Date(dateValue) : new Date(`${dateValue}T00:00:00`);
+    return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === parseInt(monthStr);
+  });
+}
+
+function previousMonth(month) {
+  const [year, monthStr] = month.split("-").map(Number);
+  const date = new Date(year, monthStr - 2, 1);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function topCounts(logs, field) {
+  const counts = {};
+  logs.forEach((log) => {
+    const value = (log[field] || "").trim();
+    if (value) counts[value] = (counts[value] || 0) + 1;
+  });
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+}
+
+function summarizeBehaviorLogs(currentLogs, previousLogs) {
+  const moodCounts = MOODS.reduce((acc, mood) => ({ ...acc, [mood]: currentLogs.filter(log => log.child_mood === mood).length }), {});
+  const previousMoodCounts = MOODS.reduce((acc, mood) => ({ ...acc, [mood]: previousLogs.filter(log => log.child_mood === mood).length }), {});
+  const calmerNow = (moodCounts.calm || 0) - (previousMoodCounts.calm || 0);
+  const highStressNow = (moodCounts.anxious || 0) + (moodCounts.angry || 0) + (moodCounts.dysregulated || 0);
+  const highStressBefore = (previousMoodCounts.anxious || 0) + (previousMoodCounts.angry || 0) + (previousMoodCounts.dysregulated || 0);
+
+  return {
+    moodCounts,
+    topTriggers: topCounts(currentLogs, "trigger"),
+    topResponses: topCounts(currentLogs, "parent_response"),
+    progressNotes: [
+      calmerNow > 0 ? `Calm moments increased by ${calmerNow} compared with the previous month.` : "Calm moments stayed steady or need continued support.",
+      highStressNow < highStressBefore ? "High-stress incidents decreased compared with the previous month." : "High-stress incidents should continue to be watched and supported.",
+      currentLogs.length > previousLogs.length ? "More behavior entries were documented this month, giving the support team stronger pattern data." : "Documentation volume was steady or lower than last month."
+    ]
+  };
+}
 
 export default function MonthlyReport() {
   const [user, setUser] = useState(null);
@@ -16,6 +66,7 @@ export default function MonthlyReport() {
   const [checkins, setCheckins] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [behaviorLogs, setBehaviorLogs] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [month, setMonth] = useState(() => {
     const d = new Date();
@@ -25,16 +76,18 @@ export default function MonthlyReport() {
   useEffect(() => {
     base44.auth.me().then(async (u) => {
       setUser(u);
-      const [child, checkins, lessons, goals] = await Promise.all([
+      const [child, checkins, lessons, goals, behaviorLogs] = await Promise.all([
         base44.entities.ChildProfile.list("-created_date", 1),
         base44.entities.CheckIn.list("-created_date", 200),
         base44.entities.LessonProgress.filter({ completed: true }),
         base44.entities.Goal.list(),
+        base44.entities.BehaviorLog.list("-entry_date", 500),
       ]);
       setChild(child[0] || null);
       setCheckins(checkins);
       setLessons(lessons);
       setGoals(goals);
+      setBehaviorLogs(behaviorLogs);
     });
   }, []);
 
@@ -45,181 +98,103 @@ export default function MonthlyReport() {
     const [year, monthStr] = month.split("-");
     const monthNum = parseInt(monthStr);
     const monthName = new Date(year, monthNum - 1).toLocaleString("default", { month: "long" });
-
+    const reportChildName = reportMode === "all" ? "All children" : child ? getChildDisplayName(child) : "Selected child";
     const reportCheckins = reportMode === "all" ? checkins : filterRecordsForChild(checkins, child);
     const reportLessons = reportMode === "all" ? lessons : filterRecordsForChild(lessons, child);
     const reportGoals = reportMode === "all" ? goals : filterRecordsForChild(goals, child);
+    const reportBehaviorLogs = reportMode === "all" ? behaviorLogs : filterRecordsForChild(behaviorLogs, child);
+    const monthCheckins = filterByMonth(reportCheckins, month);
+    const monthLessons = filterByMonth(reportLessons, month);
+    const monthCompletedGoals = filterByMonth(reportGoals, month).filter(goal => goal.progress === "completed");
+    const monthBehaviorLogs = filterByMonth(reportBehaviorLogs, month, getLogDate);
+    const previousBehaviorLogs = filterByMonth(reportBehaviorLogs, previousMonth(month), getLogDate);
+    const behaviorSummary = summarizeBehaviorLogs(monthBehaviorLogs, previousBehaviorLogs);
 
-    // Filter data by month
-    const monthCheckins = reportCheckins.filter((c) => {
-      const d = new Date(c.created_date);
-      return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
-    });
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 16;
+    let y = 18;
 
-    const monthLessons = reportLessons.filter((l) => {
-      const d = new Date(l.created_date);
-      return d.getFullYear() === parseInt(year) && d.getMonth() + 1 === monthNum;
-    });
-
-    const monthCompletedGoals = reportGoals.filter(
-      (g) =>
-        g.progress === "completed" &&
-        new Date(g.created_date).getFullYear() === parseInt(year) &&
-        new Date(g.created_date).getMonth() + 1 === monthNum
-    );
-
-    // Create PDF content as HTML
-    const htmlContent = `
-      <div style="font-family: Arial, sans-serif; padding: 40px; background: white; color: #333;">
-        <style>
-          .header { border-bottom: 3px solid #2B5C3D; padding-bottom: 20px; margin-bottom: 30px; }
-          .header h1 { margin: 0; color: #2B5C3D; font-size: 28px; }
-          .header p { margin: 5px 0 0 0; color: #666; font-size: 12px; }
-          .section { margin-bottom: 30px; page-break-inside: avoid; }
-          .section-title { background: #2B5C3D; color: white; padding: 10px 15px; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
-          .stat-box { display: inline-block; margin-right: 20px; margin-bottom: 15px; }
-          .stat-number { font-size: 24px; font-weight: bold; color: #5B8E6A; }
-          .stat-label { font-size: 11px; color: #666; }
-          .regulation-chart { margin: 15px 0; }
-          .goal-item { background: #F5F5F5; padding: 12px; margin-bottom: 10px; border-left: 4px solid #5B8E6A; font-size: 12px; }
-          .lesson-item { background: #FAFAFA; padding: 10px; margin-bottom: 8px; font-size: 11px; }
-          .footer { border-top: 1px solid #DDD; padding-top: 20px; margin-top: 40px; font-size: 10px; color: #999; }
-          .highlight { color: #2B5C3D; font-weight: bold; }
-        </style>
-
-        <div class="header">
-          <h1>Monthly Progress Report</h1>
-          <p><span class="highlight">${monthName} ${year}</span> • Family Report</p>
-          <p style="margin-top: 10px;">Report generated on ${new Date().toLocaleDateString()}</p>
-        </div>
-
-        <!-- OVERVIEW SECTION -->
-        <div class="section">
-          <div class="section-title">📊 Overview</div>
-          <p style="margin-top: 0; font-size: 12px;">
-            Family: <span class="highlight">${user?.full_name || "Family"}</span>
-            ${reportMode === "all" ? ` • Children: <span class="highlight">All children</span>` : child ? ` • Child: <span class="highlight">${getChildDisplayName(child)}</span>` : ""}
-          </p>
-          <div style="margin-top: 15px;">
-            <div class="stat-box">
-              <div class="stat-number">${monthCheckins.length}</div>
-              <div class="stat-label">Check-ins</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-number">${monthLessons.length}</div>
-              <div class="stat-label">Lessons Completed</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-number">${monthCompletedGoals.length}</div>
-              <div class="stat-label">Goals Completed</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- REGULATION TRENDS -->
-        ${
-          monthCheckins.length > 0
-            ? `
-          <div class="section">
-            <div class="section-title">📈 Regulation Trends</div>
-            <p style="font-size: 11px; margin-top: 0; color: #666;">
-              Based on ${monthCheckins.length} check-in(s) this month
-            </p>
-            <div style="margin-top: 15px;">
-              <p style="margin: 0 0 8px 0; font-size: 11px;">
-                <span class="highlight">Child's Average Regulation Score:</span>
-                ${(monthCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / monthCheckins.length).toFixed(1)}/5
-              </p>
-              <div style="background: #EEE; height: 8px; border-radius: 4px;">
-                <div style="background: #5B8E6A; height: 100%; border-radius: 4px; width: ${(monthCheckins.reduce((s, c) => s + (c.child_regulation || 0), 0) / monthCheckins.length / 5) * 100}%;" />
-              </div>
-            </div>
-            <div style="margin-top: 15px;">
-              <p style="margin: 0 0 8px 0; font-size: 11px;">
-                <span class="highlight">Parent's Average Calm Level:</span>
-                ${(monthCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / monthCheckins.length).toFixed(1)}/5
-              </p>
-              <div style="background: #EEE; height: 8px; border-radius: 4px;">
-                <div style="background: #DAA520; height: 100%; border-radius: 4px; width: ${(monthCheckins.reduce((s, c) => s + (c.parent_calm || 0), 0) / monthCheckins.length / 5) * 100}%;" />
-              </div>
-            </div>
-          </div>
-        `
-            : ""
+    const addText = (text, size = 10, style = "normal", color = [70, 70, 70]) => {
+      pdf.setFont("helvetica", style);
+      pdf.setFontSize(size);
+      pdf.setTextColor(...color);
+      const lines = pdf.splitTextToSize(text, pageWidth - margin * 2);
+      lines.forEach(line => {
+        if (y > 276) {
+          pdf.addPage();
+          y = 18;
         }
+        pdf.text(line, margin, y);
+        y += size * 0.45 + 2;
+      });
+    };
 
-        <!-- LESSONS COMPLETED -->
-        ${
-          monthLessons.length > 0
-            ? `
-          <div class="section">
-            <div class="section-title">📚 Lessons Completed</div>
-            ${monthLessons.map((lesson, i) => `<div class="lesson-item">${i + 1}. Lesson ${lesson.lesson_id} completed on ${new Date(lesson.created_date).toLocaleDateString()}</div>`).join("")}
-          </div>
-        `
-            : ""
-        }
+    const addSection = (title) => {
+      if (y > 260) {
+        pdf.addPage();
+        y = 18;
+      }
+      y += 4;
+      pdf.setFillColor(43, 92, 61);
+      pdf.rect(margin, y, pageWidth - margin * 2, 9, "F");
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      pdf.text(title, margin + 3, y + 6);
+      y += 14;
+    };
 
-        <!-- GOALS -->
-        ${
-          monthCompletedGoals.length > 0
-            ? `
-          <div class="section">
-            <div class="section-title">🎯 Goals Achieved</div>
-            ${monthCompletedGoals.map((goal) => `
-              <div class="goal-item">
-                <strong>${goal.title}</strong>
-                <p style="margin: 5px 0 0 0; color: #555;">${goal.description || "Goal completed"}</p>
-              </div>
-            `).join("")}
-          </div>
-        `
-            : ""
-        }
+    pdf.setTextColor(43, 92, 61);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(20);
+    pdf.text("Monthly Behavior & Progress Summary", margin, y);
+    y += 9;
+    addText(`${monthName} ${year} • ${reportChildName} • Generated ${new Date().toLocaleDateString()}`, 9);
 
-        <div class="footer">
-          <p>This report is for the family's personal records and to share with their care team.</p>
-          <p>Rooted 21 • Strengthening Families Through Trauma-Informed Parenting</p>
-        </div>
-      </div>
-    `;
+    addSection("Overview");
+    addText(`Behavior logs: ${monthBehaviorLogs.length} • Check-ins: ${monthCheckins.length} • Lessons completed: ${monthLessons.length} • Goals completed: ${monthCompletedGoals.length}`, 11, "bold", [43, 92, 61]);
+    addText("This summary is written for parents to share with a therapist, caseworker, school team, or other trusted support person.");
 
-    // Convert HTML to Canvas, then to PDF
-    const canvas = await html2canvas(document.createElement("div"), {
-      html: htmlContent,
-      backgroundColor: "#FFFFFF",
-    });
+    addSection("Behavior Progress & Trends");
+    behaviorSummary.progressNotes.forEach(note => addText(`• ${note}`));
+    MOODS.forEach(mood => addText(`• ${MOOD_LABELS[mood]}: ${behaviorSummary.moodCounts[mood]} logged time${behaviorSummary.moodCounts[mood] === 1 ? "" : "s"}`));
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    let heightLeft = pdfHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-    heightLeft -= pdfHeight;
-
-    while (heightLeft >= 0) {
-      position = heightLeft - pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdfHeight;
+    addSection("Common Triggers");
+    if (behaviorSummary.topTriggers.length) {
+      behaviorSummary.topTriggers.forEach(([trigger, count]) => addText(`• ${trigger}: ${count} time${count === 1 ? "" : "s"}`));
+    } else {
+      addText("No repeated triggers were documented this month.");
     }
 
-    pdf.save(`${monthName}-${year}-Family-Report.pdf`);
+    addSection("Helpful Parent Responses");
+    if (behaviorSummary.topResponses.length) {
+      behaviorSummary.topResponses.forEach(([response, count]) => addText(`• ${response}: ${count} time${count === 1 ? "" : "s"}`));
+    } else {
+      addText("No parent response patterns were documented this month.");
+    }
+
+    if (monthBehaviorLogs.length) {
+      addSection("Behavior Log Highlights");
+      monthBehaviorLogs.slice(0, 8).forEach(log => {
+        addText(`• ${getLogDate(log)} — ${log.behavior_description}${log.outcome ? ` Outcome: ${log.outcome}` : ""}`);
+      });
+    }
+
+    addSection("Support Team Note");
+    addText("These notes are family-entered observations meant to support planning, communication, and pattern recognition. They do not replace professional evaluation or clinical judgment.", 9);
+
+    pdf.save(`${monthName}-${year}-Behavior-Progress-Summary.pdf`);
     setGenerating(false);
   }
 
   const previewCheckins = reportMode === "all" ? checkins : filterRecordsForChild(checkins, child);
   const previewLessons = reportMode === "all" ? lessons : filterRecordsForChild(lessons, child);
   const previewGoals = reportMode === "all" ? goals : filterRecordsForChild(goals, child);
+  const previewBehaviorLogs = reportMode === "all" ? behaviorLogs : filterRecordsForChild(behaviorLogs, child);
+  const selectedMonthBehaviorLogs = filterByMonth(previewBehaviorLogs, month, getLogDate);
+  const selectedPreviousBehaviorLogs = filterByMonth(previewBehaviorLogs, previousMonth(month), getLogDate);
+  const behaviorSummary = summarizeBehaviorLogs(selectedMonthBehaviorLogs, selectedPreviousBehaviorLogs);
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -243,7 +218,7 @@ export default function MonthlyReport() {
           <div>
             <p className="text-xs font-bold mb-1" style={{ color: C.darkGreen }}>Monthly Summary</p>
             <p className="text-[10px] leading-relaxed" style={{ color: C.mutedText }}>
-              Generate a PDF report with your lessons, regulation trends, and completed goals to share with your therapist or caseworker.
+              Generate a PDF report with behavior patterns, triggers, progress trends, lessons, and goals to share with your support team.
             </p>
           </div>
         </div>
@@ -269,6 +244,16 @@ export default function MonthlyReport() {
               REPORT CONTENTS
             </p>
             <div className="space-y-2.5">
+              <div className="flex items-center justify-between py-2.5 px-3 rounded-lg" style={{ background: C.offWhite }}>
+                <div>
+                  <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Behavior Logs</p>
+                  <p className="text-[10px]" style={{ color: C.mutedText }}>Triggers, moods, responses & outcomes</p>
+                </div>
+                <p className="text-lg font-bold" style={{ color: C.midGreen }}>
+                  {selectedMonthBehaviorLogs.length}
+                </p>
+              </div>
+
               <div className="flex items-center justify-between py-2.5 px-3 rounded-lg" style={{ background: C.offWhite }}>
                 <div>
                   <p className="text-xs font-bold" style={{ color: C.darkGreen }}>Check-ins</p>
@@ -316,6 +301,42 @@ export default function MonthlyReport() {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {selectedMonthBehaviorLogs.length > 0 && (
+          <div className="rounded-2xl p-4 space-y-3" style={{ background: C.white, border: `1px solid ${C.cream}` }}>
+            <div className="flex items-center gap-2">
+              <TrendingUp size={16} color={C.midGreen} />
+              <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Behavior Trends for Support Team</p>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {MOODS.map(mood => (
+                <div key={mood} className="rounded-lg p-2 text-center" style={{ background: C.offWhite }}>
+                  <p className="text-sm font-black" style={{ color: C.darkGreen }}>{behaviorSummary.moodCounts[mood]}</p>
+                  <p className="text-[9px] leading-tight" style={{ color: C.mutedText }}>{MOOD_LABELS[mood]}</p>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2">
+              {behaviorSummary.progressNotes.map(note => (
+                <p key={note} className="rounded-lg px-3 py-2 text-[11px] leading-5" style={{ background: `${C.midGreen}10`, color: C.mutedText }}>
+                  {note}
+                </p>
+              ))}
+            </div>
+            {behaviorSummary.topTriggers.length > 0 && (
+              <div>
+                <p className="text-[10px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>COMMON TRIGGERS</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {behaviorSummary.topTriggers.map(([trigger, count]) => (
+                    <span key={trigger} className="rounded-full px-3 py-1 text-[10px] font-bold" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
+                      {trigger} · {count}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

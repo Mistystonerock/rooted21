@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { ChevronLeft, Plus, Calendar } from "lucide-react";
+import { ChevronLeft, Plus, Calendar, FileText } from "lucide-react";
 import BehaviorLogForm from "@/components/behavior/BehaviorLogForm";
 import BehaviorLogCard from "@/components/behavior/BehaviorLogCard";
 import BehaviorResourceRecommendations from "@/components/behavior/BehaviorResourceRecommendations";
@@ -64,6 +64,21 @@ export default function BehaviorLogs() {
 
       <div className="max-w-[540px] mx-auto px-4 py-4 space-y-4">
         <ChildSelector selectedChild={selectedChild} onChange={setSelectedChild} />
+
+        <Link
+          to="/monthly-report"
+          className="flex items-center justify-between rounded-2xl p-4 no-underline"
+          style={{ background: C.white, border: `1px solid ${C.cream}` }}
+        >
+          <div className="flex items-center gap-3">
+            <FileText size={18} color={C.midGreen} />
+            <div>
+              <p className="text-sm font-bold" style={{ color: C.darkGreen }}>Monthly Behavior Report</p>
+              <p className="text-[10px]" style={{ color: C.mutedText }}>Share progress and trends with your support team</p>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold" style={{ color: C.midGreen }}>Open</span>
+        </Link>
 
         {/* Form */}
         {showForm && (
