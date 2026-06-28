@@ -483,6 +483,7 @@ function App() {
               <Route path="/admin" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/resource-management" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/app-docs" element={<Suspense fallback={<LoadingFallback />}><AppDocs /></Suspense>} />
+              <Route path="/project-blueprint" element={<Suspense fallback={<LoadingFallback />}><routes.ProjectBlueprint /></Suspense>} />
               <Route path="/founder-access" element={<Suspense fallback={<LoadingFallback />}><FounderAccessPortal /></Suspense>} />
               <Route path="/founder-admin-management" element={<Suspense fallback={<LoadingFallback />}><FounderAdminManagement /></Suspense>} />
               <Route path="/survey" element={<Suspense fallback={<LoadingFallback />}><AppSurvey /></Suspense>} />

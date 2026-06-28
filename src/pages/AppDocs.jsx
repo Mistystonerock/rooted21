@@ -271,6 +271,9 @@ export default function AppDocs() {
           <p className="text-xs leading-relaxed" style={{ color: C.lightGreen }}>
             Three documents covering the frontend architecture, backend functions, and a full narrative context for AI agents building new features.
           </p>
+          <a href="/project-blueprint" className="mt-4 flex w-full items-center justify-center rounded-xl py-3 text-xs font-black no-underline" style={{ background: C.gold, color: C.darkGreen }}>
+            Open Project Blueprint
+          </a>
         </div>
 
         {DOCS.map(doc => (

@@ -94,6 +94,7 @@ const routes = {
   CaseInsightDashboard: lazy(() => import("@/pages/CaseInsightDashboard")),
   ConsentForms: lazy(() => import("@/pages/ConsentForms")),
   ConsentDashboard: lazy(() => import("@/pages/ConsentDashboard")),
+  ProjectBlueprint: lazy(() => import("@/pages/ProjectBlueprint")),
   SecureDocumentRepository: lazy(() => import("@/pages/SecureDocumentRepository")),
   BehavioralTrends: lazy(() => import("@/pages/BehavioralTrends")),
   JobResources: lazy(() => import("@/pages/JobResources")),
