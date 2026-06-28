@@ -22,8 +22,8 @@ export function rememberSelectedChild(child) {
 export function filterRecordsForChild(records = [], child) {
   if (!child) return records;
   return records.filter(record => {
-    if (!record.child_id && !record.child_name) return true;
-    return record.child_id === child.id || record.child_id === child.child_uid || record.child_name === child.first_name || record.child_name === getChildDisplayName(child);
+    if (!record.child_id && !record.child_profile_id && !record.child_name) return true;
+    return record.child_id === child.id || record.child_id === child.child_uid || record.child_profile_id === child.id || record.child_profile_id === child.child_uid || record.child_name === child.first_name || record.child_name === getChildDisplayName(child);
   });
 }
 
