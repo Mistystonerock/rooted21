@@ -8,6 +8,7 @@ import FamilyCalendar from "@/components/family/FamilyCalendar";
 import MessagingInbox from "@/components/family/MessagingInbox";
 import ChildSelector from "@/components/children/ChildSelector";
 import ChildDashboardSummary from "@/components/family/ChildDashboardSummary";
+import FamilyHubLinks from "@/components/family/FamilyHubLinks";
 import { filterRecordsForChild, getChildDisplayName } from "@/lib/child-selection";
 
 const TABS = [
@@ -148,6 +149,8 @@ export default function FamilyDashboard() {
           requirements={selectedRequirements}
           goals={selectedGoals}
         />
+
+        <FamilyHubLinks />
 
         {tab === "calendar" && (
           <FamilyCalendar

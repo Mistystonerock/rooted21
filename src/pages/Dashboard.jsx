@@ -34,6 +34,7 @@ const MUTED = "#8b6f54";
 // Feature tiles — each with its own color accent
 const TILES = [
   { id: "wraparound-support-button", to: "/wraparound-support", emoji: "🌳", icon: null, label: "Wrap-Around Support", sub: "Learning, care team coordination, peer support, youth tools, and well-being", accent: "#0e2a1a", border: `${GREEN}30` },
+  { to: "/family-dashboard", emoji: "🏡", icon: null, label: "Family Hub", sub: "Case plans, documents, court dates, education, resources, and progress", accent: "#0e2a1a", border: `${GREEN}30` },
   { id: "resources-button", to: "/resources", emoji: "🗂️", icon: null, label: "Resources", sub: "Local help, jobs, benefits, court forms, substance support", accent: "#0e2a1a", border: `${GREEN}30` },
   { id: "support-hub-button", to: "/support-hub", emoji: "🤝", icon: null, label: "Support", sub: "Crisis tools, conversations, team contacts", accent: "#12203a", border: "#7aaaee30" },
   { id: "behavior-log-button", to: "/behavior-hub", emoji: "🧠", icon: null, label: "Behavior", sub: "Logs, analytics, trends, regulation tools", accent: "#1a1535", border: "#a09ef030" },
