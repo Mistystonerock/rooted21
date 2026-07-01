@@ -274,8 +274,18 @@ export const ROLE_PERMISSION_SYSTEMS = {
     defaultAccess: 'aggregate-or-consented-access',
     editingBoundary: 'may manage organization tools without unrestricted family record access',
   },
+  community_resource_partner: {
+    key: 'referral_based_service_provider',
+    label: 'Community Resource Partner / Service Provider',
+    basis: ['verified organization', 'assigned referral', 'family permission', 'minimum necessary service coordination'],
+    defaultAccess: 'assigned-referrals-appointments-shared-contact-resource-materials',
+    editingBoundary: 'may update referrals, appointments, organization profile, events, and resource materials; cannot manage cases or access unrelated confidential records',
+  },
 };
 
+const COMMUNITY_RESOURCE_PARTNER_ROLES = ['service_provider', 'housing_agency', 'homeless_shelter', 'domestic_violence_program', 'food_pantry', 'community_action_agency', 'employment_program', 'workforce_development_center', 'legal_aid_organization', 'transportation_provider', 'childcare_provider', 'veterans_services', 'faith_based_organization', 'financial_assistance_program', 'recovery_community_organization', 'nonprofit_organization', 'youth_program', 'family_resource_center'];
+
 export function getRolePermissionSystem(user) {
+  if (COMMUNITY_RESOURCE_PARTNER_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.community_resource_partner;
   return ROLE_PERMISSION_SYSTEMS[user?.role] || ROLE_PERMISSION_SYSTEMS.user;
 }

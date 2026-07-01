@@ -119,6 +119,7 @@ const routes = {
   SupportChat: lazy(() => import("@/pages/SupportChat")),
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
   AgencyAdminDashboard: lazy(() => import("@/pages/AgencyAdminDashboard")),
+  CommunityResourcePartnerDashboard: lazy(() => import("@/pages/CommunityResourcePartnerDashboard")),
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
   WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
   CPSCaseNavigation: lazy(() => import("@/pages/CPSCaseNavigation")),

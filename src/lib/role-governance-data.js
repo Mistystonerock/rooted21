@@ -179,6 +179,26 @@ export const ROLE_GOVERNANCE = [
     futureFeatures: "School collaboration portal, IEP prep packets, meeting notes, and education progress summaries."
   },
   {
+    role: "Community Resource Partner / Service Provider",
+    securityLevel: "Role: Community Resource Partner · Access Level: Referral-Based Access",
+    purpose: "Organizations and professionals that provide direct services to families can receive referrals, coordinate services, schedule appointments, share approved resource materials, and strengthen community collaboration. This role supports families but does not manage cases.",
+    dashboardAccess: ["Referral Dashboard", "Service Request Center", "Appointment Management", "Family Resource Requests", "Moxie Resource Assistant", "Organization Profile", "Community Calendar", "Resource Library", "Referral Outcome Tracker", "Secure Messaging Center"],
+    permissions: "Community Resource Partners may receive, accept, decline, and update assigned referrals; request additional information; schedule appointments; confirm attendance; manage organization profile details; publish events; upload approved program materials; and communicate through secure messaging. Public resource directory changes require administrator approval before publication.",
+    aiPermissions: "Moxie may match families to appropriate services, explain eligibility requirements, recommend additional community supports, organize referrals, track referral outcomes, identify service gaps, and suggest nearby providers. Moxie may not approve benefits, determine eligibility, replace agency staff, make legal decisions, or make child welfare decisions.",
+    dataVisibilityRules: "Referral-based access only. Partners can view assigned referrals, referral information, appointment information, shared contact information, referral reason, basic goals, and required documentation. They cannot access unrelated records or view court records, behavioral health documentation, school records, CPS documentation, or medical records unless explicitly authorized.",
+    documentAccessRules: "Partners may upload appointment confirmations, enrollment forms, program brochures, resource guides, and completion certificates. They cannot upload clinical documentation, court documents, CPS documentation, or educational records unless specifically authorized.",
+    futureFeatures: ["Live Resource Availability", "Community Resource Map", "Real-Time Bed & Shelter Availability", "Volunteer Matching", "Donation Requests", "Emergency Resource Alerts", "Community Grant Opportunities", "Cross-Agency Referral Network", "One-Click Referral Acceptance"],
+    detailSections: [
+      { title: "User Types Included", items: ["Housing Agencies", "Homeless Shelters", "Domestic Violence Programs", "Food Pantries", "Community Action Agencies", "Employment Programs", "Workforce Development Centers", "Legal Aid Organizations", "Transportation Providers", "Childcare Providers", "Veterans Services", "Churches & Faith-Based Organizations", "Financial Assistance Programs", "Recovery Community Organizations", "Nonprofit Organizations", "Youth Programs", "Family Resource Centers"] },
+      { title: "Moxie may", items: ["Match families to appropriate services", "Explain eligibility requirements", "Recommend additional community supports", "Organize referrals", "Track referral outcomes", "Identify service gaps", "Suggest nearby providers"] },
+      { title: "Moxie may NOT", items: ["Approve benefits", "Determine eligibility", "Replace agency staff", "Make legal decisions", "Make child welfare decisions"] },
+      { title: "Referral Management", items: ["Receive referrals", "Accept referrals", "Decline referrals", "Request additional information", "Schedule appointments", "Update referral status", "Received", "Contacted Family", "Appointment Scheduled", "Family Engaged", "Services Active", "Services Completed", "Unable to Contact", "Referral Closed"] },
+      { title: "Organization Verification", items: ["Organization identity verification", "Business or nonprofit verification", "License verification if applicable", "Insurance verification if applicable", "Administrator approval", "Annual profile review", "Verified Resource Partner badge"] },
+      { title: "Reports Available", items: ["Referral Outcome Report", "Service Utilization Report", "Appointment Attendance Report", "Community Impact Report", "Program Completion Report", "Family Engagement Report", "Waitlist Report", "Resource Availability Report"] },
+      { title: "Audit & Compliance", items: ["Referrals received", "Referral updates", "Appointment changes", "Messages sent", "Documents uploaded", "Profile updates", "QR code use", "Enrollment-form sharing"] }
+    ]
+  },
+  {
     role: "Organization / Agency",
     securityLevel: "Future licensed organization access",
     purpose: "Support teams, agencies, nonprofits, and funders with aggregate outcomes while protecting family privacy.",
