@@ -19,6 +19,7 @@ const CATEGORIES = [
   ["school_documents", "School documents", "IEP, 504, school, and education records"],
   ["safety_plans", "Safety plans", "Family safety and crisis planning records"],
   ["case_plan_progress", "Case plan progress", "Requirements, milestones, and completion progress"],
+  ["parenting_class_progress", "Parenting class progress", "21-day program lessons, class enrollment, certificates, and achievements"],
   ["visitation_logs", "Visitation logs", "Parenting-time, contact, and visit documentation"],
   ["communication_logs", "Communication logs", "Shared communication journal summaries"],
   ["evidence_timeline", "Evidence timeline", "Uploaded evidence and timeline entries"],
@@ -39,7 +40,7 @@ export default function ConsentDashboard() {
   useEffect(() => {
     base44.auth.me().then(async me => {
       setUser(me);
-      const [existing, journals, communicationJournals, behaviorLogs, documents, safetyPlans, requirements, visits, evidence, events] = await Promise.all([
+      const [existing, journals, communicationJournals, behaviorLogs, documents, safetyPlans, requirements, lessonProgress, visits, evidence, events] = await Promise.all([
         base44.entities.ConsentPermission.filter({ owner_email: me.email }, "-updated_at", 500),
         base44.entities.ParentJournal.list("-created_date", 100),
         base44.entities.CommunicationJournalEntry.list("-created_date", 100),
@@ -47,6 +48,7 @@ export default function ConsentDashboard() {
         base44.entities.SecureDocument.list("-created_date", 100),
         base44.entities.SafetyPlan.list("-created_date", 100),
         base44.entities.CasePlanRequirement.list("-created_date", 100),
+        base44.entities.LessonProgress.list("-created_date", 100),
         base44.entities.VisitationLog.list("-visit_date", 100),
         base44.entities.EvidenceTimelineItem.list("-event_date", 100),
         base44.entities.CareCalendarEvent.list("-date", 100),
@@ -59,6 +61,7 @@ export default function ConsentDashboard() {
         school_documents: { records: documents.filter(doc => ["iep", "school"].includes(doc.category)), examples: sampleItems(documents.filter(doc => ["iep", "school"].includes(doc.category)), ["title", "file_name"]) },
         safety_plans: { records: safetyPlans, examples: sampleItems(safetyPlans, ["child_name", "important_notes"]) },
         case_plan_progress: { records: requirements, examples: sampleItems(requirements, ["title", "child_name"]) },
+        parenting_class_progress: { records: lessonProgress, examples: sampleItems(lessonProgress, ["lesson_title", "class_title", "title"]) },
         visitation_logs: { records: visits, examples: sampleItems(visits, ["visitor_name", "child_name"]) },
         communication_logs: { records: communicationJournals, examples: sampleItems(communicationJournals, ["title", "neutral_summary"]) },
         evidence_timeline: { records: evidence, examples: sampleItems(evidence, ["title", "summary"]) },
@@ -78,7 +81,7 @@ export default function ConsentDashboard() {
     const current = permissionMap[key];
     const allowed = !current?.allowed;
     setSavingKey(key);
-    const payload = { owner_email: user.email, professional_role: role, data_category: category, allowed, updated_at: new Date().toISOString(), updated_by_email: user.email };
+    const payload = { owner_email: user.email, professional_role: role, data_category: category, permission_scope: "category", allowed, updated_at: new Date().toISOString(), updated_by_email: user.email, revoked_at: allowed ? "" : new Date().toISOString() };
     const saved = current ? await base44.entities.ConsentPermission.update(current.id, payload) : await base44.entities.ConsentPermission.create(payload);
     await base44.entities.RootedAuditEvent.create({
       actor_email: user.email,
@@ -104,7 +107,7 @@ export default function ConsentDashboard() {
         <section className="rounded-3xl p-5" style={{ background: C.darkGreen }}>
           <ShieldCheck size={26} color={C.gold} />
           <h1 className="mt-3 font-serif text-2xl font-bold" style={{ color: C.cream }}>You choose what gets shared.</h1>
-          <p className="mt-2 text-sm leading-7" style={{ color: C.lightGreen }}>Toggle each professional role on or off by data type. Private journals and protected records stay private unless you turn sharing on.</p>
+          <p className="mt-2 text-sm leading-7" style={{ color: C.lightGreen }}>Nothing is shared by default. Toggle each professional role on or off by data type; every shared category requires explicit family permission. Private journals and protected records stay private unless you turn sharing on.</p>
         </section>
 
         <section className="rounded-2xl p-4" style={{ background: C.white, border: `1.5px solid ${C.cream}` }}>

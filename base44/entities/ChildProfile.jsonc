@@ -2,6 +2,14 @@
   "name": "ChildProfile",
   "type": "object",
   "properties": {
+    "family_record_id": {
+      "type": "string",
+      "description": "FamilyRecord ID this child belongs to"
+    },
+    "family_name": {
+      "type": "string",
+      "description": "Family display name snapshot"
+    },
     "child_uid": {
       "type": "string",
       "description": "Stable unique child identifier for linking records"

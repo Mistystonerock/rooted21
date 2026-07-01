@@ -133,7 +133,7 @@ SMS via Twilio: import twilio from 'npm:twilio' — use TWILIO_* secrets`
       },
       {
         title: "Governance Page",
-        body: `The full plain-language role matrix lives at /role-governance. It covers parent/caregiver, founder, admin, professional, CPS caseworker, therapist/counselor, court/legal viewer, school/education professional, and future organization/agency access.`
+        body: `The full plain-language role matrix lives at /role-governance. It covers parent/family user, founder, admin, therapist, CPS worker, school personnel, attorney/GAL, other approved professionals, and future organization/agency access.`
       }
     ]
   },

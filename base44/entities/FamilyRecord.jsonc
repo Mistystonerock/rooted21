@@ -1,0 +1,159 @@
+{
+  "name": "FamilyRecord",
+  "type": "object",
+  "properties": {
+    "family_name": {
+      "type": "string",
+      "description": "Display name for the shared family record, such as Smith Family"
+    },
+    "primary_parent_email": {
+      "type": "string",
+      "description": "Primary family owner email"
+    },
+    "parent_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Parent or legal caregiver emails connected to this family"
+    },
+    "caregiver_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Additional caregiver emails connected to this family"
+    },
+    "professional_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Approved professional emails connected to this family"
+    },
+    "court_contact_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Court or legal contact emails connected to this family"
+    },
+    "school_contact_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "School contact emails connected to this family"
+    },
+    "member_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "All user emails allowed to see that this family connection exists"
+    },
+    "child_profile_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "ChildProfile IDs connected to this family"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Family-owned notes about the relationship structure"
+    }
+  },
+  "required": [
+    "family_name",
+    "primary_parent_email"
+  ],
+  "rls": {
+    "create": {
+      "data.primary_parent_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.primary_parent_email": "{{user.email}}"
+        },
+        {
+          "data.parent_emails": "{{user.email}}"
+        },
+        {
+          "data.caregiver_emails": "{{user.email}}"
+        },
+        {
+          "data.professional_emails": "{{user.email}}"
+        },
+        {
+          "data.court_contact_emails": "{{user.email}}"
+        },
+        {
+          "data.school_contact_emails": "{{user.email}}"
+        },
+        {
+          "data.member_emails": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.primary_parent_email": "{{user.email}}"
+        },
+        {
+          "data.parent_emails": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.primary_parent_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    }
+  }
+}

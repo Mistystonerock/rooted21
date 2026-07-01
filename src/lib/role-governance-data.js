@@ -32,6 +32,7 @@ export const ROLE_GOVERNANCE = [
     detailSections: [
       { title: "Moxie may", items: ["Answer parenting questions", "Help complete forms", "Generate behavior insights", "Create progress reports", "Explain court terminology", "Assist with case plan organization", "Recommend resources", "Provide emotional regulation strategies", "Assist with documentation preparation"] },
       { title: "Moxie may NOT", items: ["Provide legal advice", "Diagnose mental health conditions", "Replace emergency services", "Override professional recommendations"] },
+      { title: "Consent Controls", items: ["Share behavior logs with a therapist only when turned on", "Keep court documents private unless explicitly approved", "Share parenting class progress when helpful", "Keep journal entries private unless explicitly approved", "Require explicit family permission for every shared category or item"] },
       { title: "Document Vault: Parents may", items: ["Upload documents", "Download documents", "Organize documents", "Share documents with approved professionals", "Revoke access permissions"] },
       { title: "Document Vault: Parents cannot", items: ["View documents belonging to other users", "Modify documents uploaded by professionals"] },
       { title: "Behavior Tracking", items: ["Log incidents", "Track triggers", "Track behaviors", "Track interventions used", "Generate reports", "View AI-generated patterns"] },

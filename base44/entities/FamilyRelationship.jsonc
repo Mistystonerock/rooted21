@@ -1,0 +1,260 @@
+{
+  "name": "FamilyRelationship",
+  "type": "object",
+  "properties": {
+    "family_record_id": {
+      "type": "string",
+      "description": "FamilyRecord ID this person or child is connected to"
+    },
+    "family_name": {
+      "type": "string"
+    },
+    "person_type": {
+      "type": "string",
+      "enum": [
+        "parent",
+        "child",
+        "professional",
+        "court_contact",
+        "school_contact",
+        "caregiver"
+      ],
+      "description": "How this person is connected to the family"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Person or child display name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email for adults or professionals, when available"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Linked User ID if this person has an app account"
+    },
+    "child_profile_id": {
+      "type": "string",
+      "description": "Linked ChildProfile ID when person_type is child"
+    },
+    "relationship_label": {
+      "type": "string",
+      "enum": [
+        "mom",
+        "dad",
+        "parent",
+        "child",
+        "kinship_caregiver",
+        "foster_parent",
+        "adoptive_parent",
+        "caregiver",
+        "cps_worker",
+        "therapist",
+        "casa",
+        "gal",
+        "attorney",
+        "judge",
+        "court_clerk",
+        "school_counselor",
+        "teacher",
+        "other"
+      ],
+      "default": "other"
+    },
+    "permission_level": {
+      "type": "string",
+      "enum": [
+        "owner",
+        "co_parent",
+        "caregiver",
+        "read_only_professional",
+        "document_limited",
+        "court_limited",
+        "school_limited",
+        "no_access"
+      ],
+      "default": "read_only_professional",
+      "description": "Permission level for this family relationship"
+    },
+    "allowed_data_categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "child_profiles",
+          "behavior_logs",
+          "case_plan_progress",
+          "court_dates",
+          "documents",
+          "education",
+          "goals",
+          "journal",
+          "resources",
+          "visitation",
+          "medical",
+          "therapy",
+          "school",
+          "safety",
+          "none"
+        ]
+      },
+      "default": [],
+      "description": "Data categories this relationship may view"
+    },
+    "allowed_document_categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "court_order",
+          "iep",
+          "medical",
+          "legal",
+          "school",
+          "therapy",
+          "financial",
+          "behavioral_health",
+          "substance_use",
+          "safety_plan",
+          "case_plan",
+          "visitation",
+          "resource_referral",
+          "other",
+          "none"
+        ]
+      },
+      "default": [],
+      "description": "Document categories this relationship may view"
+    },
+    "can_view_progress": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_documents": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_calendar": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_behavior": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_view_case_plan": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_edit_family_records": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_upload_professional_documents": {
+      "type": "boolean",
+      "default": false
+    },
+    "private_professional_notes": {
+      "type": "boolean",
+      "default": false
+    },
+    "access_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "revoked",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "approved_by_email": {
+      "type": "string",
+      "description": "Family user who approved this connection"
+    },
+    "created_by_email": {
+      "type": "string"
+    },
+    "visible_to_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Emails allowed to see this relationship record"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "family_record_id",
+    "person_type",
+    "display_name",
+    "permission_level"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "data.approved_by_email": "{{user.email}}"
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        },
+        {
+          "data.visible_to_emails": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.approved_by_email": "{{user.email}}"
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.approved_by_email": "{{user.email}}"
+        },
+        {
+          "data.created_by_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    }
+  }
+}
