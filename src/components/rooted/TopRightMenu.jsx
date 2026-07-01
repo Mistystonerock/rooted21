@@ -30,6 +30,7 @@ const ROUTES = new Set([
   "/privacy-center",
   "/founder-dashboard",
   "/resource-management",
+  "/agency-admin",
 ]);
 
 const mainMenuItems = [
@@ -59,6 +60,12 @@ const adminMenuItems = [
   { label: "Content Management", icon: NotebookText },
   { label: "Announcements", icon: Bell },
   { label: "Project Protection Checklist", icon: ShieldCheck },
+];
+
+const agencyRoles = ["agency_administrator", "agency_supervisor", "clinical_supervisor", "program_supervisor", "team_lead", "agency_director", "program_manager", "quality_assurance_staff", "compliance_officer", "executive_leadership", "contract_manager", "grant_administrator"];
+
+const agencyMenuItems = [
+  { label: "Agency Oversight", path: "/agency-admin", icon: LayoutDashboard },
 ];
 
 export default function TopRightMenu({ user }) {
@@ -176,6 +183,7 @@ export default function TopRightMenu({ user }) {
   }
 
   const showFounderLink = user?.role === "founder" || user?.role === "admin";
+  const showAgencyLink = agencyRoles.includes(user?.role);
   const isFounderDashboard = window.location.pathname === "/founder-dashboard";
 
   if (isFounderDashboard) return null;
@@ -218,6 +226,13 @@ export default function TopRightMenu({ user }) {
               <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
                 <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Shield size={14} /> Founder/Admin</p>
                 {adminMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
+              </div>
+            )}
+
+            {showAgencyLink && (
+              <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><ShieldCheck size={14} /> Agency Oversight</p>
+                {agencyMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
               </div>
             )}
 

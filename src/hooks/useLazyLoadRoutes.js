@@ -118,6 +118,7 @@ const routes = {
   ACEsGuide: lazy(() => import("@/pages/ACEsGuide")),
   SupportChat: lazy(() => import("@/pages/SupportChat")),
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
+  AgencyAdminDashboard: lazy(() => import("@/pages/AgencyAdminDashboard")),
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
   WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
   CPSCaseNavigation: lazy(() => import("@/pages/CPSCaseNavigation")),

@@ -65,6 +65,26 @@ export const ROLE_GOVERNANCE = [
     futureFeatures: "Role-specific admin permissions, organization staff seats, support queues, grant reporting tools, and moderation workflows."
   },
   {
+    role: "Agency Administrator / Supervisor",
+    securityLevel: "Role: Agency Administrator / Supervisor · Access Level: Oversight-Based Access",
+    purpose: "Leadership, supervisory, compliance, quality assurance, and program oversight users monitor services, support staff, ensure compliance, review outcomes, and improve service delivery without automatically receiving unrestricted confidential family access.",
+    dashboardAccess: ["Agency Performance Dashboard", "Staff Oversight Center", "Caseload Management", "Compliance Monitoring", "Documentation Review Center", "Outcome Tracking Dashboard", "Training & Certification Center", "Incident Review Center", "Audit & Quality Assurance Hub", "Moxie Leadership Insights"],
+    permissions: "Agency administrators may review staff caseloads, monitor service delivery, review documentation completion, track productivity, monitor training, assign or reassign staff, approve documentation, provide feedback, review incidents, and generate QA, compliance, audit, performance, service utilization, training, and grant outcome reports. Assignment changes remain logged.",
+    aiPermissions: "Moxie may identify documentation trends, highlight compliance concerns, track outcome measures, monitor caseload distribution, generate leadership reports, identify service gaps, monitor staff productivity, and track training completion. Moxie may not alter documentation, make disciplinary decisions, override staff records, modify client records, or replace supervisory judgment.",
+    dataVisibilityRules: "This is oversight-based access. Agency administrators can view assigned staff records, agency performance metrics, compliance data, and aggregate client outcomes. Client-level records require assigned supervisory authority, documented compliance review, or documented authorization. They cannot access unrelated client records, edit client documentation, delete records, or override audit logs.",
+    documentAccessRules: "Administrators may review completed documentation, monitor completion rates, identify missing documentation, conduct quality reviews, flag compliance concerns, and approve documentation where the workflow allows. They cannot change clinical content, edit historical records, delete documentation, or modify original staff documentation after submission.",
+    futureFeatures: ["Agency Benchmarking", "Outcome Prediction Analytics", "Workforce Development Dashboard", "Grant Reporting Automation", "Multi-Agency Management", "Community Impact Dashboard", "State Reporting Integration"],
+    detailSections: [
+      { title: "User Types Included", items: ["Clinical Supervisors", "Program Supervisors", "Team Leads", "Agency Directors", "Program Managers", "Quality Assurance Staff", "Compliance Officers", "Executive Leadership", "Contract Managers", "Grant Administrators"] },
+      { title: "Moxie may", items: ["Identify documentation trends", "Highlight compliance concerns", "Track outcome measures", "Monitor caseload distribution", "Generate leadership reports", "Identify service gaps", "Monitor staff productivity", "Track training completion"] },
+      { title: "Moxie may NOT", items: ["Alter documentation", "Make disciplinary decisions", "Override staff records", "Modify client records", "Replace supervisory judgment"] },
+      { title: "Staff Oversight", items: ["Review staff caseloads", "Monitor service delivery", "Review documentation completion", "Track productivity metrics", "Monitor training requirements", "Review performance indicators", "Cannot edit provider documentation after submission"] },
+      { title: "Quality Assurance & Compliance", items: ["Documentation quality", "Service compliance", "Goal progression", "Outcome measures", "Timeliness standards", "HIPAA", "FERPA", "42 CFR Part 2", "Access violations", "Security events", "Audit findings"] },
+      { title: "Reports Available", items: ["Agency Performance Report", "Caseload Distribution Report", "Staff Productivity Report", "Compliance Audit Report", "Outcome Measurement Report", "Training Completion Report", "Documentation Quality Report", "Service Utilization Report", "Grant Outcome Report"] },
+      { title: "Founder Separation", items: ["Founder role remains separate from Agency Administrator", "Founder access covers platform configuration, feature management, resource management, user management, analytics, AI configuration, and community management", "Founder should not automatically access private family records without documented authorization"] }
+    ]
+  },
+  {
     role: "Professional / Assigned Support",
     securityLevel: "Permission-based family collaboration",
     purpose: "View family-approved progress and context so support can be coordinated without editing family-owned records.",

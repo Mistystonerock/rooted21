@@ -134,7 +134,8 @@ function App() {
   const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
   const professionalHomeRoles = ["professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "community_behavioral_health_worker", "tbs_provider", "cpst_provider", "peer_support_specialist", "risk_management_specialist", "recovery_coach", "ohiorise_care_coordinator", "treatment_court_mentor", "substance_use_counselor", "behavioral_health_supervisor", "therapist", "counselor", "caseworker", "peer_mentor"];
-  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : professionalHomeRoles.includes(user?.role) ? "/professional" : "/dashboard";
+  const agencyHomeRoles = ["agency_administrator", "agency_supervisor", "clinical_supervisor", "program_supervisor", "team_lead", "agency_director", "program_manager", "quality_assurance_staff", "compliance_officer", "executive_leadership", "contract_manager", "grant_administrator"];
+  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : agencyHomeRoles.includes(user?.role) ? "/agency-admin" : professionalHomeRoles.includes(user?.role) ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
   const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/welcome"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;
@@ -480,6 +481,7 @@ function App() {
               <Route path="/professional-presentation" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><ProfessionalPresentation /></FeatureLockGate></Suspense>} />
               <Route path="/support-chat" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.SupportChat /></FeatureLockGate></Suspense>} />
               <Route path="/agency-outcomes" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AgencyOutcomeReports /></FeatureLockGate></Suspense>} />
+              <Route path="/agency-admin" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.AgencyAdminDashboard /></FeatureLockGate></Suspense>} />
               <Route path="/founder-dashboard" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate founderOnly><FounderDashboard /></AdminRouteGate></Suspense>} />
               <Route path="/admin" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
               <Route path="/resource-management" element={<Suspense fallback={<LoadingFallback />}><AdminRouteGate><ResourceManagement /></AdminRouteGate></Suspense>} />
