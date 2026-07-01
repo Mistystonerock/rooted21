@@ -3,6 +3,7 @@ import { Plus, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { rememberSelectedChild } from "@/lib/child-selection";
+import { createFamilyLinkedChild } from "@/lib/family-hub";
 import ChildProfileForm from "@/components/children/ChildProfileForm";
 
 export default function QuickAddChildCard({ onCreated }) {
@@ -11,7 +12,8 @@ export default function QuickAddChildCard({ onCreated }) {
 
   async function handleSave(data) {
     setSaving(true);
-    const child = await base44.entities.ChildProfile.create(data);
+    const user = await base44.auth.me();
+    const child = await createFamilyLinkedChild(data, user);
     rememberSelectedChild(child);
     setSaving(false);
     setOpen(false);

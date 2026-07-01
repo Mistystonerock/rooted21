@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Accessibility, Bell, BookOpen, DoorOpen, Eye, FileCheck2, Home, Languages, LayoutDashboard, LifeBuoy, Menu, NotebookText, Settings, Shield, ShieldCheck, Sparkles, Type, Volume2, X } from "lucide-react";
+import { Accessibility, Bell, BookOpen, DoorOpen, Eye, FileCheck2, Heart, Home, Languages, LayoutDashboard, LifeBuoy, Menu, NotebookText, Settings, Shield, ShieldCheck, Sparkles, Type, Volume2, X } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { activateQuickExit } from "@/lib/survivorMode";
 import { C } from "@/lib/rooted-constants";

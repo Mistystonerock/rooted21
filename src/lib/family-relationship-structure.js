@@ -12,8 +12,10 @@ export const FAMILY_RELATIONSHIP_STRUCTURE = {
   permissionModel: [
     "Parents can own or co-manage family-owned records.",
     "Children are connected to the family record but do not receive automatic account access.",
-    "Professionals can be read-only, document-limited, court-limited, school-limited, or revoked.",
+    "Therapists and counselors are professional collaborators with read + limited upload access only after family approval.",
+    "Professionals can be read-only, professional read + limited upload, document-limited, court-limited, school-limited, or revoked.",
     "Court and school contacts see only the categories approved for their relationship.",
-    "Caregivers can be connected without receiving unrestricted professional or admin access."
+    "Caregivers can be connected without receiving unrestricted professional or admin access.",
+    "The Family remains the primary record; users connect through role-based FamilyRelationship permissions rather than owning isolated records."
   ]
 };

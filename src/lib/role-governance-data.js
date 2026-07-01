@@ -129,14 +129,28 @@ export const ROLE_GOVERNANCE = [
   },
   {
     role: "Therapist / Counselor",
-    securityLevel: "Consent-based behavioral health view",
-    purpose: "Understand patterns, goals, strengths, triggers, coping supports, and family-approved context for care coordination.",
-    dashboardAccess: "Therapist-ready progress summaries, approved behavior logs, goals, family background, care calendar, and selected documents.",
-    permissions: "Read approved behavioral and progress data; provide support notes only where permission is granted.",
-    aiPermissions: "May use AI for plain-language pattern summaries and session-prep notes, not diagnosis, treatment orders, or crisis replacement.",
-    dataVisibilityRules: "Limited to consented behavioral health categories; substance-use or sensitive segments require separate consent controls.",
-    documentAccessRules: "Can view shared therapy/behavioral documents only when the family approves that segment.",
-    futureFeatures: "Therapist portal, referral matching, appointment prep, progress snapshots, and consent-segmented clinical collaboration."
+    securityLevel: "Role: Therapist/Counselor · Access Level: Professional Read + Limited Upload",
+    purpose: "Licensed mental health professionals, behavioral health providers, substance use counselors, case managers, and treatment team members can support a child, parent, or family with clinical visibility into approved information while preserving family ownership of records and professional boundaries.",
+    dashboardAccess: ["Assigned Family Dashboard", "Client Progress Tracking", "Behavior Pattern Reports", "Parenting Class Progress", "Appointment Tracker", "Treatment Collaboration Center", "Shared Document Vault", "Moxie Professional Insights", "Family Communication Summaries", "Resource Referral Center"],
+    permissions: "Therapists are professional collaborators, not record owners. They may review approved records, download approved records, contribute recommendations, upload authorized treatment resources, session summaries, treatment goals, and progress updates, recommend services, and coordinate with approved professionals. They cannot modify family-generated data or override parent-controlled permissions.",
+    aiPermissions: "Moxie may generate behavioral trend summaries, highlight risk factors, identify strengths and protective factors, suggest evidence-informed support ideas, create treatment progress summaries, organize family-shared information, and recommend resources. Moxie may not diagnose clients, create treatment plans, make clinical decisions, replace therapist judgment, or provide legal recommendations.",
+    dataVisibilityRules: "Therapists may view assigned families, shared records, shared progress reports, shared behavior data, shared behavior logs, parenting class completion, family goals, progress tracking, shared documents, appointment history, and co-parenting communication summaries. Only records specifically approved for sharing by the family or authorized entity may be visible.",
+    documentAccessRules: "Therapists can upload treatment recommendations, resource information, authorized session summaries, treatment goals, and progress updates, and download approved records. They cannot delete family-owned records, edit parent-entered information, modify court documents, remove documentation uploaded by other professionals, view unshared family records, private journals, restricted legal documents, or other provider confidential notes.",
+    futureFeatures: ["Treatment Team Collaboration Hub", "Secure Messaging", "Shared Goal Planning", "Session Preparation Tools", "Outcome Tracking Dashboard", "Multidisciplinary Team Meetings"],
+    detailSections: [
+      { title: "Moxie may", items: ["Generate behavioral trend summaries", "Highlight risk factors", "Identify strengths and protective factors", "Suggest evidence-informed support ideas", "Create treatment progress summaries", "Organize family-shared information", "Recommend resources"] },
+      { title: "Moxie may NOT", items: ["Diagnose clients", "Create treatment plans", "Make clinical decisions", "Replace therapist judgment", "Provide legal recommendations"] },
+      { title: "Can View", items: ["Assigned families", "Shared records", "Shared progress reports", "Shared behavior data", "Parenting class completion", "Family goals", "Appointment history", "Co-parenting communication summaries"] },
+      { title: "Can Upload", items: ["Treatment recommendations", "Treatment resources", "Session summaries if authorized", "Treatment goals", "Progress updates"] },
+      { title: "Cannot View or Change", items: ["Unshared family records", "Private journals", "Restricted legal documents", "Other provider confidential notes", "Family-owned records deletion", "Parent-entered information edits", "Court document changes", "Historical behavior data changes"] },
+      { title: "Treatment Collaboration Tools", items: ["Review progress trends", "Monitor parenting class participation", "Review behavioral patterns", "Track treatment-related goals", "Coordinate with approved professionals", "Keep collaboration visible and auditable"] },
+      { title: "Behavior Tracking Access", items: ["Review behavior logs", "Review triggers", "Review interventions used", "Review family observations", "Cannot edit behavior entries", "Cannot remove behavior records", "Cannot change historical data"] },
+      { title: "Risk Monitoring", items: ["Escalating behaviors", "Safety concerns", "Frequent crisis events", "Significant family stress indicators", "Alerts are informational and do not replace clinical assessment"] },
+      { title: "Resource Referral Center", items: ["Recommend services", "Suggest support programs", "Share educational resources", "Recommend parenting supports", "Connect families with community resources"] },
+      { title: "QR Code Access", items: ["Generate professional connection requests", "Link to approved families", "Request access to specific records", "Parent or authorized guardian approval required"] },
+      { title: "Reports Available", items: ["Behavioral Trends Report", "Treatment Progress Summary", "Parenting Engagement Report", "Crisis Event Summary", "Resource Utilization Report", "Family Strengths & Needs Summary"] },
+      { title: "Audit & Compliance", items: ["Records viewed", "Documents uploaded", "Reports generated", "Access requests submitted", "HIPAA, privacy, and accountability standards"] }
+    ]
   },
   {
     role: "Behavioral Health Provider / Treatment Team Member",

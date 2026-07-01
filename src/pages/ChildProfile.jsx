@@ -5,6 +5,7 @@ import { C } from "@/lib/rooted-constants";
 import { ChevronLeft } from "lucide-react";
 import { SELECTED_CHILD_KEY, rememberSelectedChild } from "@/lib/child-selection";
 import ChildProfileForm from "@/components/children/ChildProfileForm";
+import { createFamilyLinkedChild, ensureFamilyLinkedChild } from "@/lib/family-hub";
 
 export default function ChildProfile() {
   const navigate = useNavigate();
@@ -25,11 +26,13 @@ export default function ChildProfile() {
 
   async function handleSave(data) {
     setSaving(true);
+    const user = await base44.auth.me();
     if (child?.id) {
       const updated = await base44.entities.ChildProfile.update(child.id, data);
-      rememberSelectedChild(updated || { ...child, ...data });
+      const linked = await ensureFamilyLinkedChild(updated || { ...child, ...data }, user);
+      rememberSelectedChild(linked || updated || { ...child, ...data });
     } else {
-      const created = await base44.entities.ChildProfile.create(data);
+      const created = await createFamilyLinkedChild(data, user);
       rememberSelectedChild(created);
     }
     setSaving(false);

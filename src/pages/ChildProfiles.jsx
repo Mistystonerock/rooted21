@@ -6,6 +6,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import ChildProfileCard from "@/components/children/ChildProfileCard";
 import ChildProfileForm from "@/components/children/ChildProfileForm";
 import ChildDataConsentModal, { hasChildDataConsent } from "@/components/legal/ChildDataConsentModal";
+import { createFamilyLinkedChild, ensureFamilyLinkedChild } from "@/lib/family-hub";
 
 export default function ChildProfiles() {
   const [children, setChildren] = useState([]);
@@ -31,10 +32,12 @@ export default function ChildProfiles() {
 
   async function handleSave(data) {
     setSaving(true);
+    const me = user || await base44.auth.me();
     if (editing) {
-      await base44.entities.ChildProfile.update(editing.id, data);
+      const updated = await base44.entities.ChildProfile.update(editing.id, data);
+      await ensureFamilyLinkedChild(updated || { ...editing, ...data }, me);
     } else {
-      await base44.entities.ChildProfile.create(data);
+      await createFamilyLinkedChild(data, me);
     }
     setSaving(false);
     setShowForm(false);
