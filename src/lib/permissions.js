@@ -34,3 +34,45 @@ export function canAdminManageResource(user, adminPermissions, resource) {
   const orgAllowed = !adminPermissions?.organization_id || !resource?.organization_id || adminPermissions.organization_id === resource.organization_id;
   return countyAllowed && orgAllowed;
 }
+
+export const ROLE_PERMISSION_SYSTEMS = {
+  user: {
+    key: 'family_owner',
+    label: 'Parent / Family User',
+    basis: ['record ownership', 'child relationship', 'family consent', 'access-code sharing'],
+    defaultAccess: 'create-edit-own-family-records',
+    editingBoundary: 'may edit family-owned records only',
+  },
+  founder: {
+    key: 'platform_governance',
+    label: 'Founder',
+    basis: ['platform governance', 'security review', 'operations', 'compliance oversight'],
+    defaultAccess: 'platform-governance-only',
+    editingBoundary: 'may govern systems without casually taking ownership of family records',
+  },
+  admin: {
+    key: 'restricted_operations',
+    label: 'Admin',
+    basis: ['admin session', 'assigned permissions', 'county or organization scope', 'support need'],
+    defaultAccess: 'permission-scoped-operations',
+    editingBoundary: 'may edit only assigned operational areas',
+  },
+  professional: {
+    key: 'permission_based_collaboration',
+    label: 'Professional / Assigned Support',
+    basis: ['family assignment', 'consent category', 'access code', 'role-specific data segment'],
+    defaultAccess: 'read-approved-progress',
+    editingBoundary: 'may view approved data and cannot edit family-owned records by default',
+  },
+  organization: {
+    key: 'licensed_organization',
+    label: 'Organization / Agency',
+    basis: ['licensed seat', 'organization scope', 'aggregate reporting', 'family consent'],
+    defaultAccess: 'aggregate-or-consented-access',
+    editingBoundary: 'may manage organization tools without unrestricted family record access',
+  },
+};
+
+export function getRolePermissionSystem(user) {
+  return ROLE_PERMISSION_SYSTEMS[user?.role] || ROLE_PERMISSION_SYSTEMS.user;
+}

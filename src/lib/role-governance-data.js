@@ -18,7 +18,7 @@ export const ROLE_GOVERNANCE = [
       "Personal Journal",
       "Family Calendar"
     ],
-    permissions: "Parents manage their own family records, progress data, children’s profiles, documents, reports, goals, calendar items, and approved sharing permissions.",
+    permissions: "The Parent permission system grants family-owned access: parents manage their own family records, progress data, children’s profiles, documents, reports, goals, calendar items, and approved sharing permissions.",
     aiPermissions: "Moxie may support parenting questions, forms, behavior insights, progress reports, court terminology explanations, case plan organization, resource recommendations, emotional regulation strategies, and documentation preparation. Moxie may not provide legal advice, diagnose mental health conditions, replace emergency services, override professional recommendations, or act as a professional decision-maker.",
     dataVisibilityRules: "Parents can view their own profile, own children, own documents, and own reports. Parents cannot view other families, agency administrative data, or professional notes marked private.",
     documentAccessRules: "Parents may upload, download, organize, share documents with approved professionals, and revoke access permissions. Parents cannot view documents belonging to other users or modify documents uploaded by professionals.",
