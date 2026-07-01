@@ -2,12 +2,10 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const FOUNDER_EMAIL = 'misty.stonerock88@gmail.com';
 const DEFAULT_ADMIN_PERMISSIONS = [
-  'manage_local_resources',
-  'update_verified_services',
-  'moderate_community',
-  'assist_users',
-  'manage_assigned_county_resources',
-  'view_admin_dashboard',
+  'manage_users',
+  'manage_resources',
+  'manage_classes',
+  'view_analytics',
 ];
 
 function generateCode() {

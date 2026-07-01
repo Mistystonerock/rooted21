@@ -19,7 +19,8 @@ export default function AdminRouteGate({ children, founderOnly = false }) {
       }
       const user = await base44.auth.me();
       const founderAllowed = user?.role === 'founder' && user?.email?.toLowerCase() === 'misty.stonerock88@gmail.com';
-      const allowed = founderOnly ? founderAllowed : (isAdminOrFounder(user) && isAdminSessionValid(user));
+      const adminAllowed = user?.role === 'admin' && isAdminSessionValid(user);
+      const allowed = founderOnly ? founderAllowed : (founderAllowed || adminAllowed);
       setState({ loading: false, allowed });
     }
     checkAccess();

@@ -27,12 +27,21 @@ export function hasAdminPermission(adminPermissions, permission) {
 export function canAdminManageResource(user, adminPermissions, resource) {
   if (isFounder(user)) return true;
   if (!isAdminSessionValid(user)) return false;
-  if (!hasAdminPermission(adminPermissions, 'manage_local_resources') && !hasAdminPermission(adminPermissions, 'manage_assigned_county_resources') && !hasAdminPermission(adminPermissions, 'update_verified_services')) return false;
+  const canManageResources = hasAdminPermission(adminPermissions, 'manage_resources') || hasAdminPermission(adminPermissions, 'manage_local_resources') || hasAdminPermission(adminPermissions, 'manage_assigned_county_resources') || hasAdminPermission(adminPermissions, 'update_verified_services');
+  if (!canManageResources) return false;
 
   const assignedCounties = adminPermissions?.assigned_counties || [];
   const countyAllowed = assignedCounties.length === 0 || assignedCounties.includes(resource?.county);
   const orgAllowed = !adminPermissions?.organization_id || !resource?.organization_id || adminPermissions.organization_id === resource.organization_id;
   return countyAllowed && orgAllowed;
+}
+
+export function canAdminAccessRestrictedFamilyCategory(user, adminPermissions, category) {
+  if (isFounder(user)) return true;
+  if (!isAdminSessionValid(user)) return false;
+  const restrictedCategories = ['family_private_documents', 'court_records', 'behavioral_health_records'];
+  if (!restrictedCategories.includes(category)) return true;
+  return hasAdminPermission(adminPermissions, `authorized_${category}`);
 }
 
 export const ROLE_PERMISSION_SYSTEMS = {
@@ -54,8 +63,8 @@ export const ROLE_PERMISSION_SYSTEMS = {
     key: 'restricted_operations',
     label: 'Admin',
     basis: ['admin session', 'assigned permissions', 'county or organization scope', 'support need'],
-    defaultAccess: 'permission-scoped-operations',
-    editingBoundary: 'may edit only assigned operational areas',
+    defaultAccess: 'user-management-resources-classes-analytics-only',
+    editingBoundary: 'cannot access family private documents, court records, or behavioral health records unless specifically authorized',
   },
   agency_administrator: {
     key: 'agency_oversight',

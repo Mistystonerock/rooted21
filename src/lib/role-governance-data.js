@@ -44,13 +44,13 @@ export const ROLE_GOVERNANCE = [
   },
   {
     role: "Founder",
-    securityLevel: "Highest platform governance",
-    purpose: "Protect the mission, manage operations, review platform health, support funding strategy, and oversee sensitive governance decisions.",
-    dashboardAccess: "Founder Dashboard, App Documentation, Project Blueprint, resource management, admin management, audits, operational panels.",
-    permissions: "Platform-level oversight, admin setup, resource governance, launch controls, and compliance review workflows.",
-    aiPermissions: "May use AI for planning, documentation, reporting, operational summaries, and product strategy — not to bypass privacy or consent rules.",
-    dataVisibilityRules: "Uses elevated views only for platform operations, safety, moderation, support, and compliance needs.",
-    documentAccessRules: "No casual access to family documents; document visibility must be tied to support, security, legal compliance, or consented workflows.",
+    securityLevel: "Separate founder governance role · Full platform authority",
+    purpose: "Protect the mission, manage operations, review platform health, support funding strategy, and oversee sensitive governance decisions. Founder is separate from Admin and is the only role with full Rooted 21 governance authority.",
+    dashboardAccess: "Everything: Founder Dashboard, App Documentation, Project Blueprint, resource management, admin management, audits, operational panels, classes, analytics, platform settings, and compliance controls.",
+    permissions: "Everything, including admin setup, user governance, resource governance, class governance, analytics, launch controls, compliance review workflows, and platform-level configuration.",
+    aiPermissions: "May use AI for planning, documentation, reporting, operational summaries, product strategy, and governance review — not to bypass privacy or consent rules.",
+    dataVisibilityRules: "Founder is separate from Admin and may govern the platform broadly. Sensitive family data access should still be purpose-limited, documented, and auditable.",
+    documentAccessRules: "Founder-level access is distinct from Admin. Any access to private family documents, court records, or behavioral health records should be tied to documented support, compliance, legal, security, or consented workflows.",
     futureFeatures: "Grant dashboards, nonprofit reporting, organization licensing, funder outcome reports, scholarship administration, and compliance exports."
   },
   {
@@ -76,14 +76,14 @@ export const ROLE_GOVERNANCE = [
   },
   {
     role: "Admin",
-    securityLevel: "Restricted operations access",
-    purpose: "Help manage resources, user support, content quality, and approved operational tasks without taking ownership from families.",
-    dashboardAccess: "Admin/resource management areas, approved support tools, documentation, reports, and limited operational views.",
-    permissions: "Review resources, manage approved listings, support access-code workflows, and help with platform operations based on assigned permissions.",
-    aiPermissions: "May use AI for resource review, documentation drafts, support summaries, and operational triage within privacy boundaries.",
-    dataVisibilityRules: "Cannot browse family records by default; access should be limited to assigned support needs, audits, or explicit permission workflows.",
-    documentAccessRules: "No document access unless a family-approved, support-related, or compliance-based workflow grants it.",
-    futureFeatures: "Role-specific admin permissions, organization staff seats, support queues, grant reporting tools, and moderation workflows."
+    securityLevel: "Restricted operations access · Separate from Founder",
+    purpose: "Help manage operational areas without becoming a founder-level user or taking ownership from families.",
+    dashboardAccess: "User management, Resources, Classes, and Analytics only, based on assigned permissions.",
+    permissions: "Admins may manage users, resources, classes, and analytics. Admin does not mean Founder and does not grant full platform authority.",
+    aiPermissions: "May use AI for resource review, class support, analytics summaries, user-support summaries, and operational triage within privacy boundaries.",
+    dataVisibilityRules: "Admins cannot access family private documents, court records, or behavioral health records unless a specific authorized workflow grants access and logs the reason.",
+    documentAccessRules: "No access to family private documents, court records, or behavioral health records unless specifically authorized. Founder controls remain founder-only.",
+    futureFeatures: "Role-specific admin permissions, support queues, class operations, resource operations, analytics scopes, and explicit sensitive-access approval workflows."
   },
   {
     role: "Agency Administrator / Supervisor",

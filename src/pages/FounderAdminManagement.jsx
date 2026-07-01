@@ -12,11 +12,10 @@ const GREEN = '#6b9d6e';
 const GOLD = '#a67c52';
 
 const ADMIN_PERMISSIONS = {
-  moderate_content: { label: 'Moderate Content', desc: 'Flag and manage community posts' },
-  view_assigned_users: { label: 'View Assigned Users', desc: 'See families assigned to this admin' },
-  help_families: { label: 'Help Families', desc: 'Answer support tickets and FAQs' },
-  upload_resources: { label: 'Upload Resources', desc: 'Add and manage support resources' },
-  review_surveys: { label: 'Review Surveys', desc: 'View user feedback and surveys' },
+  manage_users: { label: 'User Management', desc: 'Manage user support and account access tasks' },
+  manage_resources: { label: 'Resources', desc: 'Add, update, and verify approved resources' },
+  manage_classes: { label: 'Classes', desc: 'Manage classes, enrollments, and class materials' },
+  view_analytics: { label: 'Analytics', desc: 'View platform-level usage and impact analytics' },
 };
 
 const FOUNDER_EMAIL = 'misty.stonerock88@gmail.com';
@@ -26,9 +25,9 @@ function isFounderAccount(account) {
 }
 
 const FOUNDER_ONLY = {
+  everything: { label: 'Everything', desc: 'Full Rooted 21 platform governance' },
   create_admin_codes: { label: 'Create Admin Codes', desc: 'Generate new admin invitations' },
   remove_admins: { label: 'Remove Admins', desc: 'Revoke admin access and codes' },
-  view_analytics: { label: 'View Analytics', desc: 'See user growth and engagement data' },
   manage_permissions: { label: 'Manage Permissions', desc: 'Update what each admin can do' },
   view_system_logs: { label: 'View System Logs', desc: 'Monitor all platform activity' },
   approve_agencies: { label: 'Approve Agencies', desc: 'Verify and approve new organizations' },
@@ -219,12 +218,12 @@ export default function FounderAdminManagement() {
               marginTop: 12,
             }}
           >
-            <p style={{ fontSize: 11, fontWeight: 700, color: '#FF6B5A', marginBottom: 6 }}>🔒 Admins CANNOT:</p>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#FF6B5A', marginBottom: 6 }}>🔒 Admins CANNOT access unless specifically authorized:</p>
             <ul style={{ fontSize: 10, color: MUTED, margin: '0 0 0 16px', paddingLeft: 0 }}>
-              <li>Create other admins</li>
-              <li>Access founder controls</li>
-              <li>Access financial/legal backend</li>
-              <li>Delete founder data</li>
+              <li>Family private documents</li>
+              <li>Court records</li>
+              <li>Behavioral health records</li>
+              <li>Founder controls or founder data</li>
             </ul>
           </div>
         </div>

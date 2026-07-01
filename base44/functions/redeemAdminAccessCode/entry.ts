@@ -1,12 +1,10 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const DEFAULT_ADMIN_PERMISSIONS = [
-  'manage_local_resources',
-  'update_verified_services',
-  'moderate_community',
-  'assist_users',
-  'manage_assigned_county_resources',
-  'view_admin_dashboard',
+  'manage_users',
+  'manage_resources',
+  'manage_classes',
+  'view_analytics',
 ];
 
 Deno.serve(async (req) => {
@@ -58,11 +56,12 @@ Deno.serve(async (req) => {
       admin_email: user.email,
       admin_name: user.full_name || user.email,
       permissions,
+      restricted_data_categories: ['family_private_documents', 'court_records', 'behavioral_health_records'],
       assigned_counties: accessCode.assigned_counties || [],
       organization_id: accessCode.organization_id || '',
       organization_name: accessCode.organization_name || '',
       created_by: accessCode.created_by,
-      notes: 'Admin created via founder invitation code',
+      notes: 'Admin created via founder invitation code. Admin is separate from Founder and cannot access sensitive family categories without specific authorization.',
       is_active: true,
     });
 

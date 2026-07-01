@@ -29,15 +29,45 @@
     "permissions": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "manage_users",
+          "manage_resources",
+          "manage_classes",
+          "view_analytics",
+          "authorized_family_private_documents",
+          "authorized_court_records",
+          "authorized_behavioral_health_records",
+          "manage_local_resources",
+          "update_verified_services",
+          "moderate_community",
+          "assist_users",
+          "manage_assigned_county_resources",
+          "view_admin_dashboard"
+        ]
       },
       "default": [
-        "manage_local_resources",
-        "update_verified_services",
-        "moderate_community",
-        "assist_users",
-        "manage_assigned_county_resources",
-        "view_admin_dashboard"
+        "manage_users",
+        "manage_resources",
+        "manage_classes",
+        "view_analytics"
+      ]
+    },
+    "restricted_data_categories": {
+      "type": "array",
+      "description": "Sensitive categories this admin may not access unless specifically authorized",
+      "items": {
+        "type": "string",
+        "enum": [
+          "family_private_documents",
+          "court_records",
+          "behavioral_health_records"
+        ]
+      },
+      "default": [
+        "family_private_documents",
+        "court_records",
+        "behavioral_health_records"
       ]
     },
     "used": {

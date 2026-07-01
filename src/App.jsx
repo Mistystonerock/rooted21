@@ -122,8 +122,8 @@ function App() {
   const [bootFailed, setBootFailed] = React.useState(false);
   const [welcomeSeen, setWelcomeSeen] = React.useState(false);
   const [, setBetaAccess] = React.useState(() => localStorage.getItem("rooted21_beta_access") === "true");
-  const isFounder = user?.email === "misty.stonerock88@gmail.com";
-  const isAdminOrFounder = isFounder || ["founder", "admin"].includes(user?.role);
+  const isFounder = user?.role === "founder" && user?.email?.toLowerCase() === "misty.stonerock88@gmail.com";
+  const isAdminOrFounder = isFounder || user?.role === "admin";
   const publicComingSoonPaths = ["/", "/home", "/coming-soon", "/waitlist", "/tour", "/support"];
   const publicInfoPaths = ["/login", "/privacy", "/terms", "/donation-info", "/privacy-policy", "/terms-of-service", "/donate", "/legal-disclaimers", "/survey", "/founder-access"];
   const publicPaths = [...publicComingSoonPaths, ...publicInfoPaths];
@@ -137,7 +137,7 @@ function App() {
   const agencyHomeRoles = ["agency_administrator", "agency_supervisor", "clinical_supervisor", "program_supervisor", "team_lead", "agency_director", "program_manager", "quality_assurance_staff", "compliance_officer", "executive_leadership", "contract_manager", "grant_administrator"];
   const resourcePartnerHomeRoles = ["community_resource_partner", "service_provider", "housing_agency", "homeless_shelter", "domestic_violence_program", "food_pantry", "community_action_agency", "employment_program", "workforce_development_center", "legal_aid_organization", "transportation_provider", "childcare_provider", "veterans_services", "faith_based_organization", "financial_assistance_program", "recovery_community_organization", "nonprofit_organization", "youth_program", "family_resource_center"];
   const volunteerMentorHomeRoles = ["volunteer_mentor_coach", "volunteer", "mentor", "coach", "juvenile_treatment_court_mentor", "parent_mentor", "recovery_mentor", "peer_mentor", "veteran_mentor", "positive_male_role_model", "positive_female_role_model", "life_coach", "youth_leadership_mentor", "community_volunteer", "rooted21_volunteer_facilitator", "faith_based_mentor", "career_mentor"];
-  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : agencyHomeRoles.includes(user?.role) ? "/agency-admin" : resourcePartnerHomeRoles.includes(user?.role) ? "/resource-partner" : volunteerMentorHomeRoles.includes(user?.role) ? "/volunteer-mentor" : professionalHomeRoles.includes(user?.role) ? "/professional" : "/dashboard";
+  const loggedInHomePath = isFounder ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : agencyHomeRoles.includes(user?.role) ? "/agency-admin" : resourcePartnerHomeRoles.includes(user?.role) ? "/resource-partner" : volunteerMentorHomeRoles.includes(user?.role) ? "/volunteer-mentor" : professionalHomeRoles.includes(user?.role) ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
   const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/welcome"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;

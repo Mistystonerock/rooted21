@@ -70,6 +70,15 @@
         "nonprofit_organization",
         "youth_program",
         "family_resource_center",
+        "system_administrator",
+        "platform_owner",
+        "super_admin",
+        "operations_manager",
+        "rooted_compliance_lead",
+        "technical_support",
+        "resource_verification_team",
+        "program_director",
+        "community_manager",
         "therapist",
         "counselor",
         "caseworker",
@@ -146,14 +155,5 @@
       ],
       "default": "active"
     }
-  },
-  "required": [
-    "county",
-    "organization_id",
-    "organization_name",
-    "zip_code",
-    "housing_resources_zip",
-    "sensitive_action_reauth_at",
-    "admin_session_valid_until"
-  ]
+  }
 }
