@@ -9,41 +9,34 @@ Deno.serve(async (req) => {
     const { request_id, approve } = await req.json();
     if (!request_id) return Response.json({ error: 'Missing request_id' }, { status: 400 });
 
-    const request = await base44.asServiceRole.entities.ProfessionalFamilyAccess.get(request_id);
+    const request = await base44.asServiceRole.entities.AccessApprovalRequest.get(request_id);
     if (!request) return Response.json({ error: 'Request not found' }, { status: 404 });
-    if (request.parent_user_id !== user.id && request.parent_email !== user.email) {
-      return Response.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    if (request.status !== 'pending') {
-      return Response.json({ error: 'This request is no longer pending' }, { status: 400 });
-    }
-    if (request.request_expires_at && new Date(request.request_expires_at) < new Date()) {
-      await base44.asServiceRole.entities.ProfessionalFamilyAccess.update(request.id, { status: 'expired' });
+    if (request.parent_user_id !== user.id && request.parent_email !== user.email) return Response.json({ error: 'Forbidden' }, { status: 403 });
+    if (request.status !== 'pending') return Response.json({ error: 'This request is no longer pending' }, { status: 400 });
+
+    const now = new Date();
+    if (request.request_expires_at && new Date(request.request_expires_at) < now) {
+      await base44.asServiceRole.entities.AccessApprovalRequest.update(request.id, { status: 'expired' });
       return Response.json({ error: 'This approval request has expired' }, { status: 400 });
     }
 
     if (approve === false) {
-      const revoked = await base44.asServiceRole.entities.ProfessionalFamilyAccess.update(request.id, {
-        status: 'revoked',
-        revoked_at: new Date().toISOString()
-      });
+      const revoked = await base44.asServiceRole.entities.AccessApprovalRequest.update(request.id, { status: 'revoked', revoked_at: now.toISOString() });
+      await base44.asServiceRole.entities.RootedAuditEvent.create({ actor_email: user.email, actor_role: user.role || 'user', event_type: 'security_alert', entity_name: 'AccessApprovalRequest', entity_id: request.id, severity: 'info', summary: 'Professional access request declined', occurred_at: now.toISOString() });
       return Response.json({ success: true, status: 'revoked', request: revoked });
     }
 
-    const now = new Date();
     const expiresAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString();
-    const activeRequest = await base44.asServiceRole.entities.ProfessionalFamilyAccess.update(request.id, {
+    const activeRequest = await base44.asServiceRole.entities.AccessApprovalRequest.update(request.id, {
       status: 'active',
       approved_at: now.toISOString(),
       approved_by_email: user.email,
       expires_at: expiresAt
     });
 
-    const existing = await base44.asServiceRole.entities.AssignedFamily.filter({
-      family_email: request.parent_email,
-      professional_email: request.professional_email
-    });
-
+    const existing = await base44.asServiceRole.entities.AssignedFamily.filter({ family_email: request.parent_email, professional_email: request.professional_email });
+    const assignedRoleOptions = ['Counselor', 'Caseworker', 'CPS Worker', 'Court Staff', 'Mentor', 'Behavioral Health Worker', 'School Staff', 'Therapist', 'Juvenile Probation', 'Other'];
+    const assignedRole = assignedRoleOptions.includes(request.professional_role) ? request.professional_role : 'Behavioral Health Worker';
     const assignmentPayload = {
       family_user_id: request.parent_user_id,
       family_email: request.parent_email,
@@ -52,17 +45,25 @@ Deno.serve(async (req) => {
       professional_user_id: request.professional_user_id,
       professional_email: request.professional_email,
       professional_name: request.professional_name || request.professional_email,
-      professional_role: request.professional_role || 'Other',
-      status: 'active',
-      access_request_id: request.id,
-      access_expires_at: expiresAt,
-      approved_by_email: user.email,
-      approved_at: now.toISOString()
+      professional_role: assignedRole,
+      status: 'active'
     };
 
     const assignment = existing[0]
       ? await base44.asServiceRole.entities.AssignedFamily.update(existing[0].id, assignmentPayload)
       : await base44.asServiceRole.entities.AssignedFamily.create(assignmentPayload);
+
+    await base44.asServiceRole.entities.RootedAuditEvent.create({
+      actor_email: user.email,
+      actor_role: user.role || 'user',
+      event_type: 'consent_change',
+      entity_name: 'AccessApprovalRequest',
+      entity_id: request.id,
+      severity: 'info',
+      summary: 'Professional access request approved with automatic expiration',
+      metadata_json: JSON.stringify({ professional_email: request.professional_email, expires_at: expiresAt }),
+      occurred_at: now.toISOString()
+    });
 
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: request.professional_email,

@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'This code has expired' }, { status: 400 });
     }
 
-    const existingRequests = await base44.asServiceRole.entities.ProfessionalFamilyAccess.filter({
+    const existingRequests = await base44.asServiceRole.entities.AccessApprovalRequest.filter({
       professional_user_id: user.id,
       parent_user_id: accessCode.created_by_user_id
     });
@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
 
     const now = new Date();
     const requestExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
-    const professionalAccess = reusableRequest || await base44.asServiceRole.entities.ProfessionalFamilyAccess.create({
+    const professionalAccess = reusableRequest || await base44.asServiceRole.entities.AccessApprovalRequest.create({
       professional_user_id: user.id,
       professional_email: user.email,
       professional_name: user.full_name || user.email,
@@ -48,11 +48,23 @@ Deno.serve(async (req) => {
     });
 
     await base44.asServiceRole.entities.AccessCode.update(accessCode.id, {
-      status: 'requested',
+      status: 'used',
       used_by_user_id: user.id,
       used_by_email: user.email,
       used_by_name: user.full_name || user.email,
       used_at: now.toISOString()
+    });
+
+    await base44.asServiceRole.entities.RootedAuditEvent.create({
+      actor_email: user.email,
+      actor_role: user.role || 'professional',
+      event_type: 'security_alert',
+      entity_name: 'AccessApprovalRequest',
+      entity_id: professionalAccess.id,
+      severity: 'info',
+      summary: 'Professional access request submitted from QR/access code',
+      metadata_json: JSON.stringify({ parent_email: accessCode.created_by_email, professional_role: professional_role || 'Other' }),
+      occurred_at: now.toISOString()
     });
 
     await base44.asServiceRole.integrations.Core.SendEmail({
@@ -61,14 +73,8 @@ Deno.serve(async (req) => {
       body: `Hi ${accessCode.created_by_name || 'there'},\n\n${user.full_name || user.email} (${professional_role || 'Professional'}) scanned your Rooted 21 QR/access code and is requesting access. No data has been shared yet. Please open Rooted 21 to approve or decline this request. If approved, access expires automatically in 90 days.\n\nRooted 21 Team`
     });
 
-    return Response.json({
-      success: true,
-      pending_approval: true,
-      message: 'Access request sent. The parent must approve before any data is shared.',
-      professionalAccess
-    });
+    return Response.json({ success: true, pending_approval: true, message: 'Access request sent. The parent must approve before any data is shared.', professionalAccess });
   } catch (error) {
-    console.error('Redemption error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

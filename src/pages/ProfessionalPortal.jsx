@@ -7,8 +7,8 @@ import FamilyCard from "@/components/professional/FamilyCard";
 import FamilyDetail from "@/components/professional/FamilyDetail";
 import ProfessionalDashboardOverview from "@/components/professional/ProfessionalDashboardOverview";
 
-const ROLES = ["Behavioral Health Provider", "Treatment Team Member", "Community Behavioral Health Worker", "TBS Provider", "CPST Provider", "Peer Support Specialist", "OhioRISE Care Coordinator", "Therapist", "Counselor", "Case Manager", "Substance Use Counselor", "Treatment Court Mentor", "Recovery Coach", "Behavioral Health Supervisor", "Caseworker", "CPS Worker", "Court Staff", "School Staff", "Other"];
-const PROFESSIONAL_PORTAL_ROLES = ["admin", "professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "peer_support_specialist", "recovery_coach", "ohiorise_care_coordinator", "therapist", "counselor", "caseworker", "peer_mentor"];
+const ROLES = ["Behavioral Health Provider", "Treatment Team Member", "Community Behavioral Health Worker", "TBS Provider", "CPST Provider", "Peer Support Specialist", "Risk Management Specialist", "OhioRISE Care Coordinator", "Therapist", "Counselor", "Case Manager", "Substance Use Counselor", "Treatment Court Mentor", "Recovery Coach", "Behavioral Health Supervisor", "Caseworker", "CPS Worker", "Court Staff", "School Staff", "Other"];
+const PROFESSIONAL_PORTAL_ROLES = ["admin", "professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "community_behavioral_health_worker", "tbs_provider", "cpst_provider", "peer_support_specialist", "risk_management_specialist", "recovery_coach", "ohiorise_care_coordinator", "treatment_court_mentor", "substance_use_counselor", "behavioral_health_supervisor", "therapist", "counselor", "caseworker", "peer_mentor"];
 
 export default function ProfessionalPortal() {
   const [user, setUser] = useState(null);
@@ -34,11 +34,12 @@ export default function ProfessionalPortal() {
 
   async function loadFamilies(u) {
     const assigned = await base44.entities.AssignedFamily.filter({ professional_email: u.email }, "-created_date", 100);
-    setFamilies(assigned);
+    const activeAssigned = assigned.filter(family => family.status === "active" && (!family.access_expires_at || new Date(family.access_expires_at) > new Date()));
+    setFamilies(activeAssigned);
 
-    // Load data for each family in parallel
+    // Load data for each active, unexpired family in parallel
     const dataMap = {};
-    await Promise.all(assigned.map(async fam => {
+    await Promise.all(activeAssigned.map(async fam => {
       const email = fam.family_email;
       const [checkins, lessons, goals, notes, behaviorLogs] = await Promise.all([
         base44.entities.CheckIn.filter({ created_by: email }, "-created_date", 60).catch(() => []),
@@ -56,8 +57,10 @@ export default function ProfessionalPortal() {
     if (!assignForm.family_email.trim()) return;
     setSaving(true);
     if (user?.role !== "admin") return;
+    const assignedRoleOptions = ["Counselor", "Caseworker", "CPS Worker", "Court Staff", "Mentor", "Behavioral Health Worker", "School Staff", "Therapist", "Juvenile Probation", "Other"];
     const f = await base44.entities.AssignedFamily.create({
       ...assignForm,
+      professional_role: assignedRoleOptions.includes(assignForm.professional_role) ? assignForm.professional_role : "Behavioral Health Worker",
       status: "active",
     });
     setFamilies(prev => [f, ...prev]);

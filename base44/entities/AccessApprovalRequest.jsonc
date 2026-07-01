@@ -1,0 +1,110 @@
+{
+  "name": "AccessApprovalRequest",
+  "type": "object",
+  "properties": {
+    "professional_user_id": {
+      "type": "string"
+    },
+    "professional_email": {
+      "type": "string"
+    },
+    "professional_name": {
+      "type": "string"
+    },
+    "professional_role": {
+      "type": "string"
+    },
+    "parent_user_id": {
+      "type": "string"
+    },
+    "parent_email": {
+      "type": "string"
+    },
+    "parent_name": {
+      "type": "string"
+    },
+    "child_name": {
+      "type": "string"
+    },
+    "access_code_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "revoked",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "request_expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_by_email": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "professional_user_id",
+    "parent_user_id",
+    "status"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "data.professional_user_id": "{{user.id}}"
+        },
+        {
+          "data.professional_email": "{{user.email}}"
+        },
+        {
+          "data.parent_user_id": "{{user.id}}"
+        },
+        {
+          "data.parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.parent_user_id": "{{user.id}}"
+        },
+        {
+          "data.parent_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.parent_user_id": "{{user.id}}"
+        },
+        {
+          "data.parent_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
+}

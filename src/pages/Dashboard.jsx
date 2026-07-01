@@ -73,7 +73,7 @@ export default function Dashboard() {
       base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals),
       base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
-      base44.entities.ProfessionalFamilyAccess.filter({ status: "pending" }, "-requested_at", 20).then(setPendingAccessRequests).catch(() => setPendingAccessRequests([])),
+      base44.entities.AccessApprovalRequest.filter({ status: "pending" }, "-requested_at", 20).then(setPendingAccessRequests).catch(() => setPendingAccessRequests([])),
     ]);
     queryClient.invalidateQueries();
   }
