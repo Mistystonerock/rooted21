@@ -28,7 +28,7 @@ const sections = [
 
 export default function KinshipFosterCaregiverDashboard() {
   return (
-    <div className="min-h-screen" style={{ background: C.offWhite, color: C.text }}>
+    <div className="min-h-screen" style={{ background: C.offWhite, color: C.darkText }}>
       <MobileHeader title="Kinship / Foster Caregiver" subtitle="Limited child-centered access" backTo="/dashboard" />
       <main className="mx-auto max-w-[560px] space-y-4 px-4 pb-24 pt-4">
         <section className="rounded-3xl border p-5 shadow-sm" style={{ background: C.white, borderColor: C.cream }}>
@@ -47,7 +47,7 @@ export default function KinshipFosterCaregiverDashboard() {
             return (
               <Link key={item.label} to={item.path} className="rounded-2xl border p-3 no-underline shadow-sm" style={{ background: C.white, borderColor: C.cream }}>
                 <Icon size={18} color={C.darkGreen} />
-                <p className="mt-2 text-sm font-bold" style={{ color: C.text }}>{item.label}</p>
+                <p className="mt-2 text-sm font-bold" style={{ color: C.darkText }}>{item.label}</p>
                 <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-black" style={{ color: C.midGreen }}>Open <ChevronRight size={12} /></span>
               </Link>
             );

@@ -197,15 +197,29 @@ export const ROLE_GOVERNANCE = [
     ]
   },
   {
-    role: "Court / Legal Viewer",
-    securityLevel: "Review-only legal preparation access",
-    purpose: "Review user-approved court-ready summaries, evidence timelines, documents, and progress packets for attorney or court preparation.",
-    dashboardAccess: "Court-ready export views, evidence timeline, certified summaries, selected documents, and hearing preparation materials.",
-    permissions: "Read approved materials only; cannot edit records, create evidence, or alter family-owned timelines.",
-    aiPermissions: "May review AI-assisted summaries after family approval; AI must not provide legal advice or decide legal strategy.",
-    dataVisibilityRules: "Limited to court/legal categories intentionally shared by the family.",
-    documentAccessRules: "May view selected legal/court documents and exports through time-limited or permission-based access.",
-    futureFeatures: "Attorney-review packets, court exhibit bundles, certified export logs, and hearing-prep collaboration."
+    role: "Court / Legal Support Viewer",
+    securityLevel: "Role: Court / Legal Support Viewer · Access Level: Read-Only Legal Review",
+    purpose: "GALs, CASAs, Attorneys, Public Defenders, Prosecutors, Court Staff, Magistrates, Judges' Staff, and other authorized legal professionals can review family-approved information, case documentation, progress reports, and court-related records while preserving data integrity and family-owned records.",
+    dashboardAccess: ["Assigned Family Dashboard", "Court Packet Center", "Case Progress Dashboard", "Permanency Timeline Tracker", "Co-Parenting Communication Logs", "Case Plan Progress Reports", "Shared Document Vault", "Professional Reports Center", "Hearing Preparation Tools", "Moxie Legal Summaries"],
+    permissions: "Court/legal users are independent reviewers, not data owners. They may view records, download reports, generate summaries, export court packets, and review timelines for assigned cases and approved records. They cannot edit records, delete records, modify case plans, alter behavior logs, change family data, remove uploaded documentation, upload modifications to family records, or override permissions.",
+    aiPermissions: "Moxie may summarize case activity, organize court-ready reports, generate hearing preparation summaries, create timeline reports, highlight completed milestones, identify missing documentation, and summarize co-parenting communication trends. Moxie may not provide legal advice, predict court outcomes, recommend custody decisions, recommend placement decisions, recommend removal decisions, or replace attorney or judicial judgment.",
+    dataVisibilityRules: "Access is restricted to assigned cases and approved records. Court/legal users may view approved family records, court-related documents, parenting class completion, case plan progress, family progress summaries, shared behavior reports, service participation records, and co-parenting communication logs.",
+    documentAccessRules: "Court/legal users may access court orders, motions, hearings, affidavits, case summaries, family reports, professional reports, court packets, reports, and timelines based on assigned role and family authorization. All records remain immutable.",
+    futureFeatures: ["Court Hearing Preparation Wizard", "Automated Court Packet Builder", "Judicial Dashboard", "CASA Volunteer Dashboard", "GAL Case Management Workspace", "Legal Collaboration Hub", "Secure Court Filing Integration"],
+    detailSections: [
+      { title: "Moxie may", items: ["Summarize case activity", "Organize court-ready reports", "Generate hearing preparation summaries", "Create timeline reports", "Highlight completed milestones", "Identify missing documentation", "Summarize co-parenting communication trends"] },
+      { title: "Moxie may NOT", items: ["Provide legal advice", "Predict court outcomes", "Recommend custody decisions", "Recommend placement decisions", "Recommend removal decisions", "Replace attorney or judicial judgment"] },
+      { title: "Can View", items: ["Assigned case information", "Shared records", "Court documents", "Progress reports", "Communication summaries", "Court-related documents", "Parenting class completion", "Service participation records"] },
+      { title: "Can Export", items: ["Court packets", "Reports", "Timelines"] },
+      { title: "Cannot", items: ["Edit records", "Upload modifications to family records", "Delete information", "Override permissions", "Modify case plans", "Alter behavior logs", "Change family data", "Remove uploaded documentation"] },
+      { title: "Court Packet Center", items: ["Case Plan Progress", "Parenting Class Completion", "Court Orders", "Safety Plans", "Service Participation", "Family Milestones", "Provider Reports", "Permanency Progress", "Educational Records if authorized", "Behavioral Health Summaries if authorized"] },
+      { title: "Co-Parenting Communication Review", items: ["View communication logs", "View conflict-resolution summaries", "Review communication timelines", "Generate communication reports", "Cannot modify communication records", "Cannot remove communications", "Cannot edit historical conversations"] },
+      { title: "Permanency & Placement Tracking", items: ["Reunification Progress", "Relative Placement Progress", "Kinship Placement Information", "Foster Placement Stability", "Visitation Tracking", "Child Well-Being Indicators", "Permanency Timelines", "Informational only"] },
+      { title: "Role Subcategories", items: ["CASA: child-related records, progress reports, service participation, educational information; cannot edit records", "GAL: child records, family progress, court documentation, professional reports; can generate court review reports", "Attorney: authorized family records, court packets, communication logs, progress reports; can export reports", "Judge / Magistrate Staff: court packets, case summaries, progress reports, timeline reports; strictly read-only"] },
+      { title: "QR Code Access", items: ["Request secure access", "Connect to assigned cases", "Receive temporary permissions", "Authorization required", "Audit logging required", "Expiration controls required"] },
+      { title: "Reports Available", items: ["Court Readiness Report", "Permanency Timeline Report", "Parenting Progress Summary", "Family Engagement Report", "Co-Parenting Communication Summary", "Service Participation Report", "Child Well-Being Summary", "Placement Stability Report"] },
+      { title: "Audit & Compliance", items: ["Records viewed", "Documents accessed", "Reports exported", "Timeline reviews", "Access requests", "Complete audit trail for legal transparency and accountability"] }
+    ]
   },
   {
     role: "School / Education Professional",

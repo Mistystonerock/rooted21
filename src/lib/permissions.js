@@ -285,10 +285,10 @@ export const ROLE_PERMISSION_SYSTEMS = {
   },
   attorney_gal: {
     key: 'legal_read_only_review',
-    label: 'Attorney / GAL',
-    basis: ['family assignment', 'legal consent segment', 'approved court packet'],
-    defaultAccess: 'read-only-court-packet-reports-communication-logs',
-    editingBoundary: 'read-only access',
+    label: 'Court / Legal Support Viewer',
+    basis: ['assigned case', 'family authorization', 'court/legal role', 'approved records', 'audit logging', 'expiration controls'],
+    defaultAccess: 'read-only-legal-review-court-packets-reports-timelines',
+    editingBoundary: 'independent reviewer only; may view approved records, download reports, generate summaries, export court packets, and review timelines but cannot edit records, delete records, modify case plans, alter behavior logs, change family data, remove uploaded documentation, or override permissions',
   },
   organization: {
     key: 'licensed_organization',
