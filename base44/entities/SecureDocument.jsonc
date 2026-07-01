@@ -34,6 +34,27 @@
       ],
       "description": "Document category"
     },
+    "document_record_type": {
+      "type": "string",
+      "enum": [
+        "parent_record",
+        "child_record",
+        "school_record",
+        "medical_record",
+        "court_record",
+        "behavioral_health_record"
+      ],
+      "default": "parent_record",
+      "description": "Child-centered permission tag: Parent Record, Child Record, School Record, Medical Record, Court Record, or Behavioral Health Record"
+    },
+    "permission_granularity": {
+      "type": "string",
+      "enum": [
+        "document_level"
+      ],
+      "default": "document_level",
+      "description": "Permissions for this vault item are controlled at the individual document level"
+    },
     "permission_segment": {
       "type": "string",
       "enum": [
@@ -98,7 +119,7 @@
     },
     "case_id": {
       "type": "string",
-      "description": "Associated case ID (optional)"
+      "description": "Associated case ID optional"
     },
     "court_case_number": {
       "type": "string",
@@ -212,7 +233,7 @@
     "expiry_date": {
       "type": "string",
       "format": "date",
-      "description": "Document expiry or review date (optional)"
+      "description": "Document expiry or review date optional"
     },
     "version": {
       "type": "number",
@@ -260,20 +281,20 @@
     "read": {
       "$or": [
         {
-          "owner_email": "{{user.email}}"
+          "data.owner_email": "{{user.email}}"
         },
         {
           "created_by": "{{user.email}}"
         },
         {
-          "shared_with": "{{user.email}}"
+          "data.shared_with": "{{user.email}}"
         }
       ]
     },
     "update": {
       "$or": [
         {
-          "owner_email": "{{user.email}}"
+          "data.owner_email": "{{user.email}}"
         },
         {
           "created_by": "{{user.email}}"
@@ -283,7 +304,7 @@
     "delete": {
       "$or": [
         {
-          "owner_email": "{{user.email}}"
+          "data.owner_email": "{{user.email}}"
         },
         {
           "created_by": "{{user.email}}"
