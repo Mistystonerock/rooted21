@@ -1,14 +1,45 @@
 export const ROLE_GOVERNANCE = [
   {
-    role: "Parent / Caregiver",
-    securityLevel: "Family-owned private access",
-    purpose: "Use Rooted 21 to organize family needs, track progress, prepare for meetings, and choose what to share.",
-    dashboardAccess: "Family Dashboard, child profiles, case plans, documents, resources, progress, education, Moxie AI, court-ready tools, consent dashboard.",
-    permissions: "Create, edit, delete, and export their own family-owned records. Generate invitation and document access codes.",
-    aiPermissions: "May use Moxie AI for organizing, reflection, plain-language explanations, preparation checklists, and supportive coaching within boundaries.",
-    dataVisibilityRules: "Sees only records connected to their own account, children, family, or explicitly shared partnerships.",
-    documentAccessRules: "Owns uploaded documents; can view, download, organize, delete, and share selected documents through approved access controls.",
-    futureFeatures: "Subscription options, premium classes, donation-supported scholarships, grant-funded access, and deeper family progress dashboards."
+    role: "Parent / Family User",
+    securityLevel: "Role: Parent · Access Level: Standard",
+    purpose: "The Parent/Family User is the primary participant in Rooted 21. This user receives support, education, advocacy tools, resource navigation, documentation assistance, and progress tracking designed to strengthen family stability, reunification efforts, parenting skills, and overall well-being.",
+    dashboardAccess: [
+      "SOS Crisis Support",
+      "Moxie AI Assistant",
+      "21-Day Parenting Program",
+      "Progress Tracker",
+      "Document Vault",
+      "Behavior Tracking",
+      "Resource Navigator",
+      "Court Preparation Tools",
+      "Goal & Milestone Tracking",
+      "Parenting Activities",
+      "Certificates & Achievements",
+      "Personal Journal",
+      "Family Calendar"
+    ],
+    permissions: "Parents manage their own family records, progress data, children’s profiles, documents, reports, goals, calendar items, and approved sharing permissions.",
+    aiPermissions: "Moxie may support parenting questions, forms, behavior insights, progress reports, court terminology explanations, case plan organization, resource recommendations, emotional regulation strategies, and documentation preparation. Moxie may not provide legal advice, diagnose mental health conditions, replace emergency services, override professional recommendations, or act as a professional decision-maker.",
+    dataVisibilityRules: "Parents can view their own profile, own children, own documents, and own reports. Parents cannot view other families, agency administrative data, or professional notes marked private.",
+    documentAccessRules: "Parents may upload, download, organize, share documents with approved professionals, and revoke access permissions. Parents cannot view documents belonging to other users or modify documents uploaded by professionals.",
+    futureFeatures: [
+      "Peer Support Community",
+      "Parent Mentorship Network",
+      "Group Challenges",
+      "Family Goal Sharing",
+      "Achievement Badges"
+    ],
+    detailSections: [
+      { title: "Moxie may", items: ["Answer parenting questions", "Help complete forms", "Generate behavior insights", "Create progress reports", "Explain court terminology", "Assist with case plan organization", "Recommend resources", "Provide emotional regulation strategies", "Assist with documentation preparation"] },
+      { title: "Moxie may NOT", items: ["Provide legal advice", "Diagnose mental health conditions", "Replace emergency services", "Override professional recommendations"] },
+      { title: "Document Vault: Parents may", items: ["Upload documents", "Download documents", "Organize documents", "Share documents with approved professionals", "Revoke access permissions"] },
+      { title: "Document Vault: Parents cannot", items: ["View documents belonging to other users", "Modify documents uploaded by professionals"] },
+      { title: "Behavior Tracking", items: ["Log incidents", "Track triggers", "Track behaviors", "Track interventions used", "Generate reports", "View AI-generated patterns"] },
+      { title: "Resource Navigation", items: ["Housing", "Food Assistance", "Utilities", "Domestic Violence Services", "Mental Health Providers", "Substance Use Services", "Veteran Resources", "Transportation Resources", "Childcare Resources", "Employment Resources"] },
+      { title: "Court & Case Plan Tools", items: ["Track hearings", "Track deadlines", "Upload court orders", "Generate court preparation checklists", "Track case plan objectives", "Receive reminders"] },
+      { title: "Can View", items: ["Own profile", "Own children", "Own documents", "Own reports"] },
+      { title: "Cannot View", items: ["Other families", "Agency administrative data", "Professional notes marked private"] }
+    ]
   },
   {
     role: "Founder",
