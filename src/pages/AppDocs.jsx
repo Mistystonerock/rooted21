@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { BookOpen, Server, Brain, ChevronDown, ChevronUp } from "lucide-react";
+import { BookOpen, Server, Brain, ChevronDown, ChevronUp, Shield } from "lucide-react";
 
 const DOCS = [
   {
@@ -117,6 +117,23 @@ SMS via Twilio: import twilio from 'npm:twilio' — use TWILIO_* secrets`
       {
         title: "Error Handling Convention",
         body: `Always wrap the full handler in try/catch. Return Response.json({ error: error.message }, { status: 500 }) on failure. Do not use bare specifiers — always prefix npm packages with 'npm:packagename@version'. No local imports between function files — each is deployed independently.`
+      }
+    ]
+  },
+  {
+    id: "roles",
+    icon: <Shield size={18} color={C.midGreen} />,
+    label: "Role Governance Matrix",
+    subtitle: "Purpose, permissions, visibility, documents, AI, security",
+    color: C.midGreen,
+    sections: [
+      {
+        title: "Required Role Fields",
+        body: `Every Rooted 21 role must define: Purpose, Dashboard Access, Permissions, AI Permissions, Data Visibility Rules, Document Access Rules, Security Level, and Future Features.`
+      },
+      {
+        title: "Governance Page",
+        body: `The full plain-language role matrix lives at /role-governance. It covers parent/caregiver, founder, admin, professional, CPS caseworker, therapist/counselor, court/legal viewer, school/education professional, and future organization/agency access.`
       }
     ]
   },
@@ -269,11 +286,16 @@ export default function AppDocs() {
         <div className="rounded-2xl p-4" style={{ background: C.darkGreen }}>
           <p className="font-serif font-bold text-sm mb-1" style={{ color: C.cream }}>Rooted 21 — Complete Technical Reference</p>
           <p className="text-xs leading-relaxed" style={{ color: C.lightGreen }}>
-            Three documents covering the frontend architecture, backend functions, and a full narrative context for AI agents building new features.
+            Four documents covering frontend architecture, backend functions, role governance, and full narrative context for AI agents building new features.
           </p>
-          <a href="/project-blueprint" className="mt-4 flex w-full items-center justify-center rounded-xl py-3 text-xs font-black no-underline" style={{ background: C.gold, color: C.darkGreen }}>
-            Open Project Blueprint
-          </a>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <a href="/project-blueprint" className="flex w-full items-center justify-center rounded-xl py-3 text-xs font-black no-underline" style={{ background: C.gold, color: C.darkGreen }}>
+              Open Project Blueprint
+            </a>
+            <a href="/role-governance" className="flex w-full items-center justify-center rounded-xl py-3 text-xs font-black no-underline" style={{ background: C.cream, color: C.darkGreen }}>
+              Open Role Governance
+            </a>
+          </div>
         </div>
 
         {DOCS.map(doc => (
