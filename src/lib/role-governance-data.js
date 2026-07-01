@@ -179,6 +179,27 @@ export const ROLE_GOVERNANCE = [
     futureFeatures: "School collaboration portal, IEP prep packets, meeting notes, and education progress summaries."
   },
   {
+    role: "Volunteer / Mentor / Coach",
+    securityLevel: "Role: Volunteer / Mentor / Coach · Access Level: Relationship-Based Limited Access",
+    purpose: "Trusted supporters provide encouragement, accountability, guidance, advocacy, and positive relationship-centered support to children, youth, parents, and families while complementing—not replacing—professional services.",
+    dashboardAccess: ["Assigned Participant Dashboard", "Goal & Achievement Tracker", "Meeting Scheduler", "Activity Planner", "Check-In Center", "Resource Library", "Moxie Mentor Assistant", "Progress Milestones", "Secure Messaging", "Volunteer Training Center"],
+    permissions: "Mentors may support assigned goals, schedule meetings, track attendance, log activities, document mentoring hours, record participant engagement, plan approved outings, upload mentoring notes, provide encouragement, and award motivational badges. Goals remain owned by the participant and treatment team.",
+    aiPermissions: "Moxie may suggest mentoring activities, recommend conversation starters, provide trauma-informed mentoring tips, recommend life-skill activities, suggest community opportunities, help organize meeting notes, track mentoring goals, and celebrate achievements. Moxie may not provide therapy, diagnose mental health conditions, provide legal advice, make case recommendations, replace professional services, or make safety determinations.",
+    dataVisibilityRules: "Relationship-based limited access only. Mentors may view assigned participants, preferred display name, age group, assigned goals, interests, hobbies, achievement milestones, shared activity history, approved communication, and emergency contact instructions if authorized. They cannot view CPS records, court documents, medical records, behavioral health documentation, school records, financial information, or case notes unless specifically authorized.",
+    documentAccessRules: "Mentors may upload mentoring notes, activity logs, attendance, and goal encouragement. They cannot upload or access clinical, court, CPS, school, financial, or confidential documentation unless specifically authorized by the appropriate workflow.",
+    futureFeatures: ["Mentor-Mentee Matching", "AI Interest Matching", "Leadership Challenges", "Volunteer Recognition Dashboard", "Community Service Tracking", "Event Registration", "Mentor Discussion Forums", "Continuing Education Portal", "Mentor Mobile App"],
+    detailSections: [
+      { title: "User Types Included", items: ["Juvenile Treatment Court Mentors", "Parent Mentors", "Recovery Mentors", "Peer Mentors", "Veteran Mentors", "Positive Male Role Models", "Positive Female Role Models", "Life Coaches", "Youth Leadership Mentors", "Community Volunteers", "Rooted 21 Volunteer Facilitators", "Faith-Based Mentors", "Career Mentors"] },
+      { title: "Moxie may", items: ["Suggest mentoring activities", "Recommend conversation starters", "Provide trauma-informed mentoring tips", "Recommend life-skill activities", "Suggest community opportunities", "Help organize meeting notes", "Track mentoring goals", "Celebrate participant achievements"] },
+      { title: "Moxie may NOT", items: ["Provide therapy", "Diagnose mental health conditions", "Provide legal advice", "Make case recommendations", "Replace professional services", "Make safety determinations"] },
+      { title: "Goal Support Center", items: ["Education", "Employment", "Life Skills", "Self-Esteem", "Healthy Relationships", "Recovery", "Parenting", "Leadership", "Community Service", "Emotional Wellness"] },
+      { title: "Volunteer Training Center", items: ["Trauma-Informed Care", "Professional Boundaries", "Mandatory Reporting", "Cultural Humility", "Child Safety", "Communication Skills", "Motivational Interviewing Basics", "Crisis Response Procedures", "Rooted 21 Code of Conduct", "Confidentiality & Privacy"] },
+      { title: "Recognition & Achievement", items: ["Attendance", "Leadership", "Kindness", "Responsibility", "Teamwork", "Goal Completion", "Community Service", "Positive Growth", "Resilience"] },
+      { title: "Background & Credential Requirements", items: ["Background Check", "Child Abuse Registry Check where applicable", "Identity Verification", "Confidentiality Agreement", "Code of Conduct", "Required Training Modules", "Program Orientation", "Renewal-date tracking and automatic reminders"] },
+      { title: "Audit & Compliance", items: ["Logins", "Messages", "Activity notes", "Meeting attendance", "Training completion", "Badge awards", "Access history", "Coordinator review"] }
+    ]
+  },
+  {
     role: "Community Resource Partner / Service Provider",
     securityLevel: "Role: Community Resource Partner · Access Level: Referral-Based Access",
     purpose: "Organizations and professionals that provide direct services to families can receive referrals, coordinate services, schedule appointments, share approved resource materials, and strengthen community collaboration. This role supports families but does not manage cases.",

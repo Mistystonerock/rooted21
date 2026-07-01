@@ -32,6 +32,7 @@ const ROUTES = new Set([
   "/resource-management",
   "/agency-admin",
   "/resource-partner",
+  "/volunteer-mentor",
 ]);
 
 const mainMenuItems = [
@@ -73,6 +74,12 @@ const resourcePartnerRoles = ["community_resource_partner", "service_provider", 
 
 const resourcePartnerMenuItems = [
   { label: "Resource Partner", path: "/resource-partner", icon: LifeBuoy },
+];
+
+const volunteerMentorRoles = ["volunteer_mentor_coach", "volunteer", "mentor", "coach", "juvenile_treatment_court_mentor", "parent_mentor", "recovery_mentor", "peer_mentor", "veteran_mentor", "positive_male_role_model", "positive_female_role_model", "life_coach", "youth_leadership_mentor", "community_volunteer", "rooted21_volunteer_facilitator", "faith_based_mentor", "career_mentor"];
+
+const volunteerMentorMenuItems = [
+  { label: "Volunteer Mentor", path: "/volunteer-mentor", icon: Sparkles },
 ];
 
 export default function TopRightMenu({ user }) {
@@ -192,6 +199,7 @@ export default function TopRightMenu({ user }) {
   const showFounderLink = user?.role === "founder" || user?.role === "admin";
   const showAgencyLink = agencyRoles.includes(user?.role);
   const showResourcePartnerLink = resourcePartnerRoles.includes(user?.role);
+  const showVolunteerMentorLink = volunteerMentorRoles.includes(user?.role);
   const isFounderDashboard = window.location.pathname === "/founder-dashboard";
 
   if (isFounderDashboard) return null;
@@ -248,6 +256,13 @@ export default function TopRightMenu({ user }) {
               <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
                 <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><LifeBuoy size={14} /> Resource Partner</p>
                 {resourcePartnerMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
+              </div>
+            )}
+
+            {showVolunteerMentorLink && (
+              <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Sparkles size={14} /> Volunteer Mentor</p>
+                {volunteerMentorMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
               </div>
             )}
 

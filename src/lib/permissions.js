@@ -281,11 +281,20 @@ export const ROLE_PERMISSION_SYSTEMS = {
     defaultAccess: 'assigned-referrals-appointments-shared-contact-resource-materials',
     editingBoundary: 'may update referrals, appointments, organization profile, events, and resource materials; cannot manage cases or access unrelated confidential records',
   },
+  system_administrator: {
+    key: 'platform_level_administration',
+    label: 'System Administrator / Platform Owner',
+    basis: ['approved internal platform role', 'purpose-limited administration', 'security review', 'minimum necessary access', 'audit trail'],
+    defaultAccess: 'platform-settings-users-roles-agencies-resources-ai-programs-billing-analytics-support-security',
+    editingBoundary: 'may manage platform systems but cannot secretly access private family records, delete audit logs, override consent without documentation, modify protected records, or make legal/clinical/CPS/court decisions',
+  },
 };
 
 const COMMUNITY_RESOURCE_PARTNER_ROLES = ['service_provider', 'housing_agency', 'homeless_shelter', 'domestic_violence_program', 'food_pantry', 'community_action_agency', 'employment_program', 'workforce_development_center', 'legal_aid_organization', 'transportation_provider', 'childcare_provider', 'veterans_services', 'faith_based_organization', 'financial_assistance_program', 'recovery_community_organization', 'nonprofit_organization', 'youth_program', 'family_resource_center'];
+const SYSTEM_ADMINISTRATOR_ROLES = ['platform_owner', 'super_admin', 'operations_manager', 'rooted_compliance_lead', 'technical_support', 'resource_verification_team', 'program_director', 'community_manager'];
 
 export function getRolePermissionSystem(user) {
   if (COMMUNITY_RESOURCE_PARTNER_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.community_resource_partner;
+  if (SYSTEM_ADMINISTRATOR_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.system_administrator;
   return ROLE_PERMISSION_SYSTEMS[user?.role] || ROLE_PERMISSION_SYSTEMS.user;
 }

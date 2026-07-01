@@ -120,6 +120,7 @@ const routes = {
   AgencyOutcomeReports: lazy(() => import("@/pages/AgencyOutcomeReports")),
   AgencyAdminDashboard: lazy(() => import("@/pages/AgencyAdminDashboard")),
   CommunityResourcePartnerDashboard: lazy(() => import("@/pages/CommunityResourcePartnerDashboard")),
+  VolunteerMentorDashboard: lazy(() => import("@/pages/VolunteerMentorDashboard")),
   ChildCourtReportGenerator: lazy(() => import("@/pages/ChildCourtReportGenerator")),
   WraparoundSupport: lazy(() => import("@/pages/WraparoundSupport")),
   CPSCaseNavigation: lazy(() => import("@/pages/CPSCaseNavigation")),
