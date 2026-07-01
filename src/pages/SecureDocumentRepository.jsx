@@ -105,6 +105,7 @@ export default function SecureDocumentRepository() {
       doc.judge_name,
       doc.court_name,
       doc.hearing_type,
+      doc.document_record_type,
       ...(doc.extracted_case_numbers || []),
       ...(doc.extracted_judges || []),
       ...(doc.court_packet_tags || []),

@@ -4,6 +4,7 @@ import { C } from "@/lib/rooted-constants";
 import { X, Upload, Loader2, AlertCircle, CheckCircle2, Plus } from "lucide-react";
 import DocumentAnalysisPreview from "@/components/documents/DocumentAnalysisPreview";
 import DocumentCalendarSyncPanel from "@/components/documents/DocumentCalendarSyncPanel";
+import { DOCUMENT_RECORD_TYPES, suggestDocumentRecordType } from "@/lib/document-record-types";
 
 const CATEGORIES = [
   { value: "court_order", label: "Court Order", segment: "legal" },
@@ -27,6 +28,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
     title: "",
     description: "",
     category: "other",
+    document_record_type: "parent_record",
     tags: [],
     child_name: "",
   });
@@ -91,6 +93,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
             title: parsed.title || prev.title,
             description: parsed.description || prev.description,
             category: parsed.category || prev.category,
+            document_record_type: suggestDocumentRecordType(parsed.category || prev.category),
             tags: parsed.tags || prev.tags,
             child_name: parsed.child_name || prev.child_name,
           }));
@@ -156,6 +159,8 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           title: form.title.trim(),
           description: form.description.trim(),
           category: form.category,
+          document_record_type: form.document_record_type,
+          permission_granularity: "document_level",
           permission_segment: selectedCategory.segment,
           part2_segmented: !!selectedCategory.part2,
           tags: form.tags,
@@ -306,7 +311,7 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
             <label className="text-[10px] font-bold block mb-1" style={{ color: C.mutedText }}>CATEGORY</label>
             <select
               value={form.category}
-              onChange={e => setForm({ ...form, category: e.target.value })}
+              onChange={e => setForm({ ...form, category: e.target.value, document_record_type: suggestDocumentRecordType(e.target.value) })}
               className="w-full px-3 py-2.5 rounded-xl text-sm border outline-none"
               style={{ borderColor: C.cream, background: "#fff" }}
             >
@@ -319,6 +324,24 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
                 This will be marked for segmented 42 CFR Part 2 permission handling.
               </p>
             )}
+          </div>
+
+          {/* Record type */}
+          <div>
+            <label className="text-[10px] font-bold block mb-1" style={{ color: C.mutedText }}>DOCUMENT RECORD TAG *</label>
+            <select
+              value={form.document_record_type}
+              onChange={e => setForm({ ...form, document_record_type: e.target.value })}
+              className="w-full px-3 py-2.5 rounded-xl text-sm border outline-none"
+              style={{ borderColor: C.cream, background: "#fff" }}
+            >
+              {DOCUMENT_RECORD_TYPES.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
+            <p className="text-[10px] mt-2 leading-relaxed" style={{ color: C.mutedText }}>
+              This tag controls document-level sharing permissions.
+            </p>
           </div>
 
           {/* Child name */}

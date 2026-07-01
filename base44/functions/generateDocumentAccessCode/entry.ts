@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { document_id, recipient_email, recipient_name, access_note } = await req.json();
+    const { document_id, recipient_email, recipient_name, access_note, document_record_type, permission_granularity } = await req.json();
     
     if (!document_id || !recipient_email) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
@@ -43,6 +43,8 @@ Deno.serve(async (req) => {
       document_id: document_id,
       document_title: document.title,
       document_category: document.category,
+      document_record_type: document_record_type || document.document_record_type || "parent_record",
+      permission_granularity: permission_granularity || "document_level",
       granted_by_email: user.email,
       granted_by_name: user.full_name,
       recipient_email: recipient_email.toLowerCase(),

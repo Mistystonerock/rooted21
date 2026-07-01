@@ -12,11 +12,32 @@
     },
     "document_title": {
       "type": "string",
-      "description": "Title of the document (for display)"
+      "description": "Title of the document for display"
     },
     "document_category": {
       "type": "string",
       "description": "Category of the document"
+    },
+    "document_record_type": {
+      "type": "string",
+      "enum": [
+        "parent_record",
+        "child_record",
+        "school_record",
+        "medical_record",
+        "court_record",
+        "behavioral_health_record"
+      ],
+      "default": "parent_record",
+      "description": "Child-centered permission tag attached to the shared document"
+    },
+    "permission_granularity": {
+      "type": "string",
+      "enum": [
+        "document_level"
+      ],
+      "default": "document_level",
+      "description": "Access is granted only for this specific document"
     },
     "granted_by_email": {
       "type": "string",
@@ -47,7 +68,7 @@
     "expires_at": {
       "type": "string",
       "format": "date-time",
-      "description": "When the code expires (default 30 days)"
+      "description": "When the code expires"
     },
     "is_revoked": {
       "type": "boolean",

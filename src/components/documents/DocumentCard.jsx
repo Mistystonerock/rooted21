@@ -1,6 +1,7 @@
 import { C } from "@/lib/rooted-constants";
 import { FileText, Eye, Share2, Trash2, Lock, Gavel } from "lucide-react";
 import { format } from "date-fns";
+import { DOCUMENT_RECORD_TYPE_LABELS } from "@/lib/document-record-types";
 
 export default function DocumentCard({ doc, onView, onShare, onDelete }) {
   // Get icon by category
@@ -60,6 +61,9 @@ export default function DocumentCard({ doc, onView, onShare, onDelete }) {
               <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>
                 {getCategoryLabel(doc.category)} • {format(new Date(doc.created_date), "MMM d, yyyy")}
               </p>
+              <span className="mt-1 inline-flex rounded-full px-2 py-0.5 text-[9px] font-black" style={{ background: "#EEF4FF", color: "#315E91" }}>
+                {DOCUMENT_RECORD_TYPE_LABELS[doc.document_record_type] || "Parent Record"}
+              </span>
             </div>
             {doc.is_private && (
               <Lock size={12} color={C.mutedText} className="flex-shrink-0 mt-0.5" />

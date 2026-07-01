@@ -2,6 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { X, Loader2, CheckCircle2, Copy, Mail, AlertCircle } from "lucide-react";
+import { DOCUMENT_RECORD_TYPE_LABELS } from "@/lib/document-record-types";
 
 export default function DocumentShareModal({ document, onClose }) {
   const [form, setForm] = useState({
@@ -30,6 +31,8 @@ export default function DocumentShareModal({ document, onClose }) {
       recipient_email: form.recipient_email.trim().toLowerCase(),
       recipient_name: form.recipient_name.trim(),
       access_note: form.access_note.trim(),
+      document_record_type: document.document_record_type || "parent_record",
+      permission_granularity: "document_level",
     });
 
     if (response.data?.success) {
@@ -147,6 +150,9 @@ Rooted 21 Security Team
                 <p className="text-[10px] mt-0.5" style={{ color: C.mutedText }}>
                   {(document.file_size / 1024).toFixed(0)} KB
                 </p>
+                <p className="text-[10px] mt-1 font-bold" style={{ color: "#315E91" }}>
+                  {DOCUMENT_RECORD_TYPE_LABELS[document.document_record_type] || "Parent Record"} · Document-level permission
+                </p>
               </div>
             </div>
 
@@ -198,7 +204,7 @@ Rooted 21 Security Team
             <div className="rounded-xl p-3 flex items-start gap-2" style={{ background: "#FEF3EE", border: `1px solid #F4C9B8` }}>
               <AlertCircle size={14} color="#B84C2A" className="flex-shrink-0 mt-0.5" />
               <p className="text-xs" style={{ color: "#B84C2A" }}>
-                A unique access code will be generated. Recipients must enter it to view the document. Codes expire after 30 days or one use.
+                A unique access code will be generated for this one document only, using its record tag for permission review. Codes expire after 30 days or one use.
               </p>
             </div>
 
