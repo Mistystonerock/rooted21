@@ -86,6 +86,25 @@ export const ROLE_GOVERNANCE = [
     futureFeatures: "Role-specific admin permissions, support queues, class operations, resource operations, analytics scopes, and explicit sensitive-access approval workflows."
   },
   {
+    role: "Kinship Caregiver / Foster Parent",
+    securityLevel: "Role: Kinship/Foster Caregiver · Access Level: Limited Child-Centered Access",
+    purpose: "Relatives, foster families, guardians, and temporary caregivers receive organized tools to support a child’s safety, stability, education, behavioral health, court involvement, and permanency goals while maintaining privacy protections and role-based access controls.",
+    dashboardAccess: ["Moxie AI Guidance", "Child Progress Dashboard", "Behavior Tracking", "School Support Center", "IEP/504 Tracker", "Court Preparation Tools", "Resource Navigator", "Document Vault", "Appointment Tracker", "Milestone Tracking", "Family Calendar", "Caregiver Training Center"],
+    permissions: "Caregivers may view assigned child records, school information, medical appointments, behavioral tracking, caregiver notes, shared court documents, and shared case plan goals only when approved by the legal guardian, agency, or authorized party.",
+    aiPermissions: "Moxie may provide caregiving support, offer trauma-informed parenting guidance, suggest behavioral interventions, explain court and child welfare terminology, recommend community resources, help organize documentation, generate caregiver reports, and identify behavioral patterns, escalation trends, successful interventions, and areas requiring additional support. Moxie may not provide legal advice, replace agency decisions, override court orders, make placement recommendations, or diagnose mental health conditions.",
+    dataVisibilityRules: "Child-centered rather than parent-centered. Can view assigned child records, shared family records, and shared professional recommendations. Cannot view private parent journals, restricted agency records, or confidential legal communications.",
+    documentAccessRules: "Caregivers may upload documents, organize records, store school records, store medical documentation, and generate reports. They cannot delete agency-uploaded documents, alter court orders, modify official case plans, submit documents directly to the court, or share child information outside authorized users.",
+    futureFeatures: ["Foster Parent Community", "Kinship Caregiver Peer Groups", "Caregiver Training Certifications", "Respite Care Matching", "Foster Family Resource Exchange", "Emergency Placement Support Tools"],
+    detailSections: [
+      { title: "Behavior Tracking", items: ["Log behaviors", "Record triggers", "Track interventions", "Monitor progress", "Generate summaries"] },
+      { title: "School Support Tools", items: ["Track attendance", "Store IEPs", "Store 504 Plans", "Log school concerns", "Track communication with teachers", "Prepare for school meetings", "Generate meeting preparation checklists", "Generate school advocacy reports", "Generate progress summaries"] },
+      { title: "Court & Child Welfare Tools", items: ["Track court dates", "Receive reminders", "Upload hearing notes", "Monitor case milestones", "Track reunification progress", "Generate caregiver summaries", "Cannot modify official court documents", "Cannot submit documents directly to the court"] },
+      { title: "Resource Navigation", items: ["Foster care resources", "Kinship support services", "Childcare assistance", "Housing assistance", "Mental health providers", "Educational supports", "Financial assistance programs", "Respite care resources"] },
+      { title: "QR Code Access", items: ["Generate caregiver connection requests", "Request professional access", "Share child information only with authorized users", "All access requires approval and expiration controls"] },
+      { title: "Reports Available", items: ["Caregiver Progress Summary", "Child Behavioral Summary", "School Progress Report", "Appointment History", "Placement Stability Report", "Resource Utilization Report"] }
+    ]
+  },
+  {
     role: "Agency Administrator / Supervisor",
     securityLevel: "Role: Agency Administrator / Supervisor · Access Level: Oversight-Based Access",
     purpose: "Leadership, supervisory, compliance, quality assurance, and program oversight users monitor services, support staff, ensure compliance, review outcomes, and improve service delivery without automatically receiving unrestricted confidential family access.",
@@ -129,28 +148,14 @@ export const ROLE_GOVERNANCE = [
   },
   {
     role: "Therapist / Counselor",
-    securityLevel: "Role: Therapist/Counselor · Access Level: Professional Read + Limited Upload",
-    purpose: "Licensed mental health professionals, behavioral health providers, substance use counselors, case managers, and treatment team members can support a child, parent, or family with clinical visibility into approved information while preserving family ownership of records and professional boundaries.",
-    dashboardAccess: ["Assigned Family Dashboard", "Client Progress Tracking", "Behavior Pattern Reports", "Parenting Class Progress", "Appointment Tracker", "Treatment Collaboration Center", "Shared Document Vault", "Moxie Professional Insights", "Family Communication Summaries", "Resource Referral Center"],
-    permissions: "Therapists are professional collaborators, not record owners. They may review approved records, download approved records, contribute recommendations, upload authorized treatment resources, session summaries, treatment goals, and progress updates, recommend services, and coordinate with approved professionals. They cannot modify family-generated data or override parent-controlled permissions.",
-    aiPermissions: "Moxie may generate behavioral trend summaries, highlight risk factors, identify strengths and protective factors, suggest evidence-informed support ideas, create treatment progress summaries, organize family-shared information, and recommend resources. Moxie may not diagnose clients, create treatment plans, make clinical decisions, replace therapist judgment, or provide legal recommendations.",
-    dataVisibilityRules: "Therapists may view assigned families, shared records, shared progress reports, shared behavior data, shared behavior logs, parenting class completion, family goals, progress tracking, shared documents, appointment history, and co-parenting communication summaries. Only records specifically approved for sharing by the family or authorized entity may be visible.",
-    documentAccessRules: "Therapists can upload treatment recommendations, resource information, authorized session summaries, treatment goals, and progress updates, and download approved records. They cannot delete family-owned records, edit parent-entered information, modify court documents, remove documentation uploaded by other professionals, view unshared family records, private journals, restricted legal documents, or other provider confidential notes.",
-    futureFeatures: ["Treatment Team Collaboration Hub", "Secure Messaging", "Shared Goal Planning", "Session Preparation Tools", "Outcome Tracking Dashboard", "Multidisciplinary Team Meetings"],
-    detailSections: [
-      { title: "Moxie may", items: ["Generate behavioral trend summaries", "Highlight risk factors", "Identify strengths and protective factors", "Suggest evidence-informed support ideas", "Create treatment progress summaries", "Organize family-shared information", "Recommend resources"] },
-      { title: "Moxie may NOT", items: ["Diagnose clients", "Create treatment plans", "Make clinical decisions", "Replace therapist judgment", "Provide legal recommendations"] },
-      { title: "Can View", items: ["Assigned families", "Shared records", "Shared progress reports", "Shared behavior data", "Parenting class completion", "Family goals", "Appointment history", "Co-parenting communication summaries"] },
-      { title: "Can Upload", items: ["Treatment recommendations", "Treatment resources", "Session summaries if authorized", "Treatment goals", "Progress updates"] },
-      { title: "Cannot View or Change", items: ["Unshared family records", "Private journals", "Restricted legal documents", "Other provider confidential notes", "Family-owned records deletion", "Parent-entered information edits", "Court document changes", "Historical behavior data changes"] },
-      { title: "Treatment Collaboration Tools", items: ["Review progress trends", "Monitor parenting class participation", "Review behavioral patterns", "Track treatment-related goals", "Coordinate with approved professionals", "Keep collaboration visible and auditable"] },
-      { title: "Behavior Tracking Access", items: ["Review behavior logs", "Review triggers", "Review interventions used", "Review family observations", "Cannot edit behavior entries", "Cannot remove behavior records", "Cannot change historical data"] },
-      { title: "Risk Monitoring", items: ["Escalating behaviors", "Safety concerns", "Frequent crisis events", "Significant family stress indicators", "Alerts are informational and do not replace clinical assessment"] },
-      { title: "Resource Referral Center", items: ["Recommend services", "Suggest support programs", "Share educational resources", "Recommend parenting supports", "Connect families with community resources"] },
-      { title: "QR Code Access", items: ["Generate professional connection requests", "Link to approved families", "Request access to specific records", "Parent or authorized guardian approval required"] },
-      { title: "Reports Available", items: ["Behavioral Trends Report", "Treatment Progress Summary", "Parenting Engagement Report", "Crisis Event Summary", "Resource Utilization Report", "Family Strengths & Needs Summary"] },
-      { title: "Audit & Compliance", items: ["Records viewed", "Documents uploaded", "Reports generated", "Access requests submitted", "HIPAA, privacy, and accountability standards"] }
-    ]
+    securityLevel: "Consent-based behavioral health view",
+    purpose: "Understand patterns, goals, strengths, triggers, coping supports, and family-approved context for care coordination.",
+    dashboardAccess: "Therapist-ready progress summaries, approved behavior logs, goals, family background, care calendar, and selected documents.",
+    permissions: "Read approved behavioral and progress data; provide support notes only where permission is granted.",
+    aiPermissions: "May use AI for plain-language pattern summaries and session-prep notes, not diagnosis, treatment orders, or crisis replacement.",
+    dataVisibilityRules: "Limited to consented behavioral health categories; substance-use or sensitive segments require separate consent controls.",
+    documentAccessRules: "Can view shared therapy/behavioral documents only when the family approves that segment.",
+    futureFeatures: "Therapist portal, referral matching, appointment prep, progress snapshots, and consent-segmented clinical collaboration."
   },
   {
     role: "Behavioral Health Provider / Treatment Team Member",

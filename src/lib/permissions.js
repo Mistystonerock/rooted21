@@ -66,6 +66,20 @@ export const ROLE_PERMISSION_SYSTEMS = {
     defaultAccess: 'user-management-resources-classes-analytics-only',
     editingBoundary: 'cannot access family private documents, court records, or behavioral health records unless specifically authorized',
   },
+  kinship_caregiver: {
+    key: 'limited_child_centered_access',
+    label: 'Kinship Caregiver / Foster Parent',
+    basis: ['assigned child relationship', 'legal guardian approval', 'agency authorization', 'role-based access controls'],
+    defaultAccess: 'child-stability-education-health-permanency-support',
+    editingBoundary: 'may support assigned child records and caregiver notes; cannot alter court orders, official case plans, agency records, or restricted parent information',
+  },
+  foster_parent: {
+    key: 'limited_child_centered_access',
+    label: 'Kinship Caregiver / Foster Parent',
+    basis: ['assigned child relationship', 'legal guardian approval', 'agency authorization', 'role-based access controls'],
+    defaultAccess: 'child-stability-education-health-permanency-support',
+    editingBoundary: 'may support assigned child records and caregiver notes; cannot alter court orders, official case plans, agency records, or restricted parent information',
+  },
   agency_administrator: {
     key: 'agency_oversight',
     label: 'Agency Administrator / Supervisor',
@@ -158,11 +172,11 @@ export const ROLE_PERMISSION_SYSTEMS = {
     editingBoundary: 'may view approved data and cannot edit family-owned records by default',
   },
   therapist: {
-    key: 'therapist_counselor_view',
-    label: 'Therapist / Counselor',
-    basis: ['assigned family', 'family approval', 'behavioral health consent segment', 'shared documents', 'role-restricted access'],
-    defaultAccess: 'professional-read-limited-upload-approved-records-only',
-    editingBoundary: 'professional collaborator only; may review approved records and upload authorized recommendations, resources, session summaries, treatment goals, and progress updates but cannot edit parent-entered data, delete family-owned records, modify court documents, or override family permissions',
+    key: 'therapist_view',
+    label: 'Therapist',
+    basis: ['family assignment', 'behavioral consent segment', 'shared documents'],
+    defaultAccess: 'view-behavior-parenting-progress-shared-documents',
+    editingBoundary: 'cannot edit family records or view private journals',
   },
   behavioral_health_provider: {
     key: 'behavioral_health_provider_view',
@@ -301,11 +315,9 @@ export const ROLE_PERMISSION_SYSTEMS = {
 
 const COMMUNITY_RESOURCE_PARTNER_ROLES = ['service_provider', 'housing_agency', 'homeless_shelter', 'domestic_violence_program', 'food_pantry', 'community_action_agency', 'employment_program', 'workforce_development_center', 'legal_aid_organization', 'transportation_provider', 'childcare_provider', 'veterans_services', 'faith_based_organization', 'financial_assistance_program', 'recovery_community_organization', 'nonprofit_organization', 'youth_program', 'family_resource_center'];
 const SYSTEM_ADMINISTRATOR_ROLES = ['platform_owner', 'super_admin', 'operations_manager', 'rooted_compliance_lead', 'technical_support', 'resource_verification_team', 'program_director', 'community_manager'];
-const THERAPIST_COUNSELOR_ROLES = ['therapist', 'counselor', 'licensed_mental_health_professional', 'mental_health_professional', 'case_manager'];
 
 export function getRolePermissionSystem(user) {
   if (COMMUNITY_RESOURCE_PARTNER_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.community_resource_partner;
   if (SYSTEM_ADMINISTRATOR_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.system_administrator;
-  if (THERAPIST_COUNSELOR_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.therapist;
   return ROLE_PERMISSION_SYSTEMS[user?.role] || ROLE_PERMISSION_SYSTEMS.user;
 }

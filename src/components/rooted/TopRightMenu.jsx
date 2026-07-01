@@ -33,6 +33,7 @@ const ROUTES = new Set([
   "/agency-admin",
   "/resource-partner",
   "/volunteer-mentor",
+  "/kinship-foster-caregiver",
 ]);
 
 const mainMenuItems = [
@@ -80,6 +81,12 @@ const volunteerMentorRoles = ["volunteer_mentor_coach", "volunteer", "mentor", "
 
 const volunteerMentorMenuItems = [
   { label: "Volunteer Mentor", path: "/volunteer-mentor", icon: Sparkles },
+];
+
+const kinshipFosterRoles = ["kinship_caregiver", "foster_parent"];
+
+const kinshipFosterMenuItems = [
+  { label: "Kinship / Foster Caregiver", path: "/kinship-foster-caregiver", icon: Heart },
 ];
 
 export default function TopRightMenu({ user }) {
@@ -200,6 +207,7 @@ export default function TopRightMenu({ user }) {
   const showAgencyLink = agencyRoles.includes(user?.role);
   const showResourcePartnerLink = resourcePartnerRoles.includes(user?.role);
   const showVolunteerMentorLink = volunteerMentorRoles.includes(user?.role);
+  const showKinshipFosterLink = kinshipFosterRoles.includes(user?.role);
   const isFounderDashboard = window.location.pathname === "/founder-dashboard";
 
   if (isFounderDashboard) return null;
@@ -263,6 +271,13 @@ export default function TopRightMenu({ user }) {
               <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
                 <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Sparkles size={14} /> Volunteer Mentor</p>
                 {volunteerMentorMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
+              </div>
+            )}
+
+            {showKinshipFosterLink && (
+              <div className="space-y-2 border-t pt-3" style={{ borderColor: C.cream }}>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide" style={{ color: C.darkGreen }}><Heart size={14} /> Kinship / Foster</p>
+                {kinshipFosterMenuItems.map(item => <MenuItem key={item.label} item={item} />)}
               </div>
             )}
 
