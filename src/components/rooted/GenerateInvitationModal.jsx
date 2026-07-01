@@ -55,7 +55,7 @@ export default function GenerateInvitationModal({ childName, onClose, onSuccess 
                 Code Generated!
               </p>
               <p className="text-xs mb-4" style={{ color: C.mutedText }}>
-                Share this code with your professional for 30 days
+                Share this temporary code. It only creates an approval request.
               </p>
 
               {/* CODE DISPLAY */}
@@ -92,8 +92,9 @@ export default function GenerateInvitationModal({ childName, onClose, onSuccess 
               <ol className="text-xs space-y-1.5" style={{ color: C.mutedText }}>
                 <li>• Copy the code above</li>
                 <li>• Share it with your {childName ? `${childName}'s` : 'assigned'} professional</li>
-                <li>• They'll enter it in their app to link to your account</li>
-                <li>• Your data will be automatically shared with them</li>
+                <li>• They'll enter it in their app to request access</li>
+                <li>• You approve or decline before anything is shared</li>
+                <li>• Approved access expires automatically</li>
               </ol>
             </div>
 
@@ -110,8 +111,8 @@ export default function GenerateInvitationModal({ childName, onClose, onSuccess 
           // INITIAL STATE
           <div className="space-y-4">
             <p className="text-xs leading-relaxed" style={{ color: C.mutedText }}>
-              Generate a unique code to invite a professional (therapist, caseworker, counselor, etc.) to your account.
-              They can enter this code instead of waiting for an access code from you.
+              Generate a temporary code for a professional (therapist, caseworker, counselor, etc.).
+              Scanning it sends you an approval request; it never grants access by itself.
             </p>
 
             <div className="rounded-xl p-3.5" style={{ background: C.offWhite, border: `1px solid ${C.cream}` }}>

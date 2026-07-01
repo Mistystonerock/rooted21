@@ -98,6 +98,40 @@ export const ROLE_GOVERNANCE = [
     futureFeatures: "Therapist portal, referral matching, appointment prep, progress snapshots, and consent-segmented clinical collaboration."
   },
   {
+    role: "Behavioral Health Provider / Treatment Team Member",
+    securityLevel: "Assigned-client behavioral health collaboration",
+    purpose: "Support emotional, behavioral, developmental, recovery, and mental wellness needs through service coordination, skill building, family stabilization, treatment engagement, crisis prevention, and goal achievement.",
+    dashboardAccess: [
+      "Assigned Family Dashboard",
+      "Behavioral Health Progress Tracker",
+      "Goal & Objective Tracker",
+      "Crisis Prevention Center",
+      "Family Strengths Dashboard",
+      "Resource Navigation Center",
+      "Service Coordination Hub",
+      "Treatment Team Collaboration Center",
+      "Moxie Clinical Support Tools",
+      "Documentation & Reporting Center"
+    ],
+    permissions: "Behavioral health providers may view assigned client records, shared family records, behavior tracking data, crisis prevention plans, goal progress, resource engagement, parenting class participation, and service history when the family has approved access. Providers can document goals, objectives, interventions, referrals, service coordination, skill-building progress, and outcomes.",
+    aiPermissions: "Moxie may identify behavioral patterns, generate progress summaries, highlight treatment barriers, identify strengths and protective factors, organize documentation, suggest skill-building activities, recommend resources, track goal progression, and generate treatment participation reports. Moxie may not diagnose, prescribe treatment, replace professional judgment, make safety determinations, recommend hospitalization, or override provider decisions.",
+    dataVisibilityRules: "Access is restricted to assigned clients and approved records. Sensitive behavioral health, substance-use, court, school, and family-generated information follows consent and privacy requirements.",
+    documentAccessRules: "Providers may upload service notes, assessments, treatment plans, referrals, and progress reports. They cannot delete historical documentation, modify court orders, or alter family-generated records. All documentation remains time stamped.",
+    futureFeatures: "Goal and objective tracking, skill-building activity recommendations, crisis summaries, referral outcome tracking, treatment participation reports, and treatment team collaboration workspaces.",
+    detailSections: [
+      { title: "Included Professional Types", items: ["Community Behavioral Health Workers", "TBS Providers", "CPST Providers", "Peer Support Specialists", "Risk Management Specialists", "OhioRISE Care Coordinators", "Therapists", "Counselors", "Case Managers", "Substance Use Counselors", "Treatment Court Mentors", "Recovery Coaches", "Behavioral Health Supervisors"] },
+      { title: "Moxie may", items: ["Identify behavioral patterns", "Generate progress summaries", "Highlight treatment barriers", "Identify strengths and protective factors", "Organize documentation", "Suggest skill-building activities", "Recommend resources", "Track goal progression", "Generate treatment participation reports"] },
+      { title: "Moxie may NOT", items: ["Diagnose mental health conditions", "Prescribe treatment", "Replace professional judgment", "Make safety determinations", "Recommend hospitalization", "Override provider decisions"] },
+      { title: "Assigned Client Access", items: ["Assigned client records", "Shared family records", "Behavior tracking data", "Crisis prevention plans", "Goal progress", "Resource engagement", "Parenting class participation", "Service history"] },
+      { title: "Goal & Objective Tracking", items: ["Create goals", "Create objectives", "Track progress", "Update interventions", "Monitor outcomes", "Generate progress reports"] },
+      { title: "Skill Building Center", items: ["Communication Skills", "Emotional Regulation", "Coping Skills", "Problem Solving", "Independent Living Skills", "Parenting Skills", "Social Skills", "Decision Making", "Conflict Resolution", "Community Integration"] },
+      { title: "Crisis Prevention & Safety Planning", items: ["Create crisis prevention plans", "Update safety plans", "Monitor risk indicators", "Track crisis events", "Review trigger patterns", "Review escalation indicators", "Review protective factors", "Review safety supports"] },
+      { title: "Resource Coordination", items: ["Housing", "Employment", "Education", "Transportation", "Recovery Supports", "Medical Services", "Childcare", "Food Assistance", "Legal Resources", "Domestic Violence Services"] },
+      { title: "Documentation Center", items: ["Upload service notes", "Upload assessments", "Upload treatment plans", "Upload referrals", "Upload progress reports", "Cannot delete historical documentation", "Cannot modify court orders", "Cannot alter family-generated records"] },
+      { title: "Treatment Team Collaboration", items: ["Therapists", "CPS Workers", "OhioRISE Care Coordinators", "School Personnel", "Peer Support Specialists", "Treatment Court Teams", "Medical Providers"] }
+    ]
+  },
+  {
     role: "Court / Legal Viewer",
     securityLevel: "Review-only legal preparation access",
     purpose: "Review user-approved court-ready summaries, evidence timelines, documents, and progress packets for attorney or court preparation.",

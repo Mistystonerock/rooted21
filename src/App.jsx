@@ -133,7 +133,8 @@ function App() {
   const isPublicInfoPath = !user && publicInfoPaths.includes(currentPath);
   const showSignInRequired = !user && !isPublicLandingPath;
   const showLoggedInMaintenance = maintenanceMode && user && !isAdminOrFounder;
-  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : user?.role === "professional" ? "/professional" : "/dashboard";
+  const professionalHomeRoles = ["professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "peer_support_specialist", "recovery_coach", "ohiorise_care_coordinator", "therapist", "counselor", "caseworker", "peer_mentor"];
+  const loggedInHomePath = user?.role === "founder" || user?.email === "misty.stonerock88@gmail.com" ? "/founder-dashboard" : user?.role === "admin" ? "/resource-management" : professionalHomeRoles.includes(user?.role) ? "/professional" : "/dashboard";
   const founderPreviewingComingSoon = isAdminOrFounder && window.location.pathname === "/coming-soon";
   const needsWelcome = user && !welcomeSeen && !founderPreviewingComingSoon && !["/welcome-to-rooted21", "/welcome"].includes(window.location.pathname);
   const needsOnboarding = user && user.role === "user" && user.onboarding_completed !== true;

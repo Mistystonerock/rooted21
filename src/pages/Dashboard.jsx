@@ -14,6 +14,7 @@ import TreeLogo from "@/components/rooted/TreeLogo";
 import NotificationBell from "@/components/rooted/NotificationBell";
 import AccessCodeEntry from "@/components/rooted/AccessCodeEntry";
 import GenerateInvitationModal from "@/components/rooted/GenerateInvitationModal";
+import ProfessionalAccessApprovalPanel from "@/components/rooted/ProfessionalAccessApprovalPanel";
 import MobileRefresh from "@/components/mobile/MobileRefresh";
 import DarkModeToggle from "@/components/rooted/DarkModeToggle";
 import ProgressRing from "@/components/rooted/ProgressRing";
@@ -60,6 +61,7 @@ export default function Dashboard() {
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
   const [childRefreshKey, setChildRefreshKey] = useState(0);
+  const [pendingAccessRequests, setPendingAccessRequests] = useState([]);
 
   async function handleRefresh() {
     await Promise.all([
@@ -71,6 +73,7 @@ export default function Dashboard() {
       base44.entities.Goal.filter({ progress: "in_progress" }, "-created_date", 3).then(setGoals),
       base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
+      base44.entities.ProfessionalFamilyAccess.filter({ status: "pending" }, "-requested_at", 20).then(setPendingAccessRequests).catch(() => setPendingAccessRequests([])),
     ]);
     queryClient.invalidateQueries();
   }
@@ -149,6 +152,8 @@ export default function Dashboard() {
           {user && <DashboardPersonalizationCard user={user} onUpdated={setUser} />}
 
           <PredictiveInsightsCard child={child} />
+
+          <ProfessionalAccessApprovalPanel requests={pendingAccessRequests} onChanged={handleRefresh} />
 
           <QuickAddChildCard onCreated={handleChildCreated} />
 
@@ -300,8 +305,8 @@ export default function Dashboard() {
                 <button onClick={() => setShowInvitationModal(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, background: CARD, border: `1.5px dashed ${GOLD}50`, borderRadius: 16, padding: 14, cursor: "pointer", textAlign: "left" }}>
                   <QrCode size={20} color={GOLD} />
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Generate Invitation Code</p>
-                    <p style={{ fontSize: 11, color: MUTED }}>Share with a professional to auto-link them</p>
+                    <p style={{ fontWeight: 700, fontSize: 13, color: TEXT }}>Generate QR Access Code</p>
+                    <p style={{ fontSize: 11, color: MUTED }}>Professional requests access; you approve first</p>
                   </div>
                 </button>
               )}

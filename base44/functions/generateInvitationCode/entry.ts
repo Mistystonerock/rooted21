@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
       isUnique = existing.length === 0;
     }
 
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     await base44.asServiceRole.entities.AccessCode.create({
       code,
@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     return Response.json({
       code,
       expiresAt: expiresAt.toISOString(),
-      message: 'Professional access code generated successfully'
+      message: 'Temporary QR access code generated successfully'
     });
   } catch (error) {
     console.error('Error generating code:', error);

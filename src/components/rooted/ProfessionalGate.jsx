@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MandatoryReporterModal, { hasMandatoryReporterAck } from "@/components/legal/MandatoryReporterModal";
 
-const PROFESSIONAL_ROLES = ["therapist", "caseworker", "casa", "gal", "attorney", "school_counselor", "judge", "professional"];
+const PROFESSIONAL_ROLES = ["therapist", "counselor", "caseworker", "casa", "gal", "attorney", "school_counselor", "judge", "professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "peer_support_specialist", "ohiorise_care_coordinator", "recovery_coach"];
 
 export default function ProfessionalGate({ user, children }) {
   const [showModal, setShowModal] = useState(false);

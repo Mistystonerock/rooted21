@@ -7,7 +7,8 @@ import FamilyCard from "@/components/professional/FamilyCard";
 import FamilyDetail from "@/components/professional/FamilyDetail";
 import ProfessionalDashboardOverview from "@/components/professional/ProfessionalDashboardOverview";
 
-const ROLES = ["Counselor", "Caseworker", "CPS Worker", "Court Staff", "Mentor", "Behavioral Health Worker", "School Staff", "Therapist", "Juvenile Probation", "Other"];
+const ROLES = ["Behavioral Health Provider", "Treatment Team Member", "Community Behavioral Health Worker", "TBS Provider", "CPST Provider", "Peer Support Specialist", "OhioRISE Care Coordinator", "Therapist", "Counselor", "Case Manager", "Substance Use Counselor", "Treatment Court Mentor", "Recovery Coach", "Behavioral Health Supervisor", "Caseworker", "CPS Worker", "Court Staff", "School Staff", "Other"];
+const PROFESSIONAL_PORTAL_ROLES = ["admin", "professional", "behavioral_health_worker", "behavioral_health_provider", "treatment_team_member", "peer_support_specialist", "recovery_coach", "ohiorise_care_coordinator", "therapist", "counselor", "caseworker", "peer_mentor"];
 
 export default function ProfessionalPortal() {
   const [user, setUser] = useState(null);
@@ -24,7 +25,7 @@ export default function ProfessionalPortal() {
   useEffect(() => {
     base44.auth.me().then(async u => {
       setUser(u);
-      if (u?.role === "admin" || u?.role === "professional") {
+      if (PROFESSIONAL_PORTAL_ROLES.includes(u?.role)) {
         await loadFamilies(u);
       }
       setLoading(false);
@@ -66,7 +67,7 @@ export default function ProfessionalPortal() {
     setSaving(false);
   }
 
-  const isProOrAdmin = user?.role === "admin" || user?.role === "professional";
+  const isProOrAdmin = PROFESSIONAL_PORTAL_ROLES.includes(user?.role);
   const canAssignFamilies = user?.role === "admin";
 
   const filtered = families.filter(f => {

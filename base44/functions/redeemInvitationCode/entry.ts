@@ -1,13 +1,10 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { code, professional_role } = await req.json();
     const normalizedCode = String(code || '').toUpperCase().trim();
@@ -17,87 +14,58 @@ Deno.serve(async (req) => {
     }
 
     const codes = await base44.asServiceRole.entities.AccessCode.filter({ code: normalizedCode, role_type: 'professional' });
-
-    if (codes.length === 0) {
-      return Response.json({ error: 'Invalid code' }, { status: 404 });
-    }
+    if (codes.length === 0) return Response.json({ error: 'Invalid code' }, { status: 404 });
 
     const accessCode = codes[0];
-
-    if (accessCode.status !== 'active') {
-      return Response.json({ error: 'This code is no longer active' }, { status: 400 });
-    }
+    if (accessCode.status !== 'active') return Response.json({ error: 'This code is no longer active' }, { status: 400 });
 
     if (new Date(accessCode.expires_at) < new Date()) {
       await base44.asServiceRole.entities.AccessCode.update(accessCode.id, { status: 'expired' });
       return Response.json({ error: 'This code has expired' }, { status: 400 });
     }
 
-    const existingLinks = await base44.entities.ProfessionalFamilyAccess.filter({
+    const existingRequests = await base44.asServiceRole.entities.ProfessionalFamilyAccess.filter({
       professional_user_id: user.id,
-      parent_user_id: accessCode.created_by_user_id,
-      status: 'active'
+      parent_user_id: accessCode.created_by_user_id
     });
+    const reusableRequest = existingRequests.find(item => item.status === 'pending' || item.status === 'active');
 
-    let professionalAccess = existingLinks[0];
-    if (!professionalAccess) {
-      professionalAccess = await base44.entities.ProfessionalFamilyAccess.create({
-        professional_user_id: user.id,
-        professional_email: user.email,
-        professional_name: user.full_name || user.email,
-        professional_role: professional_role || 'Other',
-        parent_user_id: accessCode.created_by_user_id,
-        parent_email: accessCode.created_by_email,
-        parent_name: accessCode.created_by_name,
-        child_name: accessCode.child_name || '',
-        access_code_id: accessCode.id,
-        status: 'active'
-      });
-    }
-
-    const existingAssignments = await base44.entities.AssignedFamily.filter({
+    const now = new Date();
+    const requestExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const professionalAccess = reusableRequest || await base44.asServiceRole.entities.ProfessionalFamilyAccess.create({
+      professional_user_id: user.id,
       professional_email: user.email,
-      family_email: accessCode.created_by_email
+      professional_name: user.full_name || user.email,
+      professional_role: professional_role || 'Other',
+      parent_user_id: accessCode.created_by_user_id,
+      parent_email: accessCode.created_by_email,
+      parent_name: accessCode.created_by_name,
+      child_name: accessCode.child_name || '',
+      access_code_id: accessCode.id,
+      status: 'pending',
+      requested_at: now.toISOString(),
+      request_expires_at: requestExpiresAt
     });
-
-    let assignment = existingAssignments[0];
-    if (!assignment) {
-      assignment = await base44.entities.AssignedFamily.create({
-        family_user_id: accessCode.created_by_user_id,
-        family_email: accessCode.created_by_email,
-        family_name: accessCode.created_by_name,
-        child_name: accessCode.child_name || '',
-        professional_user_id: user.id,
-        professional_email: user.email,
-        professional_name: user.full_name || user.email,
-        professional_role: professional_role || 'Other',
-        status: 'active'
-      });
-    }
 
     await base44.asServiceRole.entities.AccessCode.update(accessCode.id, {
-      status: 'used',
+      status: 'requested',
       used_by_user_id: user.id,
       used_by_email: user.email,
       used_by_name: user.full_name || user.email,
-      used_at: new Date().toISOString()
+      used_at: now.toISOString()
     });
 
-    await base44.integrations.Core.SendEmail({
+    await base44.asServiceRole.integrations.Core.SendEmail({
       to: accessCode.created_by_email,
-      subject: 'Professional Linked to Your Rooted 21 Account',
-      body: `Hi ${accessCode.created_by_name || 'there'},\n\n${user.full_name || user.email} (${professional_role || 'Professional'}) has successfully linked to your account using your professional access code.\n\nIf you did not authorize this, please review your support team access.\n\nRooted 21 Team`
+      subject: 'Rooted 21 professional access request',
+      body: `Hi ${accessCode.created_by_name || 'there'},\n\n${user.full_name || user.email} (${professional_role || 'Professional'}) scanned your Rooted 21 QR/access code and is requesting access. No data has been shared yet. Please open Rooted 21 to approve or decline this request. If approved, access expires automatically in 90 days.\n\nRooted 21 Team`
     });
 
     return Response.json({
       success: true,
-      message: 'Code redeemed successfully',
-      professionalAccess,
-      assignment: {
-        family_name: accessCode.created_by_name || accessCode.created_by_email,
-        professional_name: user.full_name || user.email,
-        professional_role: professional_role || 'Other'
-      }
+      pending_approval: true,
+      message: 'Access request sent. The parent must approve before any data is shared.',
+      professionalAccess
     });
   } catch (error) {
     console.error('Redemption error:', error);
