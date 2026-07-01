@@ -315,9 +315,15 @@ export const ROLE_PERMISSION_SYSTEMS = {
 
 const COMMUNITY_RESOURCE_PARTNER_ROLES = ['service_provider', 'housing_agency', 'homeless_shelter', 'domestic_violence_program', 'food_pantry', 'community_action_agency', 'employment_program', 'workforce_development_center', 'legal_aid_organization', 'transportation_provider', 'childcare_provider', 'veterans_services', 'faith_based_organization', 'financial_assistance_program', 'recovery_community_organization', 'nonprofit_organization', 'youth_program', 'family_resource_center'];
 const SYSTEM_ADMINISTRATOR_ROLES = ['platform_owner', 'super_admin', 'operations_manager', 'rooted_compliance_lead', 'technical_support', 'resource_verification_team', 'program_director', 'community_manager'];
+const THERAPIST_COUNSELOR_ROLES = ['therapist', 'counselor', 'licensed_mental_health_professional', 'mental_health_professional', 'case_manager'];
+const CPS_CASEWORKER_ROLES = ['cps_worker', 'caseworker', 'child_welfare_caseworker'];
+const LEGAL_SUPPORT_ROLES = ['casa_gal', 'casa', 'gal', 'attorney', 'public_defender', 'prosecutor', 'court_staff', 'magistrate', 'judge_staff', 'legal_support_viewer'];
 
 export function getRolePermissionSystem(user) {
   if (COMMUNITY_RESOURCE_PARTNER_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.community_resource_partner;
   if (SYSTEM_ADMINISTRATOR_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.system_administrator;
+  if (THERAPIST_COUNSELOR_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.therapist;
+  if (CPS_CASEWORKER_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.cps_worker;
+  if (LEGAL_SUPPORT_ROLES.includes(user?.role)) return ROLE_PERMISSION_SYSTEMS.attorney_gal;
   return ROLE_PERMISSION_SYSTEMS[user?.role] || ROLE_PERMISSION_SYSTEMS.user;
 }
