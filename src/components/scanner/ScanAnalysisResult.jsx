@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Save, RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Loader2 } from "lucide-react";
+import { DOCUMENT_RECORD_TYPES, suggestDocumentRecordType } from "@/lib/document-record-types";
 
 const CATEGORIES = [
   { value: "court_order", label: "Court Order" },
@@ -17,6 +18,7 @@ const CATEGORIES = [
 export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRescan, saving }) {
   const [title, setTitle] = useState(analysis.suggested_title || "");
   const [category, setCategory] = useState(analysis.suggested_category || "other");
+  const [documentRecordType, setDocumentRecordType] = useState(suggestDocumentRecordType(analysis.suggested_category || "other"));
   const [tags, setTags] = useState(analysis.suggested_tags || []);
   const [newTag, setNewTag] = useState("");
   const [summaryNote, setSummaryNote] = useState(analysis.summary_note || "");
@@ -154,7 +156,7 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           <label className="block text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>CATEGORY</label>
           <div className="flex flex-wrap gap-1.5">
             {CATEGORIES.map(c => (
-              <button key={c.value} onClick={() => setCategory(c.value)}
+              <button key={c.value} onClick={() => { setCategory(c.value); setDocumentRecordType(suggestDocumentRecordType(c.value)); }}
                 className="px-2.5 py-1 rounded-full text-[10px] font-bold"
                 style={{
                   background: category === c.value ? C.darkGreen : C.offWhite,
@@ -166,6 +168,15 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
               </button>
             ))}
           </div>
+        </div>
+        <div>
+          <label className="block text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>DOCUMENT RECORD TAG</label>
+          <select value={documentRecordType} onChange={e => setDocumentRecordType(e.target.value)}
+            className="w-full rounded-xl px-3 py-2.5 text-sm border outline-none"
+            style={{ borderColor: C.cream, background: C.offWhite }}>
+            {DOCUMENT_RECORD_TYPES.map(type => <option key={type.value} value={type.value}>{type.label}</option>)}
+          </select>
+          <p className="mt-1 text-[10px]" style={{ color: C.mutedText }}>This tag controls document-level sharing permissions.</p>
         </div>
       </div>
 
@@ -286,7 +297,7 @@ export default function ScanAnalysisResult({ analysis, previewUrl, onSave, onRes
           <RefreshCw size={14} /> Scan Again
         </button>
         <button
-          onClick={() => onSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId })}
+          onClick={() => onSave({ title, category, document_record_type: documentRecordType, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId })}
           disabled={saving || !title}
           className="flex-[2] py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
           style={{

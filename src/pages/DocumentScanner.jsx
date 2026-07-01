@@ -127,7 +127,7 @@ export default function DocumentScanner() {
     return updatedCount;
   }
 
-  async function handleSave({ title, category, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId }) {
+  async function handleSave({ title, category, document_record_type, tags, summaryNote, caseId, childName, saveAsNote, addToCalendar, checklistId }) {
     setPhase("saving");
     const user = await base44.auth.me();
 
@@ -136,6 +136,8 @@ export default function DocumentScanner() {
       owner_email: user.email,
       title,
       category,
+      document_record_type: document_record_type || "parent_record",
+      permission_granularity: "document_level",
       tags,
       description: summaryNote,
       file_url: fileUrl,
