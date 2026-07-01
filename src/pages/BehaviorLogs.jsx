@@ -6,6 +6,7 @@ import { ChevronLeft, Plus, Calendar, FileText } from "lucide-react";
 import BehaviorLogForm from "@/components/behavior/BehaviorLogForm";
 import BehaviorLogCard from "@/components/behavior/BehaviorLogCard";
 import BehaviorResourceRecommendations from "@/components/behavior/BehaviorResourceRecommendations";
+import BehaviorPatternChart from "@/components/behavior/BehaviorPatternChart";
 import ChildSelector from "@/components/children/ChildSelector";
 import { filterRecordsForChild, getChildDisplayName } from "@/lib/child-selection";
 
@@ -111,6 +112,8 @@ export default function BehaviorLogs() {
             </div>
           </div>
         )}
+
+        {logs.length > 0 && <BehaviorPatternChart logs={logs} />}
 
         {/* Empty state */}
         {!loading && logs.length === 0 && (
