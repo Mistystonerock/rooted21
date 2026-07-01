@@ -12,10 +12,17 @@
     },
     "permissions": {
       "type": "array",
-      "description": "Permissions granted to this admin",
+      "description": "Permissions granted to this admin. Founder remains separate from Admin.",
       "items": {
         "type": "string",
         "enum": [
+          "manage_users",
+          "manage_resources",
+          "manage_classes",
+          "view_analytics",
+          "authorized_family_private_documents",
+          "authorized_court_records",
+          "authorized_behavioral_health_records",
           "manage_local_resources",
           "update_verified_services",
           "moderate_community",
@@ -25,6 +32,23 @@
         ]
       },
       "default": []
+    },
+    "restricted_data_categories": {
+      "type": "array",
+      "description": "Sensitive categories this admin may not access unless specifically authorized",
+      "items": {
+        "type": "string",
+        "enum": [
+          "family_private_documents",
+          "court_records",
+          "behavioral_health_records"
+        ]
+      },
+      "default": [
+        "family_private_documents",
+        "court_records",
+        "behavioral_health_records"
+      ]
     },
     "assigned_counties": {
       "type": "array",
@@ -67,7 +91,7 @@
     "read": {
       "$or": [
         {
-          "admin_email": "{{user.email}}"
+          "data.admin_email": "{{user.email}}"
         },
         {
           "user_condition": {
