@@ -45,13 +45,16 @@ Deno.serve(async () => {
   const databaseUrl = Deno.env.get('SUPABASE_DATABASE_URL');
   if (!databaseUrl) return Response.json({ error: 'SUPABASE_DATABASE_URL is not set' }, { status: 500 });
 
-  const sql = postgres(databaseUrl, { ssl: 'require', max: 1 });
+  const sql = postgres(databaseUrl, { ssl: 'require', max: 1, connect_timeout: 10, idle_timeout: 5, prepare: false });
   const created = [];
   const alreadyPresent = [];
   const skipped = [];
   const validated = [];
 
   try {
+    await sql`set lock_timeout = '5s'`;
+    await sql`set statement_timeout = '30s'`;
+
     for (const [fromTable, fromColumn, toSchema, toTable, toColumn, rationale] of candidates) {
       const name = constraintName(fromTable, fromColumn);
 
