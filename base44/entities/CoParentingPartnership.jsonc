@@ -43,6 +43,11 @@
       ],
       "default": "active",
       "description": "Status of co-parenting partnership"
+    },
+    "no_contact": {
+      "type": "boolean",
+      "default": false,
+      "description": "Server-enforced no-contact order. When true, direct parent-to-parent messaging is blocked for DV/survivor protection."
     }
   },
   "required": [
@@ -74,13 +79,13 @@
     "read": {
       "$or": [
         {
-          "parent_1_email": "{{user.email}}"
+          "data.parent_1_email": "{{user.email}}"
         },
         {
-          "parent_2_email": "{{user.email}}"
+          "data.parent_2_email": "{{user.email}}"
         },
         {
-          "court_email": "{{user.email}}"
+          "data.court_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -92,7 +97,7 @@
     "update": {
       "$or": [
         {
-          "court_email": "{{user.email}}"
+          "data.court_email": "{{user.email}}"
         },
         {
           "user_condition": {
