@@ -12,15 +12,15 @@
     },
     "sender_email": {
       "type": "string",
-      "description": "Email of the person who sent this message"
+      "description": "Server-set. Email of the person who sent this message."
     },
     "sender_name": {
       "type": "string",
-      "description": "Display name of the sender"
+      "description": "Server-set. Display name of the sender."
     },
     "sender_role": {
       "type": "string",
-      "description": "Role label: 'parent' or the professional's role"
+      "description": "Server-set. Role label: 'parent' or the professional's role."
     },
     "body": {
       "type": "string",
@@ -30,6 +30,21 @@
       "type": "boolean",
       "default": false,
       "description": "Whether the recipient has read this message"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set authoritative UTC send timestamp."
+    },
+    "is_withdrawn": {
+      "type": "boolean",
+      "default": false,
+      "description": "Server-set soft-delete. Withdrawn messages remain in the record and audit trail for traceability."
+    },
+    "withdrawn_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set. When the sender withdrew this message."
     }
   },
   "required": [
@@ -40,37 +55,34 @@
   ],
   "rls": {
     "create": {
-      "$or": [
-        {
-          "family_email": "{{user.email}}"
-        },
-        {
-          "professional_email": "{{user.email}}"
-        }
-      ]
+      "user_condition": {
+        "role": "founder"
+      }
     },
     "read": {
       "$or": [
         {
-          "family_email": "{{user.email}}"
+          "data.family_email": "{{user.email}}"
         },
         {
-          "professional_email": "{{user.email}}"
+          "data.professional_email": "{{user.email}}"
         }
       ]
     },
     "update": {
       "$or": [
         {
-          "family_email": "{{user.email}}"
+          "data.family_email": "{{user.email}}"
         },
         {
-          "professional_email": "{{user.email}}"
+          "data.professional_email": "{{user.email}}"
         }
       ]
     },
     "delete": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     }
   }
 }
