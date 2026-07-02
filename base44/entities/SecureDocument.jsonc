@@ -6,6 +6,10 @@
       "type": "string",
       "description": "Email of the user who uploaded this document"
     },
+    "author_role": {
+      "type": "string",
+      "description": "Server-set role of the creator at upload time"
+    },
     "title": {
       "type": "string",
       "description": "Document title"
@@ -226,6 +230,11 @@
       "default": true,
       "description": "Whether document is private or shared"
     },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag. Deleted documents are never hard-removed."
+    },
     "uploaded_at": {
       "type": "string",
       "format": "date-time"
@@ -279,15 +288,31 @@
   "rls": {
     "create": true,
     "read": {
-      "$or": [
+      "$and": [
         {
-          "data.owner_email": "{{user.email}}"
+          "$or": [
+            {
+              "data.is_deleted": false
+            },
+            {
+              "data.is_deleted": {
+                "$exists": false
+              }
+            }
+          ]
         },
         {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "data.shared_with": "{{user.email}}"
+          "$or": [
+            {
+              "data.owner_email": "{{user.email}}"
+            },
+            {
+              "created_by": "{{user.email}}"
+            },
+            {
+              "data.shared_with": "{{user.email}}"
+            }
+          ]
         }
       ]
     },
