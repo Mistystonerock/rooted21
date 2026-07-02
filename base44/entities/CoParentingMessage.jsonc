@@ -8,19 +8,19 @@
     },
     "sender_email": {
       "type": "string",
-      "description": "Email of the person who sent the message"
+      "description": "Server-set. Email of the person who sent the message."
     },
     "sender_name": {
       "type": "string",
-      "description": "Name of the person who sent the message"
+      "description": "Server-set. Name of the person who sent the message."
     },
     "recipient_email": {
       "type": "string",
-      "description": "Email of the other parent/recipient allowed to read this message"
+      "description": "Server-set from the partnership. The other parent allowed to read this message."
     },
     "court_email": {
       "type": "string",
-      "description": "Assigned court staff email allowed to review this message"
+      "description": "Server-set from the partnership. Assigned court staff email allowed to review this message."
     },
     "body": {
       "type": "string",
@@ -43,6 +43,21 @@
       ],
       "default": "general",
       "description": "Topic category for the message"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set authoritative UTC send timestamp."
+    },
+    "is_withdrawn": {
+      "type": "boolean",
+      "default": false,
+      "description": "Server-set soft-delete. Withdrawn messages remain in the record and audit trail for court traceability."
+    },
+    "withdrawn_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set. When the sender withdrew this message."
     }
   },
   "required": [
@@ -52,33 +67,32 @@
   ],
   "rls": {
     "create": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     },
     "read": {
       "$or": [
         {
-          "sender_email": "{{user.email}}"
+          "data.sender_email": "{{user.email}}"
         },
         {
-          "recipient_email": "{{user.email}}"
+          "data.recipient_email": "{{user.email}}"
         },
         {
-          "court_email": "{{user.email}}"
+          "data.court_email": "{{user.email}}"
         }
       ]
     },
     "update": {
-      "$or": [
-        {
-          "sender_email": "{{user.email}}"
-        },
-        {
-          "court_email": "{{user.email}}"
-        }
-      ]
+      "user_condition": {
+        "role": "founder"
+      }
     },
     "delete": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     }
   }
 }
