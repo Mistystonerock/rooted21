@@ -25,6 +25,77 @@ async function sha256Hex(input) {
   return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
+// ── Restricted-document detection ───────────────────────────────
+const SENSITIVE_TAG_PATTERNS = ["behavioral", "behavioral-health", "behavioral_health", "mental", "mental-health", "mental_health", "therapy", "therapist", "counseling", "psych", "substance", "substance-use", "substance_use", "sud", "mat", "detox", "rehab", "addiction", "part2", "part 2", "42 cfr"];
+const SENSITIVE_CATEGORIES = ["medical", "therapy", "behavioral_health", "substance_use"];
+const SENSITIVE_RECORD_TYPES = ["medical_record", "behavioral_health_record"];
+
+function classifyDocumentRestriction(docItem) {
+  const part2 = docItem.part2_segmented === true;
+  const segment = String(docItem.permission_segment || "general").toLowerCase();
+  const segmentRestricted = segment && segment !== "general";
+  const tags = (docItem.tags || []).map(t => String(t).toLowerCase());
+  const tagRestricted = tags.some(t => SENSITIVE_TAG_PATTERNS.some(p => t.includes(p)));
+  const category = String(docItem.category || "").toLowerCase();
+  const categoryRestricted = SENSITIVE_CATEGORIES.includes(category);
+  const recordType = String(docItem.document_record_type || "").toLowerCase();
+  const recordTypeRestricted = SENSITIVE_RECORD_TYPES.includes(recordType);
+
+  const restricted = part2 || segmentRestricted || tagRestricted || categoryRestricted || recordTypeRestricted;
+  const reasons = [];
+  if (part2) reasons.push("part2_segmented");
+  if (segmentRestricted) reasons.push(`permission_segment=${segment}`);
+  if (tagRestricted) reasons.push("sensitive_tags");
+  if (categoryRestricted) reasons.push(`category=${category}`);
+  if (recordTypeRestricted) reasons.push(`record_type=${recordType}`);
+
+  return { restricted, part2, segment, category, reasons };
+}
+
+// Returns { allowed: boolean, matchedRelease?, matchedConsent?, reason }
+function evaluateReleaseAndConsent(classification, releases, consents, nowIso) {
+  const now = new Date(nowIso);
+  const seg = classification.segment;
+  const cat = classification.category;
+
+  const activeRelease = releases.find(r => {
+    if (r.status !== "active") return false;
+    if (r.revoked_at) return false;
+    const exp = r.expires_at ? new Date(r.expires_at) : null;
+    if (exp && exp < now) return false;
+    const allowed = (r.allowed_segments || []).map(s => String(s).toLowerCase());
+    return allowed.includes(seg) || (cat && allowed.includes(cat)) || allowed.includes("all");
+  });
+  if (activeRelease) {
+    return { allowed: true, matchedRelease: activeRelease.id, reason: `Active ReleaseOfInformation ${activeRelease.id} covers segment/category` };
+  }
+
+  const matchingConsent = consents.find(c => {
+    if (c.allowed !== true) return false;
+    const dc = String(c.data_category || "").toLowerCase();
+    return dc.includes(seg) || (cat && dc.includes(cat)) || dc.includes("behavioral") || dc.includes("substance");
+  });
+  if (matchingConsent) {
+    return { allowed: true, matchedConsent: matchingConsent.id, reason: `ConsentPermission ${matchingConsent.id} allows category` };
+  }
+
+  return { allowed: false, reason: "No active ReleaseOfInformation or ConsentPermission on file for this restriction segment/category" };
+}
+
+async function logExportDecision(base44, user, action, resourceId, summary, metadata, severity) {
+  await base44.asServiceRole.entities.RootedAuditEvent.create({
+    actor_email: user.email,
+    actor_role: user.role || "user",
+    event_type: action === "message_integrity_check" ? "data_export" : "document_export",
+    entity_name: "SecureDocument",
+    entity_id: resourceId || "",
+    severity: severity || "info",
+    summary,
+    metadata_json: JSON.stringify({ action, resource_type: action === "message_integrity_check" ? "messages" : "SecureDocument", ...metadata }),
+    occurred_at: new Date().toISOString(),
+  });
+}
+
 function randomAuthenticationCode() {
   const bytes = new Uint8Array(8);
   crypto.getRandomValues(bytes);
@@ -125,10 +196,65 @@ Deno.serve(async (req) => {
 
     messages.sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
 
+    // ── Message hash verification against MessageAuditLog ───────────
+    const integrity = { total: 0, verified: 0, altered: 0, missing: 0 };
+    for (const m of messages) {
+      integrity.total += 1;
+      const recomputed = await sha256Hex(m.body || "");
+      let auditLogs = await base44.asServiceRole.entities.MessageAuditLog.filter({ message_id: m.id }).catch(() => []);
+      if (!auditLogs || auditLogs.length === 0) {
+        // Fallback: match by sender + timestamp when no direct message_id link exists.
+        auditLogs = (await base44.asServiceRole.entities.MessageAuditLog.filter({ sender_email: m.sender_email }).catch(() => []))
+          .filter(a => a.sent_at && m.created_date && Math.abs(new Date(a.sent_at) - new Date(m.created_date)) < 5000);
+      }
+      const auditEntry = (auditLogs || []).find(a => a.action === "sent") || (auditLogs || [])[0];
+      if (!auditEntry || !auditEntry.content_hash) {
+        m._integrity = "MISSING_AUDIT_RECORD";
+        integrity.missing += 1;
+      } else if (auditEntry.content_hash === recomputed) {
+        m._integrity = "VERIFIED";
+        integrity.verified += 1;
+      } else {
+        m._integrity = "ALTERED";
+        integrity.altered += 1;
+      }
+    }
+    await logExportDecision(base44, user, "message_integrity_check", "", `Message integrity check for certified export ${exportId}: ${integrity.verified} verified, ${integrity.altered} altered, ${integrity.missing} missing audit records (of ${integrity.total}).`, { export_id: exportId, ...integrity }, integrity.altered > 0 ? "critical" : "info");
+
     const requestedDocumentIds = Array.isArray(documentIds) ? documentIds : [];
-    const selectedDocuments = (exportType === "case_documents" || exportType === "combined_packet")
+    const ownedRequestedDocuments = (exportType === "case_documents" || exportType === "combined_packet")
       ? documents.filter(d => requestedDocumentIds.includes(d.id) && (d.owner_email === user.email || d.created_by === user.email || (d.shared_with || []).includes(user.email)))
       : [];
+
+    // ── Server-side restricted-document consent/release gating ──────
+    // Pull the requesting user's releases and consents once for evaluation.
+    const [ownerReleases, ownerConsents] = await Promise.all([
+      base44.asServiceRole.entities.ReleaseOfInformation.filter({ owner_email: user.email }).catch(() => []),
+      base44.asServiceRole.entities.ConsentPermission.filter({ owner_email: user.email }).catch(() => []),
+    ]);
+
+    const selectedDocuments = [];   // documents actually embedded in the packet
+    const redactedDocuments = [];   // restricted-but-not-part2 placeholders
+    for (const d of ownedRequestedDocuments) {
+      const classification = classifyDocumentRestriction(d);
+      if (!classification.restricted) {
+        selectedDocuments.push(d);
+        await logExportDecision(base44, user, "export_include", d.id, `Included unrestricted document "${d.title || d.file_name || d.id}" in certified export.`, { reason: "Document not restricted", export_id: exportId }, "info");
+        continue;
+      }
+      const decision = evaluateReleaseAndConsent(classification, ownerReleases, ownerConsents, generatedAtIso);
+      if (decision.allowed) {
+        selectedDocuments.push(d);
+        await logExportDecision(base44, user, "export_include", d.id, `Included RESTRICTED document "${d.title || d.file_name || d.id}" — valid release/consent on file.`, { reason: decision.reason, restriction_reasons: classification.reasons, matched_release: decision.matchedRelease || null, matched_consent: decision.matchedConsent || null, export_id: exportId }, "warning");
+      } else if (classification.part2) {
+        // 42 CFR Part 2 — block entirely, no placeholder in the export body.
+        await logExportDecision(base44, user, "export_block", d.id, `BLOCKED 42 CFR Part 2 document "${d.title || d.file_name || d.id}" from certified export — no active release.`, { reason: decision.reason, restriction_reasons: classification.reasons, export_id: exportId }, "critical");
+      } else {
+        // Restricted but not Part 2 — redact with a placeholder.
+        redactedDocuments.push({ id: d.id, title: d.title || d.file_name || "Restricted document", reasons: classification.reasons });
+        await logExportDecision(base44, user, "export_redact", d.id, `REDACTED restricted document "${d.title || d.file_name || d.id}" — no active release on file.`, { reason: decision.reason, restriction_reasons: classification.reasons, export_id: exportId }, "warning");
+      }
+    }
 
     const records = [];
     messages.forEach((m, index) => records.push({
@@ -268,6 +394,29 @@ Deno.serve(async (req) => {
     });
     y += 60;
 
+    // Prominent message integrity summary
+    if (integrity.total > 0) {
+      const anyProblem = integrity.altered > 0 || integrity.missing > 0;
+      doc.setFillColor(anyProblem ? 250 : 240, anyProblem ? 240 : 247, anyProblem ? 240 : 242);
+      doc.setDrawColor(anyProblem ? 192 : 88, anyProblem ? 57 : 140, anyProblem ? 43 : 100);
+      doc.setLineWidth(0.5);
+      doc.roundedRect(ML, y, CW, 24, 2, 2, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(anyProblem ? 192 : 27, anyProblem ? 57 : 68, anyProblem ? 43 : 44);
+      doc.text("MESSAGE INTEGRITY VERIFICATION", ML + 4, y + 7);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...TEXT);
+      doc.text(`Total messages: ${integrity.total}   ·   Verified: ${integrity.verified}   ·   Altered: ${integrity.altered}   ·   Missing audit record: ${integrity.missing}`, ML + 4, y + 14);
+      doc.setFontSize(7.5);
+      doc.setTextColor(...MUTED);
+      doc.text(anyProblem
+        ? "One or more messages could not be verified against the tamper-evident audit trail. Review flagged entries in the transcript."
+        : "All included messages match their SHA-256 audit-trail hashes recorded at send time.", ML + 4, y + 20);
+      y += 30;
+    }
+
     if (includeCertification) {
       addLines("Federal Rule of Evidence 902(11)-Style Certification Support", 11, DARK, true);
       addLines("This packet is prepared to support a business-record certification workflow. It identifies the authenticated user who generated the export, the date and time of generation, selected record scope, ordered records, record-level hashes, a chained integrity root, and a 16-digit authentication code. A qualified custodian or authorized records representative may use this packet to prepare or support a certification that records were made at or near the time by a person with knowledge, kept in the course of a regularly conducted activity, and made as a regular practice of that activity. This tool does not itself guarantee admissibility; admissibility remains subject to attorney review, court rules, and judicial determination.", 8.5, TEXT);
@@ -320,6 +469,14 @@ Deno.serve(async (req) => {
         doc.setFontSize(7);
         doc.setTextColor(...MID);
         doc.text(`${m.source} · ${formatDateTime(m.created_date)} ET · Topic: ${m.topic || "general"}`, ML + 4, y + 11);
+        // Integrity badge
+        const badgeColor = m._integrity === "VERIFIED" ? MID : [192, 57, 43];
+        const badgeText = m._integrity === "VERIFIED" ? "✓ VERIFIED" : m._integrity === "ALTERED" ? "⚠ ALTERED" : "⚠ NO AUDIT RECORD";
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(6.5);
+        doc.setTextColor(...badgeColor);
+        doc.text(badgeText, PW - ML - 4, y + 6, { align: "right" });
+        doc.setFont("helvetica", "normal");
         doc.setFontSize(8.5);
         doc.setTextColor(...TEXT);
         doc.text(bodyLines, ML + 4, y + 18);
@@ -349,6 +506,25 @@ Deno.serve(async (req) => {
         const description = doc.splitTextToSize(d.description || d.analysis_summary || "No description provided.", CW - 8);
         doc.text(description, ML + 4, y + 23);
         y += 34;
+      });
+    }
+
+    if (redactedDocuments.length > 0) {
+      pageBreak(20);
+      addLines("Restricted Documents — Excluded / Redacted", 12, DARK, true);
+      addLines("The following requested documents contain sensitive (behavioral-health, mental-health, therapy, or medical) content and were REDACTED because no active Release of Information or consent was on file for the applicable segment. 42 CFR Part 2 substance-use documents, when restricted, are blocked entirely and are not listed here.", 8, MUTED);
+      redactedDocuments.forEach((d, index) => {
+        pageBreak(14);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(192, 57, 43);
+        doc.text(`${index + 1}. ${d.title} — RESTRICTED (no active release on file)`, ML + 2, y);
+        y += 5;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(...MUTED);
+        doc.text(`Reason: ${d.reasons.join(", ")}`, ML + 4, y);
+        y += 6;
       });
     }
 
@@ -388,7 +564,8 @@ Deno.serve(async (req) => {
       authenticationCode,
       packetHash,
       hashChainRoot,
-      summary: { recordCount: records.length, messageCount: messages.length, documentCount: selectedDocuments.length },
+      summary: { recordCount: records.length, messageCount: messages.length, documentCount: selectedDocuments.length, redactedDocumentCount: redactedDocuments.length },
+      integrity,
     });
   } catch (error) {
     console.error("generateCertifiedLegalExport error:", error);
