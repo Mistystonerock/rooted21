@@ -52,22 +52,25 @@ function classifyDocumentRestriction(docItem) {
   return { restricted, part2, segment, category, reasons };
 }
 
-// Returns { allowed: boolean, matchedRelease?, matchedConsent?, reason }
-function evaluateReleaseAndConsent(classification, releases, consents, nowIso) {
+// Returns { allowed, via, matchedRelease?, matchedSegment?, matchedConsent?, reason }
+function evaluateReleaseAndConsent(classification, releases, consents, nowIso, recipientRole) {
   const now = new Date(nowIso);
   const seg = classification.segment;
   const cat = classification.category;
+  const role = String(recipientRole || "").toLowerCase();
 
   const activeRelease = releases.find(r => {
     if (r.status !== "active") return false;
     if (r.revoked_at) return false;
     const exp = r.expires_at ? new Date(r.expires_at) : null;
     if (exp && exp < now) return false;
+    // Recipient role must match the export's recipient role (when a role is provided).
+    if (role && r.recipient_role && String(r.recipient_role).toLowerCase() !== role) return false;
     const allowed = (r.allowed_segments || []).map(s => String(s).toLowerCase());
     return allowed.includes(seg) || (cat && allowed.includes(cat)) || allowed.includes("all");
   });
   if (activeRelease) {
-    return { allowed: true, matchedRelease: activeRelease.id, reason: `Active ReleaseOfInformation ${activeRelease.id} covers segment/category` };
+    return { allowed: true, via: "release", matchedRelease: activeRelease.id, matchedSegment: seg, reason: `Restricted document included — valid active release covers segment: ${seg}` };
   }
 
   const matchingConsent = consents.find(c => {
@@ -76,10 +79,10 @@ function evaluateReleaseAndConsent(classification, releases, consents, nowIso) {
     return dc.includes(seg) || (cat && dc.includes(cat)) || dc.includes("behavioral") || dc.includes("substance");
   });
   if (matchingConsent) {
-    return { allowed: true, matchedConsent: matchingConsent.id, reason: `ConsentPermission ${matchingConsent.id} allows category` };
+    return { allowed: true, via: "consent", matchedConsent: matchingConsent.id, reason: `ConsentPermission ${matchingConsent.id} allows category` };
   }
 
-  return { allowed: false, reason: "No active ReleaseOfInformation or ConsentPermission on file for this restriction segment/category" };
+  return { allowed: false, via: null, reason: "No active ReleaseOfInformation or ConsentPermission on file for this restriction segment/category" };
 }
 
 async function logExportDecision(base44, user, action, resourceId, summary, metadata, severity) {
@@ -129,7 +132,14 @@ Deno.serve(async (req) => {
       coparentingPartnershipId,
       documentIds = [],
       includeCertification = true,
+      caseId = "",
+      case_id = "",
+      recipientRole = "",
+      recipient_role = "",
     } = payload || {};
+
+    const effectiveCaseId = caseId || case_id || "";
+    const effectiveRecipientRole = recipientRole || recipient_role || recipientType || "";
 
     const from = safeDate(dateFrom);
     const to = safeDate(dateTo);
@@ -221,9 +231,21 @@ Deno.serve(async (req) => {
     }
     await logExportDecision(base44, user, "message_integrity_check", "", `Message integrity check for certified export ${exportId}: ${integrity.verified} verified, ${integrity.altered} altered, ${integrity.missing} missing audit records (of ${integrity.total}).`, { export_id: exportId, ...integrity }, integrity.altered > 0 ? "critical" : "info");
 
+    // ── Document selection (runs fresh every call — no dedup/caching) ──
+    // Select documents that are accessible to the requester (owner / creator /
+    // shared) AND match EITHER an explicitly requested ID, OR the requested
+    // case_id, OR are owned by the requesting user. Every matching document
+    // passes through the consent-gating logic below, even if blocked/redacted.
     const requestedDocumentIds = Array.isArray(documentIds) ? documentIds : [];
     const ownedRequestedDocuments = (exportType === "case_documents" || exportType === "combined_packet")
-      ? documents.filter(d => requestedDocumentIds.includes(d.id) && (d.owner_email === user.email || d.created_by === user.email || (d.shared_with || []).includes(user.email)))
+      ? documents.filter(d => {
+          const accessible = d.owner_email === user.email || d.created_by === user.email || (d.shared_with || []).includes(user.email);
+          if (!accessible) return false;
+          const idMatch = requestedDocumentIds.includes(d.id);
+          const caseMatch = effectiveCaseId && d.case_id === effectiveCaseId;
+          const ownerMatch = d.owner_email === user.email;
+          return idMatch || caseMatch || ownerMatch;
+        })
       : [];
 
     // ── Server-side restricted-document consent/release gating ──────
@@ -239,20 +261,24 @@ Deno.serve(async (req) => {
       const classification = classifyDocumentRestriction(d);
       if (!classification.restricted) {
         selectedDocuments.push(d);
-        await logExportDecision(base44, user, "export_include", d.id, `Included unrestricted document "${d.title || d.file_name || d.id}" in certified export.`, { reason: "Document not restricted", export_id: exportId }, "info");
+        await logExportDecision(base44, user, "export_include", d.id, `Included unrestricted document "${d.title || d.file_name || d.id}" in certified export.`, { reason: "Document not restricted", export_id: exportId, case_id: effectiveCaseId || null }, "info");
         continue;
       }
-      const decision = evaluateReleaseAndConsent(classification, ownerReleases, ownerConsents, generatedAtIso);
+      const decision = evaluateReleaseAndConsent(classification, ownerReleases, ownerConsents, generatedAtIso, effectiveRecipientRole);
       if (decision.allowed) {
         selectedDocuments.push(d);
-        await logExportDecision(base44, user, "export_include", d.id, `Included RESTRICTED document "${d.title || d.file_name || d.id}" — valid release/consent on file.`, { reason: decision.reason, restriction_reasons: classification.reasons, matched_release: decision.matchedRelease || null, matched_consent: decision.matchedConsent || null, export_id: exportId }, "warning");
+        if (decision.via === "release") {
+          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — valid active release covers segment: ${classification.segment}.`, { reason: decision.reason, restriction_reasons: classification.reasons, release_id: decision.matchedRelease, matched_segment: classification.segment, export_id: exportId, case_id: effectiveCaseId || null }, "info");
+        } else {
+          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — consent on file allows segment: ${classification.segment}.`, { reason: decision.reason, restriction_reasons: classification.reasons, matched_consent: decision.matchedConsent, export_id: exportId, case_id: effectiveCaseId || null }, "info");
+        }
       } else if (classification.part2) {
         // 42 CFR Part 2 — block entirely, no placeholder in the export body.
-        await logExportDecision(base44, user, "export_block", d.id, `BLOCKED 42 CFR Part 2 document "${d.title || d.file_name || d.id}" from certified export — no active release.`, { reason: decision.reason, restriction_reasons: classification.reasons, export_id: exportId }, "critical");
+        await logExportDecision(base44, user, "export_block", d.id, `Blocked restricted document "${d.title || d.file_name || d.id}" — 42 CFR Part 2, no active release.`, { reason: "42 CFR Part 2 document blocked — no active release on file", restriction_reasons: classification.reasons, export_id: exportId, case_id: effectiveCaseId || null }, "warning");
       } else {
         // Restricted but not Part 2 — redact with a placeholder.
         redactedDocuments.push({ id: d.id, title: d.title || d.file_name || "Restricted document", reasons: classification.reasons });
-        await logExportDecision(base44, user, "export_redact", d.id, `REDACTED restricted document "${d.title || d.file_name || d.id}" — no active release on file.`, { reason: decision.reason, restriction_reasons: classification.reasons, export_id: exportId }, "warning");
+        await logExportDecision(base44, user, "export_block", d.id, `Blocked behavioral health document "${d.title || d.file_name || d.id}" — no active release on file.`, { reason: "Behavioral health document blocked — no active release on file", restriction_reasons: classification.reasons, redacted_fields: ["file", "description", "analysis_summary"], export_id: exportId, case_id: effectiveCaseId || null }, "warning");
       }
     }
 
@@ -521,6 +547,10 @@ Deno.serve(async (req) => {
         doc.text(`${index + 1}. ${d.title} — RESTRICTED (no active release on file)`, ML + 2, y);
         y += 5;
         doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(...TEXT);
+        doc.text("[REDACTED — Restricted content removed. Requires valid release for full access.]", ML + 4, y);
+        y += 4;
         doc.setFontSize(7.5);
         doc.setTextColor(...MUTED);
         doc.text(`Reason: ${d.reasons.join(", ")}`, ML + 4, y);
