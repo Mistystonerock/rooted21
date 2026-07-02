@@ -26,13 +26,12 @@ export default function DocumentShareModal({ document, onClose }) {
     setLoading(true);
     setError("");
 
-    const response = await base44.functions.invoke("generateDocumentAccessCode", {
+    // All sharing (authorization, sensitive-segment consent gate, shared_with, code) is server-side only.
+    const response = await base44.functions.invoke("shareSecureDocument", {
       document_id: document.id,
       recipient_email: form.recipient_email.trim().toLowerCase(),
       recipient_name: form.recipient_name.trim(),
       access_note: form.access_note.trim(),
-      document_record_type: document.document_record_type || "parent_record",
-      permission_granularity: "document_level",
     });
 
     if (response.data?.success) {
@@ -65,7 +64,7 @@ Rooted 21 Security Team
         // Continue even if email fails
       }
     } else {
-      setError(response.data?.message || "Failed to generate access code");
+      setError(response.data?.error || response.data?.message || "Failed to generate access code");
     }
 
     setLoading(false);
