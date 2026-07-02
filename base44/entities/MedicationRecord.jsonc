@@ -5,6 +5,10 @@
     "child_name": {
       "type": "string"
     },
+    "child_profile_id": {
+      "type": "string",
+      "description": "Linked ChildProfile ID for ownership scoping"
+    },
     "medication_name": {
       "type": "string"
     },
@@ -61,8 +65,29 @@
       "type": "boolean",
       "default": true
     },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag. Medication records are never hard-removed."
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use"
+      ],
+      "default": "general",
+      "description": "Server-set privacy segment. substance_use covers MAT, detox, rehab and other 42 CFR Part 2 care."
+    },
+    "part2_segmented": {
+      "type": "boolean",
+      "default": false,
+      "description": "Server-set. True when this medication is substance-use / MAT treatment requiring 42 CFR Part 2 consent controls."
+    },
     "parent_email": {
-      "type": "string"
+      "type": "string",
+      "description": "Server-set owner email. Never written by the client."
     }
   },
   "required": [
@@ -74,13 +99,29 @@
   "rls": {
     "create": true,
     "read": {
-      "parent_email": "{{user.email}}"
+      "$and": [
+        {
+          "$or": [
+            {
+              "data.is_deleted": false
+            },
+            {
+              "data.is_deleted": {
+                "$exists": false
+              }
+            }
+          ]
+        },
+        {
+          "data.parent_email": "{{user.email}}"
+        }
+      ]
     },
     "update": {
-      "parent_email": "{{user.email}}"
+      "data.parent_email": "{{user.email}}"
     },
     "delete": {
-      "parent_email": "{{user.email}}"
+      "data.parent_email": "{{user.email}}"
     }
   }
 }
