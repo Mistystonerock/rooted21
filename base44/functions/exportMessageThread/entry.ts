@@ -1,5 +1,11 @@
-import { createClientFromRequest } from "npm:@base44/sdk@0.8.25";
+import { createClientFromRequest } from "npm:@base44/sdk@0.8.31";
 import { jsPDF } from "npm:jspdf@4.2.1";
+
+async function sha256Hex(text) {
+  const data = new TextEncoder().encode(text || "");
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 Deno.serve(async (req) => {
   try {
@@ -32,10 +38,28 @@ Deno.serve(async (req) => {
       participants = `${familyEmail} ↔ ${professionalEmail}`;
     }
 
-    // Also fetch audit logs for hash verification
-    const auditLogs = await base44.entities.MessageAuditLog.filter(
-      { partnership_id: partnershipId || "" }, "sent_at", 500
-    );
+    // Fetch audit logs by message_id (works for both thread types) and index them.
+    const messageIds = messages.map((m) => m.id);
+    const auditByMessageId = {};
+    for (const id of messageIds) {
+      const logs = await base44.asServiceRole.entities.MessageAuditLog.filter({ message_id: id }, "sent_at", 5);
+      const sentLog = logs.find((l) => l.action === "sent") || logs[0];
+      if (sentLog) auditByMessageId[id] = sentLog;
+    }
+
+    // Recompute each message hash from the CURRENT stored body and compare to the
+    // hash recorded at send time. Mismatch => the body was altered after sending.
+    const verification = {};
+    for (const msg of messages) {
+      const recomputed = await sha256Hex(msg.body);
+      const recorded = auditByMessageId[msg.id]?.content_hash || null;
+      verification[msg.id] = {
+        recomputed,
+        recorded,
+        verified: recorded ? recorded === recomputed : false,
+      };
+    }
+    const tamperedCount = messages.filter((m) => auditByMessageId[m.id] && !verification[m.id].verified).length;
 
     const generatedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/New_York", dateStyle: "full", timeStyle: "long"
@@ -166,8 +190,9 @@ Deno.serve(async (req) => {
         hour: "2-digit", minute: "2-digit", second: "2-digit",
       });
 
-      // Find matching audit log
-      const auditEntry = auditLogs.find(a => a.message_id === msg.id);
+      // Matching audit log + server-recomputed hash verification for this message
+      const auditEntry = auditByMessageId[msg.id];
+      const verif = verification[msg.id];
 
       const bodyLines = doc.splitTextToSize(msg.body || "", CW - 10);
       const boxH = bodyLines.length * 4.5 + 18;
@@ -200,9 +225,12 @@ Deno.serve(async (req) => {
         doc.text(`TOPIC: ${(msg.topic || "").toUpperCase()}`, ML + 4, footY);
       }
       if (auditEntry?.content_hash) {
-        doc.setFontSize(6); doc.setFont("helvetica", "normal"); doc.setTextColor(...GRAY);
-        const hashShort = auditEntry.content_hash.substring(0, 16) + "…";
-        doc.text(`SHA-256: ${hashShort}`, PW - MR - 4, footY, { align: "right" });
+        doc.setFontSize(6); doc.setFont("helvetica", "normal");
+        const hashShort = verif.recomputed.substring(0, 16) + "…";
+        const badge = verif.verified ? "✓ VERIFIED" : "⚠ ALTERED";
+        if (verif.verified) doc.setTextColor(...MID); else doc.setTextColor(190, 60, 40);
+        doc.setFont("helvetica", "bold");
+        doc.text(`${badge}  SHA-256: ${hashShort}`, PW - MR - 4, footY, { align: "right" });
       } else if (msg.read_by_court !== undefined) {
         doc.setFontSize(6.5); doc.setFont("helvetica", "normal"); doc.setTextColor(...GRAY);
         doc.text(msg.read_by_court ? "✓ COURT REVIEWED" : "⏳ Pending court review", PW - MR - 4, footY, { align: "right" });
@@ -241,7 +269,18 @@ Deno.serve(async (req) => {
       CW
     );
     doc.text(closing, ML, y);
-    y += closing.length * 4.5 + 10;
+    y += closing.length * 4.5 + 8;
+
+    // Integrity verification summary — recomputed server-side, cannot be forged by the client.
+    doc.setFontSize(9); doc.setFont("helvetica", "bold");
+    if (tamperedCount === 0) {
+      doc.setTextColor(...MID);
+      doc.text("INTEGRITY CHECK: PASSED — all message hashes match the audit trail.", ML, y);
+    } else {
+      doc.setTextColor(190, 60, 40);
+      doc.text(`INTEGRITY CHECK: ${tamperedCount} message(s) FAILED hash verification (possible alteration).`, ML, y);
+    }
+    y += 8;
 
     doc.setFillColor(...LGRAY);
     doc.roundedRect(ML, y, CW, 30, 2, 2, "F");
@@ -263,6 +302,7 @@ Deno.serve(async (req) => {
       fileName: `Certified-Message-Transcript-${reportId}.pdf`,
       reportId,
       messageCount: messages.length,
+      tamperedCount,
     });
   } catch (error) {
     console.error("exportMessageThread error:", error);
