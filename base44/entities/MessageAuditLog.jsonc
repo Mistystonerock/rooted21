@@ -14,17 +14,26 @@
       ],
       "description": "Which message system this belongs to"
     },
+    "action": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "withdrawn"
+      ],
+      "default": "sent",
+      "description": "Server-set. What happened to the message."
+    },
     "sender_email": {
       "type": "string",
-      "description": "Email of the sender"
+      "description": "Server-set. Email of the sender."
     },
     "sender_name": {
       "type": "string",
-      "description": "Full name of the sender"
+      "description": "Server-set. Full name of the sender."
     },
     "recipient_email": {
       "type": "string",
-      "description": "Email of the recipient"
+      "description": "Server-set. Email of the recipient."
     },
     "body_preview": {
       "type": "string",
@@ -32,12 +41,12 @@
     },
     "content_hash": {
       "type": "string",
-      "description": "SHA-256 hex hash of the full message body for tamper detection"
+      "description": "Server-computed SHA-256 hex hash of the full message body for tamper detection"
     },
     "sent_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Exact UTC timestamp when message was recorded"
+      "description": "Server-set exact UTC timestamp when the message was recorded"
     },
     "partnership_id": {
       "type": "string",
@@ -57,23 +66,29 @@
   ],
   "rls": {
     "create": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     },
     "read": {
       "$or": [
         {
-          "sender_email": "{{user.email}}"
+          "data.sender_email": "{{user.email}}"
         },
         {
-          "recipient_email": "{{user.email}}"
+          "data.recipient_email": "{{user.email}}"
         }
       ]
     },
     "update": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     },
     "delete": {
-      "sender_email": "{{user.email}}"
+      "user_condition": {
+        "role": "founder"
+      }
     }
   }
 }
