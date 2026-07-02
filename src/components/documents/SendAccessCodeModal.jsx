@@ -17,12 +17,16 @@ export default function SendAccessCodeModal({ doc, granterName, onClose }) {
     setLoading(true);
     setError("");
     try {
-      const res = await base44.functions.invoke("generateDocumentAccessCode", {
-        documentId: doc.id,
-        recipientEmail: recipientEmail.trim(),
-        recipientName: recipientName.trim(),
-        accessNote: accessNote.trim(),
+      const res = await base44.functions.invoke("shareSecureDocument", {
+        document_id: doc.id,
+        recipient_email: recipientEmail.trim(),
+        recipient_name: recipientName.trim(),
+        access_note: accessNote.trim(),
       });
+      if (res.data?.success === false || !res.data?.code) {
+        setError(res.data?.error || "Failed to send code. Please try again.");
+        return;
+      }
       setSent({ code: res.data.code, expiresAt: res.data.expiresAt });
     } catch (err) {
       setError(err?.response?.data?.error || "Failed to send code. Please try again.");

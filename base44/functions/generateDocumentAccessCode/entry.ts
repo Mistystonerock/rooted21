@@ -1,4 +1,17 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
+
+// ⚠️ LEGACY ENDPOINT — kept only for backward-compatible callers.
+// It now enforces the EXACT same rules as shareSecureDocument:
+//   - ownership/authorization check
+//   - sensitive-segment consent gate (behavioral health / substance use / 42 CFR Part 2)
+//   - server-side access-code generation
+//   - dual audit logging for approved AND denied attempts
+//   - server-controlled shared_with (never written by the client)
+// This is a self-contained mirror rather than a cross-function invoke, because
+// function-to-function invocation is not reliable across all request contexts.
+// Keep this logic in sync with shareSecureDocument.
+
+const SENSITIVE_SEGMENTS = ["behavioral_health", "substance_use"];
 
 function generateCode(length = 8) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -9,58 +22,122 @@ function generateCode(length = 8) {
   return result;
 }
 
+function isSensitiveDocument(doc) {
+  return doc.part2_segmented === true || SENSITIVE_SEGMENTS.includes(doc.permission_segment);
+}
+
+function hasValidRelease(releases, doc) {
+  const today = new Date().toISOString().slice(0, 10);
+  return releases.some((r) => {
+    if (r.status !== "active") return false;
+    if (r.starts_at && r.starts_at > today) return false;
+    if (r.expires_at && r.expires_at < today) return false;
+    const segments = Array.isArray(r.allowed_segments) ? r.allowed_segments : [];
+    return segments.includes(doc.permission_segment) || (doc.part2_segmented === true && segments.includes("substance_use"));
+  });
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const body = await req.json();
+    // Accept both legacy camelCase and canonical snake_case param names.
+    const documentId = String(body.document_id || body.documentId || "");
+    const recipientEmail = String(body.recipient_email || body.recipientEmail || "").trim().toLowerCase();
+    const recipientName = String(body.recipient_name || body.recipientName || "").trim();
+    const accessNote = String(body.access_note || body.accessNote || "").trim();
+
+    if (!documentId || !recipientEmail) {
+      return Response.json({ error: 'Missing document_id or recipient_email' }, { status: 400 });
     }
 
-    const { document_id, recipient_email, recipient_name, access_note, document_record_type, permission_granularity } = await req.json();
-    
-    if (!document_id || !recipient_email) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    // Fetch document
-    const docs = await base44.asServiceRole.entities.SecureDocument.filter({ id: document_id });
-    if (docs.length === 0) {
-      return Response.json({ error: 'Document not found' }, { status: 404 });
-    }
-    
+    const docs = await base44.asServiceRole.entities.SecureDocument.filter({ id: documentId });
+    if (docs.length === 0) return Response.json({ error: 'Document not found' }, { status: 404 });
     const document = docs[0];
 
-    // Generate unique code
+    const now = new Date().toISOString();
+    const isOwner = document.owner_email === user.email || document.created_by === user.email;
+    const isAdmin = user.role === "admin" || user.role === "founder";
+    const canShare = isOwner || isAdmin;
+
+    async function audit(outcome, reason, severity) {
+      await base44.asServiceRole.entities.RootedAuditEvent.create({
+        actor_email: user.email,
+        actor_role: user.role || "user",
+        event_type: "data_access",
+        entity_name: "SecureDocument",
+        entity_id: documentId,
+        severity,
+        summary: `Share ${outcome} (legacy endpoint): "${document.title}" → ${recipientEmail}. ${reason}`,
+        metadata_json: JSON.stringify({ action: "share", via: "generateDocumentAccessCode", outcome, reason, recipient_email: recipientEmail, permission_segment: document.permission_segment, part2_segmented: document.part2_segmented === true }),
+        occurred_at: now,
+      });
+      await base44.asServiceRole.entities.DocumentAuditLog.create({
+        case_id: document.case_id || "none",
+        document_id: documentId,
+        document_title: document.title,
+        action: "shared",
+        performed_by_email: user.email,
+        performed_by_name: user.full_name || "",
+        performed_by_role: user.role || "user",
+        timestamp: now,
+        notes: `${outcome.toUpperCase()} (legacy endpoint) — ${reason} (recipient: ${recipientEmail})`,
+      });
+    }
+
+    // 1. Authorization gate.
+    if (!canShare) {
+      await audit("denied", "Requester does not own and is not authorized to share this document.", "warning");
+      return Response.json({ success: false, error: "You are not authorized to share this document." }, { status: 403 });
+    }
+
+    // 2. Sensitive-segment consent gate.
+    if (isSensitiveDocument(document)) {
+      const releases = await base44.asServiceRole.entities.ReleaseOfInformation.filter({ owner_email: document.owner_email });
+      if (!hasValidRelease(releases, document)) {
+        await audit("denied", `Sensitive document (segment: ${document.permission_segment}${document.part2_segmented ? ", 42 CFR Part 2" : ""}) requires an active Release of Information / consent covering this segment.`, "warning");
+        return Response.json({
+          success: false,
+          error: "This document is protected behavioral health / substance use information. Sharing requires an active signed Release of Information covering this record before a code can be issued.",
+          requires_release: true,
+          permission_segment: document.permission_segment,
+        }, { status: 403 });
+      }
+    }
+
+    // 3. Approved — generate the access code server-side ONLY.
     const code = generateCode(8);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30);
 
-    // Create access code record
     const accessCode = await base44.asServiceRole.entities.DocumentAccessCode.create({
-      code: code,
-      document_id: document_id,
+      code,
+      document_id: documentId,
       document_title: document.title,
       document_category: document.category,
-      document_record_type: document_record_type || document.document_record_type || "parent_record",
-      permission_granularity: permission_granularity || "document_level",
+      document_record_type: document.document_record_type || "parent_record",
+      permission_granularity: "document_level",
       granted_by_email: user.email,
-      granted_by_name: user.full_name,
-      recipient_email: recipient_email.toLowerCase(),
-      recipient_name: recipient_name || null,
+      granted_by_name: user.full_name || "",
+      recipient_email: recipientEmail,
+      recipient_name: recipientName || null,
       is_used: false,
       expires_at: expiresAt.toISOString(),
       is_revoked: false,
-      access_note: access_note || null,
+      access_note: accessNote || null,
     });
 
-    return Response.json({
-      success: true,
-      code: code,
-      accessCodeId: accessCode.id,
-      expiresAt: expiresAt.toISOString(),
-    });
+    // Server-controlled shared_with — the client never writes this field directly.
+    const existingShared = Array.isArray(document.shared_with) ? document.shared_with : [];
+    const nextShared = existingShared.includes(recipientEmail) ? existingShared : [...existingShared, recipientEmail];
+    await base44.asServiceRole.entities.SecureDocument.update(documentId, { shared_with: nextShared, is_private: false });
+
+    await audit("approved", `Access code issued${isSensitiveDocument(document) ? " under an active Release of Information" : ""}.`, isSensitiveDocument(document) ? "warning" : "info");
+
+    return Response.json({ success: true, code, accessCodeId: accessCode.id, expiresAt: expiresAt.toISOString() });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
