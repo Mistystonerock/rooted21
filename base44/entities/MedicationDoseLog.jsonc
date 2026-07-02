@@ -3,7 +3,8 @@
   "type": "object",
   "properties": {
     "parent_email": {
-      "type": "string"
+      "type": "string",
+      "description": "Server-set owner email. Never written by the client."
     },
     "child_name": {
       "type": "string"
@@ -58,6 +59,26 @@
     },
     "side_effects_observed": {
       "type": "string"
+    },
+    "permission_segment": {
+      "type": "string",
+      "enum": [
+        "general",
+        "behavioral_health",
+        "substance_use"
+      ],
+      "default": "general",
+      "description": "Server-set, inherited from the parent MedicationRecord."
+    },
+    "part2_segmented": {
+      "type": "boolean",
+      "default": false,
+      "description": "Server-set, inherited from the parent MedicationRecord."
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag."
     }
   },
   "required": [
@@ -69,13 +90,29 @@
   "rls": {
     "create": true,
     "read": {
-      "parent_email": "{{user.email}}"
+      "$and": [
+        {
+          "$or": [
+            {
+              "data.is_deleted": false
+            },
+            {
+              "data.is_deleted": {
+                "$exists": false
+              }
+            }
+          ]
+        },
+        {
+          "data.parent_email": "{{user.email}}"
+        }
+      ]
     },
     "update": {
-      "parent_email": "{{user.email}}"
+      "data.parent_email": "{{user.email}}"
     },
     "delete": {
-      "parent_email": "{{user.email}}"
+      "data.parent_email": "{{user.email}}"
     }
   }
 }
