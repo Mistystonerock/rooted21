@@ -3,15 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { Send, Lock, ShieldCheck, Download, Loader2 } from "lucide-react";
 
-// Simple client-side hash for display purposes (non-crypto, but consistent)
-async function hashBody(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
 export default function SecureMessageThread({ familyEmail, professionalEmail, currentUser, senderRole }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -41,32 +32,22 @@ export default function SecureMessageThread({ familyEmail, professionalEmail, cu
     setSending(true);
     setInput("");
 
-    const sentAt = new Date().toISOString();
-    const hash = await hashBody(body);
-
-    const msg = await base44.entities.SecureMessage.create({
+    // Identity, recipient resolution, hashing, and audit logging happen
+    // server-side in sendCommunicationMessage.
+    const response = await base44.functions.invoke("sendCommunicationMessage", {
+      thread_type: "secure_message",
       family_email: familyEmail,
       professional_email: professionalEmail,
-      sender_email: currentUser.email,
-      sender_name: currentUser.full_name || currentUser.email,
       sender_role: senderRole,
       body,
-      read: false,
     });
 
-    // Write immutable audit log entry
-    base44.entities.MessageAuditLog.create({
-      message_id: msg.id,
-      thread_type: "secure_message",
-      sender_email: currentUser.email,
-      sender_name: currentUser.full_name || currentUser.email,
-      recipient_email: currentUser.email === familyEmail ? professionalEmail : familyEmail,
-      body_preview: body.substring(0, 120),
-      content_hash: hash,
-      sent_at: sentAt,
-    });
-
-    setMessages(prev => [...prev, { ...msg, _hash: hash }]);
+    if (response.data?.success && response.data.message) {
+      setMessages(prev => [...prev, response.data.message]);
+    } else {
+      alert(response.data?.error || "Your message could not be sent.");
+      setInput(body);
+    }
     setSending(false);
   }
 

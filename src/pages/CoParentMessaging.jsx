@@ -22,14 +22,6 @@ const TOPIC_COLORS = {
   general:   { bg: "#F5F5F5", text: "#555555" },
 };
 
-async function hashBody(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
 export default function CoParentMessaging() {
   const { partnershipId } = useParams();
   const navigate = useNavigate();
@@ -92,36 +84,21 @@ export default function CoParentMessaging() {
     setInput("");
     setShowConflictCheck(false);
 
-    const sentAt = new Date().toISOString();
-    const hash = await hashBody(txt);
-
-    const recipientEmail = partnership?.parent_1_email === user.email ? partnership?.parent_2_email : partnership?.parent_1_email;
-    const msgData = {
-      partnership_id: partnershipId,
-      sender_email: user.email,
-      sender_name: user.full_name,
-      recipient_email: recipientEmail,
-      court_email: partnership?.court_email,
-      body: txt,
-      topic,
-    };
-
-    const created = await base44.entities.CoParentingMessage.create(msgData);
-
-    // Immutable audit log
-    base44.entities.MessageAuditLog.create({
-      message_id: created.id,
+    // All writes, identity, recipient/court resolution, hashing, audit logging,
+    // and no-contact enforcement happen server-side in sendCommunicationMessage.
+    const response = await base44.functions.invoke("sendCommunicationMessage", {
       thread_type: "coparenting",
-      sender_email: user.email,
-      sender_name: user.full_name,
-      body_preview: txt.substring(0, 120),
-      content_hash: hash,
-      sent_at: sentAt,
       partnership_id: partnershipId,
+      body: txt,
       topic,
     });
 
-    setMessages(prev => [...prev, { ...created, _hash: hash }]);
+    if (response.data?.success && response.data.message) {
+      setMessages(prev => [...prev, response.data.message]);
+    } else {
+      alert(response.data?.error || "Your message could not be sent.");
+      setInput(txt);
+    }
     setSending(false);
   }
 
