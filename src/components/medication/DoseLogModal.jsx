@@ -26,17 +26,18 @@ export default function DoseLogModal({ medication, user, onClose, onSaved }) {
 
   async function handleSave() {
     setSaving(true);
-    await base44.entities.MedicationDoseLog.create({
-      parent_email: user.email,
-      child_name: medication.child_name,
+    // parent_email, child, medication + sensitivity fields are set server-side from the medication record.
+    const res = await base44.functions.invoke("createMedicationDoseLog", {
       medication_record_id: medication.id,
-      medication_name: medication.medication_name,
-      dosage: medication.dosage,
       ...form,
     });
     setSaving(false);
-    onSaved();
-    onClose();
+    if (res.data?.success) {
+      onSaved();
+      onClose();
+    } else {
+      alert(res.data?.error || "Could not save this dose log.");
+    }
   }
 
   const inp = {

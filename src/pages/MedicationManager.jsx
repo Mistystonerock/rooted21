@@ -49,13 +49,25 @@ export default function MedicationManager() {
   async function handleSaveMed(e) {
     e.preventDefault();
     setSaving(true);
-    const data = { ...form, parent_email: user.email };
+    // parent_email and sensitivity fields are set server-side; never sent from the client.
     if (editingMed) {
-      const updated = await base44.entities.MedicationRecord.update(editingMed.id, data);
-      setMedications(prev => prev.map(m => m.id === editingMed.id ? updated : m));
+      const res = await base44.functions.invoke("updateMedicationRecord", { record_id: editingMed.id, ...form });
+      if (res.data?.success) {
+        setMedications(prev => prev.map(m => m.id === editingMed.id ? res.data.record : m));
+      } else {
+        alert(res.data?.error || "Could not update this medication.");
+        setSaving(false);
+        return;
+      }
     } else {
-      const created = await base44.entities.MedicationRecord.create(data);
-      setMedications(prev => [created, ...prev]);
+      const res = await base44.functions.invoke("createMedicationRecord", { ...form });
+      if (res.data?.success) {
+        setMedications(prev => [res.data.record, ...prev]);
+      } else {
+        alert(res.data?.error || "Could not add this medication.");
+        setSaving(false);
+        return;
+      }
     }
     setSaving(false);
     setShowForm(false);
@@ -65,8 +77,12 @@ export default function MedicationManager() {
 
   async function handleDelete(id) {
     if (!confirm("Remove this medication?")) return;
-    await base44.entities.MedicationRecord.delete(id);
-    setMedications(prev => prev.filter(m => m.id !== id));
+    const res = await base44.functions.invoke("deleteMedicationRecord", { record_id: id });
+    if (res.data?.success) {
+      setMedications(prev => prev.filter(m => m.id !== id));
+    } else {
+      alert(res.data?.error || "Could not remove this medication.");
+    }
   }
 
   function openEdit(med) {
