@@ -151,28 +151,18 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           throw new Error("Upload failed");
         }
 
-        const selectedCategory = CATEGORIES.find(cat => cat.value === form.category) || CATEGORIES[CATEGORIES.length - 1];
-
-        // Create secure document record with segmented permission metadata
-        const newDoc = await base44.entities.SecureDocument.create({
-          owner_email: user?.email,
+        // Create secure document server-side — owner, role, permission segment,
+        // Part 2 flag, is_private and shared_with are all set/validated on the server.
+        const createRes = await base44.functions.invoke("createSecureDocument", {
           title: form.title.trim(),
           description: form.description.trim(),
           category: form.category,
           document_record_type: form.document_record_type,
-          permission_granularity: "document_level",
-          permission_segment: selectedCategory.segment,
-          part2_segmented: !!selectedCategory.part2,
           tags: form.tags,
           private_file_uri: uploadResponse.file_uri,
-          storage_class: "private_vault",
-          encryption_standard: "AES-256 at rest; TLS in transit",
           file_name: file.name,
           file_size: file.size,
           child_name: form.child_name.trim(),
-          is_private: true,
-          uploaded_at: new Date().toISOString(),
-          version: 1,
           scanner_source: !!parsedData,
           analysis_summary: parsedData?.summary || parsedData?.description || "",
           extracted_dates: parsedData?.key_dates || [],
@@ -188,6 +178,11 @@ export default function DocumentUploadModal({ user, onDocumentUploaded, onClose 
           ocr_confidence: parsedData?.confidence || "",
           auto_populate_court_packet: parsedData?.is_court_document === true,
         });
+
+        if (!createRes.data?.success) {
+          throw new Error(createRes.data?.error || "Failed to save document");
+        }
+        const newDoc = createRes.data.document;
 
         if (syncToCalendar && parsedData) {
           const syncResponse = await base44.functions.invoke("syncDocumentDeadlinesToCalendar", {

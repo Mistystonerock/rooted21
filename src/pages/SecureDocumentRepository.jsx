@@ -71,23 +71,19 @@ export default function SecureDocumentRepository() {
   }
 
   async function handleView(doc) {
-    if (doc.file_url) {
-      window.open(doc.file_url, "_blank", "noopener,noreferrer");
-      return;
-    }
-
-    if (doc.private_file_uri) {
-      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({
-        file_uri: doc.private_file_uri,
-        expires_in: 300,
-      });
-      window.open(signed_url, "_blank", "noopener,noreferrer");
+    // Server re-checks access, applies segment/consent gating, and audits every view.
+    const res = await base44.functions.invoke("getDocumentSignedUrl", { document_id: doc.id, action: "view" });
+    if (res.data?.success && res.data.signed_url) {
+      window.open(res.data.signed_url, "_blank", "noopener,noreferrer");
+    } else {
+      alert(res.data?.error || "You don't have access to this document.");
     }
   }
 
   async function handleDelete(docId) {
     if (!confirm("Delete this document? This cannot be undone.")) return;
-    await base44.entities.SecureDocument.delete(docId);
+    // Soft-delete only — the record is flagged, never hard-removed.
+    await base44.entities.SecureDocument.update(docId, { is_deleted: true });
     setDocuments(prev => prev.filter(d => d.id !== docId));
   }
 
