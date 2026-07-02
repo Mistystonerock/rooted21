@@ -54,6 +54,34 @@
       ],
       "default": "active"
     },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set. When this assignment's access expires. Reads past this time are denied."
+    },
+    "approval_request_id": {
+      "type": "string",
+      "description": "Server-set. Linked AccessApprovalRequest ID when access_source is parent_approved."
+    },
+    "approved_by_email": {
+      "type": "string",
+      "description": "Server-set. Email of the parent, admin, or founder who authorized this assignment."
+    },
+    "access_reason": {
+      "type": "string",
+      "description": "Server-set. Justification for the assignment. Required for admin_override and founder_override."
+    },
+    "access_source": {
+      "type": "string",
+      "enum": [
+        "parent_approved",
+        "invitation_code",
+        "court_authorized",
+        "admin_override",
+        "founder_override"
+      ],
+      "description": "Server-set. How this assignment was authorized."
+    },
     "notes": {
       "type": "string"
     }
@@ -63,20 +91,24 @@
     "professional_email"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "user_condition": {
+        "role": "founder"
+      }
+    },
     "read": {
       "$or": [
         {
-          "family_user_id": "{{user.id}}"
+          "data.family_user_id": "{{user.id}}"
         },
         {
-          "family_email": "{{user.email}}"
+          "data.family_email": "{{user.email}}"
         },
         {
-          "professional_user_id": "{{user.id}}"
+          "data.professional_user_id": "{{user.id}}"
         },
         {
-          "professional_email": "{{user.email}}"
+          "data.professional_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -88,16 +120,10 @@
     "update": {
       "$or": [
         {
-          "family_user_id": "{{user.id}}"
+          "data.family_user_id": "{{user.id}}"
         },
         {
-          "family_email": "{{user.email}}"
-        },
-        {
-          "professional_user_id": "{{user.id}}"
-        },
-        {
-          "professional_email": "{{user.email}}"
+          "data.family_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -114,10 +140,10 @@
     "delete": {
       "$or": [
         {
-          "family_user_id": "{{user.id}}"
+          "data.family_user_id": "{{user.id}}"
         },
         {
-          "family_email": "{{user.email}}"
+          "data.family_email": "{{user.email}}"
         },
         {
           "user_condition": {
