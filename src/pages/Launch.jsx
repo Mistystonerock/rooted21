@@ -20,14 +20,14 @@ import {
 
 const LAUNCH_DATE = new Date("2026-07-10T09:00:00-04:00");
 
-const BG = "#faf6f1";
-const CARD = "#ffffff";
-const CREAM = "#f5ede2";
-const BORDER = "rgba(120,85,60,0.18)";
-const GREEN = "#6b9d6e";
-const DARK = "#5a3d28";
-const MUTED = "#8b6f54";
-const GOLD = "#a67c52";
+const BG = "#faf6ee";
+const CARD = "#fffdf9";
+const CREAM = "#efe4d2";
+const BORDER = "rgba(90,70,50,0.18)";
+const GREEN = "#2d4a35";
+const DARK = "#2d4a35";
+const MUTED = "#5c4a37";
+const GOLD = "#a9784f";
 
 const HELP_ITEMS = [
   { icon: ShieldCheck, title: "Trauma-informed parenting", text: "Calm tools for behavior, regulation, routines, and parent support." },
