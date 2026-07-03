@@ -46,9 +46,29 @@ export default function FilingSetupPanel({ form, setForm, casePlans, cases, onGe
         <input value={form.court_name} onChange={e => setForm({ ...form, court_name: e.target.value })} placeholder="Example: County Juvenile Court" className="w-full rounded-xl border px-3 py-2.5 text-sm" style={{ borderColor: C.cream }} />
       </div>
 
-      <button onClick={onGenerate} disabled={generating} className="w-full rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2" style={{ background: C.darkGreen, color: "#fff", border: "none", opacity: generating ? 0.75 : 1 }}>
+      <div>
+        <label className="block text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>FAMILY / CASE NAME</label>
+        <input value={form.family_case_name} onChange={e => setForm({ ...form, family_case_name: e.target.value })} placeholder="Example: In re: Smith Family" className="w-full rounded-xl border px-3 py-2.5 text-sm" style={{ borderColor: C.cream }} />
+      </div>
+
+      {form.filing_type === "service_request" && (
+        <div>
+          <label className="block text-[10px] font-bold mb-1" style={{ color: C.mutedText }}>SERVICE OR SUPPORT BEING REQUESTED</label>
+          <textarea value={form.service_details} onChange={e => setForm({ ...form, service_details: e.target.value })} rows={2} placeholder="Example: Weekly parenting classes and a referral for family counseling" className="w-full rounded-xl border px-3 py-2.5 text-sm" style={{ borderColor: C.cream }} />
+        </div>
+      )}
+
+      <label className="flex items-start gap-2 rounded-xl p-3" style={{ background: C.offWhite }}>
+        <input type="checkbox" checked={form.include_declaration} onChange={e => setForm({ ...form, include_declaration: e.target.checked })} className="mt-1" style={{ accentColor: C.darkGreen }} />
+        <span className="text-[11px] leading-relaxed" style={{ color: C.darkGreen }}>Include a formal declaration ("I declare under penalty of perjury...") and signature block. Leave unchecked for an informal draft.</span>
+      </label>
+
+      <button onClick={onGenerate} disabled={generating || !form.court_name || !form.family_case_name} className="w-full rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2" style={{ background: C.darkGreen, color: "#fff", border: "none", opacity: (generating || !form.court_name || !form.family_case_name) ? 0.6 : 1 }}>
         <Sparkles size={15} /> {generating ? "Drafting filing…" : "Generate court-ready draft"}
       </button>
+      {(!form.court_name || !form.family_case_name) && (
+        <p className="text-[10px]" style={{ color: C.mutedText }}>Court/agency name and family/case name are required before generating.</p>
+      )}
     </div>
   );
 }
