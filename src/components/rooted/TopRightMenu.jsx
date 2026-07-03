@@ -3,6 +3,7 @@ import { Accessibility, Bell, BookOpen, DoorOpen, Eye, FileCheck2, Heart, Home, 
 import LogoutButton from "@/components/auth/LogoutButton";
 import { activateQuickExit } from "@/lib/survivorMode";
 import { C } from "@/lib/rooted-constants";
+import TreeLogo from "@/components/rooted/TreeLogo";
 
 const LANGUAGES = [
   { code: "en", label: "English", dir: "ltr" },
@@ -235,7 +236,10 @@ export default function TopRightMenu({ user }) {
           style={{ background: C.white, border: `1.5px solid ${C.cream}`, maxHeight: "calc(100vh - 9rem)", overflowY: "auto" }}
         >
           <div className="flex items-center justify-between gap-3">
-            <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Rooted 21 menu</p>
+            <span className="flex items-center gap-2">
+              <TreeLogo size={28} />
+              <p className="font-serif text-base font-bold" style={{ color: C.darkGreen }}>Rooted 21 menu</p>
+            </span>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-xl px-2 py-1" style={{ background: C.offWhite, color: C.darkGreen, border: `1px solid ${C.cream}` }}>
               <X size={16} />
             </button>
