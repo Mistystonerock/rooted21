@@ -96,8 +96,8 @@ Deno.serve(async (req) => {
 
     // ── Read trusted records directly, scoped to authenticated user ──
     const [itemsRaw, docsRaw, releasesRaw, consentsRaw] = await Promise.all([
-      base44.entities.EvidenceTimelineItem.filter({ owner_email: user.email }, "event_date", 500).catch(() => []),
-      base44.entities.SecureDocument.list("-created_date", 300).catch(() => []),
+      base44.asServiceRole.entities.EvidenceTimelineItem.filter({ owner_email: user.email }, "event_date", 500).catch(() => []),
+      base44.asServiceRole.entities.SecureDocument.filter({ owner_email: user.email }, "-created_date", 300).catch(() => []),
       base44.asServiceRole.entities.ReleaseOfInformation.filter({ owner_email: user.email }).catch(() => []),
       base44.asServiceRole.entities.ConsentPermission.filter({ owner_email: user.email }).catch(() => []),
     ]);
@@ -256,6 +256,20 @@ Deno.serve(async (req) => {
     const pdfBytes = doc.output("arraybuffer");
     const base64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
 
+    // TEMP P1-D-2 QA: search decoded PDF text for markers, return compact booleans only. Removed after QA.
+    let _qaMarkers = undefined;
+    if (body?.__qaDecode === true) {
+      const pdfText = new TextDecoder("latin1").decode(new Uint8Array(pdfBytes));
+      _qaMarkers = {
+        sud_marker_present: pdfText.includes("SUDSECRETMARKER") || pdfText.includes("MATCONFIDENTIAL") || pdfText.includes("SUD Treatment"),
+        bh_marker_present: pdfText.includes("BHSECRETMARKER") || pdfText.includes("BHCONFIDENTIAL") || pdfText.includes("Behavioral Health Therapy"),
+        court_marker_present: pdfText.includes("COURTPUBLICMARKER") || pdfText.includes("Court Order Custody"),
+        court_case_present: pdfText.includes("P1DTEST-2026-CV-001"),
+        withheld_line_present: pdfText.includes("restricted document") && pdfText.includes("withheld"),
+      };
+      console.log("QA_MARKERS " + JSON.stringify(_qaMarkers));
+    }
+
     // ── Summary audit ──
     await base44.asServiceRole.entities.RootedAuditEvent.create({
       actor_email: user.email,
@@ -271,12 +285,13 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      base64,
-      fileName: `chronology-exhibit-${nowIso.slice(0, 10)}.pdf`,
+      _qaMarkers,
       reportId,
       summary: { exhibits: items.length },
       documents_summary: documentsSummary,
       integrity,
+      fileName: `chronology-exhibit-${nowIso.slice(0, 10)}.pdf`,
+      base64,
     });
   } catch (error) {
     console.error("generateChronologyExhibitPdf error:", error);
