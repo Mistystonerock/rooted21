@@ -50,6 +50,9 @@ export default function MoxieChatWidget({ compact = false }) {
   const moduleLabel = useMemo(() => currentModuleLabel(modulePath), [modulePath]);
   const [mode, setMode] = useState(() => inferMoxieMode(modulePath));
   const isFounderDashboard = modulePath === "/founder-dashboard";
+  const isCriticalSafetyPage = modulePath.startsWith("/sos") || modulePath.startsWith("/human-trafficking") || modulePath.startsWith("/trafficking");
+  const bubbleBottomOffset = isCriticalSafetyPage ? "calc(env(safe-area-inset-bottom) + 10rem)" : "calc(env(safe-area-inset-bottom) + 6.75rem)";
+  const forceCompact = compact || isCriticalSafetyPage;
   const [messages, setMessages] = useState([
     { role: "assistant", content: openingPrompt(inferMoxieMode(modulePath)), suggestions: ["What should I do next?", "Help me document this", "Show crisis resources"] }
   ]);
@@ -128,26 +131,26 @@ export default function MoxieChatWidget({ compact = false }) {
   if (!open) {
     return (
       <div
-        className="fixed left-3 z-40 flex items-center gap-2"
-        style={{ bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)" }}
+        className="fixed left-3 z-30 flex items-center gap-2"
+        style={{ bottom: bubbleBottomOffset }}
       >
         <button
           ref={openerRef}
           type="button"
           onClick={() => setOpen(true)}
-          className={`shadow-xl ${compact ? "rounded-full p-3" : "rounded-full px-4 py-3"}`}
+          className={`shadow-xl ${forceCompact ? "rounded-full p-3" : "rounded-full px-4 py-3"}`}
           style={{ background: C.darkGreen, color: "#fff", border: `2px solid ${C.cream}` }}
           aria-label="Open Moxie AI chat"
           title="Ask Moxie AI"
         >
-          <Bot size={compact ? 20 : 18} className={compact ? "" : "mr-2"} /> {!compact && "Ask Moxie AI"}
+          <Bot size={forceCompact ? 20 : 18} className={forceCompact ? "" : "mr-2"} /> {!forceCompact && "Ask Moxie AI"}
         </button>
       </div>
     );
   }
 
   return (
-    <section ref={panelRef} className="fixed left-3 z-40 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: "calc(env(safe-area-inset-bottom) + 6.75rem)", background: C.white, border: `1.5px solid ${C.cream}` }}>
+    <section ref={panelRef} className="fixed left-3 z-40 w-[calc(100vw-24px)] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl" style={{ bottom: bubbleBottomOffset, background: C.white, border: `1.5px solid ${C.cream}` }}>
       <div className="flex items-center gap-2 p-3" style={{ background: C.darkGreen }}>
         <button type="button" onClick={backFromMoxie} className="rounded-xl px-2 py-2 text-xs font-black" style={{ color: C.cream, background: "rgba(255,255,255,0.12)", border: "none" }} aria-label="Back from Moxie chat">
           <ArrowLeft size={16} className="mr-1" /> Back

@@ -1,5 +1,29 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.31";
-import twilio from "npm:twilio@5.3.0";
+
+function normalizePhoneNumber(raw) {
+  if (!raw) return null;
+  const digits = String(raw).replace(/[^\d+]/g, "");
+  if (digits.startsWith("+")) return digits;
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  return digits.startsWith("+") ? digits : `+${digits}`;
+}
+
+async function sendSmsViaTwilio(accountSid, authToken, fromNumber, toNumber, body) {
+  const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+  const authHeader = "Basic " + btoa(`${accountSid}:${authToken}`);
+  const params = new URLSearchParams({ To: toNumber, From: fromNumber, Body: body });
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { Authorization: authHeader, "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(json?.message || `Twilio SMS failed with status ${res.status}`);
+  }
+  return json;
+}
 
 Deno.serve(async (req) => {
   try {
@@ -72,16 +96,11 @@ Deno.serve(async (req) => {
       });
     } catch (_e) { /* no contacts configured */ }
 
-    // ── Twilio client (best-effort — SMS delivery must never block the SOS save) ──
-    let twilioClient = null;
+    // ── Twilio credentials (best-effort — SMS delivery must never block the SOS save) ──
     const twilioAccountSid = Deno.env.get("TWILIO_ACCOUNT_SID");
     const twilioAuthToken = Deno.env.get("TWILIO_AUTH_TOKEN");
     const twilioFromNumber = Deno.env.get("TWILIO_PHONE_NUMBER");
-    if (twilioAccountSid && twilioAuthToken && twilioFromNumber) {
-      try {
-        twilioClient = twilio(twilioAccountSid, twilioAuthToken);
-      } catch (_e) { twilioClient = null; }
-    }
+    const twilioConfigured = !!(twilioAccountSid && twilioAuthToken && twilioFromNumber);
 
     // ── Process each approved contact ──
     const notifiedUserIds = [];
@@ -147,9 +166,11 @@ Deno.serve(async (req) => {
         if (gpsShared) smsBody += ` Location: https://maps.google.com/?q=${gps_coordinates.lat},${gps_coordinates.lng}`;
         smsBody += " Please check in with them.";
 
-        if (twilioClient) {
+        if (twilioConfigured) {
+          const toNumber = normalizePhoneNumber(contact.phone_number);
           try {
-            await twilioClient.messages.create({ body: smsBody, from: twilioFromNumber, to: contact.phone_number });
+            if (!toNumber) throw new Error("Contact has no usable phone number");
+            await sendSmsViaTwilio(twilioAccountSid, twilioAuthToken, twilioFromNumber, toNumber, smsBody);
             await logDelivery(contactName, "sms", "success", null, gpsShared, messageShared);
             externalDeliveries.push({ name: contactName, method: "sms", status: "success" });
           } catch (smsError) {
@@ -245,6 +266,7 @@ Deno.serve(async (req) => {
       success: true,
       incidentId,
       timestamp,
+      had_active_contacts: supportContacts.length > 0,
       notified_count: totalNotified,
       failed_count: externalFailures.length,
       notified_user_ids: notifiedUserIds,

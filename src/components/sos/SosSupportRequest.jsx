@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
 import { activateQuickExit } from "@/lib/survivorMode";
-import { Send, CheckCircle2, MapPin, MapPinOff, Loader2, Phone, Users, Plus, X } from "lucide-react";
+import { Send, CheckCircle2, AlertCircle, MapPin, MapPinOff, Loader2, Phone, Users, Plus, X } from "lucide-react";
 
 function QuickExitButton() {
   return (
@@ -114,16 +114,28 @@ export default function SosSupportRequest() {
   // ── Confirmation screen ──
   if (confirmation) {
     const cr = confirmation.crisis_resources || {};
+    const noContacts = !confirmation.had_active_contacts;
+    const deliveryFailed = confirmation.had_active_contacts && (confirmation.notified_count || 0) === 0 && (confirmation.failed_count || 0) > 0;
+
+    let statusMessage = confirmation.confirmation_message;
+    if (noContacts) {
+      statusMessage = "No support contacts are set up yet. Your SOS was saved, and emergency resources are shown below.";
+    } else if (deliveryFailed) {
+      statusMessage = "Your SOS was saved, but we could not notify your support contact. Please use 911, 988, or call your trusted person directly if safe.";
+    }
+
     return (
       <section className="rounded-3xl p-5 shadow-lg" style={{ background: "#fff", border: `2px solid ${C.midGreen}` }}>
         <QuickExitButton />
-        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: C.midGreen }}>
-          <CheckCircle2 size={32} color="#fff" />
+        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: deliveryFailed ? "#C0392B" : C.midGreen }}>
+          {deliveryFailed ? <AlertCircle size={32} color="#fff" /> : <CheckCircle2 size={32} color="#fff" />}
         </div>
-        <h2 className="text-center font-serif text-2xl font-black" style={{ color: C.darkGreen }}>Request sent</h2>
-        <p className="mt-2 text-center text-sm leading-relaxed" style={{ color: C.mutedText }}>{confirmation.confirmation_message}</p>
+        <h2 className="text-center font-serif text-2xl font-black" style={{ color: C.darkGreen }}>
+          {deliveryFailed ? "SOS saved — delivery failed" : "Request sent"}
+        </h2>
+        <p className="mt-2 text-center text-sm leading-relaxed" style={{ color: C.mutedText }}>{statusMessage}</p>
 
-        {(confirmation.notified_count > 0 || confirmation.failed_count > 0) && (
+        {!noContacts && !deliveryFailed && (confirmation.notified_count > 0 || confirmation.failed_count > 0) && (
           <div className="mt-3 rounded-2xl p-3 text-center" style={{ background: `${C.midGreen}15`, border: `1px solid ${C.midGreen}40` }}>
             <p className="text-xs font-bold" style={{ color: C.darkGreen }}>
               {confirmation.notified_count || 0} contact{confirmation.notified_count === 1 ? "" : "s"} notified
@@ -138,6 +150,22 @@ export default function SosSupportRequest() {
           <a href={`tel:${cr.crisis_lifeline || "988"}`} className="flex items-center gap-2 text-sm font-bold no-underline" style={{ color: "#B84C2A" }}><Phone size={15} /> Call or text {cr.crisis_lifeline || "988"}</a>
           <p className="text-xs font-bold" style={{ color: "#B84C2A" }}>{cr.crisis_text_line || "Text HOME to 741741"}</p>
         </div>
+
+        {(noContacts || deliveryFailed) && (
+          <div className="mt-4 space-y-2">
+            <Link to="/support-contacts" className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-black no-underline" style={{ background: C.darkGreen, color: "#fff" }}>
+              <Users size={16} /> Add Support Contact
+            </Link>
+            <Link to="/support-contacts" className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-black no-underline" style={{ background: "#fff", color: C.darkGreen, border: `2px solid ${C.darkGreen}` }}>
+              View Support Contacts
+            </Link>
+            {deliveryFailed && (
+              <button type="button" onClick={reset} className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-black" style={{ background: C.cream, color: C.darkGreen, border: "none", cursor: "pointer" }}>
+                Try Again
+              </button>
+            )}
+          </div>
+        )}
 
         <button type="button" onClick={reset} className="mt-4 w-full rounded-2xl py-3 text-sm font-black" style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
           Done
