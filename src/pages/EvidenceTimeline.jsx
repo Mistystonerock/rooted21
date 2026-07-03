@@ -75,7 +75,7 @@ export default function EvidenceTimeline() {
           </div>
         </section>
 
-        <ChronologyExportButton items={filteredItems} courtDocuments={courtDocuments} />
+        <ChronologyExportButton items={filteredItems} childName={selectedChild?.full_name || selectedChild?.name || ""} category={category} />
         <EvidenceTimelineList items={filteredItems} courtDocuments={courtDocuments} onDelete={deleteItem} />
       </main>
     </div>
