@@ -1,0 +1,112 @@
+{
+  "name": "SupportContact",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "The user who owns this support contact."
+    },
+    "family_id": {
+      "type": "string",
+      "description": "Optional link to a family/case."
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Name of the support person."
+    },
+    "contact_relationship": {
+      "type": "string",
+      "description": "Relationship or role, e.g. Sponsor, Friend, Mother, Therapist."
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "preferred_contact_method": {
+      "type": "string",
+      "enum": [
+        "in_app",
+        "phone",
+        "text",
+        "email"
+      ],
+      "default": "in_app",
+      "description": "How this contact prefers to be reached."
+    },
+    "can_receive_sos_alerts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this contact is notified when the user sends an SOS."
+    },
+    "can_receive_gps": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this contact may receive the user's GPS location."
+    },
+    "can_receive_message_details": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this contact may read the SOS message content."
+    },
+    "safe_word": {
+      "type": "string",
+      "description": "Optional safe word or contact instruction."
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "linked_user_id": {
+      "type": "string",
+      "description": "If this contact is a platform user, their user ID for in-app notifications."
+    },
+    "updated_by": {
+      "type": "string"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag."
+    },
+    "deleted_at": {
+      "type": "string"
+    },
+    "deleted_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_id",
+    "contact_name"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}

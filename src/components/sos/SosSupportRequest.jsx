@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Send, CheckCircle2, MapPin, MapPinOff, Loader2, Phone } from "lucide-react";
+import { Send, CheckCircle2, MapPin, MapPinOff, Loader2, Phone, Users, Plus } from "lucide-react";
 
 const URGENCY = [
   { value: "low", label: "Low", hint: "I need support soon", color: C.midGreen },
@@ -31,6 +31,25 @@ export default function SosSupportRequest() {
   const [status, setStatus] = useState("");
   const [confirmation, setConfirmation] = useState(null);
   const [error, setError] = useState("");
+  const [hasContacts, setHasContacts] = useState(null);
+  const [proceedWithoutContacts, setProceedWithoutContacts] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const u = await base44.auth.me();
+        const contacts = await base44.entities.SupportContact.filter({
+          user_id: u.id,
+          active: true,
+          can_receive_sos_alerts: true,
+          is_deleted: false,
+        }, "", 1);
+        setHasContacts(contacts.length > 0);
+      } catch {
+        setHasContacts(false);
+      }
+    })();
+  }, []);
 
   async function handleSend() {
     if (!urgency) {
@@ -97,6 +116,30 @@ export default function SosSupportRequest() {
 
         <button type="button" onClick={reset} className="mt-4 w-full rounded-2xl py-3 text-sm font-black" style={{ background: C.darkGreen, color: "#fff", border: "none", cursor: "pointer" }}>
           Done
+        </button>
+      </section>
+    );
+  }
+
+  // ── No support contacts fallback ──
+  if (hasContacts === false && !proceedWithoutContacts) {
+    return (
+      <section className="rounded-3xl p-5 shadow-lg" style={{ background: "#fff", border: `2px solid ${C.gold}` }}>
+        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: C.gold }}>
+          <Users size={30} color="#fff" />
+        </div>
+        <h2 className="text-center font-serif text-xl font-black" style={{ color: C.darkGreen }}>No support contacts yet</h2>
+        <p className="mt-2 text-center text-sm leading-relaxed" style={{ color: C.mutedText }}>
+          You do not have support contacts set up yet. Your SOS will still be saved, and emergency resources will still be shown.
+        </p>
+        <Link to="/support-contacts" className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-base font-black no-underline shadow-lg"
+          style={{ background: C.darkGreen, color: "#fff" }}>
+          <Plus size={20} /> Add Support Contact
+        </Link>
+        <button type="button" onClick={() => setProceedWithoutContacts(true)}
+          className="mt-3 w-full rounded-2xl py-3.5 text-sm font-black"
+          style={{ background: "#fff", color: C.darkGreen, border: `2px solid ${C.darkGreen}`, cursor: "pointer" }}>
+          Send SOS Without Contacts
         </button>
       </section>
     );

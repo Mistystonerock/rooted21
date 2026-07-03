@@ -1,29 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.31";
 
-// Professional roles (as stored on AssignedFamily.professional_role) that map to
-// the SafeContactPreference approved-role vocabulary.
-const ROLE_ALIASES = {
-  Caseworker: ["caseworker", "cps worker", "cps caseworker"],
-  Therapist: ["therapist", "counselor", "behavioral health worker"],
-  CASA: ["casa", "casa_gal"],
-  GuardianAdLitem: ["gal", "guardian ad litem"],
-  Attorney: ["attorney"],
-  CourtStaff: ["court staff"],
-  SchoolStaff: ["school staff"],
-  Probation: ["juvenile probation", "probation"],
-  Mentor: ["mentor"],
-  Administrator: ["administrator", "admin"],
-};
-
-function roleMatchesApproved(professionalRole, approvedRoles) {
-  const pr = String(professionalRole || "").toLowerCase().trim();
-  return approvedRoles.some((approved) => {
-    if (String(approved).toLowerCase() === pr) return true;
-    const aliases = ROLE_ALIASES[approved] || [];
-    return aliases.includes(pr);
-  });
-}
-
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -43,44 +19,17 @@ Deno.serve(async (req) => {
     const userName = currentUser.full_name || "Unknown";
     const userEmail = currentUser.email || "Unknown";
 
-    // ── Resolve safe-contact preferences (server-side privacy enforcement) ──
-    let approvedRoles = ["Caseworker", "Therapist", "CASA", "GuardianAdLitem", "Attorney", "CourtStaff", "SchoolStaff", "Probation", "Mentor", "Administrator"];
-    let approvedUserIds = null;
-    let gpsAllowed = true;
-
-    try {
-      const prefs = await base44.asServiceRole.entities.SafeContactPreference.filter({ user_id: userId, is_deleted: false }, "-created_date", 1);
-      if (prefs && prefs.length > 0) {
-        const safePrefs = prefs[0];
-        if (Array.isArray(safePrefs.approved_recipient_roles) && safePrefs.approved_recipient_roles.length > 0) {
-          approvedRoles = safePrefs.approved_recipient_roles;
-        }
-        if (Array.isArray(safePrefs.approved_recipient_user_ids) && safePrefs.approved_recipient_user_ids.length > 0) {
-          approvedUserIds = safePrefs.approved_recipient_user_ids;
-        }
-        gpsAllowed = safePrefs.gps_allowed !== false;
-      }
-    } catch (_e) { /* preferences optional */ }
-
-    // Enforce GPS privacy server-side — client cannot override.
-    let finalGpsCoordinates = gps_coordinates || null;
-    let finalLocationShared = location_shared === true;
-    if (!gpsAllowed) {
-      finalGpsCoordinates = null;
-      finalLocationShared = false;
-    }
-
     // ── Create the SOS incident (GPS lives ONLY here) ──
     const incident = await base44.asServiceRole.entities.SOSIncident.create({
       user_id: userId,
       family_id: null,
       incident_type: "sos_support_request",
-      description: message || "SOS support request",
+      description: message || "SOS support request — no message provided",
       status: "active",
       urgency_level,
-      gps_coordinates: finalGpsCoordinates,
+      gps_coordinates: gps_coordinates || null,
       manual_location: manual_location || null,
-      location_shared: finalLocationShared,
+      location_shared: location_shared === true,
       user_name: userName,
       user_email: userEmail,
       notified_user_ids: [],
@@ -93,88 +42,130 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.RootedAuditEvent.create({
         actor_email: userEmail,
         actor_role: currentUser.role || "user",
-        event_type: "sos_alert",
+        event_type: "security_alert",
         entity_name: "SOSIncident",
         entity_id: incidentId,
-        severity: urgency_level === "critical" ? "critical" : "high",
-        summary: `SOS support request sent by ${userName} — urgency: ${urgency_level}, GPS: ${finalGpsCoordinates ? "included" : "not included"}`,
+        severity: urgency_level === "critical" ? "critical" : "warning",
+        summary: `SOS support request sent by ${userName} — urgency: ${urgency_level}, GPS: ${gps_coordinates ? "included" : "not included"}`,
         metadata_json: JSON.stringify({
           action: "sos_support_request",
           incident_id: incidentId,
           urgency_level,
-          gps_included: !!finalGpsCoordinates,
+          gps_included: !!gps_coordinates,
           manual_location_provided: !!manual_location,
-          location_shared: finalLocationShared,
+          location_shared: location_shared === true,
           user_id: userId,
         }),
         occurred_at: new Date().toISOString(),
       });
     } catch (_e) { /* audit best-effort */ }
 
-    // ── Notify approved support team (from AssignedFamily, in-app only, no message body) ──
-    const notifiedUserIds = [];
-    let notificationCount = 0;
-
+    // ── Query SupportContact records — only active + SOS-approved + not deleted ──
+    let supportContacts = [];
     try {
-      const assignments = await base44.asServiceRole.entities.AssignedFamily.filter({ family_email: userEmail, status: "active" }, "-created_date", 100);
-      const now = new Date();
-
-      const approvedAssignments = (assignments || []).filter((a) => {
-        if (!a.professional_email) return false;
-        if (a.expires_at && new Date(a.expires_at) < now) return false;
-        if (approvedUserIds && approvedUserIds.length > 0) {
-          return a.professional_user_id && approvedUserIds.includes(a.professional_user_id);
-        }
-        return roleMatchesApproved(a.professional_role, approvedRoles);
+      supportContacts = await base44.asServiceRole.entities.SupportContact.filter({
+        user_id: userId,
+        active: true,
+        can_receive_sos_alerts: true,
+        is_deleted: false,
       });
+    } catch (_e) { /* no contacts configured */ }
 
-      const seen = new Set();
-      for (const a of approvedAssignments) {
-        if (seen.has(a.professional_email)) continue;
-        seen.add(a.professional_email);
+    // ── Process each approved contact ──
+    const notifiedUserIds = [];
+    const notifiedContacts = [];
+    const externalNotificationIntents = [];
+
+    for (const contact of supportContacts) {
+      const contactName = contact.contact_name || "Unknown";
+      const contactMethod = contact.preferred_contact_method || "in_app";
+      const gpsShared = !!(contact.can_receive_gps && gps_coordinates && location_shared);
+      const messageShared = !!(contact.can_receive_message_details && message);
+
+      const notifTitle = `SOS Alert — ${urgency_level.toUpperCase()}`;
+      let notifBody = `${userName} has sent an SOS support request. Urgency: ${urgency_level}.`;
+      if (messageShared) notifBody += ` Message: "${message}"`;
+      if (gpsShared) notifBody += ` Location: ${gps_coordinates.lat}, ${gps_coordinates.lng}`;
+      if (contact.can_receive_message_details && manual_location && !gps_coordinates) notifBody += ` Manual location: ${manual_location}`;
+
+      if (contact.linked_user_id) {
         try {
-          await base44.asServiceRole.entities.Notification.create({
-            user_email: a.professional_email,
-            type: "sos_alert",
-            title: `SOS Support Request — ${urgency_level.toUpperCase()}`,
-            body: `A family you support has sent an SOS support request. Urgency: ${urgency_level}. Open the dashboard for details.`,
-            sensitive: true,
-            delivery_channel: "in_app",
-            related_entity: "SOSIncident",
-            related_id: incidentId,
-            read: false,
-          });
-          if (a.professional_user_id) notifiedUserIds.push(a.professional_user_id);
-          notificationCount++;
+          const linkedUser = await base44.asServiceRole.entities.User.filter({ id: contact.linked_user_id }, "", 1);
+          const linkedEmail = linkedUser && linkedUser[0] ? linkedUser[0].email : null;
+          if (linkedEmail) {
+            await base44.asServiceRole.entities.Notification.create({
+              user_email: linkedEmail,
+              type: "system",
+              title: notifTitle,
+              body: notifBody,
+              sensitive: true,
+              delivery_channel: "in_app",
+              related_entity: "SOSIncident",
+              related_id: incidentId,
+              read: false,
+            });
+            notifiedUserIds.push(contact.linked_user_id);
+            notifiedContacts.push({ name: contactName, method: "in_app", gps_shared: gpsShared, message_shared: messageShared });
+          } else {
+            externalNotificationIntents.push({ name: contactName, method: contactMethod, phone: contact.phone_number || null, email: contact.email || null, gps_shared: gpsShared, message_shared: messageShared });
+          }
         } catch (_e) { /* skip failed recipient */ }
+      } else {
+        externalNotificationIntents.push({ name: contactName, method: contactMethod, phone: contact.phone_number || null, email: contact.email || null, gps_shared: gpsShared, message_shared: messageShared });
       }
-    } catch (_e) { /* no support team configured */ }
+    }
 
+    // ── Update SOSIncident with notified user IDs ──
     if (notifiedUserIds.length > 0) {
       try {
-        await base44.asServiceRole.entities.SOSIncident.update(incidentId, {
-          notified_user_ids: notifiedUserIds,
-          updated_by: userId,
-        });
+        await base44.asServiceRole.entities.SOSIncident.update(incidentId, { notified_user_ids: notifiedUserIds, updated_by: userId });
       } catch (_e) { /* non-fatal */ }
     }
 
-    const confirmationMessage = notificationCount > 0
-      ? `Your support team has been notified. ${notificationCount} professional(s) received an in-app alert. Your incident ID is ${incidentId}.`
-      : `Your SOS request has been saved. Incident ID: ${incidentId}. No support team is currently configured. If you are in immediate danger, call or text 911. 988 Suicide & Crisis Lifeline is available 24/7.`;
+    // ── Audit contact notifications (no GPS coordinates or message content) ──
+    if (notifiedContacts.length > 0 || externalNotificationIntents.length > 0) {
+      try {
+        await base44.asServiceRole.entities.RootedAuditEvent.create({
+          actor_email: userEmail,
+          actor_role: currentUser.role || "user",
+          event_type: "security_alert",
+          entity_name: "SOSIncident",
+          entity_id: incidentId,
+          severity: "info",
+          summary: `SOS notifications sent for incident ${incidentId}: ${notifiedContacts.length} in-app, ${externalNotificationIntents.length} external intents`,
+          metadata_json: JSON.stringify({
+            incident_id: incidentId,
+            in_app_notifications: notifiedContacts.map((c) => ({ name: c.name, gps_shared: c.gps_shared, message_shared: c.message_shared })),
+            external_intents: externalNotificationIntents.map((c) => ({ name: c.name, method: c.method, gps_shared: c.gps_shared, message_shared: c.message_shared })),
+          }),
+          occurred_at: new Date().toISOString(),
+        });
+      } catch (_e) { /* audit best-effort */ }
+    }
+
+    const timestamp = new Date().toISOString();
+    const totalNotified = notifiedContacts.length + externalNotificationIntents.length;
+
+    let confirmationMessage;
+    if (totalNotified > 0) {
+      const parts = [];
+      if (notifiedContacts.length > 0) parts.push(`${notifiedContacts.length} in-app notification(s) sent`);
+      if (externalNotificationIntents.length > 0) parts.push(`${externalNotificationIntents.length} external contact(s) queued`);
+      confirmationMessage = `Your SOS has been saved (Incident ID: ${incidentId}). ${parts.join(" and ")}. If you are in immediate danger, call or text 911. The 988 Suicide & Crisis Lifeline is available 24/7.`;
+    } else {
+      confirmationMessage = `Your SOS request has been saved. Incident ID: ${incidentId}. No support contacts are configured to receive alerts. If you are in immediate danger, call or text 911. The 988 Suicide & Crisis Lifeline is available 24/7.`;
+    }
 
     return Response.json({
       success: true,
       incidentId,
-      timestamp: new Date().toISOString(),
-      notified_count: notificationCount,
+      timestamp,
+      notified_count: totalNotified,
       notified_user_ids: notifiedUserIds,
+      notified_contacts: notifiedContacts,
+      external_notification_intents: externalNotificationIntents,
       confirmation_message: confirmationMessage,
-      crisis_resources: {
-        emergency: "911",
-        crisis_lifeline: "988",
-        crisis_text_line: "Text HOME to 741741",
-      },
+      crisis_resources: { emergency: "911", crisis_lifeline: "988", crisis_text_line: "Text HOME to 741741" },
     });
   } catch (error) {
     console.error("sendSosSupportMessage error:", error);

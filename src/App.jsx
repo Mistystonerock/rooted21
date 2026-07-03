@@ -57,6 +57,7 @@ import FamilySafetyCrisisPlan from '@/pages/FamilySafetyCrisisPlan';
 import CommunicationToneTool from '@/pages/CommunicationToneTool';
 import Donate from '@/pages/Donate';
 import SOS from '@/pages/SOS';
+import SupportContacts from '@/pages/SupportContacts';
 import CaregiverMeeting from '@/pages/CaregiverMeeting';
 
 import BottomNav from '@/components/rooted/BottomNav';
@@ -330,6 +331,7 @@ function App() {
               <Route path="/" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
+              <Route path="/support-contacts" element={<FeatureLockGate user={user}><SupportContacts /></FeatureLockGate>} />
               <Route path="/caregiver-meeting" element={<FeatureLockGate user={user}><CaregiverMeeting /></FeatureLockGate>} />
               <Route path="/crisis-intake" element={<Suspense fallback={<LoadingFallback />}><FeatureLockGate user={user}><routes.CrisisIntake /></FeatureLockGate></Suspense>} />
               <Route path="/safe-screen" element={<Suspense fallback={<LoadingFallback />}><FakeSafeScreen /></Suspense>} />
