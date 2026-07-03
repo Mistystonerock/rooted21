@@ -2,7 +2,22 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { C } from "@/lib/rooted-constants";
-import { Send, CheckCircle2, MapPin, MapPinOff, Loader2, Phone, Users, Plus } from "lucide-react";
+import { activateQuickExit } from "@/lib/survivorMode";
+import { Send, CheckCircle2, MapPin, MapPinOff, Loader2, Phone, Users, Plus, X } from "lucide-react";
+
+function QuickExitButton() {
+  return (
+    <button
+      type="button"
+      onClick={() => activateQuickExit()}
+      className="mb-3 flex w-full items-center justify-center gap-1.5 rounded-2xl py-2.5 text-xs font-black"
+      style={{ background: `${C.darkGreen}12`, color: C.darkGreen, border: `1.5px solid ${C.darkGreen}40`, cursor: "pointer" }}
+      aria-label="Quick exit to a safe screen"
+    >
+      <X size={15} /> Quick exit
+    </button>
+  );
+}
 
 const URGENCY = [
   { value: "low", label: "Low", hint: "I need support soon", color: C.midGreen },
@@ -101,6 +116,7 @@ export default function SosSupportRequest() {
     const cr = confirmation.crisis_resources || {};
     return (
       <section className="rounded-3xl p-5 shadow-lg" style={{ background: "#fff", border: `2px solid ${C.midGreen}` }}>
+        <QuickExitButton />
         <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: C.midGreen }}>
           <CheckCircle2 size={32} color="#fff" />
         </div>
@@ -148,6 +164,7 @@ export default function SosSupportRequest() {
   // ── Request form ──
   return (
     <section className="rounded-3xl p-5 shadow-lg" style={{ background: "#fff", border: `2px solid ${C.midGreen}40` }}>
+      <QuickExitButton />
       <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: C.darkGreen }}>
         <Send size={30} color="#fff" />
       </div>
