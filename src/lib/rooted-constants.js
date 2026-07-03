@@ -3,7 +3,7 @@ import { SURFACES, TEXT } from './design-system.js';
 export const C = {
   // Rooted 21 brand colors — warm parchment, muted olive, dark forest green
   darkGreen: "#2d4a35",
-  midGreen: "#77906a",
+  midGreen: "#5f7350",
   lightGreen: "#a3b28c",
   darkGreenElevated: "#efe4d2",
   cream: "#efe4d2",
@@ -13,7 +13,7 @@ export const C = {
   brown: "#a9784f",
   
   // Text colors
-  darkText: "#1a1a1a",
+  darkText: "#4a3d2f",
   mutedText: "#5c4a37",
   warmText: "#8a7157",
   
