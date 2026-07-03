@@ -26,6 +26,37 @@ function hasCrisisLanguage(text = '') {
   return CRISIS_TERMS.some(term => lower.includes(term));
 }
 
+const TRAFFICKING_TERMS = [
+  'trafficking', 'trafficked', 'being sold', 'forced to work', 'forced to have sex',
+  'someone is controlling me', 'they took my id', 'took my passport', 'cannot leave',
+  "can't leave", 'owe them money', 'forced me', 'pimp', 'being exploited', 'held against',
+  'they threaten', 'making me do things'
+];
+
+function hasTraffickingLanguage(text = '') {
+  const lower = text.toLowerCase();
+  return TRAFFICKING_TERMS.some(term => lower.includes(term));
+}
+
+const TRAFFICKING_SYSTEM_INSTRUCTIONS = `Moxie AI is Rooted 21's trauma-informed assistant, now in the Human Trafficking Survivor Support crisis protocol. The person may be a survivor or worried about someone they care about. Be exceptionally gentle, calm, warm, patient, and nonjudgmental. Safety comes first, education second, and documentation only if the user asks and it is safe.
+
+LANGUAGE RULES (strict):
+- NEVER ask "Are you being trafficked?" or ask them to label or prove what is happening.
+- Use gentle framing like: "Are you worried someone is controlling, threatening, pressuring, or exploiting you or someone you care about?"
+- Never pressure the person to disclose details, name anyone, or explain what happened. Let them share only what they choose.
+- Lead with safety and choices, not questions that force disclosure.
+- Reassure them it is not their fault and they are not in trouble.
+
+ALWAYS PRIORITIZE SAFETY:
+- If there is any sign of immediate danger, say: "If you or someone else is in immediate danger, call 911 now."
+- Offer the National Human Trafficking Hotline: call 1-888-373-7888, text 233733, or chat at humantraffickinghotline.org/en/chat (free, confidential, 24/7).
+- Remind them the hotline does not require them to share their name or explain everything.
+- Mention they can use Quick Exit or Safe Screen to leave the page instantly, and the secure SOS to alert only the contacts they have chosen.
+
+BOUNDARIES: Never diagnose, give legal advice, promise outcomes, encourage unsafe contact with someone who is hurting them, or expose private information. Do not push documentation; only mention keeping notes if the user brings it up and only if it feels safe to them.
+
+Response structure: gentle validation, one small next step focused on safety and choice, hotline/crisis options when relevant, and a reminder that they are in control of what they share.`;
+
 function resourceIsOutdated(resource) {
   if (!resource.verified_at) return true;
   return Date.now() - new Date(resource.verified_at).getTime() > 60 * 24 * 60 * 60 * 1000;
@@ -132,6 +163,36 @@ Deno.serve(async (req) => {
         crisis: false,
         mode,
         suggestions: ['Help me find the right tool', 'Show safety resources']
+      });
+    }
+
+    if (requestedMode === 'trafficking_crisis' || hasTraffickingLanguage(message)) {
+      if (hasCrisisLanguage(message)) {
+        return Response.json({
+          reply: 'If you or someone else is in immediate danger, call 911 now.\n\nYou are not alone and this is not your fault. The National Human Trafficking Hotline is free, confidential, and available 24/7 — you do not have to share your name or explain everything:\n• Call 1-888-373-7888\n• Text 233733\n• Chat at humantraffickinghotline.org/en/chat\n\nYou can use Quick exit or Safe screen at the top to leave this page instantly.',
+          crisis: true,
+          mode: 'trafficking_crisis',
+          suggestions: ['Open safety planning', 'Show me safe contact options', 'Ground me for 60 seconds']
+        });
+      }
+
+      const traffickingPrompt = `${TRAFFICKING_SYSTEM_INSTRUCTIONS}\n\nCurrent module: ${moduleLabel}\n\nRecent chat:\n${history.map(m => `${m.role}: ${m.content}`).join('\n')}\n\nUser message: ${message}\n\nAnswer as Moxie AI in the Human Trafficking Survivor Support crisis protocol. Return JSON only.`;
+      const traffickingReply = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: traffickingPrompt,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            reply: { type: 'string' },
+            suggestions: { type: 'array', items: { type: 'string' } }
+          },
+          required: ['reply', 'suggestions']
+        }
+      });
+      return Response.json({
+        reply: traffickingReply.reply,
+        crisis: false,
+        mode: 'trafficking_crisis',
+        suggestions: Array.isArray(traffickingReply.suggestions) ? traffickingReply.suggestions.slice(0, 3) : ['Show hotline options', 'Open safety planning', 'Help me feel calmer']
       });
     }
 

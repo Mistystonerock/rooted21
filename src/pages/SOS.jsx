@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, HeartPulse, Phone, X } from "lucide-react";
+import { AlertTriangle, ChevronLeft, HeartPulse, Phone, X, HeartHandshake, ChevronRight } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import DomesticViolenceSupportSection from "@/components/sos/DomesticViolenceSupportSection";
 import SurvivorModeSettings from "@/components/safety-plan/SurvivorModeSettings";
@@ -53,6 +53,19 @@ export default function SOS() {
 
       <main className="mx-auto max-w-[520px] space-y-4 px-4 py-5">
         <SosSupportRequest />
+
+        <Link to="/human-trafficking-support" className="flex w-full items-center justify-between gap-3 rounded-3xl p-4 no-underline shadow-sm" style={{ background: "#fff", border: `2px solid ${C.midGreen}40` }}>
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl" style={{ background: `${C.midGreen}18` }}>
+              <HeartHandshake size={22} color={C.darkGreen} />
+            </div>
+            <div>
+              <p className="text-sm font-black" style={{ color: C.darkGreen }}>Human Trafficking Survivor Support</p>
+              <p className="text-[11px] font-bold" style={{ color: C.mutedText }}>Private, gentle safety options</p>
+            </div>
+          </div>
+          <ChevronRight size={20} color={C.darkGreen} />
+        </Link>
 
         <section className="rounded-3xl p-5 text-center shadow-lg" style={{ background: "#fff", border: `2px solid ${C.cream}` }}>
           <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: C.midGreen }}>

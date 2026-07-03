@@ -1,0 +1,93 @@
+{
+  "name": "TraffickingSafetyPlan",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Survivor who owns this plan. Private by default."
+    },
+    "safe_word": {
+      "type": "string",
+      "description": "Optional safe word to signal a trusted person that help is needed."
+    },
+    "safe_places": {
+      "type": "array",
+      "description": "Places the survivor can go to be safe.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "warning_signs": {
+      "type": "string",
+      "description": "Signs that the situation is becoming unsafe."
+    },
+    "quick_escape_notes": {
+      "type": "string",
+      "description": "Steps or route to leave quickly if needed."
+    },
+    "grab_bag_items": {
+      "type": "array",
+      "description": "Items to have ready if leaving quickly.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "grounding_tools": {
+      "type": "array",
+      "description": "Calming or grounding tools that help the survivor.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "safe_contact_notes": {
+      "type": "string",
+      "description": "Notes about who is safe to contact and how."
+    },
+    "important_notes": {
+      "type": "string",
+      "description": "Any other private notes the survivor wants to keep."
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag."
+    },
+    "deleted_at": {
+      "type": "string"
+    },
+    "deleted_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}
