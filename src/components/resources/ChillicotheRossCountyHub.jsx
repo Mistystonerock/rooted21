@@ -47,7 +47,7 @@ export default function ChillicotheRossCountyHub({ zip, includeStatewide }) {
   }, [allResources, trimmedZip, isRossZip]);
 
   const statewideMatches = useMemo(() => (
-    allResources.filter(r => !r.county && !r.zip_code && (!r.service_area_zips || r.service_area_zips.length === 0))
+    allResources.filter(r => !r.county || r.county === "National" || r.county === "Statewide")
   ), [allResources]);
 
   const noLocalMatches = !!trimmedZip && localMatches.length === 0;
