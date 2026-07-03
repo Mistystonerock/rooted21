@@ -11,22 +11,30 @@ import { AlertTriangle, Loader2, CheckCircle2, Users, X } from "lucide-react";
  *   caseName   — optional case display name
  *   variant    — "full" (large hero button) | "compact" (smaller inline)
  */
-export default function EmergencyAlertButton({ childName, caseId, caseName, variant = "full" }) {
+const URGENCY_OPTIONS = [
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+  { value: "critical", label: "Critical" },
+];
+
+export default function EmergencyAlertButton({ variant = "full" }) {
   const [step, setStep] = useState("idle"); // idle | confirm | sending | done | error
   const [situation, setSituation] = useState("");
   const [location, setLocation] = useState("");
+  const [urgency, setUrgency] = useState("high");
   const [result, setResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSend() {
     setStep("sending");
     setErrorMsg("");
-    const response = await base44.functions.invoke("sendEmergencyAlert", {
-      situation: situation.trim() || "Emergency — immediate assistance needed",
-      caseId,
-      caseName,
-      childName,
-      location: location.trim() || null,
+    const response = await base44.functions.invoke("sendSosSupportMessage", {
+      message: situation.trim() || "Emergency — immediate assistance needed",
+      urgency_level: urgency,
+      gps_coordinates: null,
+      manual_location: location.trim() || null,
+      location_shared: false,
     });
 
     if (response.data?.success) {
@@ -42,6 +50,7 @@ export default function EmergencyAlertButton({ childName, caseId, caseName, vari
     setStep("idle");
     setSituation("");
     setLocation("");
+    setUrgency("high");
     setResult(null);
     setErrorMsg("");
   }
@@ -91,8 +100,33 @@ export default function EmergencyAlertButton({ childName, caseId, caseName, vari
 
           <div className="p-5 space-y-4">
             <p className="text-xs leading-relaxed" style={{ color: C.darkGreen }}>
-              This will <strong>immediately send an SMS</strong> to your caseworker, attorney, CASA, and other key contacts with phone numbers. An urgent incident report will also be added to your case record.
+              This will <strong>immediately send an in-app alert</strong> to your approved support team and save an SOS incident to your record.
             </p>
+
+            {/* Urgency */}
+            <div>
+              <label className="block text-[10px] font-bold mb-1.5" style={{ color: C.mutedText }}>
+                HOW URGENT IS THIS?
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {URGENCY_OPTIONS.map((u) => (
+                  <button
+                    key={u.value}
+                    type="button"
+                    onClick={() => setUrgency(u.value)}
+                    className="py-2 rounded-xl text-xs font-bold"
+                    style={{
+                      background: urgency === u.value ? "#C0392B" : C.offWhite,
+                      color: urgency === u.value ? "#fff" : C.mutedText,
+                      border: `1.5px solid ${urgency === u.value ? "#C0392B" : C.cream}`,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {u.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Situation */}
             <div>
@@ -175,24 +209,8 @@ export default function EmergencyAlertButton({ childName, caseId, caseName, vari
           </div>
           <div className="p-5 space-y-3">
             <div className="rounded-xl p-3" style={{ background: "#EAF4EA", border: `1px solid ${C.midGreen}40` }}>
-              <p className="text-xs font-bold mb-1" style={{ color: C.darkGreen }}>
-                📱 {result.smsCount} of {result.totalContacts} contact{result.totalContacts !== 1 ? "s" : ""} notified via SMS
-              </p>
-              {result.smsResults?.map((r, i) => (
-                <p key={i} className="text-[11px]" style={{ color: r.status === "failed" ? "#C0392B" : C.mutedText }}>
-                  {r.status === "failed" ? "❌" : "✅"} {r.name} ({r.role}) — {r.status}
-                </p>
-              ))}
+              <p className="text-xs font-bold" style={{ color: C.darkGreen }}>{result.confirmation_message}</p>
             </div>
-
-            {result.caseNoteId && (
-              <p className="text-[11px]" style={{ color: C.midGreen }}>
-                📋 Urgent note added to case timeline
-              </p>
-            )}
-            <p className="text-[11px]" style={{ color: C.midGreen }}>
-              📄 Incident report created and saved
-            </p>
             <p className="text-[10px]" style={{ color: C.mutedText }}>Sent at {result.timestamp}</p>
 
             <div className="rounded-xl p-3 flex gap-2" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
