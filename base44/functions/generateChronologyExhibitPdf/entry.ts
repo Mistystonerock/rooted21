@@ -256,20 +256,6 @@ Deno.serve(async (req) => {
     const pdfBytes = doc.output("arraybuffer");
     const base64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
 
-    // TEMP P1-D-2 QA: search decoded PDF text for markers, return compact booleans only. Removed after QA.
-    let _qaMarkers = undefined;
-    if (body?.__qaDecode === true) {
-      const pdfText = new TextDecoder("latin1").decode(new Uint8Array(pdfBytes));
-      _qaMarkers = {
-        sud_marker_present: pdfText.includes("SUDSECRETMARKER") || pdfText.includes("MATCONFIDENTIAL") || pdfText.includes("SUD Treatment"),
-        bh_marker_present: pdfText.includes("BHSECRETMARKER") || pdfText.includes("BHCONFIDENTIAL") || pdfText.includes("Behavioral Health Therapy"),
-        court_marker_present: pdfText.includes("COURTPUBLICMARKER") || pdfText.includes("Court Order Custody"),
-        court_case_present: pdfText.includes("P1DTEST-2026-CV-001"),
-        withheld_line_present: pdfText.includes("restricted document") && pdfText.includes("withheld"),
-      };
-      console.log("QA_MARKERS " + JSON.stringify(_qaMarkers));
-    }
-
     // ── Summary audit ──
     await base44.asServiceRole.entities.RootedAuditEvent.create({
       actor_email: user.email,
@@ -285,7 +271,6 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      _qaMarkers,
       reportId,
       summary: { exhibits: items.length },
       documents_summary: documentsSummary,
