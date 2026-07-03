@@ -3,7 +3,7 @@ import { createClientFromRequest } from "npm:@base44/sdk@0.8.31";
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const results: Record<string, unknown> = {};
+    const results = {};
     const testUserId = "test_user_sos_sc";
 
     // TEST 1: Create support contact with GPS + SOS + message permissions
@@ -44,9 +44,7 @@ Deno.serve(async (req) => {
         updated_by: testUserId,
       });
 
-      const contacts = await base44.asServiceRole.entities.SupportContact.filter({
-        user_id: testUserId, active: true, can_receive_sos_alerts: true, is_deleted: false,
-      });
+      const contacts = await base44.asServiceRole.entities.SupportContact.filter({ user_id: testUserId, active: true, can_receive_sos_alerts: true, is_deleted: false });
 
       const notifDetails = [];
       for (const c of contacts) {
@@ -59,11 +57,10 @@ Deno.serve(async (req) => {
           type: "system",
           title: "SOS Alert",
           body: body,
-          sensitive: true,
-          delivery_channel: "in_app",
           related_entity: "SOSIncident",
           related_id: sos.id,
           read: false,
+          delivery_channel: "in_app",
         });
         notifDetails.push({ gps_in_notif: c.can_receive_gps, msg_in_notif: c.can_receive_message_details, notifId: notif.id });
       }
@@ -143,7 +140,7 @@ Deno.serve(async (req) => {
 
     // TEST 7: Privacy audit — check GPS not in audit events
     try {
-      const audits = await base44.asServiceRole.entities.RootedAuditEvent.filter({ actor_email: "test@example.com" }, "-occurred_at", 20);
+      const audits = await base44.asServiceRole.entities.RootedAuditEvent.filter({ actor_email: "test@example.com" }, "", 20);
       let gpsInAudit = false;
       for (const a of audits) {
         const s = JSON.stringify(a);
