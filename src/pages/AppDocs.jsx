@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C } from "@/lib/rooted-constants";
 import MobileHeader from "@/components/mobile/MobileHeader";
-import { BookOpen, Server, Brain, ChevronDown, ChevronUp, Shield } from "lucide-react";
+import { BookOpen, Server, Brain, ChevronDown, ChevronUp, Shield, HeartHandshake } from "lucide-react";
 
 const DOCS = [
   {
@@ -134,6 +134,42 @@ SMS via Twilio: import twilio from 'npm:twilio' — use TWILIO_* secrets`
       {
         title: "Governance Page",
         body: `The full plain-language role matrix lives at /role-governance. It covers parent/family user, founder, admin, therapist, CPS worker, school personnel, attorney/GAL, other approved professionals, and future organization/agency access.`
+      }
+    ]
+  },
+  {
+    id: "trafficking-support",
+    icon: <HeartHandshake size={18} color={C.midGreen} />,
+    label: "Human Trafficking Survivor Support",
+    subtitle: "Phase 1 — COMPLETE. Phase 2 backlog below.",
+    color: C.midGreen,
+    sections: [
+      {
+        title: "Status: Phase 1 Complete ✅",
+        body: `Human Trafficking Survivor Support Phase 1 is CLOSED and verified as of July 2026.
+
+Delivered:
+- Survivor Safety Hub landing (/human-trafficking-support), reachable from the SOS page.
+- Routes: /human-trafficking-support, /trafficking-emergency, /trafficking-safety-plan, /trafficking-safe-contacts (all behind FeatureLockGate).
+- Quick Exit + Safe Screen on every trafficking screen (shared TraffickingHeader → QuickExitBar).
+- Emergency Help: 911 guidance, National Human Trafficking Hotline call 1-888-373-7888, text 233733, and live chat; plus 988 for emotional crisis.
+- Safety Planning Tool saving privately to the TraffickingSafetyPlan entity (owner-scoped RLS).
+- Safe Contact Plan connected to the existing SupportContact system.
+- SOS uses the secured sendSosSupportMessage flow: only active + SOS-approved contacts notified; GPS and message content gated per-contact; nothing auto-shared with parents, caregivers, co-parents, professionals, or agencies; notifications are in-app and sensitive-flagged (no unsafe push).
+- Moxie trafficking protocol: activates by explicit mode or language detection, never forces disclosure, never asks "Are you being trafficked?", and escalates immediate-danger language to 911 + hotline.
+
+Verification: all test safety-plan records cleaned up (0 remaining); no temporary helper functions were created.`
+      },
+      {
+        title: "Phase 2 Backlog (NOT yet built)",
+        body: `Saved recommendations for a future Phase 2 — do not build until approved:
+
+1. External SOS delivery through SMS/email, with the same per-contact permission gating as in-app alerts (reuse existing Twilio + Core.SendEmail).
+2. Duress / decoy PIN.
+3. One-tap panic wipe of survivor drafts.
+4. Optional auto-expiring or passcode-locked safety plan.
+5. Multilingual trafficking / crisis language detection for Moxie.
+6. Offline-accessible hotline card (works with no connection).`
       }
     ]
   },
