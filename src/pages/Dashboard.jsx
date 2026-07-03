@@ -199,6 +199,7 @@ export default function Dashboard() {
                 { id: "sos-button", to: "/sos", emoji: null, label: "Help Me\nRight Now", sub: "Immediate support", bg: CARD, border: "#B84C2A", textColor: "#B84C2A", issos: true },
                 { id: "checkin-button", to: "/daily-checkin", emoji: "✅", label: "Check-In", sub: "Daily check-in & mood", bg: CARD, border: GREEN, textColor: GREEN },
                 { id: "safety-plan-button", to: "/safety-plan", emoji: "🛡️", label: "Safety Plan", sub: "Crisis plan & resources", bg: CARD, border: GOLD, textColor: GOLD },
+                { id: "support-contacts-button", to: "/support-contacts", emoji: "📇", label: "Safe Contacts", sub: "Who gets alerted for SOS", bg: CARD, border: GREEN, textColor: GREEN },
               ].map((a, i) => (
                 <motion.div key={a.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
                   <Link id={a.id} to={a.to} style={{ display: "block", background: a.bg, border: `1.5px solid ${a.border}`, borderRadius: 16, padding: "14px 10px", textAlign: "center", textDecoration: "none", boxShadow: `0 8px 24px rgba(61,40,23,0.08)` }}>

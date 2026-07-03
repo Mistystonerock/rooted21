@@ -261,7 +261,7 @@ export default function SosSupportRequest() {
         {sending ? (status || "Sending…") : "Send SOS Support Request"}
       </button>
 
-      <Link to="/my-team" className="mt-3 inline-flex text-xs font-bold underline" style={{ color: C.darkGreen }}>Manage support team contacts</Link>
+      <Link to="/support-contacts" className="mt-3 inline-flex text-xs font-bold underline" style={{ color: C.darkGreen }}>Manage my safe support contacts</Link>
     </section>
   );
 }

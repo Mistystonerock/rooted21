@@ -54,7 +54,7 @@ export default function SupportContacts() {
             <ChevronLeft size={22} color="#fff" />
           </button>
           <div className="flex-1">
-            <h1 className="font-serif text-lg font-bold" style={{ color: "#fff" }}>My Support Contacts</h1>
+            <h1 className="font-serif text-lg font-bold" style={{ color: "#fff" }}>My Safe Support Contacts</h1>
             <p className="text-[11px] font-bold" style={{ color: "rgba(255,255,255,0.82)" }}>You control who is contacted when you need help.</p>
           </div>
           <button type="button" onClick={() => activateQuickExit()}
