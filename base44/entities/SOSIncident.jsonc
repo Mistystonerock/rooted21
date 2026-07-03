@@ -86,6 +86,19 @@
     "updated_by": {
       "type": "string",
       "description": "Server-set. ID of the user who last updated this incident."
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag. SOS incidents are never hard-removed."
+    },
+    "deleted_at": {
+      "type": "string",
+      "description": "When this incident was soft-deleted."
+    },
+    "deleted_by": {
+      "type": "string",
+      "description": "Who soft-deleted this incident."
     }
   },
   "required": [
