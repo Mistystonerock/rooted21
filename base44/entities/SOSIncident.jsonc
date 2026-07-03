@@ -1,0 +1,137 @@
+{
+  "name": "SOSIncident",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Server-set. ID of the user who triggered the SOS."
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Server-set display name of the requesting user."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Server-set email of the requesting user."
+    },
+    "family_id": {
+      "type": "string",
+      "description": "Server-resolved family/case identifier, if any."
+    },
+    "incident_type": {
+      "type": "string",
+      "enum": [
+        "sos_support_request",
+        "safety",
+        "medical",
+        "other"
+      ],
+      "default": "sos_support_request",
+      "description": "Type of SOS incident."
+    },
+    "description": {
+      "type": "string",
+      "description": "User-provided description of what is happening."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "acknowledged",
+        "resolved",
+        "closed"
+      ],
+      "default": "active",
+      "description": "Lifecycle status of the SOS incident."
+    },
+    "urgency_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "description": "How urgent the request is."
+    },
+    "gps_coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      },
+      "description": "Optional GPS coordinates. Stored only on this incident record, never in notifications or audit events."
+    },
+    "manual_location": {
+      "type": "string",
+      "description": "Optional user-typed location string."
+    },
+    "location_shared": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user chose to share their location."
+    },
+    "notified_user_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of approved support team members notified."
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Server-set. ID of the user who last updated this incident."
+    }
+  },
+  "required": [
+    "user_id",
+    "incident_type",
+    "status"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "data.notified_user_ids": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "delete": false
+  }
+}

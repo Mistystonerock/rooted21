@@ -1,0 +1,114 @@
+{
+  "name": "SafeContactPreference",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "ID of the user who owns these safe-contact preferences."
+    },
+    "family_id": {
+      "type": "string",
+      "description": "Optional family/case identifier."
+    },
+    "approved_recipient_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Caseworker",
+          "Therapist",
+          "CASA",
+          "GuardianAdLitem",
+          "Attorney",
+          "CourtStaff",
+          "SchoolStaff",
+          "Probation",
+          "Mentor",
+          "Administrator"
+        ]
+      },
+      "default": [],
+      "description": "Professional roles allowed to receive SOS alerts."
+    },
+    "approved_recipient_user_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Specific user IDs allowed to receive SOS alerts. Overrides role list when set."
+    },
+    "sms_allowed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether SMS delivery is permitted."
+    },
+    "gps_allowed": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether GPS location may be shared with the support team."
+    },
+    "push_allowed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether push delivery is permitted."
+    },
+    "safe_word": {
+      "type": "string",
+      "description": "Optional safe word for survivor pathways."
+    },
+    "contact_instruction": {
+      "type": "string",
+      "description": "Optional instructions for how the support team should respond."
+    },
+    "is_survivor_pathway": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user is on a survivor-safety pathway."
+    },
+    "updated_by": {
+      "type": "string"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "deleted_at": {
+      "type": "string"
+    },
+    "deleted_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}
