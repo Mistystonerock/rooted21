@@ -60,6 +60,14 @@ const RESOURCE_SECTIONS = [
 
 export default function Resources() {
   const [activeTab, setActiveTab] = useState("all");
+  const [zip, setZip] = useState(() => localStorage.getItem("rooted21_resource_zip") || "");
+  const [includeStatewide, setIncludeStatewide] = useState(false);
+
+  function handleZipChange(value) {
+    setZip(value);
+    if (value) localStorage.setItem("rooted21_resource_zip", value);
+    else localStorage.removeItem("rooted21_resource_zip");
+  }
 
   return (
     <div className="min-h-screen" style={{ background: C.offWhite }}>
@@ -91,8 +99,8 @@ export default function Resources() {
               <p className="font-serif font-bold text-base" style={{ color: C.cream }}>All Resources in One Place</p>
               <p className="text-xs mt-1 leading-relaxed" style={{ color: C.lightGreen }}>Start with your ZIP code, then jump to local help, court paperwork, jobs, benefits, and substance-use support.</p>
             </div>
-            <ZipResourceNotice />
-            <ChillicotheRossCountyHub />
+            <ZipResourceNotice zip={zip} onZipChange={handleZipChange} includeStatewide={includeStatewide} onToggleStatewide={setIncludeStatewide} />
+            <ChillicotheRossCountyHub zip={zip} includeStatewide={includeStatewide} />
             {RESOURCE_SECTIONS.map(section => (
               <div key={section.title} className="space-y-2">
                 <p className="text-[11px] font-extrabold tracking-wider" style={{ color: C.mutedText }}>{section.title}</p>
