@@ -100,7 +100,7 @@ analyzeAndMatchTherapist — matches user to therapists based on check-in data
 analyzeDocumentScan — AI extracts data from uploaded documents
 parseCasePlanDocument — AI parses CPS/court documents into checklists
 generateCourtReadyReport / generateCaseStatusReport — PDF report generation
-sendEmergencyAlert — SMS emergency notifications via Twilio
+sendSosSupportMessage — in-app SOS support alerts to the approved support team
 sendTaskReminders / sendDocumentAlert — notification dispatchers
 analyzeCoParentingHealth — partnership health scoring
 generatePartnershipReport — co-parenting court report PDF
