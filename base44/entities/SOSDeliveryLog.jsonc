@@ -1,0 +1,86 @@
+{
+  "name": "SOSDeliveryLog",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "ID of the user who sent the SOS. Server-set."
+    },
+    "incident_id": {
+      "type": "string",
+      "description": "ID of the related SOSIncident."
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Name of the support contact this delivery was attempted for."
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "sms",
+        "email"
+      ],
+      "description": "Delivery channel attempted."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed"
+      ],
+      "description": "Whether the delivery succeeded."
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error detail if delivery failed. Never contains GPS coordinates."
+    },
+    "gps_included": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether GPS was included in this delivery. Coordinates themselves are never stored here."
+    },
+    "message_included": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user's message details were included in this delivery."
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Server-set. When this delivery attempt occurred."
+    }
+  },
+  "required": [
+    "user_id",
+    "incident_id",
+    "contact_name",
+    "method",
+    "status"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "founder"
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}

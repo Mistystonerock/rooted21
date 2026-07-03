@@ -1,4 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.31";
+import twilio from "npm:twilio@5.3.0";
 
 Deno.serve(async (req) => {
   try {
@@ -71,10 +72,36 @@ Deno.serve(async (req) => {
       });
     } catch (_e) { /* no contacts configured */ }
 
+    // ── Twilio client (best-effort — SMS delivery must never block the SOS save) ──
+    let twilioClient = null;
+    const twilioAccountSid = Deno.env.get("TWILIO_ACCOUNT_SID");
+    const twilioAuthToken = Deno.env.get("TWILIO_AUTH_TOKEN");
+    const twilioFromNumber = Deno.env.get("TWILIO_PHONE_NUMBER");
+    if (twilioAccountSid && twilioAuthToken && twilioFromNumber) {
+      try {
+        twilioClient = twilio(twilioAccountSid, twilioAuthToken);
+      } catch (_e) { twilioClient = null; }
+    }
+
     // ── Process each approved contact ──
     const notifiedUserIds = [];
     const notifiedContacts = [];
-    const externalNotificationIntents = [];
+    const externalDeliveries = [];
+    const deliveryLogRows = [];
+
+    async function logDelivery(contactName, method, status, errorMessage, gpsIncluded, messageIncluded) {
+      deliveryLogRows.push({
+        user_id: userId,
+        incident_id: incidentId,
+        contact_name: contactName,
+        method,
+        status,
+        error_message: errorMessage || undefined,
+        gps_included: !!gpsIncluded,
+        message_included: !!messageIncluded,
+        sent_at: new Date().toISOString(),
+      });
+    }
 
     for (const contact of supportContacts) {
       const contactName = contact.contact_name || "Unknown";
@@ -88,6 +115,7 @@ Deno.serve(async (req) => {
       if (gpsShared) notifBody += ` Location: ${gps_coordinates.lat}, ${gps_coordinates.lng}`;
       if (contact.can_receive_message_details && manual_location && !gps_coordinates) notifBody += ` Manual location: ${manual_location}`;
 
+      // ── In-app delivery for linked platform users ──
       if (contact.linked_user_id) {
         try {
           const linkedUser = await base44.asServiceRole.entities.User.filter({ id: contact.linked_user_id }, "", 1);
@@ -106,13 +134,66 @@ Deno.serve(async (req) => {
             });
             notifiedUserIds.push(contact.linked_user_id);
             notifiedContacts.push({ name: contactName, method: "in_app", gps_shared: gpsShared, message_shared: messageShared });
-          } else {
-            externalNotificationIntents.push({ name: contactName, method: contactMethod, phone: contact.phone_number || null, email: contact.email || null, gps_shared: gpsShared, message_shared: messageShared });
+            continue;
           }
-        } catch (_e) { /* skip failed recipient */ }
-      } else {
-        externalNotificationIntents.push({ name: contactName, method: contactMethod, phone: contact.phone_number || null, email: contact.email || null, gps_shared: gpsShared, message_shared: messageShared });
+        } catch (_e) { /* fall through to external delivery below */ }
       }
+
+      // ── External SMS delivery ──
+      const canSms = ["sms", "text", "phone"].includes(contactMethod) && !!contact.phone_number;
+      if (canSms) {
+        let smsBody = `Rooted 21 Safety Alert: ${userName} has requested support (urgency: ${urgency_level}).`;
+        if (messageShared) smsBody += ` Note: "${message}"`;
+        if (gpsShared) smsBody += ` Location: https://maps.google.com/?q=${gps_coordinates.lat},${gps_coordinates.lng}`;
+        smsBody += " Please check in with them.";
+
+        if (twilioClient) {
+          try {
+            await twilioClient.messages.create({ body: smsBody, from: twilioFromNumber, to: contact.phone_number });
+            await logDelivery(contactName, "sms", "success", null, gpsShared, messageShared);
+            externalDeliveries.push({ name: contactName, method: "sms", status: "success" });
+          } catch (smsError) {
+            await logDelivery(contactName, "sms", "failed", smsError?.message || "SMS delivery failed", gpsShared, messageShared);
+            externalDeliveries.push({ name: contactName, method: "sms", status: "failed" });
+          }
+        } else {
+          await logDelivery(contactName, "sms", "failed", "SMS not configured", gpsShared, messageShared);
+          externalDeliveries.push({ name: contactName, method: "sms", status: "failed" });
+        }
+      }
+
+      // ── External email delivery ──
+      const canEmail = contactMethod === "email" && !!contact.email;
+      if (canEmail) {
+        let emailBody = `${userName} has sent a Rooted 21 safety alert requesting support.\n\nUrgency: ${urgency_level}`;
+        if (messageShared) emailBody += `\n\nNote from ${userName}: "${message}"`;
+        if (gpsShared) emailBody += `\n\nLocation: https://maps.google.com/?q=${gps_coordinates.lat},${gps_coordinates.lng}`;
+        emailBody += "\n\nPlease check in with them as soon as you can.";
+
+        try {
+          await base44.asServiceRole.integrations.Core.SendEmail({
+            to: contact.email,
+            subject: `Rooted 21 Safety Alert — ${urgency_level.toUpperCase()}`,
+            body: emailBody,
+          });
+          await logDelivery(contactName, "email", "success", null, gpsShared, messageShared);
+          externalDeliveries.push({ name: contactName, method: "email", status: "success" });
+        } catch (emailError) {
+          await logDelivery(contactName, "email", "failed", emailError?.message || "Email delivery failed", gpsShared, messageShared);
+          externalDeliveries.push({ name: contactName, method: "email", status: "failed" });
+        }
+      }
+
+      if (!contact.linked_user_id && !canSms && !canEmail) {
+        // No usable delivery channel for this contact — nothing to send, nothing to log.
+      }
+    }
+
+    // ── Persist delivery logs (best-effort, never blocks the SOS) ──
+    if (deliveryLogRows.length > 0) {
+      try {
+        await base44.asServiceRole.entities.SOSDeliveryLog.bulkCreate(deliveryLogRows);
+      } catch (_e) { /* logging best-effort */ }
     }
 
     // ── Update SOSIncident with notified user IDs ──
@@ -122,8 +203,11 @@ Deno.serve(async (req) => {
       } catch (_e) { /* non-fatal */ }
     }
 
-    // ── Audit contact notifications (no GPS coordinates or message content) ──
-    if (notifiedContacts.length > 0 || externalNotificationIntents.length > 0) {
+    // ── Audit contact notifications (no GPS coordinates or message content — GPS included is boolean-only) ──
+    const externalSuccesses = externalDeliveries.filter((d) => d.status === "success");
+    const externalFailures = externalDeliveries.filter((d) => d.status === "failed");
+
+    if (notifiedContacts.length > 0 || externalDeliveries.length > 0) {
       try {
         await base44.asServiceRole.entities.RootedAuditEvent.create({
           actor_email: userEmail,
@@ -132,11 +216,11 @@ Deno.serve(async (req) => {
           entity_name: "SOSIncident",
           entity_id: incidentId,
           severity: "info",
-          summary: `SOS notifications sent for incident ${incidentId}: ${notifiedContacts.length} in-app, ${externalNotificationIntents.length} external intents`,
+          summary: `SOS notifications for incident ${incidentId}: ${notifiedContacts.length} in-app, ${externalSuccesses.length} external delivered, ${externalFailures.length} external failed`,
           metadata_json: JSON.stringify({
             incident_id: incidentId,
-            in_app_notifications: notifiedContacts.map((c) => ({ name: c.name, gps_shared: c.gps_shared, message_shared: c.message_shared })),
-            external_intents: externalNotificationIntents.map((c) => ({ name: c.name, method: c.method, gps_shared: c.gps_shared, message_shared: c.message_shared })),
+            in_app_notifications: notifiedContacts.map((c) => ({ name: c.name, gps_included: c.gps_shared, message_included: c.message_shared })),
+            external_deliveries: externalDeliveries.map((d) => ({ name: d.name, method: d.method, status: d.status })),
           }),
           occurred_at: new Date().toISOString(),
         });
@@ -144,14 +228,15 @@ Deno.serve(async (req) => {
     }
 
     const timestamp = new Date().toISOString();
-    const totalNotified = notifiedContacts.length + externalNotificationIntents.length;
+    const totalNotified = notifiedContacts.length + externalSuccesses.length;
 
     let confirmationMessage;
-    if (totalNotified > 0) {
+    if (totalNotified > 0 || externalFailures.length > 0) {
       const parts = [];
       if (notifiedContacts.length > 0) parts.push(`${notifiedContacts.length} in-app notification(s) sent`);
-      if (externalNotificationIntents.length > 0) parts.push(`${externalNotificationIntents.length} external contact(s) queued`);
-      confirmationMessage = `Your SOS has been saved (Incident ID: ${incidentId}). ${parts.join(" and ")}. If you are in immediate danger, call or text 911. The 988 Suicide & Crisis Lifeline is available 24/7.`;
+      if (externalSuccesses.length > 0) parts.push(`${externalSuccesses.length} contact(s) notified by SMS/email`);
+      if (externalFailures.length > 0) parts.push(`${externalFailures.length} delivery attempt(s) failed`);
+      confirmationMessage = `Your SOS has been saved (Incident ID: ${incidentId}). ${parts.join(", ")}. If you are in immediate danger, call or text 911. The 988 Suicide & Crisis Lifeline is available 24/7.`;
     } else {
       confirmationMessage = `Your SOS request has been saved. Incident ID: ${incidentId}. No support contacts are configured to receive alerts. If you are in immediate danger, call or text 911. The 988 Suicide & Crisis Lifeline is available 24/7.`;
     }
@@ -161,9 +246,10 @@ Deno.serve(async (req) => {
       incidentId,
       timestamp,
       notified_count: totalNotified,
+      failed_count: externalFailures.length,
       notified_user_ids: notifiedUserIds,
       notified_contacts: notifiedContacts,
-      external_notification_intents: externalNotificationIntents,
+      external_deliveries: externalDeliveries,
       confirmation_message: confirmationMessage,
       crisis_resources: { emergency: "911", crisis_lifeline: "988", crisis_text_line: "Text HOME to 741741" },
     });

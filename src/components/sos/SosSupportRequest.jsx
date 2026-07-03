@@ -123,6 +123,15 @@ export default function SosSupportRequest() {
         <h2 className="text-center font-serif text-2xl font-black" style={{ color: C.darkGreen }}>Request sent</h2>
         <p className="mt-2 text-center text-sm leading-relaxed" style={{ color: C.mutedText }}>{confirmation.confirmation_message}</p>
 
+        {(confirmation.notified_count > 0 || confirmation.failed_count > 0) && (
+          <div className="mt-3 rounded-2xl p-3 text-center" style={{ background: `${C.midGreen}15`, border: `1px solid ${C.midGreen}40` }}>
+            <p className="text-xs font-bold" style={{ color: C.darkGreen }}>
+              {confirmation.notified_count || 0} contact{confirmation.notified_count === 1 ? "" : "s"} notified
+              {confirmation.failed_count > 0 ? ` · ${confirmation.failed_count} delivery attempt${confirmation.failed_count === 1 ? "" : "s"} failed` : ""}
+            </p>
+          </div>
+        )}
+
         <div className="mt-4 space-y-2 rounded-2xl p-4" style={{ background: "#FEF3EE", border: "1px solid #F4C9B8" }}>
           <p className="text-xs font-black" style={{ color: "#B84C2A" }}>Immediate crisis resources</p>
           <a href={`tel:${cr.emergency || "911"}`} className="flex items-center gap-2 text-sm font-bold no-underline" style={{ color: "#B84C2A" }}><Phone size={15} /> Call {cr.emergency || "911"}</a>
