@@ -54,11 +54,11 @@ export default function MobileHeader({
         )}
 
         <div className="flex-1 text-center">
-          <p className="font-serif font-bold text-sm leading-tight" style={{ color: TEXT }}>
+          <p className="rooted-section-heading" style={{ color: TEXT }}>
             {title}
           </p>
           {subtitle && (
-            <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
+            <p className="rooted-label mt-0.5" style={{ color: MUTED }}>
               {subtitle}
             </p>
           )}
