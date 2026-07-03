@@ -2,10 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Home, LayoutGrid, BookOpen, Stethoscope, ClipboardList } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 
-const BG = "#0f1f14";
+const BG = "#233b28";
 const BORDER = "rgba(255,255,255,0.08)";
-const GREEN = "#3db870";
-const MUTED = "rgba(240,232,216,0.45)";
+const GREEN = "#a9c17d";
+const MUTED = "rgba(239,228,210,0.55)";
 
 export default function BottomNav() {
   const { pathname } = useLocation();

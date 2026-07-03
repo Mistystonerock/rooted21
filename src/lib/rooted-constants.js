@@ -1,21 +1,21 @@
 import { SURFACES, TEXT } from './design-system.js';
 
 export const C = {
-  // Launch page brand colors
-  darkGreen: "#6b9d6e",
-  midGreen: "#6b9d6e",
-  lightGreen: "#6b9d6e",
-  darkGreenElevated: "#f5ede2",
-  cream: "#f5ede2",
-  offWhite: "#faf6f1",
-  white: "#ffffff",
-  gold: "#a67c52",
-  brown: "#a67c52",
+  // Rooted 21 brand colors — warm parchment, muted olive, dark forest green
+  darkGreen: "#2d4a35",
+  midGreen: "#77906a",
+  lightGreen: "#a3b28c",
+  darkGreenElevated: "#efe4d2",
+  cream: "#efe4d2",
+  offWhite: "#faf6ee",
+  white: "#fffdf9",
+  gold: "#a9784f",
+  brown: "#a9784f",
   
   // Text colors
   darkText: "#1a1a1a",
-  mutedText: "#5a3d28",
-  warmText: "#8b6f54",
+  mutedText: "#5c4a37",
+  warmText: "#8a7157",
   
   // Direct design system access
   surfaces: SURFACES,
