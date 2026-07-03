@@ -180,52 +180,63 @@ Deno.serve(async (req) => {
       });
     });
 
-    // ── Document selection (runs fresh every call — no dedup/caching) ──
-    // A document is a candidate when it is owned by the requester AND matches
-    // EITHER the requested case_id, OR the requesting user (owner_email), OR the
-    // date range. Every matching document passes through the gating logic below,
-    // even if it ends up blocked or redacted.
+    // ── Document selection ──
+    // Read ALL non-deleted SecureDocuments owned by the requester. Every one
+    // passes through the gating logic below, even if it ends up blocked/redacted.
     const candidateDocuments = secureDocuments.filter(d => {
       const ownerMatch = d.owner_email === user.email;
       if (!ownerMatch) return false;
-      const childMatch = !childName || !d.child_name || d.child_name?.toLowerCase() === childName.toLowerCase();
-      if (!childMatch) return false;
-      const caseMatch = effectiveCaseId && d.case_id === effectiveCaseId;
-      const dateMatch = inRange(d.created_date);
-      // Include if linked to the requested case OR falls within the date range.
-      return caseMatch || dateMatch;
+      if (d.is_deleted === true) return false;
+      return true;
     });
 
     // ── Server-side restricted-document consent/release gating ──────
     const reportId0 = `R-${Date.now().toString(36).toUpperCase()}`;
     const nowIso0 = new Date().toISOString();
-    const [ownerReleases, ownerConsents] = await Promise.all([
+    const now0 = new Date(nowIso0);
+    const [ownerReleasesRaw, ownerConsents] = await Promise.all([
       base44.asServiceRole.entities.ReleaseOfInformation.filter({ owner_email: user.email }).catch(() => []),
       base44.asServiceRole.entities.ConsentPermission.filter({ owner_email: user.email }).catch(() => []),
     ]);
 
+    // Valid active releases: not deleted, status active, not expired, not revoked, started.
+    const ownerReleases = (ownerReleasesRaw || []).filter(r => {
+      if (r.is_deleted === true) return false;
+      if (r.status !== "active") return false;
+      if (r.revoked_at) return false;
+      if (r.expires_at && new Date(r.expires_at) < now0) return false;
+      if (r.starts_at && new Date(r.starts_at) > now0) return false;
+      return true;
+    });
+
+    const documentsSummary = { total: 0, included: 0, blocked: 0, redacted: 0, allowed_with_release: 0 };
     const filteredDocuments = [];   // documents shown in the inventory
     const redactedDocuments = [];   // restricted-but-not-part2 placeholders
     for (const d of candidateDocuments) {
+      documentsSummary.total += 1;
       const classification = classifyDocumentRestriction(d);
       if (!classification.restricted) {
         filteredDocuments.push(d);
-        await logExportDecision(base44, user, "export_include", d.id, `Included unrestricted document "${d.title || d.file_name || d.id}" in court-ready report.`, { reason: "Document not restricted", report_id: reportId0, case_id: effectiveCaseId || null }, "info");
+        documentsSummary.included += 1;
+        await logExportDecision(base44, user, "export_include", d.id, `Included unrestricted document "${d.title || d.file_name || d.id}" in court-ready report.`, { document_id: d.id, document_title: d.title || d.file_name || d.id, reason: "Document not restricted", report_id: reportId0, case_id: effectiveCaseId || null }, "info");
         continue;
       }
       const decision = evaluateReleaseAndConsent(classification, ownerReleases, ownerConsents, nowIso0, effectiveRecipientRole);
       if (decision.allowed) {
         filteredDocuments.push(d);
+        documentsSummary.allowed_with_release += 1;
         if (decision.via === "release") {
-          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — valid active release covers segment: ${classification.segment}.`, { reason: decision.reason, restriction_reasons: classification.reasons, release_id: decision.matchedRelease, matched_segment: classification.segment, report_id: reportId0, case_id: effectiveCaseId || null }, "info");
+          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — valid active release covers segment: ${classification.segment}.`, { document_id: d.id, document_title: d.title || d.file_name || d.id, reason: decision.reason, restriction_reasons: classification.reasons, release_id: decision.matchedRelease, matched_segment: classification.segment, report_id: reportId0, case_id: effectiveCaseId || null }, "info");
         } else {
-          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — consent on file allows segment: ${classification.segment}.`, { reason: decision.reason, restriction_reasons: classification.reasons, matched_consent: decision.matchedConsent, report_id: reportId0, case_id: effectiveCaseId || null }, "info");
+          await logExportDecision(base44, user, "export_allow_with_release", d.id, `Restricted document included "${d.title || d.file_name || d.id}" — consent on file allows segment: ${classification.segment}.`, { document_id: d.id, document_title: d.title || d.file_name || d.id, reason: decision.reason, restriction_reasons: classification.reasons, matched_consent: decision.matchedConsent, report_id: reportId0, case_id: effectiveCaseId || null }, "info");
         }
       } else if (classification.part2) {
-        await logExportDecision(base44, user, "export_block", d.id, `Blocked restricted document "${d.title || d.file_name || d.id}" — 42 CFR Part 2, no active release.`, { reason: "42 CFR Part 2 document blocked — no active release on file", restriction_reasons: classification.reasons, report_id: reportId0, case_id: effectiveCaseId || null }, "warning");
+        documentsSummary.blocked += 1;
+        await logExportDecision(base44, user, "export_block", d.id, `Blocked restricted document "${d.title || d.file_name || d.id}" — 42 CFR Part 2, no active release.`, { document_id: d.id, document_title: d.title || d.file_name || d.id, reason: "42 CFR Part 2 document blocked — no active release on file", restriction_reasons: classification.reasons, report_id: reportId0, case_id: effectiveCaseId || null }, "warning");
       } else {
         redactedDocuments.push({ id: d.id, title: d.title || d.file_name || "Restricted document", reasons: classification.reasons });
-        await logExportDecision(base44, user, "export_redact", d.id, `Redacted restricted document "${d.title || d.file_name || d.id}" — restricted segment removed, summary included.`, { reason: "Document redacted — restricted segment removed, summary included", restriction_reasons: classification.reasons, redacted_fields: ["file", "description", "analysis_summary"], report_id: reportId0, case_id: effectiveCaseId || null }, "warning");
+        documentsSummary.redacted += 1;
+        await logExportDecision(base44, user, "export_redact", d.id, `Redacted restricted document "${d.title || d.file_name || d.id}" — restricted segment removed, summary included.`, { document_id: d.id, document_title: d.title || d.file_name || d.id, reason: "Document redacted — restricted segment removed, summary included", restriction_reasons: classification.reasons, redacted_fields: ["file", "description", "analysis_summary"], report_id: reportId0, case_id: effectiveCaseId || null }, "warning");
       }
     }
 
@@ -1144,6 +1155,7 @@ Deno.serve(async (req) => {
         messages: filteredMessages.length,
         redactedDocuments: redactedDocuments.length,
         },
+      documents_summary: documentsSummary,
       integrity,
     });
   } catch (error) {
