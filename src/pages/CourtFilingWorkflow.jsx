@@ -6,6 +6,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import FilingSetupPanel from "@/components/court-filings/FilingSetupPanel";
 import FilingSourceSummary from "@/components/court-filings/FilingSourceSummary";
 import FilingDraftPreview from "@/components/court-filings/FilingDraftPreview";
+import FilingReviewChecklist from "@/components/court-filings/FilingReviewChecklist";
 import { AlertTriangle, CheckCircle2, ChevronRight } from "lucide-react";
 
 function collectChecklistItems(plans) {
@@ -41,7 +42,13 @@ export default function CourtFilingWorkflow() {
   const [signature, setSignature] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [saved, setSaved] = useState(null);
-  const [form, setForm] = useState({ filing_type: "service_request", case_plan_id: "", case_id: "", court_name: "" });
+  const [reviewConfirmed, setReviewConfirmed] = useState(false);
+  const [form, setForm] = useState({ filing_type: "service_request", case_plan_id: "", case_id: "", court_name: "", family_case_name: "", service_details: "", include_declaration: false });
+
+  const placeholders = draft ? (draft.draft_markdown.match(/\[[^\]\n]{0,80}\]/g) || []) : [];
+  const missingFields = draft?.missing_fields || [];
+  const hasIssues = placeholders.length > 0 || missingFields.length > 0;
+  const draftStatus = !draft ? "draft" : hasIssues ? "draft" : "ready_for_review";
 
   useEffect(() => {
     base44.auth.me().then(async me => {
@@ -74,10 +81,14 @@ export default function CourtFilingWorkflow() {
   async function generateDraft() {
     setGenerating(true);
     setSaved(null);
+    setReviewConfirmed(false);
+    const linkedCase = cases.find(c => c.id === form.case_id) || null;
     const sourceContext = {
       filing_type: form.filing_type,
-      court_or_agency: form.court_name,
-      linked_case: cases.find(c => c.id === form.case_id) || null,
+      court_or_agency_name: form.court_name,
+      family_or_case_name: form.family_case_name,
+      service_or_support_requested: form.service_details || null,
+      linked_case: linkedCase,
       case_plan_items: checklistItems.slice(0, 80),
       agency_emails: agencyEmails.slice(0, 25).map(e => ({ agency: e.agency_name, subject: e.subject, direction: e.direction, date: e.correspondence_date, body: e.body })),
       professional_messages: secureMessages.slice(0, 25).map(m => ({ sender: m.sender_email, role: m.sender_role, date: m.created_date, body: m.body })),
@@ -85,10 +96,10 @@ export default function CourtFilingWorkflow() {
     };
 
     const documentInstructions = form.filing_type === "service_request"
-      ? "Create a pre-filled service request form with: caption placeholder, family/case identifiers, requested service or referral section, reason for request, urgency/impact, supporting facts from the data, proposed provider/support notes, requested response timeline, exhibit list, and signature/declaration block."
+      ? "Create a service request form with: caption (using the provided court/agency name and family/case name — never a placeholder), the requested service or referral (use the provided service_or_support_requested text), reason for request, urgency/impact, supporting facts from the data, proposed provider/support notes, and requested response timeline."
       : form.filing_type === "status_report"
-        ? "Create a court-ready status report with: caption placeholder, report period placeholder, child/case identifiers, case plan progress summary, completed items, pending items, barriers, communication/meeting summary, safety or stability updates, requested next steps, exhibit list, and signature/declaration block."
-        : "Create a polished filing with: caption placeholder, title, introduction, facts/background, case plan compliance summary, communication audit summary, requested next steps, exhibit list, and signature/declaration block.";
+        ? "Create a court-ready status report with: caption (using the provided court/agency name and family/case name), report period, child/case identifiers, case plan progress summary, completed items, pending items, barriers, communication/meeting summary, safety or stability updates, and requested next steps."
+        : "Create a polished filing with: caption (using the provided court/agency name and family/case name), title, introduction, facts/background, case plan compliance summary, communication audit summary, and requested next steps.";
 
     const response = await base44.integrations.Core.InvokeLLM({
       prompt: `Draft a court-ready legal document using the mapped data below. This is not legal advice; format it as a clear official draft the parent can review with counsel.
@@ -98,20 +109,31 @@ DOCUMENT TYPE: ${form.filing_type}
 DATA SOURCES:
 ${JSON.stringify(sourceContext, null, 2)}
 
-${documentInstructions} Use plain respectful language and avoid making claims not supported by the source data.`, 
+${documentInstructions}
+
+CRITICAL RULES:
+- Never use bracket placeholder text like "[Insert Caption Here]", "[Case Number]", or similar. Always use the real values provided above.
+- Do NOT include an exhibit list or a signature/declaration block — those are added separately.
+- If a specific piece of information needed for the document is not available in the data above, write a plain sentence noting it (e.g. "Case number not yet provided.") instead of a bracket, AND add that exact field name to the missing_fields list in your response.
+- Use plain, respectful language and avoid making claims not supported by the source data.`,
       response_json_schema: {
         type: "object",
         properties: {
           title: { type: "string" },
           draft_markdown: { type: "string" },
           preparation_tasks: { type: "array", items: { type: "string" } },
-          source_summary: { type: "string" }
+          source_summary: { type: "string" },
+          missing_fields: { type: "array", items: { type: "string" }, description: "Fields needed for this document that were not available in the source data" }
         }
       }
     });
 
     setDraft(response);
     setGenerating(false);
+  }
+
+  function handleEditDraft(value) {
+    setDraft(prev => ({ ...prev, draft_markdown: value }));
   }
 
   async function signAndSave() {
@@ -128,10 +150,13 @@ ${documentInstructions} Use plain respectful language and avoid making claims no
       filing_type: form.filing_type,
       title: draft.title,
       child_name: selectedPlans[0]?.child_name || cases.find(c => c.id === form.case_id)?.child_name || "",
+      family_case_name: form.family_case_name,
+      court_name: form.court_name,
       draft_markdown: draft.draft_markdown,
       preparation_tasks: draft.preparation_tasks || [],
       source_summary: draft.source_summary,
-      status: "signed",
+      include_declaration: form.include_declaration,
+      status: "final_signed",
       signed_file_url: file_url,
       signed_at: new Date().toISOString(),
       signature_name: user.full_name || user.email,
@@ -186,7 +211,18 @@ ${documentInstructions} Use plain respectful language and avoid making claims no
                   <ChevronRight size={16} color={C.mutedText} />
                 </Link>
               </div>
-              <FilingDraftPreview draft={draft} signature={signature} setSignature={setSignature} agreed={agreed} setAgreed={setAgreed} onSign={signAndSave} signing={signing} />
+              {draft && !reviewConfirmed ? (
+                <FilingReviewChecklist
+                  status={draftStatus}
+                  placeholders={placeholders}
+                  missingFields={missingFields}
+                  draftMarkdown={draft.draft_markdown}
+                  onEditDraft={handleEditDraft}
+                  onContinue={() => setReviewConfirmed(true)}
+                />
+              ) : (
+                <FilingDraftPreview draft={draft} includeDeclaration={form.include_declaration} signature={signature} setSignature={setSignature} agreed={agreed} setAgreed={setAgreed} onSign={signAndSave} signing={signing} onBackToReview={() => setReviewConfirmed(false)} />
+              )}
             </div>
           </>
         )}

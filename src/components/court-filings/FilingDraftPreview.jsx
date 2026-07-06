@@ -4,7 +4,7 @@ import { ClipboardList, Download, FileSignature } from "lucide-react";
 import { C } from "@/lib/rooted-constants";
 import SignaturePad from "@/components/legal/SignaturePad";
 
-export default function FilingDraftPreview({ draft, signature, setSignature, agreed, setAgreed, onSign, signing }) {
+export default function FilingDraftPreview({ draft, includeDeclaration, signature, setSignature, agreed, setAgreed, onSign, signing, onBackToReview }) {
   function downloadPdf() {
     const doc = new jsPDF();
     const margin = 18;
@@ -53,14 +53,26 @@ export default function FilingDraftPreview({ draft, signature, setSignature, agr
 
   return (
     <div className="rounded-2xl overflow-hidden" style={{ background: C.white, border: `1.5px solid ${C.midGreen}` }}>
-      <div className="p-4" style={{ background: C.darkGreen }}>
-        <p className="font-serif font-bold text-base" style={{ color: "#fff" }}>{draft.title}</p>
-        <p className="text-[11px] mt-1" style={{ color: C.cream }}>Preview the official filing draft before signing.</p>
+      <div className="p-4 flex items-center justify-between" style={{ background: C.darkGreen }}>
+        <div>
+          <p className="font-serif font-bold text-base" style={{ color: "#fff" }}>{draft.title}</p>
+          <p className="text-[11px] mt-1" style={{ color: C.cream }}>Preview the official filing draft before signing.</p>
+        </div>
+        {onBackToReview && (
+          <button onClick={onBackToReview} className="text-[11px] font-bold underline" style={{ color: C.cream, background: "none", border: "none", cursor: "pointer" }}>
+            Back to edit
+          </button>
+        )}
       </div>
 
       <div className="p-5 space-y-5">
         <div className="rounded-xl p-4 prose prose-sm max-w-none" style={{ background: C.offWhite, color: C.darkText }}>
           <ReactMarkdown>{draft.draft_markdown}</ReactMarkdown>
+          {includeDeclaration && (
+            <p className="mt-4 text-xs font-bold" style={{ color: C.darkText }}>
+              I declare under penalty of perjury under the laws of my state that the foregoing is true and correct to the best of my knowledge.
+            </p>
+          )}
         </div>
 
         {draft.preparation_tasks?.length > 0 && (
