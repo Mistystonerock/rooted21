@@ -35,6 +35,14 @@
       "type": "string",
       "description": "Child or case subject"
     },
+    "family_case_name": {
+      "type": "string",
+      "description": "Family or case name used in the caption"
+    },
+    "court_name": {
+      "type": "string",
+      "description": "Court or agency name used in the caption"
+    },
     "draft_markdown": {
       "type": "string",
       "description": "Generated court-ready filing draft text"
@@ -50,13 +58,20 @@
       "type": "string",
       "description": "Summary of case plan and communication audit data used"
     },
+    "include_declaration": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user chose to include a formal perjury declaration and signature block"
+    },
     "status": {
       "type": "string",
       "enum": [
         "draft",
-        "signed"
+        "ready_for_review",
+        "final_signed"
       ],
-      "default": "draft"
+      "default": "draft",
+      "description": "Draft = still has missing info; Ready for Review = complete and reviewed; Final/Signed = signed and saved"
     },
     "signed_file_url": {
       "type": "string",
@@ -79,16 +94,16 @@
   ],
   "rls": {
     "create": {
-      "owner_email": "{{user.email}}"
+      "data.owner_email": "{{user.email}}"
     },
     "read": {
-      "owner_email": "{{user.email}}"
+      "data.owner_email": "{{user.email}}"
     },
     "update": {
-      "owner_email": "{{user.email}}"
+      "data.owner_email": "{{user.email}}"
     },
     "delete": {
-      "owner_email": "{{user.email}}"
+      "data.owner_email": "{{user.email}}"
     }
   }
 }
