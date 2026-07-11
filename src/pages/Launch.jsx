@@ -139,14 +139,24 @@ export default function Launch() {
             <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: MUTED }}>Parenting Network</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => base44.auth.redirectToLogin("/welcome")}
-          className="rounded-xl px-4 py-2 text-sm font-black"
-          style={{ background: CARD, color: GREEN, border: `1.5px solid ${GREEN}` }}
-        >
-          Log In
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => base44.auth.redirectToLogin("/welcome")}
+            className="rounded-xl px-4 py-2 text-sm font-black"
+            style={{ background: CARD, color: GREEN, border: `1.5px solid ${GREEN}` }}
+          >
+            Log In
+          </button>
+          <button
+            type="button"
+            onClick={() => base44.auth.redirectToLogin("/welcome")}
+            className="rounded-xl px-4 py-2 text-sm font-black"
+            style={{ background: GREEN, color: "#fff", border: "none" }}
+          >
+            Sign Up
+          </button>
+        </div>
       </header>
 
       <main className="mx-auto w-full max-w-6xl overflow-x-hidden px-4 pb-[160px]">
@@ -275,7 +285,8 @@ export default function Launch() {
         </section>
 
         <footer id="footer-actions" className="mt-8 flex flex-col items-center justify-center gap-3 pb-8 text-center text-xs md:flex-row" style={{ color: MUTED }}>
-          <button type="button" onClick={() => base44.auth.redirectToLogin("/welcome")} className="rounded-xl px-4 py-2 text-xs font-black" style={{ background: GREEN, color: "#fff", border: "none" }}>Log In</button>
+          <button type="button" onClick={() => base44.auth.redirectToLogin("/welcome")} className="rounded-xl px-4 py-2 text-xs font-black" style={{ background: CARD, color: GREEN, border: `1.5px solid ${GREEN}` }}>Log In</button>
+          <button type="button" onClick={() => base44.auth.redirectToLogin("/welcome")} className="rounded-xl px-4 py-2 text-xs font-black" style={{ background: GREEN, color: "#fff", border: "none" }}>Sign Up</button>
           <button type="button" onClick={() => setShowCodeModal(true)} className="rounded-xl px-4 py-2 text-xs font-black" style={{ background: CARD, color: DARK, border: `1px solid ${BORDER}` }}>Redeem Access Code</button>
           <a href="/privacy-policy" className="no-underline" style={{ color: MUTED }}>Privacy Policy</a>
           <a href="/terms-of-service" className="no-underline" style={{ color: MUTED }}>Terms of Service</a>
