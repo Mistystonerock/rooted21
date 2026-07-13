@@ -50,20 +50,24 @@ export default function ProjectProtectionChecklist() {
 
   async function loadChecklist() {
     setLoading(true);
-    const existing = await base44.entities.RootedProtectionChecklistItem.list("item_key", 100);
-    const existingKeys = new Set(existing.map(item => item.item_key));
-    const missing = DEFAULT_ITEMS.filter(item => !existingKeys.has(item.item_key));
+    try {
+      const existing = await base44.entities.RootedProtectionChecklistItem.list("item_key", 100);
+      const existingKeys = new Set(existing.map(item => item.item_key));
+      const missing = DEFAULT_ITEMS.filter(item => !existingKeys.has(item.item_key));
 
-    let created = [];
-    if (missing.length) {
-      created = await base44.entities.RootedProtectionChecklistItem.bulkCreate(missing.map(item => ({
-        ...item,
-        status: "Not Started",
-        last_updated_date: new Date().toISOString().slice(0, 10)
-      })));
+      let created = [];
+      if (missing.length) {
+        created = await base44.entities.RootedProtectionChecklistItem.bulkCreate(missing.map(item => ({
+          ...item,
+          status: "Not Started",
+          last_updated_date: new Date().toISOString().slice(0, 10)
+        })));
+      }
+
+      setItems([...existing, ...created].sort((a, b) => DEFAULT_ITEMS.findIndex(item => item.item_key === a.item_key) - DEFAULT_ITEMS.findIndex(item => item.item_key === b.item_key)));
+    } catch (_e) {
+      setItems([]);
     }
-
-    setItems([...existing, ...created].sort((a, b) => DEFAULT_ITEMS.findIndex(item => item.item_key === a.item_key) - DEFAULT_ITEMS.findIndex(item => item.item_key === b.item_key)));
     setLoading(false);
   }
 

@@ -84,19 +84,20 @@ export default function FounderDashboard() {
   }
 
   async function loadFounderData() {
+    const safe = (p, fallback = []) => p.catch(() => fallback);
     const [users, wl, surveyList, betaList, liveClasses, enrollmentList, contentList, fundingList, announcementList, resourceList, reportList, maintenanceRes] = await Promise.all([
-      base44.entities.User.list("-created_date", 10000),
-      base44.entities.WaitlistSignup.list("-created_date", 10000),
-      base44.entities.Survey.list("-created_date", 10000),
-      base44.entities.BetaTesterCode.list("-created_date", 10000),
-      base44.entities.LiveClass.list("-created_date", 1000),
-      base44.entities.ClassEnrollment.list("-created_date", 10000),
-      base44.entities.ContentItem.list("-updated_date", 1000),
-      base44.entities.GrantDonation.list("-record_date", 1000),
-      base44.entities.Announcement.list("-created_date", 500),
-      base44.entities.ResourceListing.list("-updated_date", 1000),
-      base44.entities.ResourceReport.list("-reported_at", 500),
-      base44.functions.invoke("getMaintenanceMode", {}),
+      safe(base44.functions.invoke("getFounderUsers", {}).then(r => r.data.users), []),
+      safe(base44.entities.WaitlistSignup.list("-created_date", 10000), []),
+      safe(base44.entities.Survey.list("-created_date", 10000), []),
+      safe(base44.entities.BetaTesterCode.list("-created_date", 10000), []),
+      safe(base44.entities.LiveClass.list("-created_date", 1000), []),
+      safe(base44.entities.ClassEnrollment.list("-created_date", 10000), []),
+      safe(base44.entities.ContentItem.list("-updated_date", 1000), []),
+      safe(base44.entities.GrantDonation.list("-record_date", 1000), []),
+      safe(base44.entities.Announcement.list("-created_date", 500), []),
+      safe(base44.entities.ResourceListing.list("-updated_date", 1000), []),
+      safe(base44.entities.ResourceReport.list("-reported_at", 500), []),
+      safe(base44.functions.invoke("getMaintenanceMode", {}).then(r => r.data), { comingSoonMode: false, maintenanceMode: false }),
     ]);
     setAllUsers(users);
     setWaitlist(wl);
@@ -109,8 +110,8 @@ export default function FounderDashboard() {
     setAnnouncements(announcementList);
     setResourceListings(resourceList);
     setResourceReports(reportList);
-    setMaintenanceMode(maintenanceRes.data.maintenanceMode === true || maintenanceRes.data.enabled === true);
-    setComingSoonMode(maintenanceRes.data.comingSoonMode !== false);
+    setMaintenanceMode(maintenanceRes.maintenanceMode === true || maintenanceRes.enabled === true);
+    setComingSoonMode(maintenanceRes.comingSoonMode !== false);
   }
 
   async function toggleMaintenanceMode(enabled) {
@@ -140,7 +141,8 @@ export default function FounderDashboard() {
   }
 
   async function updateUser(id, updates) {
-    const updated = await base44.entities.User.update(id, updates);
+    const res = await base44.functions.invoke("updateUserAsFounder", { userId: id, updates });
+    const updated = res.data.user;
     setAllUsers(prev => prev.map(u => u.id === id ? updated : u));
     if (selectedProfile?.id === id) setSelectedProfile(updated);
   }

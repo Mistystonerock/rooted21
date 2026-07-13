@@ -13,12 +13,13 @@ export default function ScalabilityOperationsPanel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const safe = (p, fallback = []) => p.catch(() => fallback);
     Promise.all([
-      base44.entities.SystemOperationalLog.list('-occurred_at', 100),
-      base44.entities.ErrorReport.list('-reported_at', 100),
-      base44.entities.IntegrationEndpoint.list('-updated_date', 100),
-      base44.entities.StatewideCountyConfig.list('-updated_date', 100),
-      base44.entities.OfflineDraft.list('-last_saved_at', 100),
+      safe(base44.entities.SystemOperationalLog.list('-occurred_at', 100)),
+      safe(base44.entities.ErrorReport.list('-reported_at', 100)),
+      safe(base44.entities.IntegrationEndpoint.list('-updated_date', 100)),
+      safe(base44.entities.StatewideCountyConfig.list('-updated_date', 100)),
+      safe(base44.entities.OfflineDraft.list('-last_saved_at', 100)),
     ]).then(([logRows, errorRows, endpointRows, countyRows, draftRows]) => {
       setLogs(logRows);
       setErrors(errorRows);

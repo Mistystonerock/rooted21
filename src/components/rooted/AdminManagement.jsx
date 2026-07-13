@@ -25,9 +25,10 @@ export default function AdminManagement() {
   const [activeTab, setActiveTab] = useState("codes");
 
   useEffect(() => {
+    const safe = (p, fallback = []) => p.catch(() => fallback);
     Promise.all([
-      base44.entities.AdminPermissions.list("-created_date", 100),
-      base44.entities.AdminAccessCode.list("-created_date", 100),
+      safe(base44.entities.AdminPermissions.list("-created_date", 100)),
+      safe(base44.entities.AdminAccessCode.list("-created_date", 100)),
     ]).then(([adminList, codeList]) => {
       setAdmins(adminList);
       setAccessCodes(codeList);
