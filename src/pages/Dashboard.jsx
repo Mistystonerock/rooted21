@@ -22,6 +22,7 @@ import ChildSelector from "@/components/children/ChildSelector";
 import QuickAddChildCard from "@/components/children/QuickAddChildCard";
 import DashboardPersonalizationCard from "@/components/dashboard/DashboardPersonalizationCard";
 import PredictiveInsightsCard from "@/components/dashboard/PredictiveInsightsCard";
+import ProgressTrackingSection from "@/components/dashboard/ProgressTrackingSection";
 import { filterRecordsForChild, getChildAvatar, getChildDisplayName } from "@/lib/child-selection";
 
 const BG = "#faf6f1";
@@ -62,6 +63,8 @@ export default function Dashboard() {
   const [showInvitationModal, setShowInvitationModal] = useState(false);
   const [childRefreshKey, setChildRefreshKey] = useState(0);
   const [pendingAccessRequests, setPendingAccessRequests] = useState([]);
+  const [milestones, setMilestones] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
 
   async function handleRefresh() {
     await Promise.all([
@@ -74,6 +77,8 @@ export default function Dashboard() {
       base44.entities.LessonProgress.filter({ completed: true }, "-created_date", 50).then(setLessonProgress),
       base44.entities.CheckIn.list("-created_date", 3).then(setRecentCheckins),
       base44.entities.AccessApprovalRequest.filter({ status: "pending" }, "-requested_at", 20).then(setPendingAccessRequests).catch(() => setPendingAccessRequests([])),
+      base44.entities.ParentMilestone.list("-created_date", 50).then(setMilestones).catch(() => setMilestones([])),
+      base44.entities.CaseTask.filter({ status: "completed" }, "-completed_date", 50).then(setCompletedTasks).catch(() => setCompletedTasks([])),
     ]);
     queryClient.invalidateQueries();
   }
@@ -152,6 +157,8 @@ export default function Dashboard() {
           {user && <DashboardPersonalizationCard user={user} onUpdated={setUser} />}
 
           <PredictiveInsightsCard child={child} />
+
+          <ProgressTrackingSection milestones={milestones} completedTasks={completedTasks} />
 
           <ProfessionalAccessApprovalPanel requests={pendingAccessRequests} onChanged={handleRefresh} />
 
