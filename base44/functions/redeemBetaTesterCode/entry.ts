@@ -23,18 +23,26 @@ Deno.serve(async (req) => {
 
     const matches = await base44.asServiceRole.entities.BetaTesterCode.filter({ code }, '', 1);
     if (matches.length === 0) {
-      return Response.json({ error: 'Invalid beta tester code' }, { status: 400 });
+      return Response.json({ error: 'Invalid enrollment code. Please check and try again.' }, { status: 400 });
     }
 
     const betaCode = matches[0];
     if (betaCode.status === 'used') {
-      return Response.json({ error: 'This beta tester code has already been used' }, { status: 400 });
+      // Idempotent: if already redeemed by this same user, return success
+      if (betaCode.used_by_email === user.email) {
+        return Response.json({
+          success: true,
+          role: betaCode.tester_role,
+          message: 'Beta tester access already activated'
+        });
+      }
+      return Response.json({ error: 'This enrollment code has already been used' }, { status: 400 });
     }
     if (betaCode.status === 'revoked') {
-      return Response.json({ error: 'This beta tester code has been revoked' }, { status: 400 });
+      return Response.json({ error: 'This enrollment code has been revoked' }, { status: 400 });
     }
     if (new Date(betaCode.expires_at) < new Date()) {
-      return Response.json({ error: 'This beta tester code has expired' }, { status: 400 });
+      return Response.json({ error: 'This enrollment code has expired' }, { status: 400 });
     }
 
     await base44.asServiceRole.entities.BetaTesterCode.update(betaCode.id, {

@@ -226,18 +226,34 @@ function App() {
 
           const pendingBetaCode = localStorage.getItem("pending_beta_code");
           if (pendingBetaCode) {
-            await withStartupTimeout(base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode }), 8000);
-            localStorage.removeItem("pending_beta_code");
-            const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
-            if (mounted) setUser(refreshedUser);
+              try {
+                  await withStartupTimeout(base44.functions.invoke("redeemBetaTesterCode", { code: pendingBetaCode }), 8000);
+              } catch (_e) {
+                  // Code redemption failed (already used, expired, etc.) — user stays logged in
+              }
+              localStorage.removeItem("pending_beta_code");
+              try {
+                  const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
+                  if (mounted) setUser(refreshedUser);
+              } catch (_e) {
+                  // Keep existing user if refresh fails
+              }
           }
 
           const pendingAdminCode = localStorage.getItem("pending_admin_code");
           if (pendingAdminCode) {
-            await withStartupTimeout(base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode }), 8000);
-            localStorage.removeItem("pending_admin_code");
-            const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
-            if (mounted) setUser(refreshedUser);
+              try {
+                  await withStartupTimeout(base44.functions.invoke("redeemAdminAccessCode", { code: pendingAdminCode }), 8000);
+              } catch (_e) {
+                  // Code redemption failed — user stays logged in
+              }
+              localStorage.removeItem("pending_admin_code");
+              try {
+                  const refreshedUser = await withStartupTimeout(base44.auth.me(), 8000);
+                  if (mounted) setUser(refreshedUser);
+              } catch (_e) {
+                  // Keep existing user if refresh fails
+              }
           }
         }
       } catch (error) {

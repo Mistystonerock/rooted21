@@ -24,15 +24,19 @@ Deno.serve(async (req) => {
 
     const codes = await base44.asServiceRole.entities.AdminAccessCode.filter({ code }, '', 1);
     if (codes.length === 0) {
-      return Response.json({ error: 'Invalid code' }, { status: 400 });
+      return Response.json({ error: 'Invalid agency code. Please check and try again.' }, { status: 400 });
     }
 
     const accessCode = codes[0];
     if (accessCode.used) {
-      return Response.json({ error: 'Code has already been used' }, { status: 400 });
+      // Idempotent: if already redeemed by this same user, return success
+      if (accessCode.used_by === user.email) {
+        return Response.json({ success: true, message: 'Admin access already activated.' });
+      }
+      return Response.json({ error: 'This agency code has already been used.' }, { status: 400 });
     }
     if (new Date(accessCode.expires_at) < new Date()) {
-      return Response.json({ error: 'Code has expired' }, { status: 400 });
+      return Response.json({ error: 'This agency code has expired.' }, { status: 400 });
     }
 
     await base44.asServiceRole.entities.AdminAccessCode.update(accessCode.id, {

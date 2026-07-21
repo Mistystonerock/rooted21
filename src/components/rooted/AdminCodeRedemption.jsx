@@ -27,7 +27,7 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
     if (!isAuthed) {
       // Save code and redirect to login — code will be redeemed after login
       localStorage.setItem(trimmed.length === 8 ? "pending_beta_code" : "pending_admin_code", trimmed);
-      base44.auth.redirectToLogin("/home");
+      base44.auth.redirectToLogin("/welcome");
       return;
     }
 
@@ -46,7 +46,8 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
         setError(response.data?.error || "Invalid or expired code");
       }
     } catch (err) {
-      setError(err?.response?.data?.error || "Invalid or expired code");
+      const msg = err?.response?.data?.error || err?.data?.error || err?.message || "Invalid or expired code";
+      setError(msg);
     }
     setLoading(false);
   }
@@ -94,8 +95,9 @@ export default function AdminCodeRedemption({ onClose, onSuccess }) {
               className="w-full px-3 py-3 rounded-xl text-base border outline-none text-center font-mono tracking-widest"
               style={{
                 borderColor: BORDER,
-                background: "rgba(255,255,255,0.08)",
-                color: TEXT,
+                background: "#ffffff",
+                color: "#1a1a1a",
+                caretColor: "#1a1a1a",
               }}
               disabled={loading}
               autoComplete="off"

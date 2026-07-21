@@ -94,12 +94,18 @@ export default function Launch() {
     const betaCode = form.beta_code.trim().toUpperCase();
     if (betaCode) {
       try {
-        await base44.functions.invoke("validateBetaTesterCode", { code: betaCode });
-        localStorage.setItem("pending_beta_code", betaCode);
-        base44.auth.redirectToLogin("/welcome");
+        const result = await base44.functions.invoke("validateBetaTesterCode", { code: betaCode });
+        if (result.data?.valid) {
+          localStorage.setItem("pending_beta_code", betaCode);
+          base44.auth.redirectToLogin("/welcome");
+          return;
+        }
+        setError(result.data?.error || "This enrollment code could not be verified.");
+        setLoading(false);
         return;
-      } catch {
-        setError("This beta access code could not be verified. Please check the code and try again.");
+      } catch (err) {
+        const msg = err?.data?.error || err?.response?.data?.error || err?.message || "This enrollment code could not be verified. Please check the code and try again.";
+        setError(msg);
         setLoading(false);
         return;
       }
