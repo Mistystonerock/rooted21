@@ -2,6 +2,11 @@
   "name": "CPSCaseNavigation",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "case_number": {
       "type": "string",
       "description": "Optional juvenile court or agency case number"

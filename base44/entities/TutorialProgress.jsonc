@@ -2,6 +2,11 @@
   "name": "TutorialProgress",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "user_email": {
       "type": "string"
     },

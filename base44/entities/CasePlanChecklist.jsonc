@@ -2,6 +2,11 @@
   "name": "CasePlanChecklist",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "parent_email": {
       "type": "string",
       "description": "Email of the parent/caregiver who owns this checklist"

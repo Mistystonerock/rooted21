@@ -2,6 +2,11 @@
   "name": "ConsultationReview",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "booking_id": {
       "type": "string",
       "description": "ID of the ConsultationBooking being reviewed"

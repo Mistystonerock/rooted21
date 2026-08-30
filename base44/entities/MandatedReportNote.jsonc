@@ -2,6 +2,11 @@
   "name": "MandatedReportNote",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "concern_date": {
       "type": "string",
       "format": "date",

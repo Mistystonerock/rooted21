@@ -2,6 +2,11 @@
   "name": "WaitlistSignup",
   "type": "object",
   "properties": {
+    "description": {
+      "type": "string",
+      "description": "Optional description or notes for this record",
+      "maxLength": 1000
+    },
     "first_name": {
       "type": "string",
       "description": "First name of the person signing up"
