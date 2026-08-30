@@ -142,7 +142,7 @@ export default function Launch() {
           </div>
           <div>
             <p className="font-serif text-xl font-black leading-none" style={{ color: DARK }}>Rooted 21</p>
-            <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: MUTED }}>Parenting Network</p>
+            <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: MUTED }}>Real Support. Real Tools. Real Change.</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

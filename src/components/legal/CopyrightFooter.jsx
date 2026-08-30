@@ -11,7 +11,7 @@ export default function CopyrightFooter({ hasBottomNav = false }) {
       }}
     >
       <p className="mx-auto max-w-[720px] text-[11px] leading-relaxed" style={{ color: C.mutedText }}>
-        © 2026 Rooted 21 Parenting Network LLC. All rights reserved. Trademark pending. Chillicothe, Ross County, Ohio. rooted21parenting.org
+        © 2026 Rooted 21 Parenting LLC. All rights reserved. Trademark pending. Chillicothe, Ross County, Ohio. rooted21parenting.org
       </p>
     </footer>
   );
