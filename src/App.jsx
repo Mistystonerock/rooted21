@@ -75,6 +75,7 @@ import BehavioralHealthRecords from '@/pages/BehavioralHealthRecords';
 import ClientErrorBoundary from '@/components/system/ClientErrorBoundary';
 import FakeSafeScreen from '@/pages/FakeSafeScreen';
 import HiddenDocumentVault from '@/pages/HiddenDocumentVault';
+import OAuthConsent from '@/pages/OAuthConsent';
 
 import { activateQuickExit, getSecureSessionTimeoutMinutes, isPrivateModeEnabled } from '@/lib/survivorMode';
 import AdminRouteGate from '@/components/security/AdminRouteGate';
@@ -349,6 +350,7 @@ function App() {
             ) : (
             <Routes>
               <Route path="/" element={<ComingSoon onBetaAccess={() => setBetaAccess(true)} />} />
+              <Route path="/oauth/consent" element={<OAuthConsent />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/sos" element={<Suspense fallback={<LoadingFallback />}><SOS /></Suspense>} />
               <Route path="/support-contacts" element={<FeatureLockGate user={user}><SupportContacts /></FeatureLockGate>} />
