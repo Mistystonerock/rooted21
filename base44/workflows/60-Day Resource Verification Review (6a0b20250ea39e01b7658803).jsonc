@@ -1,0 +1,44 @@
+{
+  "name": "60-Day Resource Verification Review (6a0b20250ea39e01b7658803)",
+  "description": "Flags stale statewide resource listings, emails admins, notifies founder dashboard, and logs accountability events every 60 days.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "interval",
+      "cron_expression": null,
+      "one_time_date": null,
+      "timezone": "UTC",
+      "interval_value": 60,
+      "interval_unit": "days",
+      "interval_anchor": "2026-05-18T14:20:21.545000",
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "60_day_resource_verification_review_6a0b20250ea39e01b7658803",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "verifyResourceFreshness",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "verifyResourceFreshness"
+  }
+}
